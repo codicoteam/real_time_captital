@@ -18,7 +18,7 @@ type WorkflowType = {
 };
 
 const WorkflowManagement = () => {
-  const [workflows, setWorkflows] = useState<WorkflowType[]>([
+  const [workflows] = useState<WorkflowType[]>([
     {
       id: 1,
       name: "Personal Loan Approval",

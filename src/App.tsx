@@ -6,15 +6,28 @@ import LoanManagement from "./pages/Admin_Pages/Loan_management";
 import LoanTracking from "./pages/Admin_Pages/loan_tracking";
 import Settings from "./pages/Admin_Pages/Settings";
 
+//user imports
+import UserDashboard from "./pages/User_Pages/Dashboard";
+import Loan_application from "./pages/User_Pages/Loan_application";
+import Payment from "./pages/User_Pages/Payment";
+import Account from "./pages/User_Pages/Account";
+
 function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Dashboard />} />
+        {/* Admin Routes */}
+        <Route path="/m" element={<Dashboard />} />
         <Route path="/users" element={<Users />} />
         <Route path="/loan-management" element={<LoanManagement />} />
         <Route path="/loan-tracking" element={<LoanTracking />} />
         <Route path="/settings" element={<Settings />} />
+
+        {/* User Routes */}
+        <Route path="/" element={<UserDashboard />} />
+        <Route path="/loan_application" element={<Loan_application />} />
+        <Route path="/payment" element={<Payment />} />
+        <Route path="/account" element={<Account />} />
       </Routes>
     </Router>
   );
