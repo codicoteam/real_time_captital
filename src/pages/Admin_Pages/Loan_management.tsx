@@ -8,20 +8,13 @@ import {
   XCircle,
   FileText,
   Plus,
-  Calendar,
-  User,
-  DollarSign,
   Clock,
-  AlertCircle,
   Menu,
   Bell,
   ChevronDown,
   MoreVertical,
-  Trash2,
-  Edit,
 } from "lucide-react";
 import Sidebar from "../../components/Sidebar";
-
 
 const LoanManagement = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -155,8 +148,9 @@ const LoanManagement = () => {
   ];
 
   const filteredApplications = loanApplications.filter((app) => {
-    const matchesFilter = selectedFilter === "all" || app.status === selectedFilter;
-    const matchesSearch = 
+    const matchesFilter =
+      selectedFilter === "all" || app.status === selectedFilter;
+    const matchesSearch =
       app.applicant.toLowerCase().includes(searchTerm.toLowerCase()) ||
       app.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
       app.loanType.toLowerCase().includes(searchTerm.toLowerCase());
@@ -267,7 +261,8 @@ const LoanManagement = () => {
                 Loan Management
               </h1>
               <p className="text-orange-600">
-                Manage loan applications, approve or reject requests, and handle documentation
+                Manage loan applications, approve or reject requests, and handle
+                documentation
               </p>
             </div>
             <div className="flex items-center space-x-3">
@@ -287,7 +282,9 @@ const LoanManagement = () => {
             <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-6 shadow-lg border border-white/50">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm text-orange-600 font-medium">Total Applications</p>
+                  <p className="text-sm text-orange-600 font-medium">
+                    Total Applications
+                  </p>
                   <p className="text-2xl font-bold text-orange-800">
                     {loanApplications.length}
                   </p>
@@ -300,9 +297,17 @@ const LoanManagement = () => {
             <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-6 shadow-lg border border-white/50">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm text-yellow-600 font-medium">Pending Review</p>
+                  <p className="text-sm text-yellow-600 font-medium">
+                    Pending Review
+                  </p>
                   <p className="text-2xl font-bold text-yellow-800">
-                    {loanApplications.filter(app => app.status === 'pending' || app.status === 'under_review').length}
+                    {
+                      loanApplications.filter(
+                        (app) =>
+                          app.status === "pending" ||
+                          app.status === "under_review"
+                      ).length
+                    }
                   </p>
                 </div>
                 <div className="p-3 bg-yellow-100 rounded-xl">
@@ -315,7 +320,11 @@ const LoanManagement = () => {
                 <div>
                   <p className="text-sm text-green-600 font-medium">Approved</p>
                   <p className="text-2xl font-bold text-green-800">
-                    {loanApplications.filter(app => app.status === 'approved').length}
+                    {
+                      loanApplications.filter(
+                        (app) => app.status === "approved"
+                      ).length
+                    }
                   </p>
                 </div>
                 <div className="p-3 bg-green-100 rounded-xl">
@@ -328,7 +337,11 @@ const LoanManagement = () => {
                 <div>
                   <p className="text-sm text-red-600 font-medium">Rejected</p>
                   <p className="text-2xl font-bold text-red-800">
-                    {loanApplications.filter(app => app.status === 'rejected').length}
+                    {
+                      loanApplications.filter(
+                        (app) => app.status === "rejected"
+                      ).length
+                    }
                   </p>
                 </div>
                 <div className="p-3 bg-red-100 rounded-xl">
@@ -344,7 +357,9 @@ const LoanManagement = () => {
               <div className="flex items-center space-x-4">
                 <div className="flex items-center space-x-2">
                   <Filter className="w-4 h-4 text-orange-600" />
-                  <span className="text-sm font-medium text-orange-700">Filter by:</span>
+                  <span className="text-sm font-medium text-orange-700">
+                    Filter by:
+                  </span>
                 </div>
                 <select
                   value={selectedFilter}
@@ -359,7 +374,8 @@ const LoanManagement = () => {
                 </select>
               </div>
               <div className="text-sm text-orange-600">
-                Showing {filteredApplications.length} of {loanApplications.length} applications
+                Showing {filteredApplications.length} of{" "}
+                {loanApplications.length} applications
               </div>
             </div>
           </div>
@@ -392,7 +408,10 @@ const LoanManagement = () => {
                 </thead>
                 <tbody className="divide-y divide-orange-200/30">
                   {filteredApplications.map((application) => (
-                    <tr key={application.id} className="hover:bg-orange-50/30 transition-colors duration-200">
+                    <tr
+                      key={application.id}
+                      className="hover:bg-orange-50/30 transition-colors duration-200"
+                    >
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="flex items-center">
                           <div className="w-10 h-10 bg-gradient-to-br from-orange-400 to-red-500 rounded-xl flex items-center justify-center mr-3">
@@ -437,7 +456,11 @@ const LoanManagement = () => {
                         </div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
-                        <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full border ${getStatusColor(application.status)}`}>
+                        <span
+                          className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full border ${getStatusColor(
+                            application.status
+                          )}`}
+                        >
                           {getStatusText(application.status)}
                         </span>
                       </td>
@@ -451,7 +474,9 @@ const LoanManagement = () => {
                           </div>
                           <div className="flex space-x-1">
                             <button
-                              onClick={() => handleViewDocuments(application.id)}
+                              onClick={() =>
+                                handleViewDocuments(application.id)
+                              }
                               className="p-1 text-orange-600 hover:text-orange-700 hover:bg-orange-100 rounded transition-colors duration-200"
                               title="View Documents"
                             >
@@ -476,7 +501,8 @@ const LoanManagement = () => {
                           >
                             <Eye className="w-4 h-4" />
                           </button>
-                          {(application.status === 'pending' || application.status === 'under_review') && (
+                          {(application.status === "pending" ||
+                            application.status === "under_review") && (
                             <>
                               <button
                                 onClick={() => handleApprove(application.id)}
@@ -512,7 +538,8 @@ const LoanManagement = () => {
           <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-4 shadow-lg border border-white/50">
             <div className="flex items-center justify-between">
               <div className="text-sm text-orange-600">
-                Showing 1 to {filteredApplications.length} of {filteredApplications.length} results
+                Showing 1 to {filteredApplications.length} of{" "}
+                {filteredApplications.length} results
               </div>
               <div className="flex items-center space-x-2">
                 <button className="px-3 py-2 text-sm font-medium text-orange-600 bg-orange-100/50 border border-orange-200/50 rounded-lg hover:bg-orange-200/50 transition-colors duration-200">
