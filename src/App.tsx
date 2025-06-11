@@ -7,6 +7,7 @@ import LoanTracking from "./pages/Admin_Pages/loan_tracking";
 import Settings from "./pages/Admin_Pages/Settings";
 
 //user imports
+
 import UserDashboard from "./pages/User_Pages/Dashboard";
 import Loan_application from "./pages/User_Pages/Loan_application";
 import Payment from "./pages/User_Pages/Payment";
@@ -17,7 +18,7 @@ function App() {
     <Router>
       <Routes>
         {/* Admin Routes */}
-        <Route path="/m" element={<Dashboard />} />
+        <Route path="/" element={<Dashboard />} />
         <Route path="/users" element={<Users />} />
         <Route path="/loan-management" element={<LoanManagement />} />
         <Route path="/loan-tracking" element={<LoanTracking />} />
