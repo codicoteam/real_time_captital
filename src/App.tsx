@@ -12,6 +12,8 @@ import UserDashboard from "./pages/User_Pages/Dashboard";
 import Loan_application from "./pages/User_Pages/Loan_application";
 import Payment from "./pages/User_Pages/Payment";
 import Account from "./pages/User_Pages/Account";
+import Userlogin from "./pages/User_Pages/Login";
+import UserSignup from "./pages/User_Pages/Signup";
 
 function App() {
   return (
@@ -25,7 +27,9 @@ function App() {
         <Route path="/settings" element={<Settings />} />
 
         {/* User Routes */}
-        <Route path="/m" element={<UserDashboard />} />
+        <Route path="/userlogin" element={<Userlogin />} />
+        <Route path="/usersignup" element={<UserSignup />} />
+        <Route path="/userdashboard" element={<UserDashboard />} />
         <Route path="/loan_application" element={<Loan_application />} />
         <Route path="/payment" element={<Payment />} />
         <Route path="/account" element={<Account />} />

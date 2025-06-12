@@ -17,7 +17,7 @@ const Sidebar = ({ isOpen = true, onClose = () => {} }) => {
       icon: LayoutDashboard,
       label: "Dashboard",
       subtitle: "Loan Overview",
-      path: "/",
+      path: "/userdashboard",
       color: "from-blue-500 to-purple-600",
     },
     {
