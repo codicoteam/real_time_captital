@@ -45,6 +45,7 @@ const LoanService = {
       }
     }
   },
+
   getLoansByUserId: async (userId: string): Promise<any> => {
     try {
       const response = await axios.get(`${BASE_URL}/user/${userId}`, {
@@ -129,7 +130,7 @@ const LoanService = {
  * Helper function to get the auth token from localStorage
  */
 const getAuthToken = (): string | null => {
-  return localStorage.getItem("userToken");
+  return localStorage.getItem("adminToken");
 };
 
 export default LoanService;

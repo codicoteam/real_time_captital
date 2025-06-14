@@ -7,36 +7,57 @@ import {
   FileText,
   CreditCard,
   RefreshCw,
+  User,
+  Calendar,
+  DollarSign,
 } from "lucide-react";
-import LoanService from "../../services/user_Services/loan_Service"; // Adjust the import path as needed
+import LoanService from "../../services/user_Services/loan_Service";
 
-// Type definitions
-interface Application {
-  id: string;
+// Updated type definitions based on your loan model
+interface LoanApplication {
+  _id: string;
+  user: string;
   productType: "vehicle" | "solar" | "finishing_touch";
-  type: string;
+  status: "pending" | "approved" | "rejected" | "active" | "closed";
+  applicationDate: string;
+  approvalDate?: string;
+  startDate?: string;
+  endDate?: string;
   amount: number;
-  status: "approved" | "pending" | "under_review" | "rejected";
-  date: string;
-  progress: number;
+  interestRate?: number;
+  term?: number;
+  balance?: number;
+  borrowerInfo: {
+    firstName?: string;
+    surname?: string;
+    email?: string;
+    phone?: string;
+  };
+  createdAt: string;
+  updatedAt: string;
 }
 
 interface StatusConfig {
   color: string;
+  bgColor: string;
   icon: React.ComponentType<{ className?: string }>;
   text: string;
+  description: string;
 }
 
 interface ApplicationStatusProps {
-  applications?: Application[];
+  applications?: LoanApplication[];
 }
 
 const ApplicationStatus: React.FC<ApplicationStatusProps> = ({
   applications,
 }) => {
-  const [applicationsData, setApplicationsData] = useState<Application[]>([]);
+  const [applicationsData, setApplicationsData] = useState<LoanApplication[]>(
+    []
+  );
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
 
   // Fetch applications from API
   const fetchApplications = async () => {
@@ -44,86 +65,19 @@ const ApplicationStatus: React.FC<ApplicationStatusProps> = ({
     setError(null);
     try {
       const response = await LoanService.getAllLoans();
-      // Transform API response to match Application interface
-      const transformedData: Application[] =
-        response.data?.map((loan: any) => ({
-          id: loan.id || loan._id,
-          productType: mapProductType(loan.loanType || loan.type),
-          type: loan.loanType || loan.type || "Loan",
-          amount: loan.amount || 0,
-          status: mapStatus(loan.status),
-          date: loan.createdAt || loan.date || new Date().toISOString(),
-          progress: calculateProgress(loan.status, loan.stage),
-        })) || [];
 
-      setApplicationsData(transformedData);
-    } catch (err) {
-      setError("Failed to fetch applications");
+      if (response.data) {
+        setApplicationsData(response.data);
+        setLastUpdated(new Date());
+      } else {
+        setApplicationsData([]);
+      }
+    } catch (err: any) {
+      setError(err.message || "Failed to fetch loan applications");
       console.error("Error fetching applications:", err);
       setApplicationsData([]);
     } finally {
       setLoading(false);
-    }
-  };
-
-  // Helper function to map loan types to product types
-  const mapProductType = (
-    loanType: string
-  ): "vehicle" | "solar" | "finishing_touch" => {
-    const type = loanType?.toLowerCase();
-    if (
-      type?.includes("vehicle") ||
-      type?.includes("car") ||
-      type?.includes("auto")
-    ) {
-      return "vehicle";
-    }
-    if (type?.includes("solar")) {
-      return "solar";
-    }
-    return "finishing_touch";
-  };
-
-  // Helper function to map API status to component status
-  const mapStatus = (
-    apiStatus: string
-  ): "approved" | "pending" | "under_review" | "rejected" => {
-    const status = apiStatus?.toLowerCase();
-    switch (status) {
-      case "approved":
-      case "active":
-        return "approved";
-      case "pending":
-        return "pending";
-      case "review":
-      case "under_review":
-      case "processing":
-        return "under_review";
-      case "rejected":
-      case "declined":
-        return "rejected";
-      default:
-        return "pending";
-    }
-  };
-
-  // Helper function to calculate progress based on status and stage
-  const calculateProgress = (status: string, stage?: string): number => {
-    const statusLower = status?.toLowerCase();
-    switch (statusLower) {
-      case "approved":
-      case "active":
-        return 100;
-      case "under_review":
-      case "processing":
-        return 60;
-      case "pending":
-        return 30;
-      case "rejected":
-      case "declined":
-        return 0;
-      default:
-        return 20;
     }
   };
 
@@ -133,42 +87,116 @@ const ApplicationStatus: React.FC<ApplicationStatusProps> = ({
       fetchApplications();
     } else {
       setApplicationsData(applications);
+      setLastUpdated(new Date());
     }
   }, [applications]);
 
-  const getStatusConfig = (status: Application["status"]): StatusConfig => {
+  const getStatusConfig = (status: LoanApplication["status"]): StatusConfig => {
     switch (status) {
       case "approved":
         return {
-          color: "text-green-700 bg-green-100",
+          color: "text-green-700",
+          bgColor: "bg-green-100 border-green-200",
           icon: CheckCircle,
           text: "Approved",
+          description:
+            "Your loan has been approved and is ready for disbursement",
+        };
+      case "active":
+        return {
+          color: "text-blue-700",
+          bgColor: "bg-blue-100 border-blue-200",
+          icon: CheckCircle,
+          text: "Active",
+          description: "Your loan is currently active and running",
         };
       case "pending":
         return {
-          color: "text-orange-700 bg-orange-100",
+          color: "text-orange-700",
+          bgColor: "bg-orange-100 border-orange-200",
           icon: Clock,
-          text: "Pending",
-        };
-      case "under_review":
-        return {
-          color: "text-blue-700 bg-blue-100",
-          icon: AlertCircle,
-          text: "Under Review",
+          text: "Pending Review",
+          description: "Your application is being reviewed by our team",
         };
       case "rejected":
         return {
-          color: "text-red-700 bg-red-100",
+          color: "text-red-700",
+          bgColor: "bg-red-100 border-red-200",
           icon: XCircle,
           text: "Rejected",
+          description: "Unfortunately, your loan application was not approved",
+        };
+      case "closed":
+        return {
+          color: "text-gray-700",
+          bgColor: "bg-gray-100 border-gray-200",
+          icon: FileText,
+          text: "Closed",
+          description: "This loan has been completed or closed",
         };
       default:
         return {
-          color: "text-gray-700 bg-gray-100",
+          color: "text-gray-700",
+          bgColor: "bg-gray-100 border-gray-200",
           icon: Clock,
           text: status,
+          description: "Status information",
         };
     }
+  };
+
+  const getProductTypeDisplay = (productType: string): string => {
+    switch (productType) {
+      case "vehicle":
+        return "Vehicle Loan";
+      case "solar":
+        return "Solar Loan";
+      case "finishing_touch":
+        return "Finishing Touch Loan";
+      default:
+        return (
+          productType.charAt(0).toUpperCase() + productType.slice(1) + " Loan"
+        );
+    }
+  };
+
+  const calculateProgress = (loan: LoanApplication): number => {
+    switch (loan.status) {
+      case "closed":
+        return 100;
+      case "active":
+        // If we have balance and amount, calculate based on repayment
+        if (loan.balance !== undefined && loan.amount) {
+          const repaidAmount = loan.amount - loan.balance;
+          return Math.round((repaidAmount / loan.amount) * 100);
+        }
+        return 85;
+      case "approved":
+        return 75;
+      case "pending":
+        return 25;
+      case "rejected":
+        return 0;
+      default:
+        return 10;
+    }
+  };
+
+  const formatCurrency = (amount: number): string => {
+    return new Intl.NumberFormat("en-ZW", {
+      style: "currency",
+      currency: "USD",
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0,
+    }).format(amount);
+  };
+
+  const formatDate = (dateString: string): string => {
+    return new Date(dateString).toLocaleDateString("en-ZW", {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+    });
   };
 
   return (
@@ -178,17 +206,22 @@ const ApplicationStatus: React.FC<ApplicationStatusProps> = ({
           <div>
             <h3 className="text-xl font-bold text-blue-800 mb-2 flex items-center">
               <FileText className="w-6 h-6 mr-2 text-blue-600" />
-              Application Status
+              Loan Applications Status
             </h3>
             <p className="text-sm text-blue-500">
-              Track your current loan applications
+              Track your current loan applications and active loans
             </p>
+            {lastUpdated && (
+              <p className="text-xs text-blue-400 mt-1">
+                Last updated: {lastUpdated.toLocaleTimeString()}
+              </p>
+            )}
           </div>
           {!applications && (
             <button
               onClick={fetchApplications}
               disabled={loading}
-              className="flex items-center px-4 py-2 bg-blue-100 hover:bg-blue-200 text-blue-700 rounded-lg transition-colors duration-200 disabled:opacity-50"
+              className="flex items-center px-4 py-2 bg-blue-100 hover:bg-blue-200 text-blue-700 rounded-lg transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               <RefreshCw
                 className={`w-4 h-4 mr-2 ${loading ? "animate-spin" : ""}`}
@@ -197,79 +230,148 @@ const ApplicationStatus: React.FC<ApplicationStatusProps> = ({
             </button>
           )}
         </div>
+
         {error && (
-          <div className="mt-4 p-3 bg-red-100 border border-red-300 text-red-700 rounded-lg text-sm">
-            {error}
+          <div className="mt-4 p-4 bg-red-50 border border-red-200 text-red-700 rounded-lg text-sm">
+            <div className="flex items-center">
+              <AlertCircle className="w-4 h-4 mr-2 flex-shrink-0" />
+              <span>{error}</span>
+            </div>
           </div>
         )}
       </div>
 
       {loading ? (
-        <div className="flex items-center justify-center py-8">
-          <RefreshCw className="w-6 h-6 animate-spin text-blue-600 mr-2" />
-          <span className="text-blue-600">Loading applications...</span>
+        <div className="flex items-center justify-center py-12">
+          <RefreshCw className="w-6 h-6 animate-spin text-blue-600 mr-3" />
+          <span className="text-blue-600">
+            Loading your loan applications...
+          </span>
         </div>
       ) : applicationsData.length === 0 ? (
-        <div className="text-center py-8">
-          <FileText className="w-12 h-12 text-blue-300 mx-auto mb-4" />
-          <p className="text-blue-600 text-lg mb-2">No applications found</p>
+        <div className="text-center py-12">
+          <FileText className="w-16 h-16 text-blue-300 mx-auto mb-4" />
+          <p className="text-blue-600 text-lg mb-2 font-medium">
+            No loan applications found
+          </p>
           <p className="text-blue-500 text-sm">
-            You don't have any loan applications yet.
+            You don't have any loan applications yet. Apply for a loan to get
+            started.
           </p>
         </div>
       ) : (
-        <div className="space-y-4">
-          {applicationsData.map((app) => {
-            const statusConfig = getStatusConfig(app.status);
+        <div className="space-y-6">
+          {applicationsData.map((loan) => {
+            const statusConfig = getStatusConfig(loan.status);
             const StatusIcon = statusConfig.icon;
+            const progress = calculateProgress(loan);
 
             return (
               <div
-                key={app.id}
-                className="p-6 border border-blue-200/50 rounded-xl hover:shadow-md transition-all duration-200"
+                key={loan._id}
+                className={`p-6 border-2 rounded-xl hover:shadow-lg transition-all duration-300 ${statusConfig.bgColor}`}
               >
+                {/* Header */}
                 <div className="flex items-center justify-between mb-4">
                   <div className="flex items-center space-x-4">
-                    <div className="p-3 bg-blue-100 rounded-xl">
+                    <div className="p-3 bg-white/80 rounded-xl shadow-sm">
                       <CreditCard className="w-6 h-6 text-blue-600" />
                     </div>
                     <div>
-                      <h4 className="font-semibold text-blue-800">
-                        {app.type}
+                      <h4 className="font-bold text-blue-900 text-lg">
+                        {getProductTypeDisplay(loan.productType)}
                       </h4>
-                      <p className="text-sm text-blue-600">
-                        ₹{app.amount.toLocaleString()}
+                      <p className="text-blue-700 font-semibold">
+                        {formatCurrency(loan.amount)}
                       </p>
+                      {loan.borrowerInfo?.firstName && (
+                        <p className="text-blue-600 text-sm flex items-center mt-1">
+                          <User className="w-3 h-3 mr-1" />
+                          {loan.borrowerInfo.firstName}{" "}
+                          {loan.borrowerInfo.surname}
+                        </p>
+                      )}
                     </div>
                   </div>
+
                   <div
-                    className={`px-3 py-1 rounded-full text-sm font-medium flex items-center ${statusConfig.color}`}
+                    className={`px-4 py-2 rounded-full text-sm font-bold flex items-center ${statusConfig.color} bg-white/80`}
                   >
-                    <StatusIcon className="w-4 h-4 mr-1" />
+                    <StatusIcon className="w-4 h-4 mr-2" />
                     {statusConfig.text}
                   </div>
                 </div>
 
+                {/* Status Description */}
+                <div className="mb-4 p-3 bg-white/60 rounded-lg">
+                  <p className="text-sm text-blue-700">
+                    {statusConfig.description}
+                  </p>
+                </div>
+
+                {/* Progress Bar */}
                 <div className="mb-4">
                   <div className="flex justify-between text-sm mb-2">
-                    <span className="text-blue-600">Progress</span>
-                    <span className="text-blue-800 font-medium">
-                      {app.progress}%
+                    <span className="text-blue-700 font-medium">
+                      Application Progress
                     </span>
+                    <span className="text-blue-900 font-bold">{progress}%</span>
                   </div>
-                  <div className="w-full bg-blue-200 rounded-full h-2">
+                  <div className="w-full bg-blue-200/60 rounded-full h-3 shadow-inner">
                     <div
-                      className="h-full bg-gradient-to-r from-blue-500 to-purple-500 rounded-full transition-all duration-1000"
-                      style={{ width: `${app.progress}%` }}
+                      className="h-full bg-gradient-to-r from-blue-500 to-purple-600 rounded-full transition-all duration-1000 shadow-sm"
+                      style={{ width: `${progress}%` }}
                     ></div>
                   </div>
                 </div>
 
-                <div className="flex justify-between text-sm text-blue-600">
-                  <span>Application ID: {app.id}</span>
-                  <span>
-                    Applied: {new Date(app.date).toLocaleDateString()}
+                {/* Loan Details */}
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-4">
+                  {loan.interestRate && (
+                    <div className="flex items-center text-sm">
+                      <DollarSign className="w-4 h-4 mr-2 text-blue-600" />
+                      <span className="text-blue-600">Interest Rate: </span>
+                      <span className="font-semibold text-blue-800 ml-1">
+                        {loan.interestRate}%
+                      </span>
+                    </div>
+                  )}
+
+                  {loan.term && (
+                    <div className="flex items-center text-sm">
+                      <Calendar className="w-4 h-4 mr-2 text-blue-600" />
+                      <span className="text-blue-600">Term: </span>
+                      <span className="font-semibold text-blue-800 ml-1">
+                        {loan.term} months
+                      </span>
+                    </div>
+                  )}
+
+                  {loan.balance !== undefined && loan.status === "active" && (
+                    <div className="flex items-center text-sm">
+                      <CreditCard className="w-4 h-4 mr-2 text-blue-600" />
+                      <span className="text-blue-600">Balance: </span>
+                      <span className="font-semibold text-blue-800 ml-1">
+                        {formatCurrency(loan.balance)}
+                      </span>
+                    </div>
+                  )}
+                </div>
+
+                {/* Footer */}
+                <div className="flex justify-between items-center text-sm text-blue-600 pt-4 border-t border-blue-200/50">
+                  <span className="font-medium">
+                    Application ID: {loan._id.slice(-8).toUpperCase()}
                   </span>
+                  <div className="flex items-center space-x-4">
+                    <span>Applied: {formatDate(loan.applicationDate)}</span>
+                    {loan.approvalDate && (
+                      <span>Approved: {formatDate(loan.approvalDate)}</span>
+                    )}
+                    {loan.startDate && (
+                      <span>Started: {formatDate(loan.startDate)}</span>
+                    )}
+                  </div>
                 </div>
               </div>
             );

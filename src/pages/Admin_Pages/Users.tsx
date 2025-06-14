@@ -1,8 +1,7 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Users,
   UserPlus,
-  Edit3,
   Trash2,
   Shield,
   Search,
@@ -16,104 +15,116 @@ import {
   CheckCircle,
   Clock,
   UserCheck,
+  Loader2,
 } from "lucide-react";
 // Import Sidebar from your components directory
 import Sidebar from "../../components/Sidebar";
+import UserService from "../../services/admin_Services/user_Service"; // Adjust the import path as needed
+import UserDetailsModal from "../../components/user_component/view_User";
+
+interface User {
+  _id: string; // Changed from id to _id to match modal
+  id?: string | number; // Keep for backward compatibility
+  firstName: string; // Add firstName
+  lastName: string; // Add lastName
+  name?: string; // Keep for backward compatibility
+  email: string;
+  phoneNumber: string; // Add phoneNumber
+  address: string; // Add address
+  profilePicture?: string; // Add profilePicture
+  role?: string;
+  status?: string;
+  avatar?: string;
+  lastLogin?: string;
+  permissions?: string[];
+  joinDate?: string;
+  totalLoans?: number;
+  createdAt: string; // Make required for modal
+  updatedAt: string; // Make required for modal
+}
 
 const UserManagement = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedRole, setSelectedRole] = useState("all");
   const [selectedStatus, setSelectedStatus] = useState("all");
+  const [users, setUsers] = useState<User[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [selectedUser, setSelectedUser] = useState<User | null>(null);
 
-  // Mock user data
-  const mockUsers = [
-    {
-      id: 1,
-      name: "Sarah Johnson",
-      email: "sarah.johnson@pocket.com",
-      role: "Loan Manager",
-      status: "Active",
-      avatar: "SJ",
-      lastLogin: "2025-06-05 09:30 AM",
-      permissions: ["loan_approval", "user_management", "reports"],
-      joinDate: "2024-01-15",
-      totalLoans: 145,
-    },
-    {
-      id: 2,
-      name: "Michael Chen",
-      email: "michael.chen@pocket.com",
-      role: "Senior Analyst",
-      status: "Active",
-      avatar: "MC",
-      lastLogin: "2025-06-05 08:45 AM",
-      permissions: ["analytics", "reports", "loan_tracking"],
-      joinDate: "2024-03-20",
-      totalLoans: 89,
-    },
-    {
-      id: 3,
-      name: "Emily Rodriguez",
-      email: "emily.rodriguez@pocket.com",
-      role: "Customer Support",
-      status: "Away",
-      avatar: "ER",
-      lastLogin: "2025-06-04 05:20 PM",
-      permissions: ["customer_support", "basic_reports"],
-      joinDate: "2024-05-10",
-      totalLoans: 32,
-    },
-    {
-      id: 4,
-      name: "David Thompson",
-      email: "david.thompson@pocket.com",
-      role: "Admin",
-      status: "Active",
-      avatar: "DT",
-      lastLogin: "2025-06-05 10:15 AM",
-      permissions: ["all_permissions"],
-      joinDate: "2023-11-05",
-      totalLoans: 203,
-    },
-    {
-      id: 5,
-      name: "Lisa Wang",
-      email: "lisa.wang@pocket.com",
-      role: "Loan Officer",
-      status: "Inactive",
-      avatar: "LW",
-      lastLogin: "2025-05-28 02:30 PM",
-      permissions: ["loan_processing", "customer_contact"],
-      joinDate: "2024-02-28",
-      totalLoans: 67,
-    },
-    {
-      id: 6,
-      name: "James Miller",
-      email: "james.miller@pocket.com",
-      role: "Risk Analyst",
-      status: "Active",
-      avatar: "JM",
-      lastLogin: "2025-06-05 09:00 AM",
-      permissions: ["risk_assessment", "analytics", "reports"],
-      joinDate: "2024-04-12",
-      totalLoans: 112,
-    },
-  ];
+  // Fetch users from API
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+        const response = await UserService.getAllUsers();
 
+        // Transform API data to match your component's expected format
+        const transformedUsers =
+          response.data?.map((user: any) => ({
+            _id: user._id || user.id, // Primary ID for modal
+            id: user.id || user._id, // Backup ID
+            firstName: user.firstName || user.name?.split(" ")[0] || "",
+            lastName: user.lastName || user.name?.split(" ")[1] || "",
+            name:
+              user.name ||
+              user.fullName ||
+              `${user.firstName} ${user.lastName}`.trim(),
+            email: user.email,
+            phoneNumber: user.phoneNumber || user.phone || "Not provided",
+            address: user.address || "Not provided",
+            profilePicture: user.profilePicture || user.avatar,
+            role: user.role || "User",
+            status: user.status || (user.isActive ? "Active" : "Inactive"),
+            avatar:
+              user.avatar ||
+              getInitials(user.name || user.fullName || user.email),
+            lastLogin: user.lastLogin || user.lastLoginAt || "Never",
+            permissions: user.permissions || [],
+            joinDate:
+              user.joinDate || user.createdAt?.split("T")[0] || "Unknown",
+            totalLoans: user.totalLoans || user.loansCount || 0,
+            createdAt: user.createdAt || new Date().toISOString(),
+            updatedAt: user.updatedAt || new Date().toISOString(),
+          })) || [];
+        setUsers(transformedUsers);
+      } catch (err: any) {
+        console.error("Error fetching users:", err);
+        setError(err.message || "Failed to fetch users");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchUsers();
+  }, []);
+
+  // Helper function to generate initials from name
+  const getInitials = (name: string): string => {
+    if (!name) return "??";
+    return name
+      .split(" ")
+      .map((word) => word.charAt(0))
+      .join("")
+      .toUpperCase()
+      .slice(0, 2);
+  };
+
+  // Calculate user stats from actual data
   const userStats = [
     {
       label: "Total Users",
-      value: "24",
-      trend: "+3",
+      value: users.length.toString(),
+      trend: "+3", // You might want to calculate this based on recent additions
       color: "from-orange-400 to-red-500",
       bgColor: "bg-orange-50",
       icon: Users,
     },
     {
       label: "Active Users",
-      value: "18",
+      value: users.filter((user) => user.status === "Active").length.toString(),
       trend: "+2",
       color: "from-green-500 to-emerald-600",
       bgColor: "bg-green-50",
@@ -121,7 +132,9 @@ const UserManagement = () => {
     },
     {
       label: "Pending Approval",
-      value: "3",
+      value: users
+        .filter((user) => user.status === "Pending")
+        .length.toString(),
       trend: "0",
       color: "from-yellow-500 to-orange-500",
       bgColor: "bg-yellow-50",
@@ -129,7 +142,7 @@ const UserManagement = () => {
     },
     {
       label: "Admin Users",
-      value: "5",
+      value: users.filter((user) => user.role === "Admin").length.toString(),
       trend: "+1",
       color: "from-purple-500 to-pink-600",
       bgColor: "bg-purple-50",
@@ -137,21 +150,20 @@ const UserManagement = () => {
     },
   ];
 
+  // Get unique roles from users
   const roles = [
     "all",
-    "Admin",
-    "Loan Manager",
-    "Senior Analyst",
-    "Loan Officer",
-    "Customer Support",
-    "Risk Analyst",
+    ...new Set(users.map((user) => user.role).filter(Boolean)),
   ];
-  const statuses = ["all", "Active", "Inactive", "Away", "Pending"];
+  const statuses = [
+    "all",
+    ...new Set(users.map((user) => user.status).filter(Boolean)),
+  ];
 
   // Filter users based on search and filters
-  const filteredUsers = mockUsers.filter((user) => {
+  const filteredUsers = users.filter((user) => {
     const matchesSearch =
-      user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      user.firstName.toLowerCase().includes(searchTerm.toLowerCase()) ||
       user.email.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesRole = selectedRole === "all" || user.role === selectedRole;
     const matchesStatus =
@@ -187,6 +199,59 @@ const UserManagement = () => {
         return <Clock className="w-3 h-3" />;
       default:
         return <AlertCircle className="w-3 h-3" />;
+    }
+  };
+
+  const handleDeleteUser = async (userId: string | number) => {
+    if (window.confirm("Are you sure you want to delete this user?")) {
+      try {
+        await UserService.deleteUser(userId.toString());
+        setUsers(
+          users.filter((user) => user._id !== userId && user.id !== userId)
+        );
+        // You might want to show a success message here
+      } catch (err: any) {
+        console.error("Error deleting user:", err);
+        setError(err.message || "Failed to delete user");
+      }
+    }
+  };
+
+  const refreshUsers = async () => {
+    try {
+      setLoading(true);
+      const response = await UserService.getAllUsers();
+      const transformedUsers =
+        response.data?.map((user: any) => ({
+          _id: user._id || user.id,
+          id: user.id || user._id,
+          firstName: user.firstName || user.name?.split(" ")[0] || "",
+          lastName: user.lastName || user.name?.split(" ")[1] || "",
+          name:
+            user.name ||
+            user.fullName ||
+            `${user.firstName} ${user.lastName}`.trim(),
+          email: user.email,
+          phoneNumber: user.phoneNumber || user.phone || "Not provided",
+          address: user.address || "Not provided",
+          profilePicture: user.profilePicture || user.avatar,
+          role: user.role || "User",
+          status: user.status || (user.isActive ? "Active" : "Inactive"),
+          avatar:
+            user.avatar ||
+            getInitials(user.name || user.fullName || user.email),
+          lastLogin: user.lastLogin || user.lastLoginAt || "Never",
+          permissions: user.permissions || [],
+          joinDate: user.joinDate || user.createdAt?.split("T")[0] || "Unknown",
+          totalLoans: user.totalLoans || user.loansCount || 0,
+          createdAt: user.createdAt || new Date().toISOString(),
+          updatedAt: user.updatedAt || new Date().toISOString(),
+        })) || [];
+      setUsers(transformedUsers);
+    } catch (err: any) {
+      setError(err.message || "Failed to refresh users");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -231,6 +296,20 @@ const UserManagement = () => {
                   className="pl-10 pr-4 py-2 w-64 bg-orange-100/50 border border-orange-200/50 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500/50 transition-all duration-200"
                 />
               </div>
+
+              {/* Refresh Button */}
+              <button
+                onClick={refreshUsers}
+                disabled={loading}
+                className="p-2 rounded-xl bg-orange-100/50 hover:bg-orange-200/50 transition-all duration-200 group disabled:opacity-50"
+                title="Refresh Users"
+              >
+                <Loader2
+                  className={`w-5 h-5 text-orange-600 group-hover:text-orange-700 ${
+                    loading ? "animate-spin" : ""
+                  }`}
+                />
+              </button>
 
               {/* Notifications */}
               <button className="relative p-2 rounded-xl bg-orange-100/50 hover:bg-orange-200/50 transition-all duration-200 group">
@@ -283,6 +362,22 @@ const UserManagement = () => {
               </button>
             </div>
           </div>
+
+          {/* Error Display */}
+          {error && (
+            <div className="bg-red-100/70 backdrop-blur-sm border border-red-200/50 rounded-2xl p-4 shadow-lg">
+              <div className="flex items-center space-x-2">
+                <AlertCircle className="w-5 h-5 text-red-600" />
+                <span className="text-red-700 font-medium">Error: {error}</span>
+                <button
+                  onClick={() => setError(null)}
+                  className="ml-auto p-1 hover:bg-red-200/50 rounded"
+                >
+                  <span className="text-red-600">×</span>
+                </button>
+              </div>
+            </div>
+          )}
 
           {/* User Stats */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -357,7 +452,7 @@ const UserManagement = () => {
                 </select>
               </div>
               <div className="ml-auto text-sm text-orange-600">
-                Showing {filteredUsers.length} of {mockUsers.length} users
+                Showing {filteredUsers.length} of {users.length} users
               </div>
             </div>
           </div>
@@ -370,136 +465,163 @@ const UserManagement = () => {
               </h3>
             </div>
 
-            <div className="overflow-x-auto">
-              <table className="w-full">
-                <thead className="bg-orange-50/50">
-                  <tr>
-                    <th className="px-6 py-4 text-left text-xs font-medium text-orange-600 uppercase tracking-wider">
-                      User
-                    </th>
-                    <th className="px-6 py-4 text-left text-xs font-medium text-orange-600 uppercase tracking-wider">
-                      Role
-                    </th>
-                    <th className="px-6 py-4 text-left text-xs font-medium text-orange-600 uppercase tracking-wider">
-                      Status
-                    </th>
-                    <th className="px-6 py-4 text-left text-xs font-medium text-orange-600 uppercase tracking-wider">
-                      Last Login
-                    </th>
-                    <th className="px-6 py-4 text-left text-xs font-medium text-orange-600 uppercase tracking-wider">
-                      Loans Managed
-                    </th>
-                    <th className="px-6 py-4 text-right text-xs font-medium text-orange-600 uppercase tracking-wider">
-                      Actions
-                    </th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-orange-200/30">
-                  {filteredUsers.map((user) => (
-                    <tr
-                      key={user.id}
-                      className="hover:bg-orange-50/30 transition-colors duration-200"
-                    >
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="flex items-center space-x-3">
-                          <div className="w-10 h-10 bg-gradient-to-br from-orange-400 to-red-500 rounded-xl flex items-center justify-center shadow-lg shadow-orange-500/25">
-                            <span className="text-white font-semibold text-sm">
-                              {user.avatar}
-                            </span>
-                          </div>
-                          <div>
-                            <div className="text-sm font-semibold text-orange-800">
-                              {user.name}
-                            </div>
-                            <div className="text-xs text-orange-600">
-                              {user.email}
-                            </div>
-                          </div>
-                        </div>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="text-sm font-medium text-orange-700">
-                          {user.role}
-                        </div>
-                        <div className="text-xs text-orange-500">
-                          Since {user.joinDate}
-                        </div>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div
-                          className={`inline-flex items-center space-x-1 px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(
-                            user.status
-                          )}`}
-                        >
-                          {getStatusIcon(user.status)}
-                          <span>{user.status}</span>
-                        </div>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="text-sm text-orange-700">
-                          {user.lastLogin}
-                        </div>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="text-sm font-semibold text-orange-800">
-                          {user.totalLoans}
-                        </div>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-right">
-                        <div className="flex items-center justify-end space-x-2">
-                          <button
-                            className="p-2 rounded-lg bg-blue-100/70 hover:bg-blue-200/70 transition-colors duration-200 group"
-                            title="View Details"
-                          >
-                            <Eye className="w-4 h-4 text-blue-600 group-hover:text-blue-700" />
-                          </button>
-                          <button
-                            className="p-2 rounded-lg bg-green-100/70 hover:bg-green-200/70 transition-colors duration-200 group"
-                            title="Edit User"
-                          >
-                            <Edit3 className="w-4 h-4 text-green-600 group-hover:text-green-700" />
-                          </button>
-                          <button
-                            className="p-2 rounded-lg bg-purple-100/70 hover:bg-purple-200/70 transition-colors duration-200 group"
-                            title="Manage Permissions"
-                          >
-                            <Shield className="w-4 h-4 text-purple-600 group-hover:text-purple-700" />
-                          </button>
-                          <button
-                            className="p-2 rounded-lg bg-red-100/70 hover:bg-red-200/70 transition-colors duration-200 group"
-                            title="Delete User"
-                          >
-                            <Trash2 className="w-4 h-4 text-red-600 group-hover:text-red-700" />
-                          </button>
-                          <button
-                            className="p-2 rounded-lg bg-gray-100/70 hover:bg-gray-200/70 transition-colors duration-200 group"
-                            title="More Options"
-                          >
-                            <MoreVertical className="w-4 h-4 text-gray-600 group-hover:text-gray-700" />
-                          </button>
-                        </div>
-                      </td>
+            {loading ? (
+              <div className="text-center py-12">
+                <Loader2 className="w-12 h-12 text-orange-400 mx-auto mb-4 animate-spin" />
+                <h3 className="text-lg font-semibold text-orange-700 mb-2">
+                  Loading Users...
+                </h3>
+                <p className="text-orange-600">
+                  Please wait while we fetch the user data
+                </p>
+              </div>
+            ) : (
+              <div className="overflow-x-auto">
+                <table className="w-full">
+                  <thead className="bg-orange-50/50">
+                    <tr>
+                      <th className="px-6 py-4 text-left text-xs font-medium text-orange-600 uppercase tracking-wider">
+                        User
+                      </th>
+                      <th className="px-6 py-4 text-left text-xs font-medium text-orange-600 uppercase tracking-wider">
+                        Role
+                      </th>
+                      <th className="px-6 py-4 text-left text-xs font-medium text-orange-600 uppercase tracking-wider">
+                        Status
+                      </th>
+                      <th className="px-6 py-4 text-left text-xs font-medium text-orange-600 uppercase tracking-wider">
+                        Last Login
+                      </th>
+                      <th className="px-6 py-4 text-left text-xs font-medium text-orange-600 uppercase tracking-wider">
+                        Loans Managed
+                      </th>
+                      <th className="px-6 py-4 text-right text-xs font-medium text-orange-600 uppercase tracking-wider">
+                        Actions
+                      </th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+                  </thead>
+                  <tbody className="divide-y divide-orange-200/30">
+                    {filteredUsers.map((user) => (
+                      <tr
+                        key={user.id}
+                        className="hover:bg-orange-50/30 transition-colors duration-200"
+                      >
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <div className="flex items-center space-x-3">
+                            <div className="w-10 h-10 bg-gradient-to-br from-orange-400 to-red-500 rounded-xl flex items-center justify-center shadow-lg shadow-orange-500/25">
+                              <span className="text-white font-semibold text-sm">
+                                {user.avatar}
+                              </span>
+                            </div>
+                            <div>
+                              <div className="text-sm font-semibold text-orange-800">
+                                {user.name}
+                              </div>
+                              <div className="text-xs text-orange-600">
+                                {user.email}
+                              </div>
+                            </div>
+                          </div>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <div className="text-sm font-medium text-orange-700">
+                            {user.role}
+                          </div>
+                          <div className="text-xs text-orange-500">
+                            Since {user.joinDate}
+                          </div>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <div
+                            className={`inline-flex items-center space-x-1 px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(
+                              user.status || "Unknown"
+                            )}`}
+                          >
+                            {getStatusIcon(user.status || "Unknown")}
+                            <span>{user.status || "Unknown"}</span>
+                          </div>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <div className="text-sm text-orange-700">
+                            {user.lastLogin}
+                          </div>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <div className="text-sm font-semibold text-orange-800">
+                            {user.totalLoans}
+                          </div>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-right">
+                          <div className="flex items-center justify-end space-x-2">
+                            <button
+                              className="p-2 rounded-lg bg-blue-100/70 hover:bg-blue-200/70 transition-colors duration-200 group"
+                              title="View Details"
+                              onClick={() => setSelectedUser(user)}
+                            >
+                              <Eye className="w-4 h-4 text-blue-600 group-hover:text-blue-700" />
+                            </button>
+                            {/* <button
+                              className="p-2 rounded-lg bg-green-100/70 hover:bg-green-200/70 transition-colors duration-200 group"
+                              title="Edit User"
+                              onClick={() => {
+                                // Handle edit user
+                                console.log("Edit user:", user.id);
+                              }}
+                            >
+                              <Edit3 className="w-4 h-4 text-green-600 group-hover:text-green-700" />
+                            </button> */}
+                            {/* <button
+                              className="p-2 rounded-lg bg-purple-100/70 hover:bg-purple-200/70 transition-colors duration-200 group"
+                              title="Manage Permissions"
+                              onClick={() => {
+                                // Handle manage permissions
+                                console.log(
+                                  "Manage permissions for user:",
+                                  user.id
+                                );
+                              }}
+                            >
+                              <Shield className="w-4 h-4 text-purple-600 group-hover:text-purple-700" />
+                            </button> */}
+                            <button
+                              className="p-2 rounded-lg bg-red-100/70 hover:bg-red-200/70 transition-colors duration-200 group"
+                              title="Delete User"
+                              onClick={() => handleDeleteUser(user._id)}
+                            >
+                              <Trash2 className="w-4 h-4 text-red-600 group-hover:text-red-700" />
+                            </button>
+                            <button
+                              className="p-2 rounded-lg bg-gray-100/70 hover:bg-gray-200/70 transition-colors duration-200 group"
+                              title="More Options"
+                            >
+                              <MoreVertical className="w-4 h-4 text-gray-600 group-hover:text-gray-700" />
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
 
-            {filteredUsers.length === 0 && (
+            {!loading && filteredUsers.length === 0 && (
               <div className="text-center py-12">
                 <Users className="w-12 h-12 text-orange-400 mx-auto mb-4" />
                 <h3 className="text-lg font-semibold text-orange-700 mb-2">
                   No users found
                 </h3>
                 <p className="text-orange-600">
-                  Try adjusting your search or filter criteria
+                  {users.length === 0
+                    ? "No users are currently registered in the system"
+                    : "Try adjusting your search or filter criteria"}
                 </p>
               </div>
             )}
           </div>
 
           {/* Pagination */}
-          {filteredUsers.length > 0 && (
+          {!loading && filteredUsers.length > 0 && (
             <div className="flex items-center justify-between bg-white/70 backdrop-blur-sm rounded-2xl p-4 shadow-lg border border-white/50">
               <div className="text-sm text-orange-600">
                 Showing 1 to {filteredUsers.length} of {filteredUsers.length}{" "}
@@ -528,6 +650,12 @@ const UserManagement = () => {
           onClick={() => setSidebarOpen(false)}
         />
       )}
+
+      {/* User Details Modal */}
+      <UserDetailsModal
+        selectedUser={selectedUser}
+        onClose={() => setSelectedUser(null)}
+      />
     </div>
   );
 };

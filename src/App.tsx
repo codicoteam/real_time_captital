@@ -1,5 +1,8 @@
 // import React from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+
+// Admin imports
+import Adminlogin from "./pages/Admin_Pages/Login";
 import Dashboard from "./pages/Admin_Pages/Dashboard";
 import Users from "./pages/Admin_Pages/Users";
 import LoanManagement from "./pages/Admin_Pages/Loan_management";
@@ -20,7 +23,8 @@ function App() {
     <Router>
       <Routes>
         {/* Admin Routes */}
-        <Route path="/" element={<Dashboard />} />
+        <Route path="/" element={<Adminlogin />} />
+        <Route path="/admindashboard" element={<Dashboard />} />
         <Route path="/users" element={<Users />} />
         <Route path="/loan-management" element={<LoanManagement />} />
         <Route path="/loan-tracking" element={<LoanTracking />} />

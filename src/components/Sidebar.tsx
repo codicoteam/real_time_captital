@@ -13,7 +13,7 @@ const Sidebar = ({ isOpen = true, onClose = () => {} }) => {
   const location = useLocation();
 
   const sidebarItems = [
-    { icon: LayoutDashboard, label: "Dashboard", path: "/" },
+    { icon: LayoutDashboard, label: "Dashboard", path: "/admindashboard" },
     { icon: Users, label: "Users", path: "/users" },
     { icon: CreditCard, label: "Loan Management", path: "/loan-management" },
     { icon: TrendingUp, label: "Loan Tracking", path: "/loan-tracking" },

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Plus, DollarSign, Send } from "lucide-react";
 import LoanService from "../../services/user_Services/loan_Service";
+import { jwtDecode } from "jwt-decode";
 
 interface FormData {
   productType: string;
@@ -97,7 +98,6 @@ interface FormData {
 interface ProductType {
   value: string;
   label: string;
-  rate: string;
 }
 
 interface MaritalStatusOption {
@@ -205,9 +205,22 @@ const ApplyNewLoan: React.FC = () => {
   });
 
   const productTypes: ProductType[] = [
-    { value: "vehicle", label: "Vehicle Loan", rate: "12.5%" },
-    { value: "solar", label: "Solar Loan", rate: "10.0%" },
-    { value: "finishing_touch", label: "Finishing Touch Loan", rate: "11.5%" },
+    {
+      value: "Education Loan (Short Term)",
+      label: "Education Loan (Short Term)",
+    },
+    {
+      value: "Vehicle Loan (Long Term)",
+      label: "Vehicle Loan (Long Term)",
+    },
+    {
+      value: "Solar Loan (LT)",
+      label: "Solar Loan (LT)",
+    },
+    {
+      value: "Building Finisher Loan (LT)", // Added space before (LT)
+      label: "Building Finisher Loan (LT)",
+    },
   ];
 
   const maritalStatusOptions: MaritalStatusOption[] = [
@@ -236,15 +249,147 @@ const ApplyNewLoan: React.FC = () => {
     setSubmitMessage(null);
 
     try {
-      const response = await LoanService.createLoan(formData);
+      const token = localStorage.getItem("userToken");
+
+      if (!token) {
+        throw new Error("User not authenticated. Please log in and try again.");
+      }
+
+      // Decode the JWT token to get user ID
+      const decodedToken: any = jwtDecode(token);
+      const userId = decodedToken.id || decodedToken.userId || decodedToken.sub;
+
+      console.log("Decoded token:", decodedToken); // For debugging
+      console.log("User ID:", userId); // For debugging
+
+      if (!userId) {
+        throw new Error("Invalid token. Please log in again.");
+      }
+
+      const loanData = {
+        user: userId,
+        productType: formData.productType,
+        amount: parseFloat(formData.amount),
+        interestRate: parseFloat(formData.interestRate) || 0.05, // Default if not provided
+        term: parseInt(formData.term),
+
+        borrowerInfo: {
+          firstName: formData.firstName,
+          middleNames: formData.middleNames,
+          surname: formData.surname,
+          alias: formData.alias,
+          idNumber: formData.idNumber,
+          passport: formData.passport,
+          email: formData.email,
+          phone: formData.phone,
+          mobile: formData.mobile,
+          ecocash: formData.ecocash,
+          oneMoney: formData.oneMoney,
+          innsBucks: formData.innsBucks,
+          maritalStatus: formData.maritalStatus,
+          children: parseInt(formData.children) || 0,
+          childrenUnder18: parseInt(formData.childrenUnder18) || 0,
+          dependents: parseInt(formData.dependents) || 0,
+        },
+
+        residentialHistory: {
+          currentAddress: {
+            street: formData.street,
+            city: formData.city,
+            province: formData.province,
+            phone: formData.addressPhone,
+            mobile: formData.addressMobile,
+            work: formData.work,
+            owned: formData.owned,
+            rentAmount: parseFloat(formData.rentAmount) || 0,
+            historyYears: parseInt(formData.historyYears) || 0,
+          },
+        },
+
+        borrowerEmploymentHistory:
+          formData.employmentType === "employed"
+            ? [
+                {
+                  company: formData.company,
+                  jobTitle: formData.jobTitle,
+                  address: formData.employmentAddress,
+                  suburb: formData.suburb,
+                  city: formData.employmentCity,
+                  province: formData.employmentProvince,
+                  contactEmail: formData.contactEmail,
+                  contactPhone: formData.contactPhone,
+                  salary: parseFloat(formData.salary) || 0,
+                  from: formData.employmentFrom,
+                  to: formData.employmentTo,
+                },
+              ]
+            : [],
+
+        borrowerBusinessHistory:
+          formData.employmentType === "self-employed" ||
+          formData.employmentType === "business"
+            ? [
+                {
+                  businessName: formData.businessName,
+                  businessDescription: formData.businessDescription,
+                  multipleLocations: formData.multipleLocations,
+                  address: formData.businessAddress,
+                  suburb: formData.businessSuburb,
+                  city: formData.businessCity,
+                  province: formData.businessProvince,
+                  leased: formData.leased,
+                  leaseCost: parseFloat(formData.leaseCost) || 0,
+                  ownPremises: formData.ownPremises,
+                  titleDeedAttached: formData.titleDeedAttached,
+                  tradingLicenseAttached: formData.tradingLicenseAttached,
+                  netIncome: parseFloat(formData.netIncome) || 0,
+                  from: formData.businessFrom,
+                  to: formData.businessTo,
+                },
+              ]
+            : [],
+
+        financialSummary: {
+          salary: parseFloat(formData.salary) || 0,
+          hustleProfit: parseFloat(formData.hustleProfit) || 0,
+          businessExpenses: parseFloat(formData.businessExpenses) || 0,
+          bonuses: parseFloat(formData.bonuses) || 0,
+          rent: parseFloat(formData.rent) || 0,
+          rentalIncome: parseFloat(formData.rentalIncome) || 0,
+          schoolFees: parseFloat(formData.schoolFees) || 0,
+          investmentIncome: parseFloat(formData.investmentIncome) || 0,
+          ratesAndBills: parseFloat(formData.ratesAndBills) || 0,
+          otherIncome: parseFloat(formData.otherIncome) || 0,
+          loanRepayments: parseFloat(formData.loanRepayments) || 0,
+          otherDebts: parseFloat(formData.otherDebts) || 0,
+        },
+
+        bankReferences: [
+          {
+            institution: formData.bankInstitution,
+            currentAccount: formData.currentAccount,
+            savingsAccount: formData.savingsAccount,
+            loanNumber: formData.loanNumber,
+            loanBalance: parseFloat(formData.loanBalance) || 0,
+            branch: formData.branch,
+          },
+        ],
+
+        bankruptcy: {
+          hasDeclared: formData.hasDeclaredBankruptcy,
+          declaredDate: formData.bankruptcyDate,
+        },
+
+        status: "pending",
+        applicationDate: new Date().toISOString().split("T")[0],
+      };
+
+      const response = await LoanService.createLoan(loanData);
       setSubmitMessage({
         type: "success",
         text: "Loan application submitted successfully!",
       });
       console.log("Application submitted:", response);
-
-      // Optionally reset form
-      // setFormData(initialFormState);
     } catch (error) {
       setSubmitMessage({
         type: "error",
@@ -303,7 +448,7 @@ const ApplyNewLoan: React.FC = () => {
                 <option value="">Select product type</option>
                 {productTypes.map((type) => (
                   <option key={type.value} value={type.value}>
-                    {type.label} - {type.rate}
+                    {type.label}
                   </option>
                 ))}
               </select>

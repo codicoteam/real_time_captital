@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   DollarSign,
   Percent,
@@ -13,109 +13,158 @@ import {
   CheckCircle,
   Download,
   Calculator,
+  Loader2,
 } from "lucide-react";
-import Sidebar from "../../components/User_Sidebar"; // Import the ModernSidebar component
+import Sidebar from "../../components/User_Sidebar";
+import LoanService from "../../services/user_Services/loan_Service"; // Adjust path as needed
+
+interface Loan {
+  _id: string;
+  productType: string;
+  borrowerInfo: {
+    firstName: string;
+    surname: string;
+    email: string;
+  };
+  amount: number;
+  interestRate: number;
+  term: number;
+  balance: number;
+  status: string;
+  startDate?: string;
+  applicationDate: string;
+  paymentSchedule: PaymentScheduleItem[];
+}
+
+interface PaymentScheduleItem {
+  dueDate: string;
+  amountDue: number;
+  amountPaid: number;
+  paidOn?: string;
+  status: "pending" | "paid" | "overdue";
+}
 
 const UserDashboard = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [selectedLoan, setSelectedLoan] = useState(0);
+  const [loans, setLoans] = useState<Loan[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  const loans = [
-    {
-      id: "LN001",
-      borrower: "John Doe",
-      loanAmount: 500000,
-      interestRate: 8.5,
-      tenure: 60,
-      loanType: "Home Loan",
-      disbursedDate: "2024-01-15",
-      currentBalance: 425000,
-      monthlyEMI: 10247,
-      nextPaymentDate: "2025-07-15",
-      status: "Active",
-      totalPaid: 75000,
-      paymentsCompleted: 6,
-      creditScore: 750,
-    },
-    {
-      id: "LN002",
-      borrower: "Jane Smith",
-      loanAmount: 200000,
-      interestRate: 12.0,
-      tenure: 36,
-      loanType: "Business Loan",
-      disbursedDate: "2024-03-10",
-      currentBalance: 165000,
-      monthlyEMI: 6645,
-      nextPaymentDate: "2025-07-10",
-      status: "Active",
-      totalPaid: 35000,
-      paymentsCompleted: 4,
-      creditScore: 720,
-    },
-    {
-      id: "LN003",
-      borrower: "Mike Johnson",
-      loanAmount: 75000,
-      interestRate: 15.5,
-      tenure: 24,
-      loanType: "Personal Loan",
-      disbursedDate: "2024-05-20",
-      currentBalance: 68500,
-      monthlyEMI: 3742,
-      nextPaymentDate: "2025-07-20",
-      status: "Active",
-      totalPaid: 6500,
-      paymentsCompleted: 2,
-      creditScore: 680,
-    },
-  ];
+  // Fetch loans from backend
+  useEffect(() => {
+    const fetchLoans = async () => {
+      try {
+        setLoading(true);
+        const response = await LoanService.getAllLoans();
+
+        // Get all loans without filtering
+        const allLoans = response.data || [];
+
+        setLoans(allLoans);
+
+        if (allLoans.length === 0) {
+          setError("No loans found");
+        }
+      } catch (err: any) {
+        console.error("Error fetching loans:", err);
+        setError(err.message || "Failed to fetch loans");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchLoans();
+  }, []);
+
+  // Return early if loading or error
+  if (loading) {
+    return (
+      <div className="flex h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50">
+        <div className="flex-1 flex items-center justify-center">
+          <div className="text-center">
+            <Loader2 className="w-8 h-8 animate-spin text-blue-600 mx-auto mb-4" />
+            <p className="text-blue-600">Loading loans...</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (error || loans.length === 0) {
+    return (
+      <div className="flex h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50">
+        <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+        <div className="flex-1 flex items-center justify-center">
+          <div className="text-center bg-white/70 backdrop-blur-sm rounded-2xl p-8 shadow-lg border border-white/50">
+            <AlertCircle className="w-12 h-12 text-orange-500 mx-auto mb-4" />
+            <h2 className="text-xl font-bold text-blue-800 mb-2">
+              No Active Loans
+            </h2>
+            <p className="text-blue-600">
+              {error || "You don't have any active loans at the moment."}
+            </p>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   const currentLoan = loans[selectedLoan];
 
   // Generate payment schedule for the selected loan
-  const generatePaymentSchedule = (loan: {
-    id?: string;
-    borrower?: string;
-    loanAmount: any;
-    interestRate: any;
-    tenure: any;
-    loanType?: string;
-    disbursedDate: any;
-    currentBalance?: number;
-    monthlyEMI: any;
-    nextPaymentDate?: string;
-    status?: string;
-    totalPaid?: number;
-    paymentsCompleted: any;
-    creditScore?: number;
-  }) => {
+  const generatePaymentSchedule = (loan: Loan) => {
+    // If loan has existing payment schedule, use it
+    if (loan.paymentSchedule && loan.paymentSchedule.length > 0) {
+      return loan.paymentSchedule.slice(0, 12).map((payment, index) => ({
+        month: index + 1,
+        date: payment.dueDate,
+        emi: payment.amountDue,
+        principal: payment.amountDue * 0.7, // Approximate - you may need actual calculation
+        interest: payment.amountDue * 0.3, // Approximate - you may need actual calculation
+        balance: loan.balance - payment.amountPaid * (index + 1),
+        status:
+          payment.status === "paid"
+            ? "Paid"
+            : payment.status === "overdue"
+            ? "Overdue"
+            : index === 0
+            ? "Due"
+            : "Upcoming",
+      }));
+    }
+
+    // Generate schedule if not available
     const schedule = [];
-    const monthlyRate = loan.interestRate / 100 / 12;
-    const totalPayments = loan.tenure;
-    let balance = loan.loanAmount;
+    const monthlyRate = (loan.interestRate || 0) / 100 / 12;
+    const totalPayments = loan.term || 12;
+    let balance = loan.amount || 0;
+
+    // Calculate EMI using standard formula
+    const emi =
+      monthlyRate > 0
+        ? (balance * monthlyRate * Math.pow(1 + monthlyRate, totalPayments)) /
+          (Math.pow(1 + monthlyRate, totalPayments) - 1)
+        : balance / totalPayments;
+
+    const startDate = new Date(loan.startDate || loan.applicationDate);
 
     for (let i = 1; i <= Math.min(12, totalPayments); i++) {
       const interestPayment = balance * monthlyRate;
-      const principalPayment = loan.monthlyEMI - interestPayment;
+      const principalPayment = emi - interestPayment;
       balance -= principalPayment;
 
-      const paymentDate = new Date(loan.disbursedDate);
+      const paymentDate = new Date(startDate);
       paymentDate.setMonth(paymentDate.getMonth() + i - 1);
 
       schedule.push({
         month: i,
         date: paymentDate.toISOString().split("T")[0],
-        emi: loan.monthlyEMI,
+        emi: emi,
         principal: principalPayment,
         interest: interestPayment,
-        balance: balance,
-        status:
-          i <= loan.paymentsCompleted
-            ? "Paid"
-            : i === loan.paymentsCompleted + 1
-            ? "Due"
-            : "Upcoming",
+        balance: Math.max(0, balance),
+        status: "Upcoming",
       });
     }
     return schedule;
@@ -123,16 +172,18 @@ const UserDashboard = () => {
 
   const paymentSchedule = generatePaymentSchedule(currentLoan);
 
-  const formatCurrency = (amount: number | bigint) => {
+  const formatCurrency = (amount: number | undefined) => {
+    if (!amount && amount !== 0) return "N/A";
     return new Intl.NumberFormat("en-IN", {
       style: "currency",
-      currency: "INR",
+      currency: "USD",
       minimumFractionDigits: 0,
       maximumFractionDigits: 0,
     }).format(amount);
   };
 
-  const formatDate = (dateString: string | number | Date) => {
+  const formatDate = (dateString: string | undefined) => {
+    if (!dateString) return "N/A";
     return new Date(dateString).toLocaleDateString("en-IN", {
       year: "numeric",
       month: "short",
@@ -140,23 +191,54 @@ const UserDashboard = () => {
     });
   };
 
-  const getProgressPercentage = (loan: {
-    id?: string;
-    borrower?: string;
-    loanAmount: any;
-    interestRate?: number;
-    tenure?: number;
-    loanType?: string;
-    disbursedDate?: string;
-    currentBalance: any;
-    monthlyEMI?: number;
-    nextPaymentDate?: string;
-    status?: string;
-    totalPaid?: number;
-    paymentsCompleted?: number;
-    creditScore?: number;
-  }) => {
-    return ((loan.loanAmount - loan.currentBalance) / loan.loanAmount) * 100;
+  const getProgressPercentage = (loan: Loan) => {
+    if (!loan.amount || !loan.balance) return 0;
+    return ((loan.amount - loan.balance) / loan.amount) * 100;
+  };
+
+  const getPaymentsCompleted = (loan: Loan) => {
+    if (loan.paymentSchedule) {
+      return loan.paymentSchedule.filter((p) => p.status === "paid").length;
+    }
+    return 0;
+  };
+
+  const getTotalPaid = (loan: Loan) => {
+    if (loan.paymentSchedule) {
+      return loan.paymentSchedule
+        .filter((p) => p.status === "paid")
+        .reduce((sum, p) => sum + p.amountPaid, 0);
+    }
+    return loan.amount - loan.balance;
+  };
+
+  const getNextPaymentDate = (loan: Loan) => {
+    if (loan.paymentSchedule) {
+      const nextPayment = loan.paymentSchedule.find(
+        (p) => p.status === "pending"
+      );
+      return nextPayment?.dueDate;
+    }
+    return undefined;
+  };
+
+  const getMonthlyEMI = (loan: Loan) => {
+    if (loan.paymentSchedule && loan.paymentSchedule.length > 0) {
+      return loan.paymentSchedule[0].amountDue;
+    }
+
+    // Calculate EMI if not available
+    const monthlyRate = (loan.interestRate || 0) / 100 / 12;
+    const totalPayments = loan.term || 12;
+    const principal = loan.amount || 0;
+
+    if (monthlyRate > 0) {
+      return (
+        (principal * monthlyRate * Math.pow(1 + monthlyRate, totalPayments)) /
+        (Math.pow(1 + monthlyRate, totalPayments) - 1)
+      );
+    }
+    return principal / totalPayments;
   };
 
   return (
@@ -211,13 +293,17 @@ const UserDashboard = () => {
               <div className="flex items-center space-x-3 pl-4 border-l border-blue-200/50">
                 <div className="text-right hidden sm:block">
                   <div className="text-sm font-semibold text-blue-700">
-                    Sarah Johnson
+                    {currentLoan?.borrowerInfo?.firstName}{" "}
+                    {currentLoan?.borrowerInfo?.surname}
                   </div>
-                  <div className="text-xs text-blue-500">Loan Manager</div>
+                  <div className="text-xs text-blue-500">Borrower</div>
                 </div>
                 <div className="relative">
                   <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-500 rounded-xl flex items-center justify-center shadow-lg shadow-blue-500/25">
-                    <span className="text-white font-semibold text-sm">SJ</span>
+                    <span className="text-white font-semibold text-sm">
+                      {currentLoan?.borrowerInfo?.firstName?.[0]}
+                      {currentLoan?.borrowerInfo?.surname?.[0]}
+                    </span>
                   </div>
                   <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-400 border-2 border-white rounded-full shadow-sm"></div>
                 </div>
@@ -237,7 +323,7 @@ const UserDashboard = () => {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               {loans.map((loan, index) => (
                 <div
-                  key={loan.id}
+                  key={loan._id}
                   onClick={() => setSelectedLoan(index)}
                   className={`p-4 rounded-xl cursor-pointer transition-all duration-200 border-2 ${
                     selectedLoan === index
@@ -247,12 +333,14 @@ const UserDashboard = () => {
                 >
                   <div className="flex items-center justify-between mb-2">
                     <span className="text-sm font-semibold text-blue-800">
-                      {loan.id}
+                      {loan._id.slice(-6).toUpperCase()}
                     </span>
                     <span
                       className={`px-2 py-1 rounded-full text-xs font-medium ${
-                        loan.status === "Active"
+                        loan.status === "active"
                           ? "bg-green-100 text-green-700"
+                          : loan.status === "approved"
+                          ? "bg-blue-100 text-blue-700"
                           : "bg-gray-100 text-gray-700"
                       }`}
                     >
@@ -260,11 +348,13 @@ const UserDashboard = () => {
                     </span>
                   </div>
                   <div className="text-lg font-bold text-blue-900">
-                    {loan.borrower}
+                    {loan.borrowerInfo?.firstName} {loan.borrowerInfo?.surname}
                   </div>
-                  <div className="text-sm text-blue-600">{loan.loanType}</div>
+                  <div className="text-sm text-blue-600">
+                    {loan.productType}
+                  </div>
                   <div className="text-sm font-semibold text-blue-800 mt-2">
-                    {formatCurrency(loan.currentBalance)} remaining
+                    {formatCurrency(loan.balance)} remaining
                   </div>
                 </div>
               ))}
@@ -287,7 +377,7 @@ const UserDashboard = () => {
                   Loan Amount
                 </h3>
                 <div className="text-2xl font-bold text-blue-800">
-                  {formatCurrency(currentLoan.loanAmount)}
+                  {formatCurrency(currentLoan.amount)}
                 </div>
               </div>
             </div>
@@ -306,7 +396,7 @@ const UserDashboard = () => {
                   Outstanding Balance
                 </h3>
                 <div className="text-2xl font-bold text-green-800">
-                  {formatCurrency(currentLoan.currentBalance)}
+                  {formatCurrency(currentLoan.balance)}
                 </div>
               </div>
             </div>
@@ -325,7 +415,7 @@ const UserDashboard = () => {
                   Interest Rate
                 </h3>
                 <div className="text-2xl font-bold text-purple-800">
-                  {currentLoan.interestRate}%
+                  {currentLoan.interestRate || 0}%
                 </div>
               </div>
             </div>
@@ -344,7 +434,7 @@ const UserDashboard = () => {
                   EMI Amount
                 </h3>
                 <div className="text-2xl font-bold text-orange-800">
-                  {formatCurrency(currentLoan.monthlyEMI)}
+                  {formatCurrency(getMonthlyEMI(currentLoan))}
                 </div>
               </div>
             </div>
@@ -387,13 +477,14 @@ const UserDashboard = () => {
               <div className="grid grid-cols-2 gap-4 mb-6">
                 <div className="text-center p-4 bg-gradient-to-br from-blue-50 to-purple-50 rounded-xl">
                   <div className="text-2xl font-bold text-blue-800">
-                    {currentLoan.paymentsCompleted}
+                    {getPaymentsCompleted(currentLoan)}
                   </div>
                   <div className="text-sm text-blue-600">Payments Made</div>
                 </div>
                 <div className="text-center p-4 bg-gradient-to-br from-purple-50 to-pink-50 rounded-xl">
                   <div className="text-2xl font-bold text-purple-800">
-                    {currentLoan.tenure - currentLoan.paymentsCompleted}
+                    {(currentLoan.term || 0) -
+                      getPaymentsCompleted(currentLoan)}
                   </div>
                   <div className="text-sm text-purple-600">Remaining</div>
                 </div>
@@ -404,19 +495,19 @@ const UserDashboard = () => {
                 <div className="flex justify-between items-center py-2 border-b border-blue-100">
                   <span className="text-sm text-blue-600">Total Paid</span>
                   <span className="font-semibold text-blue-800">
-                    {formatCurrency(currentLoan.totalPaid)}
+                    {formatCurrency(getTotalPaid(currentLoan))}
                   </span>
                 </div>
                 <div className="flex justify-between items-center py-2 border-b border-blue-100">
                   <span className="text-sm text-blue-600">Next Payment</span>
                   <span className="font-semibold text-blue-800">
-                    {formatDate(currentLoan.nextPaymentDate)}
+                    {formatDate(getNextPaymentDate(currentLoan))}
                   </span>
                 </div>
                 <div className="flex justify-between items-center py-2">
                   <span className="text-sm text-blue-600">Loan Tenure</span>
                   <span className="font-semibold text-blue-800">
-                    {currentLoan.tenure} months
+                    {currentLoan.term || 0} months
                   </span>
                 </div>
               </div>
@@ -440,7 +531,7 @@ const UserDashboard = () => {
                       Loan ID
                     </label>
                     <div className="text-lg font-bold text-blue-800">
-                      {currentLoan.id}
+                      {currentLoan._id.slice(-8).toUpperCase()}
                     </div>
                   </div>
                   <div>
@@ -448,7 +539,8 @@ const UserDashboard = () => {
                       Borrower
                     </label>
                     <div className="text-lg font-bold text-blue-800">
-                      {currentLoan.borrower}
+                      {currentLoan.borrowerInfo?.firstName}{" "}
+                      {currentLoan.borrowerInfo?.surname}
                     </div>
                   </div>
                 </div>
@@ -459,15 +551,15 @@ const UserDashboard = () => {
                       Loan Type
                     </label>
                     <div className="text-lg font-bold text-blue-800">
-                      {currentLoan.loanType}
+                      {currentLoan.productType}
                     </div>
                   </div>
                   <div>
                     <label className="text-sm font-medium text-blue-600">
-                      Credit Score
+                      Email
                     </label>
                     <div className="text-lg font-bold text-blue-800">
-                      {currentLoan.creditScore}
+                      {currentLoan.borrowerInfo?.email || "N/A"}
                     </div>
                   </div>
                 </div>
@@ -475,17 +567,19 @@ const UserDashboard = () => {
                 <div className="grid grid-cols-2 gap-4">
                   <div>
                     <label className="text-sm font-medium text-blue-600">
-                      Disbursed Date
+                      Start Date
                     </label>
                     <div className="text-lg font-bold text-blue-800">
-                      {formatDate(currentLoan.disbursedDate)}
+                      {formatDate(
+                        currentLoan.startDate || currentLoan.applicationDate
+                      )}
                     </div>
                   </div>
                   <div>
                     <label className="text-sm font-medium text-blue-600">
                       Status
                     </label>
-                    <div className="text-lg font-bold text-green-600">
+                    <div className="text-lg font-bold text-green-600 capitalize">
                       {currentLoan.status}
                     </div>
                   </div>
@@ -585,18 +679,11 @@ const UserDashboard = () => {
                               ? "bg-green-100 text-green-700"
                               : payment.status === "Due"
                               ? "bg-orange-100 text-orange-700"
+                              : payment.status === "Overdue"
+                              ? "bg-red-100 text-red-700"
                               : "bg-blue-100 text-blue-700"
                           }`}
                         >
-                          {payment.status === "Paid" && (
-                            <CheckCircle className="w-3 h-3 inline mr-1" />
-                          )}
-                          {payment.status === "Due" && (
-                            <AlertCircle className="w-3 h-3 inline mr-1" />
-                          )}
-                          {payment.status === "Upcoming" && (
-                            <Clock className="w-3 h-3 inline mr-1" />
-                          )}
                           {payment.status}
                         </span>
                       </td>
@@ -604,6 +691,52 @@ const UserDashboard = () => {
                   ))}
                 </tbody>
               </table>
+            </div>
+
+            {/* Payment Schedule Summary */}
+            <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl p-4">
+                <div className="flex items-center space-x-3">
+                  <div className="p-2 bg-blue-100 rounded-lg">
+                    <Clock className="w-5 h-5 text-blue-600" />
+                  </div>
+                  <div>
+                    <div className="text-sm text-blue-600">Next Payment</div>
+                    <div className="text-lg font-bold text-blue-800">
+                      {formatDate(getNextPaymentDate(currentLoan))}
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="bg-gradient-to-br from-green-50 to-emerald-50 rounded-xl p-4">
+                <div className="flex items-center space-x-3">
+                  <div className="p-2 bg-green-100 rounded-lg">
+                    <CheckCircle className="w-5 h-5 text-green-600" />
+                  </div>
+                  <div>
+                    <div className="text-sm text-green-600">Payments Made</div>
+                    <div className="text-lg font-bold text-green-800">
+                      {getPaymentsCompleted(currentLoan)} /{" "}
+                      {currentLoan.term || 0}
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="bg-gradient-to-br from-purple-50 to-pink-50 rounded-xl p-4">
+                <div className="flex items-center space-x-3">
+                  <div className="p-2 bg-purple-100 rounded-lg">
+                    <DollarSign className="w-5 h-5 text-purple-600" />
+                  </div>
+                  <div>
+                    <div className="text-sm text-purple-600">Total Paid</div>
+                    <div className="text-lg font-bold text-purple-800">
+                      {formatCurrency(getTotalPaid(currentLoan))}
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </main>

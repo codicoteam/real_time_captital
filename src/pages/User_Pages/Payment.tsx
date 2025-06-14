@@ -20,6 +20,7 @@ import {
   Shield,
   Info,
   Download,
+  Banknote,
 } from "lucide-react";
 import Sidebar from "../../components/User_Sidebar";
 
@@ -28,13 +29,16 @@ const Payment = () => {
   const [activeTab, setActiveTab] = useState("make-payment");
   const [selectedLoan, setSelectedLoan] = useState(0);
   const [paymentAmount, setPaymentAmount] = useState("");
-  const [paymentMethod, setPaymentMethod] = useState("upi");
+  const [paymentMethod, setPaymentMethod] = useState("Ecocash");
   const [autoPayEnabled, setAutoPayEnabled] = useState(false);
   const [filterStatus, setFilterStatus] = useState("all");
+  const [paymentReference, setPaymentReference] = useState("");
+  const [notes, setNotes] = useState("");
 
   const loans = [
     {
-      id: "LN001",
+      _id: "64a5f123456789abcdef0001",
+      loanId: "LN001",
       borrower: "John Doe",
       loanType: "Home Loan",
       currentBalance: 425000,
@@ -43,7 +47,8 @@ const Payment = () => {
       dueAmount: 10247,
     },
     {
-      id: "LN002",
+      _id: "64a5f123456789abcdef0002",
+      loanId: "LN002",
       borrower: "Jane Smith",
       loanType: "Business Loan",
       currentBalance: 165000,
@@ -52,7 +57,8 @@ const Payment = () => {
       dueAmount: 6645,
     },
     {
-      id: "LN003",
+      _id: "64a5f123456789abcdef0003",
+      loanId: "LN003",
       borrower: "Mike Johnson",
       loanType: "Personal Loan",
       currentBalance: 68500,
@@ -64,68 +70,94 @@ const Payment = () => {
 
   const paymentHistory = [
     {
-      id: "TXN001",
+      _id: "64a5f123456789abcdef1001",
+      loan: "64a5f123456789abcdef0001",
       loanId: "LN001",
-      amount: 10247,
-      date: "2025-06-15",
-      status: "Success",
-      method: "UPI",
-      transactionId: "UPI123456789",
-      type: "EMI Payment",
+      user: "64a5f123456789abcdef2001",
+      amountPaid: 10247,
+      paymentDate: "2025-06-15",
+      paymentMethod: "Ecocash",
+      paymentReference: "EC123456789",
+      forInstallmentDate: "2025-06-15",
+      status: "confirmed",
+      notes: "Monthly EMI payment",
+      createdAt: "2025-06-15T08:30:00Z",
+      updatedAt: "2025-06-15T08:35:00Z",
     },
     {
-      id: "TXN002",
+      _id: "64a5f123456789abcdef1002",
+      loan: "64a5f123456789abcdef0001",
       loanId: "LN001",
-      amount: 10247,
-      date: "2025-05-15",
-      status: "Success",
-      method: "Net Banking",
-      transactionId: "NB987654321",
-      type: "EMI Payment",
+      user: "64a5f123456789abcdef2001",
+      amountPaid: 10247,
+      paymentDate: "2025-05-15",
+      paymentMethod: "BankTransfer",
+      paymentReference: "BT987654321",
+      forInstallmentDate: "2025-05-15",
+      status: "confirmed",
+      notes: "Monthly EMI payment via bank transfer",
+      createdAt: "2025-05-15T09:15:00Z",
+      updatedAt: "2025-05-15T09:20:00Z",
     },
     {
-      id: "TXN003",
+      _id: "64a5f123456789abcdef1003",
+      loan: "64a5f123456789abcdef0002",
       loanId: "LN002",
-      amount: 6645,
-      date: "2025-06-10",
-      status: "Success",
-      method: "Debit Card",
-      transactionId: "DC456789123",
-      type: "EMI Payment",
+      user: "64a5f123456789abcdef2002",
+      amountPaid: 6645,
+      paymentDate: "2025-06-10",
+      paymentMethod: "Card",
+      paymentReference: "CD456789123",
+      forInstallmentDate: "2025-06-10",
+      status: "confirmed",
+      notes: "Business loan EMI",
+      createdAt: "2025-06-10T14:22:00Z",
+      updatedAt: "2025-06-10T14:25:00Z",
     },
     {
-      id: "TXN004",
+      _id: "64a5f123456789abcdef1004",
+      loan: "64a5f123456789abcdef0003",
       loanId: "LN003",
-      amount: 5000,
-      date: "2025-06-08",
-      status: "Failed",
-      method: "UPI",
-      transactionId: "UPI789123456",
-      type: "Partial Payment",
+      user: "64a5f123456789abcdef2003",
+      amountPaid: 5000,
+      paymentDate: "2025-06-08",
+      paymentMethod: "OneMoney",
+      paymentReference: "OM789123456",
+      forInstallmentDate: "2025-06-08",
+      status: "failed",
+      notes: "Partial payment attempt",
+      createdAt: "2025-06-08T11:45:00Z",
+      updatedAt: "2025-06-08T11:50:00Z",
     },
     {
-      id: "TXN005",
+      _id: "64a5f123456789abcdef1005",
+      loan: "64a5f123456789abcdef0001",
       loanId: "LN001",
-      amount: 10247,
-      date: "2025-04-15",
-      status: "Success",
-      method: "UPI",
-      transactionId: "UPI321654987",
-      type: "EMI Payment",
+      user: "64a5f123456789abcdef2001",
+      amountPaid: 10247,
+      paymentDate: "2025-04-15",
+      paymentMethod: "Innsbucks",
+      paymentReference: "IB321654987",
+      forInstallmentDate: "2025-04-15",
+      status: "confirmed",
+      notes: "Regular monthly payment",
+      createdAt: "2025-04-15T16:30:00Z",
+      updatedAt: "2025-04-15T16:35:00Z",
     },
   ];
 
   const currentLoan = loans[selectedLoan];
 
   const formatCurrency = (amount: number | bigint) =>
-    new Intl.NumberFormat("en-IN", {
+    new Intl.NumberFormat("en-US", {
       style: "currency",
-      currency: "INR",
+      currency: "USD",
       minimumFractionDigits: 0,
       maximumFractionDigits: 0,
     }).format(amount);
+
   const formatDate = (dateString: string | number | Date) =>
-    new Date(dateString).toLocaleDateString("en-IN", {
+    new Date(dateString).toLocaleDateString("en-US", {
       year: "numeric",
       month: "short",
       day: "numeric",
@@ -133,30 +165,38 @@ const Payment = () => {
 
   const getStatusIcon = (status: string) => {
     const icons: { [key: string]: JSX.Element } = {
-      Success: <CheckCircle className="w-4 h-4 text-green-600" />,
-      Failed: <XCircle className="w-4 h-4 text-red-600" />,
-      Pending: <Clock className="w-4 h-4 text-yellow-600" />,
+      confirmed: <CheckCircle className="w-4 h-4 text-green-600" />,
+      failed: <XCircle className="w-4 h-4 text-red-600" />,
+      pending: <Clock className="w-4 h-4 text-yellow-600" />,
     };
     return icons[status] || <AlertCircle className="w-4 h-4 text-gray-600" />;
   };
+
   const getStatusColor = (status: string) => {
     const colors: { [key: string]: string } = {
-      Success: "bg-green-100 text-green-700 border-green-200",
-      Failed: "bg-red-100 text-red-700 border-red-200",
-      Pending: "bg-yellow-100 text-yellow-700 border-yellow-200",
+      confirmed: "bg-green-100 text-green-700 border-green-200",
+      failed: "bg-red-100 text-red-700 border-red-200",
+      pending: "bg-yellow-100 text-yellow-700 border-yellow-200",
     };
     return colors[status] || "bg-gray-100 text-gray-700 border-gray-200";
   };
+
   const filteredHistory = paymentHistory.filter(
     (payment) =>
       filterStatus === "all" || payment.status.toLowerCase() === filterStatus
   );
-  const handlePayment = () =>
+
+  const handlePayment = () => {
+    if (!paymentReference.trim()) {
+      alert("Please enter a payment reference number");
+      return;
+    }
     alert(
       `Processing payment of ${formatCurrency(
         parseFloat(paymentAmount) || currentLoan.dueAmount
-      )} via ${paymentMethod.toUpperCase()}`
+      )} via ${paymentMethod} with reference: ${paymentReference}`
     );
+  };
 
   const tabs = [
     { id: "make-payment", label: "Make Payment", icon: CreditCard },
@@ -165,23 +205,25 @@ const Payment = () => {
   ];
 
   const paymentMethods = [
-    { id: "upi", label: "UPI", icon: Smartphone },
-    { id: "netbanking", label: "Net Banking", icon: Building2 },
-    { id: "debitcard", label: "Debit Card", icon: CreditCard },
-    { id: "wallet", label: "Wallet", icon: Wallet },
+    { id: "Ecocash", label: "Ecocash", icon: Smartphone },
+    { id: "OneMoney", label: "OneMoney", icon: Smartphone },
+    { id: "Innsbucks", label: "Innsbucks", icon: Wallet },
+    { id: "BankTransfer", label: "Bank Transfer", icon: Building2 },
+    { id: "Cash", label: "Cash", icon: Banknote },
+    { id: "Card", label: "Card", icon: CreditCard },
   ];
 
   const summaryCards = [
     {
-      title: "Successful Payments",
-      value: paymentHistory.filter((p) => p.status === "Success").length,
+      title: "Confirmed Payments",
+      value: paymentHistory.filter((p) => p.status === "confirmed").length,
       icon: CheckCircle,
       color: "green",
       arrow: ArrowUpRight,
     },
     {
       title: "Failed Payments",
-      value: paymentHistory.filter((p) => p.status === "Failed").length,
+      value: paymentHistory.filter((p) => p.status === "failed").length,
       icon: XCircle,
       color: "red",
       arrow: ArrowDownLeft,
@@ -190,8 +232,8 @@ const Payment = () => {
       title: "Total Paid",
       value: formatCurrency(
         paymentHistory
-          .filter((p) => p.status === "Success")
-          .reduce((sum, p) => sum + p.amount, 0)
+          .filter((p) => p.status === "confirmed")
+          .reduce((sum, p) => sum + p.amountPaid, 0)
       ),
       icon: DollarSign,
       color: "blue",
@@ -200,7 +242,7 @@ const Payment = () => {
     {
       title: "This Month",
       value: paymentHistory.filter(
-        (p) => new Date(p.date).getMonth() === new Date().getMonth()
+        (p) => new Date(p.paymentDate).getMonth() === new Date().getMonth()
       ).length,
       icon: Calendar,
       color: "purple",
@@ -303,7 +345,7 @@ const Payment = () => {
                   <div className="space-y-3">
                     {loans.map((loan, index) => (
                       <div
-                        key={loan.id}
+                        key={loan._id}
                         onClick={() => setSelectedLoan(index)}
                         className={`p-4 rounded-xl cursor-pointer transition-all duration-200 border-2 ${
                           selectedLoan === index
@@ -313,7 +355,7 @@ const Payment = () => {
                       >
                         <div className="flex justify-between items-start mb-2">
                           <span className="text-sm font-semibold text-blue-800">
-                            {loan.id}
+                            {loan.loanId}
                           </span>
                           <span className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded-full">
                             Active
@@ -344,7 +386,7 @@ const Payment = () => {
                       Payment Details
                     </h3>
                     <p className="text-sm text-blue-500">
-                      Make a payment for loan {currentLoan.id}
+                      Make a payment for loan {currentLoan.loanId}
                     </p>
                   </div>
 
@@ -426,7 +468,7 @@ const Payment = () => {
                       <label className="block text-sm font-medium text-blue-700 mb-3">
                         Payment Method
                       </label>
-                      <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                      <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
                         {paymentMethods.map((method) => {
                           const IconComponent = method.icon;
                           return (
@@ -447,6 +489,38 @@ const Payment = () => {
                           );
                         })}
                       </div>
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-blue-700 mb-3">
+                        Payment Reference{" "}
+                        <span className="text-red-500">*</span>
+                      </label>
+                      <input
+                        type="text"
+                        value={paymentReference}
+                        onChange={(e) => setPaymentReference(e.target.value)}
+                        placeholder="Enter payment reference number"
+                        className="w-full px-4 py-3 bg-white border border-blue-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all duration-200"
+                        required
+                      />
+                      <p className="text-xs text-blue-500 mt-1">
+                        Required: Transaction ID or reference number from your
+                        payment provider
+                      </p>
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-blue-700 mb-3">
+                        Notes (Optional)
+                      </label>
+                      <textarea
+                        value={notes}
+                        onChange={(e) => setNotes(e.target.value)}
+                        placeholder="Add any additional notes about this payment"
+                        rows={3}
+                        className="w-full px-4 py-3 bg-white border border-blue-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all duration-200 resize-none"
+                      />
                     </div>
 
                     <div className="pt-4 border-t border-blue-200">
@@ -530,7 +604,7 @@ const Payment = () => {
                       className="px-4 py-2 bg-white border border-blue-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20"
                     >
                       <option value="all">All Status</option>
-                      <option value="success">Success</option>
+                      <option value="confirmed">Confirmed</option>
                       <option value="failed">Failed</option>
                       <option value="pending">Pending</option>
                     </select>
@@ -546,13 +620,14 @@ const Payment = () => {
                     <thead>
                       <tr className="border-b border-blue-200">
                         {[
-                          "Transaction ID",
+                          "Payment Reference",
                           "Loan ID",
-                          "Amount",
-                          "Date",
+                          "Amount Paid",
+                          "Payment Date",
                           "Method",
-                          "Type",
+                          "For Installment",
                           "Status",
+                          "Notes",
                         ].map((header) => (
                           <th
                             key={header}
@@ -570,178 +645,228 @@ const Payment = () => {
                           className="border-b border-blue-100 hover:bg-blue-50/50 transition-colors duration-200"
                         >
                           <td className="py-4 px-4 text-sm font-medium text-blue-800">
-                            {payment.transactionId}
+                            {payment.paymentReference}
                           </td>
                           <td className="py-4 px-4 text-sm text-blue-700">
                             {payment.loanId}
                           </td>
                           <td className="py-4 px-4 text-sm font-semibold text-blue-800">
-                            {formatCurrency(payment.amount)}
+                            {formatCurrency(payment.amountPaid)}
                           </td>
                           <td className="py-4 px-4 text-sm text-blue-700">
-                            {formatDate(payment.date)}
+                            {formatDate(payment.paymentDate)}
                           </td>
                           <td className="py-4 px-4 text-sm text-blue-700">
-                            {payment.method}
+                            {payment.paymentMethod}
                           </td>
                           <td className="py-4 px-4 text-sm text-blue-700">
-                            {payment.type}
+                            {formatDate(payment.forInstallmentDate)}
                           </td>
                           <td className="py-4 px-4">
-                            <span
-                              className={`flex items-center space-x-1 px-3 py-1 rounded-full text-xs font-medium border ${getStatusColor(
+                            <div
+                              className={`inline-flex items-center space-x-2 px-3 py-1 rounded-full text-xs font-medium border ${getStatusColor(
                                 payment.status
                               )}`}
                             >
                               {getStatusIcon(payment.status)}
-                              <span>{payment.status}</span>
-                            </span>
+                              <span className="capitalize">
+                                {payment.status}
+                              </span>
+                            </div>
+                          </td>
+                          <td className="py-4 px-4 text-sm text-blue-700 max-w-xs truncate">
+                            {payment.notes}
                           </td>
                         </tr>
                       ))}
                     </tbody>
                   </table>
                 </div>
+
+                {filteredHistory.length === 0 && (
+                  <div className="text-center py-12">
+                    <Clock className="w-12 h-12 text-blue-300 mx-auto mb-4" />
+                    <p className="text-blue-500 text-lg font-medium">
+                      No payments found
+                    </p>
+                    <p className="text-blue-400 text-sm">
+                      Try adjusting your filter settings
+                    </p>
+                  </div>
+                )}
               </div>
             </div>
           )}
 
           {/* Auto Payment Tab */}
           {activeTab === "auto-pay" && (
-            <div className="space-y-6">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
               <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-8 shadow-lg border border-white/50">
-                <div className="flex items-center justify-between mb-6">
-                  <div>
-                    <h3 className="text-xl font-bold text-blue-800 mb-1">
-                      Automatic Payment Setup
-                    </h3>
-                    <p className="text-sm text-blue-500">
-                      Set up automatic EMI payments for your loans
-                    </p>
-                  </div>
-                  <div className="flex items-center space-x-3">
-                    <span className="text-sm font-medium text-blue-700">
-                      Auto Pay
-                    </span>
-                    <button
-                      onClick={() => setAutoPayEnabled(!autoPayEnabled)}
-                      className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors duration-200 ${
-                        autoPayEnabled
-                          ? "bg-gradient-to-r from-blue-500 to-purple-500"
-                          : "bg-gray-300"
-                      }`}
-                    >
-                      <span
-                        className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform duration-200 ${
-                          autoPayEnabled ? "translate-x-5" : "translate-x-1"
-                        }`}
-                      />
-                    </button>
-                  </div>
+                <div className="mb-6">
+                  <h3 className="text-xl font-bold text-blue-800 mb-2">
+                    Auto Payment Settings
+                  </h3>
+                  <p className="text-sm text-blue-500">
+                    Set up automatic payments for your loans
+                  </p>
                 </div>
 
-                {autoPayEnabled && (
-                  <div className="space-y-6 p-6 bg-blue-50/50 rounded-xl border border-blue-200/50">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="space-y-6">
+                  <div className="flex items-center justify-between p-4 bg-gradient-to-r from-blue-50 to-purple-50 rounded-xl border border-blue-200">
+                    <div>
+                      <h4 className="text-lg font-semibold text-blue-800">
+                        Enable Auto Payment
+                      </h4>
+                      <p className="text-sm text-blue-600">
+                        Automatically pay your EMI on due date
+                      </p>
+                    </div>
+                    <label className="relative inline-flex items-center cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={autoPayEnabled}
+                        onChange={(e) => setAutoPayEnabled(e.target.checked)}
+                        className="sr-only peer"
+                      />
+                      <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                    </label>
+                  </div>
+
+                  {autoPayEnabled && (
+                    <div className="space-y-4 animate-in slide-in-from-top-4 duration-300">
                       <div>
                         <label className="block text-sm font-medium text-blue-700 mb-3">
-                          Select Loan for Auto Pay
+                          Select Loan for Auto Payment
                         </label>
-                        <select className="w-full px-4 py-3 bg-white border border-blue-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20">
+                        <select className="w-full px-4 py-3 bg-white border border-blue-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all duration-200">
                           {loans.map((loan) => (
-                            <option key={loan.id} value={loan.id}>
-                              {loan.id} - {loan.borrower} ({loan.loanType})
+                            <option key={loan._id} value={loan._id}>
+                              {loan.loanId} - {loan.borrower} ({loan.loanType})
                             </option>
                           ))}
                         </select>
                       </div>
-                      <div>
-                        <label className="block text-sm font-medium text-blue-700 mb-3">
-                          Payment Date
-                        </label>
-                        <select className="w-full px-4 py-3 bg-white border border-blue-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20">
-                          {[5, 10, 15, 20, 25].map((day) => (
-                            <option key={day} value={day}>
-                              {day}th of every month
-                            </option>
-                          ))}
-                        </select>
-                      </div>
+
                       <div>
                         <label className="block text-sm font-medium text-blue-700 mb-3">
                           Payment Method
                         </label>
-                        <select className="w-full px-4 py-3 bg-white border border-blue-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20">
-                          <option value="netbanking">Net Banking</option>
-                          <option value="upi">UPI Auto Pay</option>
-                          <option value="debitcard">Debit Card</option>
+                        <select className="w-full px-4 py-3 bg-white border border-blue-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all duration-200">
+                          {paymentMethods.map((method) => (
+                            <option key={method.id} value={method.id}>
+                              {method.label}
+                            </option>
+                          ))}
                         </select>
                       </div>
+
                       <div>
                         <label className="block text-sm font-medium text-blue-700 mb-3">
-                          Maximum Amount Limit
+                          Payment Date Preference
                         </label>
-                        <input
-                          type="number"
-                          placeholder="Enter maximum amount"
-                          className="w-full px-4 py-3 bg-white border border-blue-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20"
-                        />
+                        <div className="grid grid-cols-2 gap-3">
+                          <button className="p-3 border-2 border-blue-500 bg-blue-50 rounded-xl text-center">
+                            <div className="text-sm font-medium text-blue-700">
+                              On Due Date
+                            </div>
+                            <div className="text-xs text-blue-600 mt-1">
+                              Pay exactly on due date
+                            </div>
+                          </button>
+                          <button className="p-3 border-2 border-blue-200 rounded-xl text-center hover:border-blue-300">
+                            <div className="text-sm font-medium text-blue-700">
+                              3 Days Early
+                            </div>
+                            <div className="text-xs text-blue-600 mt-1">
+                              Pay 3 days before due
+                            </div>
+                          </button>
+                        </div>
                       </div>
-                    </div>
 
-                    <div className="flex items-center space-x-3 p-4 bg-yellow-50 border border-yellow-200 rounded-xl">
-                      <AlertCircle className="w-5 h-5 text-yellow-600 flex-shrink-0" />
-                      <div className="text-sm text-yellow-700">
-                        <strong>Important:</strong> Auto payments will be
-                        processed 2 days before the due date. You'll receive
-                        notifications via SMS and email before each transaction.
-                      </div>
-                    </div>
-
-                    <div className="flex justify-end space-x-4">
-                      <button className="px-6 py-3 border border-blue-300 text-blue-700 rounded-xl hover:bg-blue-50 transition-all duration-200">
-                        Cancel
-                      </button>
-                      <button className="px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-500 text-white rounded-xl hover:from-blue-600 hover:to-purple-600 transition-all duration-200 flex items-center space-x-2">
-                        <CheckCircle className="w-4 h-4" />
-                        <span>Save Auto Pay Settings</span>
-                      </button>
-                    </div>
-                  </div>
-                )}
-
-                <div className="mt-8 space-y-4">
-                  <h4 className="text-lg font-semibold text-blue-800">
-                    Current Auto Pay Status
-                  </h4>
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                    {loans.map((loan) => (
-                      <div
-                        key={loan.id}
-                        className="p-4 bg-white rounded-xl border border-blue-200/50 shadow-sm"
-                      >
-                        <div className="flex items-center justify-between mb-3">
-                          <span className="text-sm font-semibold text-blue-800">
-                            {loan.id}
-                          </span>
-                          <span className="text-xs bg-red-100 text-red-700 px-2 py-1 rounded-full">
-                            Disabled
-                          </span>
-                        </div>
-                        <div className="text-sm text-blue-700 mb-1">
-                          {loan.borrower}
-                        </div>
-                        <div className="text-xs text-blue-500">
-                          {loan.loanType}
-                        </div>
-                        <div className="text-sm font-semibold text-blue-800 mt-2">
-                          EMI: {formatCurrency(loan.monthlyEMI)}
-                        </div>
-                        <button className="w-full mt-3 py-2 text-xs bg-blue-100 text-blue-700 rounded-lg hover:bg-blue-200 transition-colors duration-200">
-                          Setup Auto Pay
+                      <div className="pt-4">
+                        <button className="w-full py-3 bg-gradient-to-r from-green-500 to-emerald-500 text-white rounded-xl font-semibold hover:from-green-600 hover:to-emerald-600 transition-all duration-200 flex items-center justify-center space-x-2">
+                          <CheckCircle className="w-5 h-5" />
+                          <span>Save Auto Payment Settings</span>
                         </button>
                       </div>
-                    ))}
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-8 shadow-lg border border-white/50">
+                <div className="mb-6">
+                  <h3 className="text-xl font-bold text-blue-800 mb-2">
+                    Benefits of Auto Payment
+                  </h3>
+                  <p className="text-sm text-blue-500">
+                    Why you should enable automatic payments
+                  </p>
+                </div>
+
+                <div className="space-y-4">
+                  {[
+                    {
+                      icon: CheckCircle,
+                      title: "Never Miss a Payment",
+                      description:
+                        "Automatic payments ensure you never miss your EMI due date",
+                    },
+                    {
+                      icon: Shield,
+                      title: "Secure & Reliable",
+                      description:
+                        "Bank-grade security with automated transaction processing",
+                    },
+                    {
+                      icon: Clock,
+                      title: "Save Time",
+                      description:
+                        "No need to manually process payments every month",
+                    },
+                    {
+                      icon: DollarSign,
+                      title: "Avoid Late Fees",
+                      description:
+                        "Prevent penalty charges from delayed payments",
+                    },
+                  ].map((benefit, index) => {
+                    const IconComponent = benefit.icon;
+                    return (
+                      <div
+                        key={index}
+                        className="flex items-start space-x-4 p-4 bg-gradient-to-r from-green-50 to-emerald-50 rounded-xl border border-green-200"
+                      >
+                        <div className="p-2 bg-green-100 rounded-xl">
+                          <IconComponent className="w-5 h-5 text-green-600" />
+                        </div>
+                        <div>
+                          <h4 className="text-sm font-semibold text-green-800 mb-1">
+                            {benefit.title}
+                          </h4>
+                          <p className="text-xs text-green-600">
+                            {benefit.description}
+                          </p>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+
+                <div className="mt-6 p-4 bg-gradient-to-r from-yellow-50 to-orange-50 rounded-xl border border-yellow-200">
+                  <div className="flex items-start space-x-3">
+                    <Info className="w-5 h-5 text-yellow-600 mt-0.5" />
+                    <div>
+                      <h4 className="text-sm font-semibold text-yellow-800 mb-1">
+                        Important Note
+                      </h4>
+                      <p className="text-xs text-yellow-700">
+                        Ensure sufficient balance in your selected payment
+                        method before the auto-debit date. You can disable auto
+                        payment anytime from this settings page.
+                      </p>
+                    </div>
                   </div>
                 </div>
               </div>
