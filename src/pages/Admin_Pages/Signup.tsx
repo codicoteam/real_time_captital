@@ -2,36 +2,40 @@ import { useState, useEffect } from "react";
 import {
   Eye,
   EyeOff,
-  UserPlus,
   Sparkles,
   ArrowRight,
   User,
   Phone,
   Mail,
-  MapPin,
+  Camera,
+  Shield,
 } from "lucide-react";
+// Note: These imports would be used in your actual project
 import { Link, useNavigate } from "react-router-dom";
-import SignupUser from "../../services/user_Services/signup_Service";
+
+import SignupAdmin from "../../services/admin_Services/signup_Service";
 
 interface FormData {
   firstName: string;
   lastName: string;
   email: string;
-  phoneNumber: string;
+  contactNumber: string;
   password: string;
   confirmPassword: string;
-  address: string;
+  profilePicture: string;
+  role: "admin" | "superadmin" | "moderator"; // Changed from string to union type
 }
 
-const UserSignup = () => {
+const AdminSignUp = () => {
   const [formData, setFormData] = useState<FormData>({
     firstName: "",
     lastName: "",
     email: "",
-    phoneNumber: "",
+    contactNumber: "",
     password: "",
     confirmPassword: "",
-    address: "",
+    profilePicture: "",
+    role: "admin",
   });
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -39,7 +43,7 @@ const UserSignup = () => {
   const [, setMousePosition] = useState({ x: 0, y: 0 });
   const [isHovered, setIsHovered] = useState(false);
   const [passwordStrength, setPasswordStrength] = useState(0);
-  const navigate = useNavigate();
+  const navigate = useNavigate(); // This would be used in your actual project
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
@@ -66,7 +70,7 @@ const UserSignup = () => {
   }, [formData.password]);
 
   const handleInputChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
@@ -92,8 +96,8 @@ const UserSignup = () => {
       alert("Please enter a valid email address");
       return false;
     }
-    if (!formData.phoneNumber.trim()) {
-      alert("Phone number is required");
+    if (!formData.contactNumber.trim()) {
+      alert("Contact number is required");
       return false;
     }
     if (!formData.password) {
@@ -108,8 +112,8 @@ const UserSignup = () => {
       alert("Passwords do not match");
       return false;
     }
-    if (!formData.address.trim()) {
-      alert("Address is required");
+    if (!formData.profilePicture.trim()) {
+      alert("Profile picture URL is required");
       return false;
     }
     return true;
@@ -126,24 +130,37 @@ const UserSignup = () => {
 
     try {
       // Remove confirmPassword from the data sent to the server
-      const { confirmPassword, ...signupData } = formData;
+      const { confirmPassword, ...adminData } = formData;
 
-      // Call the actual signup service
-      const response = await SignupUser(signupData);
+      // Call the admin signup service
+      const response = await SignupAdmin(adminData);
 
-      console.log("Signup successful:", response);
-      alert("Account created successfully!");
-      navigate("/login");
+      console.log("Admin signup successful:", response);
+      alert("Admin account created successfully!");
+
+      // Clear the form after successful signup
+      setFormData({
+        firstName: "",
+        lastName: "",
+        email: "",
+        contactNumber: "",
+        password: "",
+        confirmPassword: "",
+        profilePicture: "",
+        role: "admin",
+      });
+
+      navigate("/admindashboard"); // Uncomment when you have routing set up
     } catch (error: any) {
       // Handle different types of errors
       const errorMessage =
         error.response?.data?.message ||
         error.response?.data?.error ||
         error.message ||
-        "Signup failed. Please try again.";
+        "Admin signup failed. Please try again.";
 
       alert(errorMessage);
-      console.error("Signup error:", error);
+      console.error("Admin signup error:", error);
     } finally {
       setIsLoading(false);
     }
@@ -200,22 +217,22 @@ const UserSignup = () => {
                   <Sparkles className="w-4 h-4 sm:w-5 sm:h-5 text-white animate-pulse" />
                 </div>
                 <span className="text-xl sm:text-2xl font-bold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
-                  FinanceApp
+                  Pocket. Admin
                 </span>
               </div>
 
               {/* Welcome Text */}
               <div className="mb-6 sm:mb-8">
                 <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white mb-2 animate-fadeIn">
-                  Create Your Account 🚀
+                  Create Admin Account 🛡️
                 </h1>
                 <p className="text-gray-300 text-sm sm:text-base">
-                  Join thousands of users managing their finances smarter
+                  Join our administrative team to manage the platform
                 </p>
               </div>
 
               {/* Signup Form */}
-              <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
+              <div className="space-y-4 sm:space-y-6">
                 {/* Name Fields */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div className="group">
@@ -265,19 +282,65 @@ const UserSignup = () => {
                   </div>
                 </div>
 
-                {/* Phone Number */}
+                {/* Contact Number */}
                 <div className="group">
                   <div className="relative">
                     <Phone className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
                     <input
                       type="tel"
-                      name="phoneNumber"
-                      placeholder="Phone Number"
-                      value={formData.phoneNumber}
+                      name="contactNumber"
+                      placeholder="Contact Number"
+                      value={formData.contactNumber}
                       onChange={handleInputChange}
                       required
                       className="w-full pl-10 pr-4 py-3 sm:py-4 bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all duration-300 group-hover:bg-white/15"
                     />
+                  </div>
+                </div>
+
+                {/* Profile Picture URL */}
+                <div className="group">
+                  <div className="relative">
+                    <Camera className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+                    <input
+                      type="url"
+                      name="profilePicture"
+                      placeholder="Profile Picture URL"
+                      value={formData.profilePicture}
+                      onChange={handleInputChange}
+                      required
+                      className="w-full pl-10 pr-4 py-3 sm:py-4 bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all duration-300 group-hover:bg-white/15"
+                    />
+                  </div>
+                </div>
+
+                {/* Role Selection */}
+                <div className="group">
+                  <div className="relative">
+                    <Shield className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+                    <select
+                      name="role"
+                      value={formData.role}
+                      onChange={handleInputChange}
+                      required
+                      className="w-full pl-10 pr-4 py-3 sm:py-4 bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all duration-300 group-hover:bg-white/15 appearance-none"
+                    >
+                      <option value="admin" className="bg-gray-800 text-white">
+                        Admin
+                      </option>
+                      <option
+                        value="moderator"
+                        className="bg-gray-800 text-white"
+                      >
+                        Moderator
+                      </option>
+                      <option
+                        value="superadmin"
+                        className="bg-gray-800 text-white"
+                      >
+                        Super Admin
+                      </option>
+                    </select>
                   </div>
                 </div>
 
@@ -354,24 +417,9 @@ const UserSignup = () => {
                   </div>
                 )}
 
-                {/* Address */}
-                <div className="group">
-                  <div className="relative">
-                    <MapPin className="absolute left-3 top-4 text-gray-400 w-5 h-5" />
-                    <textarea
-                      name="address"
-                      placeholder="Enter your address"
-                      value={formData.address}
-                      onChange={handleInputChange}
-                      required
-                      rows={3}
-                      className="w-full pl-10 pr-4 py-3 sm:py-4 bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all duration-300 group-hover:bg-white/15 resize-none"
-                    />
-                  </div>
-                </div>
-
                 <button
                   type="submit"
+                  onClick={handleSubmit}
                   disabled={isLoading}
                   onMouseEnter={() => setIsHovered(true)}
                   onMouseLeave={() => setIsHovered(false)}
@@ -384,7 +432,7 @@ const UserSignup = () => {
                     </>
                   ) : (
                     <>
-                      <span>Create Account</span>
+                      <span>Create Admin Account</span>
                       <ArrowRight
                         className={`w-4 h-4 transition-transform duration-200 ${
                           isHovered ? "translate-x-1" : ""
@@ -393,7 +441,7 @@ const UserSignup = () => {
                     </>
                   )}
                 </button>
-              </form>
+              </div>
 
               <div className="mt-4 sm:mt-6">
                 <div className="text-center text-gray-400 text-sm relative">
@@ -408,7 +456,7 @@ const UserSignup = () => {
                 <div className="text-center text-sm text-gray-400 mt-4">
                   Already have an account?
                   <Link
-                    to="/userlogin"
+                    to="/"
                     className="text-orange-400 font-semibold hover:text-orange-300 transition-colors ml-1 hover:underline"
                   >
                     SignIn
@@ -437,7 +485,7 @@ const UserSignup = () => {
 
                   {/* Character */}
                   <div className="relative animate-float">
-                    <UserPlus
+                    <Shield
                       size={80}
                       className="text-white opacity-90 sm:w-24 sm:h-24 lg:w-28 lg:h-28"
                     />
@@ -456,12 +504,12 @@ const UserSignup = () => {
               </div>
 
               <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-white mb-3 sm:mb-4 animate-fadeIn">
-                Join Our Community 🌟
+                Admin Portal Access 🛡️
               </h2>
               <p className="text-gray-300 text-sm sm:text-base lg:text-lg mb-6 sm:mb-8 leading-relaxed">
-                Start your financial journey
+                Manage the platform with
                 <br className="hidden sm:block" />
-                with confidence and security
+                administrative privileges
               </p>
 
               {/* Enhanced Pagination Dots */}
@@ -510,4 +558,4 @@ const UserSignup = () => {
   );
 };
 
-export default UserSignup;
+export default AdminSignUp;

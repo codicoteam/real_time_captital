@@ -17,13 +17,16 @@ import Payment from "./pages/User_Pages/Payment";
 import Account from "./pages/User_Pages/Account";
 import Userlogin from "./pages/User_Pages/Login";
 import UserSignup from "./pages/User_Pages/Signup";
+import AdminSignUp from "./pages/Admin_Pages/Signup";
 
 function App() {
   return (
     <Router>
       <Routes>
         {/* Admin Routes */}
+
         <Route path="/" element={<Adminlogin />} />
+        <Route path="/adminsignup" element={<AdminSignUp />} />
         <Route path="/admindashboard" element={<Dashboard />} />
         <Route path="/users" element={<Users />} />
         <Route path="/loan-management" element={<LoanManagement />} />
