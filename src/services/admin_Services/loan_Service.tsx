@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const BASE_URL = "http://localhost:5050/api/v1/loan_route"; // Replace with your actual backend URL
+const BASE_URL = "https://loan-backend-qnj0.onrender.com/api/v1/loan_route"; // Replace with your actual backend URL
 
 /**
  * Service for handling loan-related API requests

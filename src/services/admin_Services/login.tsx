@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const BASE_URL = "http://localhost:5050/api/v1/admin_route"; // Base URL only
+const BASE_URL = "https://loan-backend-qnj0.onrender.com/api/v1/admin_route"; // Base URL only
 
 interface LoginData {
   email: string;
