@@ -133,7 +133,7 @@ const UserSignup = () => {
 
       console.log("Signup successful:", response);
       alert("Account created successfully!");
-      navigate("/login");
+      navigate("/userdashbord");
     } catch (error: any) {
       // Handle different types of errors
       const errorMessage =

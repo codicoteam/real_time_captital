@@ -21,9 +21,7 @@ import {
   PlayCircle,
   StopCircle,
   Download,
-  MapPin,
-  Phone,
-  Mail,
+  
 } from "lucide-react";
 import LoanService from "../../services/user_Services/loan_Service"; // Adjust the import path
 
