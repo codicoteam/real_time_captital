@@ -41,6 +41,13 @@ const Sidebar = ({ isOpen = true, onClose = () => {} }) => {
       path: "/account",
       color: "from-purple-500 to-pink-600",
     },
+    {
+      icon: User,
+      label: "Logout",
+      subtitle: "Profile & Settings",
+      path: "/logout",
+      color: "from-purple-500 to-pink-600",
+    },
   ];
 
   const handleNavigation = (path: To) => {
