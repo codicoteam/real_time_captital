@@ -19,6 +19,7 @@ import Userlogin from "./pages/User_Pages/Login";
 import UserSignup from "./pages/User_Pages/Signup";
 import AdminSignUp from "./pages/Admin_Pages/Signup";
 import Landingpage from "./pages/User_Pages/landing page";
+import Logout from "./pages/User_Pages/logout";
 function App() {
   return (
     <Router>
@@ -41,6 +42,7 @@ function App() {
         <Route path="/loan_application" element={<Loan_application />} />
         <Route path="/payment" element={<Payment />} />
         <Route path="/account" element={<Account />} />
+         <Route path="/Logout" element={<Logout />} />
       </Routes>
     </Router>
   );
