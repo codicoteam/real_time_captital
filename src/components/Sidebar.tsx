@@ -17,6 +17,7 @@ const Sidebar = ({ isOpen = true, onClose = () => {} }) => {
     { icon: Users, label: "Users", path: "/users" },
     { icon: CreditCard, label: "Loan Management", path: "/loan-management" },
     { icon: TrendingUp, label: "Loan Tracking", path: "/loan-tracking" },
+    { icon: Settings, label: "Payments", path: "/payments" },
     { icon: Settings, label: "Settings", path: "/settings" },
   ];
 

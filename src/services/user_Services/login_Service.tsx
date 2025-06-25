@@ -16,11 +16,10 @@ const loginUser = async (userData: LoginData) => {
 
     if (response.data.token) {
       localStorage.setItem("userToken", response.data.token);
-      console.log("User token stored successfully!", );
+      console.log("User token stored successfully!");
     } else {
       alert("Login failed: No token received!");
     }
-    // mongodb+srv://pockettloan:pockettloan12345@pocket.sbssyen.mongodb.net/
 
     return response.data;
   } catch (error: any) {

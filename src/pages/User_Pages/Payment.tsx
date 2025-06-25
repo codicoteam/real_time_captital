@@ -1,4 +1,4 @@
-import { useState, type JSX } from "react";
+import { useEffect, useState, type JSX } from "react";
 import {
   CreditCard,
   Calendar,
@@ -23,6 +23,57 @@ import {
   Banknote,
 } from "lucide-react";
 import Sidebar from "../../components/User_Sidebar";
+import PaymentService from "../../services/user_Services/payment_Service"; // Adjust path as needed
+import LoanService from "../../services/user_Services/loan_Service";
+import React from "react";
+
+interface PaymentHistory {
+  _id: string;
+  loan: string;
+  user: string;
+  amountPaid: number;
+  paymentMethod: string;
+  paymentReference: string;
+  forInstallmentDate: string;
+  paymentDate: string;
+  notes?: string;
+  status: "pending" | "confirmed" | "failed";
+}
+
+interface Loan {
+  _id: string;
+  productType: string;
+  borrowerInfo: {
+    firstName: string;
+    middleNames?: string;
+    surname: string;
+    email: string;
+    phone: string;
+  };
+  amount: number;
+  balance: number;
+  interestRate: number;
+  term: number;
+  status: string;
+  paymentSchedule: Array<{
+    dueDate: string;
+    amountDue: number;
+    status: string;
+  }>;
+}
+
+// Extended interface for transformed loan data
+interface TransformedLoan {
+  _id: string;
+  loanId: string;
+  borrower: string;
+  loanType: string;
+  currentBalance: number;
+  monthlyEMI: number;
+  nextPaymentDate: string;
+  dueAmount: number;
+  status: string;
+}
 
 const Payment = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -34,119 +85,124 @@ const Payment = () => {
   const [filterStatus, setFilterStatus] = useState("all");
   const [paymentReference, setPaymentReference] = useState("");
   const [notes, setNotes] = useState("");
+  const [paymentHistory, setPaymentHistory] = useState<PaymentHistory[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  //loans
+  const [loans, setLoans] = useState<TransformedLoan[]>([]);
+  const [loansLoading, setLoansLoading] = useState(false);
+  const [loansError, setLoansError] = useState("");
 
-  const loans = [
-    {
-      _id: "64a5f123456789abcdef0001",
-      loanId: "LN001",
-      borrower: "John Doe",
-      loanType: "Home Loan",
-      currentBalance: 425000,
-      monthlyEMI: 10247,
-      nextPaymentDate: "2025-07-15",
-      dueAmount: 10247,
-    },
-    {
-      _id: "64a5f123456789abcdef0002",
-      loanId: "LN002",
-      borrower: "Jane Smith",
-      loanType: "Business Loan",
-      currentBalance: 165000,
-      monthlyEMI: 6645,
-      nextPaymentDate: "2025-07-10",
-      dueAmount: 6645,
-    },
-    {
-      _id: "64a5f123456789abcdef0003",
-      loanId: "LN003",
-      borrower: "Mike Johnson",
-      loanType: "Personal Loan",
-      currentBalance: 68500,
-      monthlyEMI: 3742,
-      nextPaymentDate: "2025-07-20",
-      dueAmount: 3742,
-    },
-  ];
+  useEffect(() => {
+    const fetchLoans = async () => {
+      try {
+        setLoansLoading(true);
+        const token = localStorage.getItem("userToken");
 
-  const paymentHistory = [
-    {
-      _id: "64a5f123456789abcdef1001",
-      loan: "64a5f123456789abcdef0001",
-      loanId: "LN001",
-      user: "64a5f123456789abcdef2001",
-      amountPaid: 10247,
-      paymentDate: "2025-06-15",
-      paymentMethod: "Ecocash",
-      paymentReference: "EC123456789",
-      forInstallmentDate: "2025-06-15",
-      status: "confirmed",
-      notes: "Monthly EMI payment",
-      createdAt: "2025-06-15T08:30:00Z",
-      updatedAt: "2025-06-15T08:35:00Z",
-    },
-    {
-      _id: "64a5f123456789abcdef1002",
-      loan: "64a5f123456789abcdef0001",
-      loanId: "LN001",
-      user: "64a5f123456789abcdef2001",
-      amountPaid: 10247,
-      paymentDate: "2025-05-15",
-      paymentMethod: "BankTransfer",
-      paymentReference: "BT987654321",
-      forInstallmentDate: "2025-05-15",
-      status: "confirmed",
-      notes: "Monthly EMI payment via bank transfer",
-      createdAt: "2025-05-15T09:15:00Z",
-      updatedAt: "2025-05-15T09:20:00Z",
-    },
-    {
-      _id: "64a5f123456789abcdef1003",
-      loan: "64a5f123456789abcdef0002",
-      loanId: "LN002",
-      user: "64a5f123456789abcdef2002",
-      amountPaid: 6645,
-      paymentDate: "2025-06-10",
-      paymentMethod: "Card",
-      paymentReference: "CD456789123",
-      forInstallmentDate: "2025-06-10",
-      status: "confirmed",
-      notes: "Business loan EMI",
-      createdAt: "2025-06-10T14:22:00Z",
-      updatedAt: "2025-06-10T14:25:00Z",
-    },
-    {
-      _id: "64a5f123456789abcdef1004",
-      loan: "64a5f123456789abcdef0003",
-      loanId: "LN003",
-      user: "64a5f123456789abcdef2003",
-      amountPaid: 5000,
-      paymentDate: "2025-06-08",
-      paymentMethod: "OneMoney",
-      paymentReference: "OM789123456",
-      forInstallmentDate: "2025-06-08",
-      status: "failed",
-      notes: "Partial payment attempt",
-      createdAt: "2025-06-08T11:45:00Z",
-      updatedAt: "2025-06-08T11:50:00Z",
-    },
-    {
-      _id: "64a5f123456789abcdef1005",
-      loan: "64a5f123456789abcdef0001",
-      loanId: "LN001",
-      user: "64a5f123456789abcdef2001",
-      amountPaid: 10247,
-      paymentDate: "2025-04-15",
-      paymentMethod: "Innsbucks",
-      paymentReference: "IB321654987",
-      forInstallmentDate: "2025-04-15",
-      status: "confirmed",
-      notes: "Regular monthly payment",
-      createdAt: "2025-04-15T16:30:00Z",
-      updatedAt: "2025-04-15T16:35:00Z",
-    },
-  ];
+        if (!token) {
+          setLoansError("No authentication token found");
+          return;
+        }
 
-  const currentLoan = loans[selectedLoan];
+        // Decode the token to get user ID
+        const payload = JSON.parse(atob(token.split(".")[1]));
+        const userId = payload.id;
+
+        const response = await LoanService.getLoansByUserId(userId);
+        const fetchedLoans = response.data || [];
+
+        // Transform the data to match your interface
+        const transformedLoans: TransformedLoan[] = fetchedLoans.map(
+          (loan: Loan) => ({
+            _id: loan._id,
+            loanId: `LN${loan._id.slice(-3).toUpperCase()}`,
+            borrower: `${loan.borrowerInfo.firstName} ${loan.borrowerInfo.surname}`,
+            loanType: loan.productType,
+            currentBalance: loan.balance || 0,
+            monthlyEMI: calculateMonthlyEMI(
+              loan.amount,
+              loan.interestRate,
+              loan.term
+            ),
+            nextPaymentDate: getNextPaymentDate(loan.paymentSchedule),
+            dueAmount: getDueAmount(loan.paymentSchedule),
+            status: loan.status,
+          })
+        );
+
+        setLoans(transformedLoans);
+      } catch (err: any) {
+        console.error("Error fetching loans:", err);
+        setLoansError("Failed to fetch loans");
+      } finally {
+        setLoansLoading(false);
+      }
+    };
+
+    fetchLoans();
+  }, []);
+
+  const calculateMonthlyEMI = (
+    principal: number,
+    rate: number,
+    term: number
+  ): number => {
+    if (!principal || !rate || !term) return 0;
+    const monthlyRate = rate / (12 * 100);
+    const emi =
+      (principal * monthlyRate * Math.pow(1 + monthlyRate, term)) /
+      (Math.pow(1 + monthlyRate, term) - 1);
+    return Math.round(emi);
+  };
+
+  const getNextPaymentDate = (paymentSchedule: any[]): string => {
+    if (!paymentSchedule || paymentSchedule.length === 0) {
+      // Default to next month if no schedule
+      const nextMonth = new Date();
+      nextMonth.setMonth(nextMonth.getMonth() + 1);
+      return nextMonth.toISOString().split("T")[0];
+    }
+
+    const nextPayment = paymentSchedule.find((p) => p.status === "pending");
+    return nextPayment ? nextPayment.dueDate : paymentSchedule[0].dueDate;
+  };
+
+  const getDueAmount = (paymentSchedule: any[]): number => {
+    if (!paymentSchedule || paymentSchedule.length === 0) return 0;
+    const nextPayment = paymentSchedule.find((p) => p.status === "pending");
+    return nextPayment ? nextPayment.amountDue : 0;
+  };
+
+  // Updated payment history to match the Payment model exactly
+  useEffect(() => {
+    const fetchPayments = async () => {
+      try {
+        setLoading(true);
+        const token = localStorage.getItem("userToken");
+
+        if (!token) {
+          setError("No authentication token found");
+          return;
+        }
+
+        // Decode the token to get user ID
+        const payload = JSON.parse(atob(token.split(".")[1]));
+        const userId = payload.id;
+
+        const response = await PaymentService.getPaymentsByUserId(userId);
+        setPaymentHistory(response.data || []);
+      } catch (err: any) {
+        console.error("Error fetching payments:", err);
+        setError("Failed to fetch payment history");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchPayments();
+  }, []);
+
+  const currentLoan = loans.length > 0 ? loans[selectedLoan] : null;
 
   const formatCurrency = (amount: number | bigint) =>
     new Intl.NumberFormat("en-US", {
@@ -182,20 +238,74 @@ const Payment = () => {
   };
 
   const filteredHistory = paymentHistory.filter(
-    (payment) =>
+    (payment: PaymentHistory) =>
       filterStatus === "all" || payment.status.toLowerCase() === filterStatus
   );
 
-  const handlePayment = () => {
+  const handlePayment = async () => {
+    if (!currentLoan) {
+      alert("Please select a loan first");
+      return;
+    }
+
     if (!paymentReference.trim()) {
       alert("Please enter a payment reference number");
       return;
     }
-    alert(
-      `Processing payment of ${formatCurrency(
-        parseFloat(paymentAmount) || currentLoan.dueAmount
-      )} via ${paymentMethod} with reference: ${paymentReference}`
-    );
+
+    try {
+      setLoading(true);
+      const token = localStorage.getItem("userToken");
+
+      if (!token) {
+        alert("Authentication required. Please login again.");
+        return;
+      }
+
+      // Decode token to get user ID
+      const payload = JSON.parse(atob(token.split(".")[1]));
+      const userId = payload.id;
+
+      const paymentData = {
+        loan: currentLoan._id,
+        user: userId,
+        amountPaid: parseFloat(paymentAmount) || currentLoan.dueAmount,
+        paymentMethod: paymentMethod,
+        paymentReference: paymentReference,
+        forInstallmentDate: currentLoan.nextPaymentDate,
+        notes: notes,
+        status: "pending" as const, // Initial status
+      };
+
+      const response = await PaymentService.createPayment(paymentData);
+
+      if (response.success) {
+        alert(`Payment submitted successfully! Reference: ${paymentReference}`);
+
+        // Reset form
+        setPaymentAmount("");
+        setPaymentReference("");
+        setNotes("");
+
+        // Refresh payment history
+        const updatedPayments = await PaymentService.getPaymentsByUserId(
+          userId
+        );
+        setPaymentHistory(updatedPayments.data || []);
+      } else {
+        alert("Payment submission failed. Please try again.");
+      }
+    } catch (error: any) {
+      console.error("Payment error:", error);
+      alert("Payment failed: " + (error.message || "Unknown error"));
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Helper function to get loan info by loan ID
+  const getLoanInfo = (loanId: string) => {
+    return loans.find((loan) => loan._id === loanId);
   };
 
   const tabs = [
@@ -213,17 +323,21 @@ const Payment = () => {
     { id: "Card", label: "Card", icon: CreditCard },
   ];
 
+  // 6. UPDATE THE SUMMARY CARDS CALCULATION (replace summaryCards array)
   const summaryCards = [
     {
       title: "Confirmed Payments",
-      value: paymentHistory.filter((p) => p.status === "confirmed").length,
+      value: paymentHistory.filter(
+        (p: PaymentHistory) => p.status === "confirmed"
+      ).length,
       icon: CheckCircle,
       color: "green",
       arrow: ArrowUpRight,
     },
     {
       title: "Failed Payments",
-      value: paymentHistory.filter((p) => p.status === "failed").length,
+      value: paymentHistory.filter((p: PaymentHistory) => p.status === "failed")
+        .length,
       icon: XCircle,
       color: "red",
       arrow: ArrowDownLeft,
@@ -232,8 +346,8 @@ const Payment = () => {
       title: "Total Paid",
       value: formatCurrency(
         paymentHistory
-          .filter((p) => p.status === "confirmed")
-          .reduce((sum, p) => sum + p.amountPaid, 0)
+          .filter((p: PaymentHistory) => p.status === "confirmed")
+          .reduce((sum: number, p: PaymentHistory) => sum + p.amountPaid, 0)
       ),
       icon: DollarSign,
       color: "blue",
@@ -242,7 +356,8 @@ const Payment = () => {
     {
       title: "This Month",
       value: paymentHistory.filter(
-        (p) => new Date(p.paymentDate).getMonth() === new Date().getMonth()
+        (p: PaymentHistory) =>
+          new Date(p.paymentDate).getMonth() === new Date().getMonth()
       ).length,
       icon: Calendar,
       color: "purple",
@@ -343,207 +458,255 @@ const Payment = () => {
                     Select Loan Account
                   </h3>
                   <div className="space-y-3">
-                    {loans.map((loan, index) => (
-                      <div
-                        key={loan._id}
-                        onClick={() => setSelectedLoan(index)}
-                        className={`p-4 rounded-xl cursor-pointer transition-all duration-200 border-2 ${
-                          selectedLoan === index
-                            ? "border-blue-500 bg-blue-50 shadow-lg"
-                            : "border-blue-200/50 bg-white/50 hover:border-blue-300 hover:shadow-md"
-                        }`}
-                      >
-                        <div className="flex justify-between items-start mb-2">
-                          <span className="text-sm font-semibold text-blue-800">
-                            {loan.loanId}
-                          </span>
-                          <span className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded-full">
-                            Active
-                          </span>
-                        </div>
-                        <div className="text-lg font-bold text-blue-900 mb-1">
-                          {loan.borrower}
-                        </div>
-                        <div className="text-sm text-blue-600 mb-2">
-                          {loan.loanType}
-                        </div>
-                        <div className="text-sm font-semibold text-red-600">
-                          Due: {formatCurrency(loan.dueAmount)}
-                        </div>
-                        <div className="text-xs text-blue-500 mt-1">
-                          Next Payment: {formatDate(loan.nextPaymentDate)}
-                        </div>
+                    {loansLoading ? (
+                      <div className="text-center py-8">
+                        <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600 mx-auto mb-2"></div>
+                        <p className="text-blue-600 text-sm">
+                          Loading loans...
+                        </p>
                       </div>
-                    ))}
+                    ) : loansError ? (
+                      <div className="text-center py-8">
+                        <AlertCircle className="w-8 h-8 text-red-300 mx-auto mb-2" />
+                        <p className="text-red-500 text-sm">{loansError}</p>
+                      </div>
+                    ) : loans.length === 0 ? (
+                      <div className="text-center py-8">
+                        <AlertCircle className="w-8 h-8 text-blue-300 mx-auto mb-2" />
+                        <p className="text-blue-500 text-sm">
+                          No active loans found
+                        </p>
+                      </div>
+                    ) : (
+                      loans.map((loan, index) => (
+                        <div
+                          key={loan._id}
+                          onClick={() => setSelectedLoan(index)}
+                          className={`p-4 rounded-xl cursor-pointer transition-all duration-200 border-2 ${
+                            selectedLoan === index
+                              ? "border-blue-500 bg-blue-50 shadow-lg"
+                              : "border-blue-200/50 bg-white/50 hover:border-blue-300 hover:shadow-md"
+                          }`}
+                        >
+                          <div className="flex justify-between items-start mb-2">
+                            <span className="text-sm font-semibold text-blue-800">
+                              {loan.loanId}
+                            </span>
+                            <span
+                              className={`text-xs px-2 py-1 rounded-full ${
+                                loan.status === "active"
+                                  ? "bg-green-100 text-green-700"
+                                  : "bg-yellow-100 text-yellow-700"
+                              }`}
+                            >
+                              {loan.status}
+                            </span>
+                          </div>
+                          <div className="text-lg font-bold text-blue-900 mb-1">
+                            {loan.borrower}
+                          </div>
+                          <div className="text-sm text-blue-600 mb-2">
+                            {loan.loanType}
+                          </div>
+                          <div className="text-sm font-semibold text-red-600">
+                            Due: {formatCurrency(loan.dueAmount)}
+                          </div>
+                          <div className="text-xs text-blue-500 mt-1">
+                            Next Payment: {formatDate(loan.nextPaymentDate)}
+                          </div>
+                        </div>
+                      ))
+                    )}
                   </div>
                 </div>
               </div>
 
               <div className="lg:col-span-2 space-y-6">
-                <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-8 shadow-lg border border-white/50">
-                  <div className="mb-6">
-                    <h3 className="text-xl font-bold text-blue-800 mb-2">
-                      Payment Details
-                    </h3>
-                    <p className="text-sm text-blue-500">
-                      Make a payment for loan {currentLoan.loanId}
-                    </p>
-                  </div>
-
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-                    <div className="p-4 bg-gradient-to-br from-red-50 to-orange-50 rounded-xl border border-red-200">
-                      <div className="flex items-center space-x-3 mb-2">
-                        <AlertCircle className="w-5 h-5 text-red-600" />
-                        <span className="text-sm font-medium text-red-700">
-                          Amount Due
-                        </span>
-                      </div>
-                      <div className="text-2xl font-bold text-red-800">
-                        {formatCurrency(currentLoan.dueAmount)}
-                      </div>
-                      <div className="text-xs text-red-600 mt-1">
-                        Due on {formatDate(currentLoan.nextPaymentDate)}
-                      </div>
-                    </div>
-                    <div className="p-4 bg-gradient-to-br from-blue-50 to-purple-50 rounded-xl border border-blue-200">
-                      <div className="flex items-center space-x-3 mb-2">
-                        <DollarSign className="w-5 h-5 text-blue-600" />
-                        <span className="text-sm font-medium text-blue-700">
-                          Outstanding Balance
-                        </span>
-                      </div>
-                      <div className="text-2xl font-bold text-blue-800">
-                        {formatCurrency(currentLoan.currentBalance)}
-                      </div>
-                      <div className="text-xs text-blue-600 mt-1">
-                        Total remaining amount
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="space-y-6">
-                    <div>
-                      <label className="block text-sm font-medium text-blue-700 mb-3">
-                        Payment Amount
-                      </label>
-                      <div className="grid grid-cols-2 gap-3 mb-4">
-                        <button
-                          onClick={() =>
-                            setPaymentAmount(currentLoan.dueAmount.toString())
-                          }
-                          className="p-3 border-2 border-blue-200 rounded-xl text-center hover:border-blue-400 hover:bg-blue-50 transition-all duration-200"
-                        >
-                          <div className="text-sm font-medium text-blue-700">
-                            Pay EMI Amount
-                          </div>
-                          <div className="text-lg font-bold text-blue-800">
-                            {formatCurrency(currentLoan.dueAmount)}
-                          </div>
-                        </button>
-                        <button
-                          onClick={() => setPaymentAmount("")}
-                          className="p-3 border-2 border-purple-200 rounded-xl text-center hover:border-purple-400 hover:bg-purple-50 transition-all duration-200"
-                        >
-                          <div className="text-sm font-medium text-purple-700">
-                            Custom Amount
-                          </div>
-                          <div className="text-lg font-bold text-purple-800">
-                            Enter Amount
-                          </div>
-                        </button>
-                      </div>
-                      <div className="relative">
-                        <DollarSign className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-blue-400" />
-                        <input
-                          type="number"
-                          value={paymentAmount}
-                          onChange={(e) => setPaymentAmount(e.target.value)}
-                          placeholder="Enter payment amount"
-                          className="w-full pl-12 pr-4 py-4 bg-white border border-blue-200 rounded-xl text-lg font-semibold focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all duration-200"
-                        />
-                      </div>
-                    </div>
-
-                    <div>
-                      <label className="block text-sm font-medium text-blue-700 mb-3">
-                        Payment Method
-                      </label>
-                      <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-                        {paymentMethods.map((method) => {
-                          const IconComponent = method.icon;
-                          return (
-                            <button
-                              key={method.id}
-                              onClick={() => setPaymentMethod(method.id)}
-                              className={`p-4 rounded-xl border-2 transition-all duration-200 ${
-                                paymentMethod === method.id
-                                  ? "border-blue-500 bg-blue-50 shadow-lg"
-                                  : "border-blue-200 hover:border-blue-300 hover:bg-blue-50/50"
-                              }`}
-                            >
-                              <IconComponent className="w-6 h-6 text-blue-600 mx-auto mb-2" />
-                              <div className="text-sm font-medium text-blue-700">
-                                {method.label}
-                              </div>
-                            </button>
-                          );
-                        })}
-                      </div>
-                    </div>
-
-                    <div>
-                      <label className="block text-sm font-medium text-blue-700 mb-3">
-                        Payment Reference{" "}
-                        <span className="text-red-500">*</span>
-                      </label>
-                      <input
-                        type="text"
-                        value={paymentReference}
-                        onChange={(e) => setPaymentReference(e.target.value)}
-                        placeholder="Enter payment reference number"
-                        className="w-full px-4 py-3 bg-white border border-blue-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all duration-200"
-                        required
-                      />
-                      <p className="text-xs text-blue-500 mt-1">
-                        Required: Transaction ID or reference number from your
-                        payment provider
+                {currentLoan ? (
+                  <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-8 shadow-lg border border-white/50">
+                    <div className="mb-6">
+                      <h3 className="text-xl font-bold text-blue-800 mb-2">
+                        Payment Details
+                      </h3>
+                      <p className="text-sm text-blue-500">
+                        Make a payment for loan {currentLoan.loanId}
                       </p>
                     </div>
 
-                    <div>
-                      <label className="block text-sm font-medium text-blue-700 mb-3">
-                        Notes (Optional)
-                      </label>
-                      <textarea
-                        value={notes}
-                        onChange={(e) => setNotes(e.target.value)}
-                        placeholder="Add any additional notes about this payment"
-                        rows={3}
-                        className="w-full px-4 py-3 bg-white border border-blue-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all duration-200 resize-none"
-                      />
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                      <div className="p-4 bg-gradient-to-br from-red-50 to-orange-50 rounded-xl border border-red-200">
+                        <div className="flex items-center space-x-3 mb-2">
+                          <AlertCircle className="w-5 h-5 text-red-600" />
+                          <span className="text-sm font-medium text-red-700">
+                            Amount Due
+                          </span>
+                        </div>
+                        <div className="text-2xl font-bold text-red-800">
+                          {formatCurrency(currentLoan.dueAmount)}
+                        </div>
+                        <div className="text-xs text-red-600 mt-1">
+                          Due on {formatDate(currentLoan.nextPaymentDate)}
+                        </div>
+                      </div>
+                      <div className="p-4 bg-gradient-to-br from-blue-50 to-purple-50 rounded-xl border border-blue-200">
+                        <div className="flex items-center space-x-3 mb-2">
+                          <DollarSign className="w-5 h-5 text-blue-600" />
+                          <span className="text-sm font-medium text-blue-700">
+                            Outstanding Balance
+                          </span>
+                        </div>
+                        <div className="text-2xl font-bold text-blue-800">
+                          {formatCurrency(currentLoan.currentBalance)}
+                        </div>
+                        <div className="text-xs text-blue-600 mt-1">
+                          Total remaining amount
+                        </div>
+                      </div>
                     </div>
 
-                    <div className="pt-4 border-t border-blue-200">
-                      <button
-                        onClick={handlePayment}
-                        className="w-full py-4 bg-gradient-to-r from-blue-500 to-purple-500 text-white rounded-xl text-lg font-semibold hover:from-blue-600 hover:to-purple-600 transition-all duration-200 flex items-center justify-center space-x-2 shadow-lg shadow-blue-500/25"
-                      >
-                        <Shield className="w-5 h-5" />
-                        <span>
-                          Pay{" "}
-                          {formatCurrency(
-                            parseFloat(paymentAmount) || currentLoan.dueAmount
-                          )}{" "}
-                          Securely
-                        </span>
-                      </button>
-                      <div className="flex items-center justify-center space-x-1 mt-3 text-xs text-blue-500">
-                        <Shield className="w-3 h-3" />
-                        <span>256-bit SSL encrypted • PCI DSS compliant</span>
+                    <div className="space-y-6">
+                      <div>
+                        <label className="block text-sm font-medium text-blue-700 mb-3">
+                          Payment Amount
+                        </label>
+                        <div className="grid grid-cols-2 gap-3 mb-4">
+                          <button
+                            onClick={() =>
+                              setPaymentAmount(currentLoan.dueAmount.toString())
+                            }
+                            className="p-3 border-2 border-blue-200 rounded-xl text-center hover:border-blue-400 hover:bg-blue-50 transition-all duration-200"
+                          >
+                            <div className="text-sm font-medium text-blue-700">
+                              Pay EMI Amount
+                            </div>
+                            <div className="text-lg font-bold text-blue-800">
+                              {formatCurrency(currentLoan.dueAmount)}
+                            </div>
+                          </button>
+                          <button
+                            onClick={() => setPaymentAmount("")}
+                            className="p-3 border-2 border-purple-200 rounded-xl text-center hover:border-purple-400 hover:bg-purple-50 transition-all duration-200"
+                          >
+                            <div className="text-sm font-medium text-purple-700">
+                              Custom Amount
+                            </div>
+                            <div className="text-lg font-bold text-purple-800">
+                              Enter Amount
+                            </div>
+                          </button>
+                        </div>
+                        <div className="relative">
+                          <DollarSign className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-blue-400" />
+                          <input
+                            type="number"
+                            value={paymentAmount}
+                            onChange={(e) => setPaymentAmount(e.target.value)}
+                            placeholder="Enter payment amount"
+                            className="w-full pl-12 pr-4 py-4 bg-white border border-blue-200 rounded-xl text-lg font-semibold focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all duration-200"
+                          />
+                        </div>
+                      </div>
+
+                      <div>
+                        <label className="block text-sm font-medium text-blue-700 mb-3">
+                          Payment Method
+                        </label>
+                        <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                          {paymentMethods.map((method) => {
+                            const IconComponent = method.icon;
+                            return (
+                              <button
+                                key={method.id}
+                                onClick={() => setPaymentMethod(method.id)}
+                                className={`p-4 rounded-xl border-2 transition-all duration-200 ${
+                                  paymentMethod === method.id
+                                    ? "border-blue-500 bg-blue-50 shadow-lg"
+                                    : "border-blue-200 hover:border-blue-300 hover:bg-blue-50/50"
+                                }`}
+                              >
+                                <IconComponent className="w-6 h-6 text-blue-600 mx-auto mb-2" />
+                                <div className="text-sm font-medium text-blue-700">
+                                  {method.label}
+                                </div>
+                              </button>
+                            );
+                          })}
+                        </div>
+                      </div>
+
+                      <div>
+                        <label className="block text-sm font-medium text-blue-700 mb-3">
+                          Payment Reference{" "}
+                          <span className="text-red-500">*</span>
+                        </label>
+                        <input
+                          type="text"
+                          value={paymentReference}
+                          onChange={(e) => setPaymentReference(e.target.value)}
+                          placeholder="Enter payment reference number"
+                          className="w-full px-4 py-3 bg-white border border-blue-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all duration-200"
+                          required
+                        />
+                        <p className="text-xs text-blue-500 mt-1">
+                          Required: Transaction ID or reference number from your
+                          payment provider
+                        </p>
+                      </div>
+
+                      <div>
+                        <label className="block text-sm font-medium text-blue-700 mb-3">
+                          Notes (Optional)
+                        </label>
+                        <textarea
+                          value={notes}
+                          onChange={(e) => setNotes(e.target.value)}
+                          placeholder="Add any additional notes about this payment"
+                          rows={3}
+                          className="w-full px-4 py-3 bg-white border border-blue-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all duration-200 resize-none"
+                        />
+                      </div>
+
+                      <div className="pt-4 border-t border-blue-200">
+                        <button
+                          onClick={handlePayment}
+                          disabled={loading}
+                          className={`w-full py-4 ${
+                            loading
+                              ? "bg-gray-400 cursor-not-allowed"
+                              : "bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600"
+                          } text-white rounded-xl text-lg font-semibold transition-all duration-200 flex items-center justify-center space-x-2 shadow-lg shadow-blue-500/25`}
+                        >
+                          <Shield className="w-5 h-5" />
+                          <span>
+                            {loading
+                              ? "Processing..."
+                              : `Pay ${formatCurrency(
+                                  parseFloat(paymentAmount) ||
+                                    currentLoan.dueAmount
+                                )} Securely`}
+                          </span>
+                        </button>
+                        <div className="flex items-center justify-center space-x-1 mt-3 text-xs text-blue-500">
+                          <Shield className="w-3 h-3" />
+                          <span>256-bit SSL encrypted • PCI DSS compliant</span>
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
+                ) : (
+                  <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-8 shadow-lg border border-white/50">
+                    <div className="text-center py-12">
+                      <AlertCircle className="w-16 h-16 text-blue-300 mx-auto mb-4" />
+                      <h3 className="text-lg font-semibold text-blue-700 mb-2">
+                        No Loan Selected
+                      </h3>
+                      <p className="text-blue-500">
+                        Please select a loan account from the left panel to make
+                        a payment.
+                      </p>
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
           )}
@@ -551,7 +714,8 @@ const Payment = () => {
           {/* Payment History Tab */}
           {activeTab === "history" && (
             <div className="space-y-6">
-              <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+              {/* Summary Cards */}
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 {summaryCards.map((card, index) => {
                   const IconComponent = card.icon;
                   const ArrowComponent = card.arrow;
@@ -561,139 +725,169 @@ const Payment = () => {
                       className="bg-white/70 backdrop-blur-sm rounded-2xl p-6 shadow-lg border border-white/50"
                     >
                       <div className="flex items-center justify-between mb-4">
-                        <div className={`p-3 rounded-2xl bg-${card.color}-100`}>
+                        <div className={`p-3 rounded-xl bg-${card.color}-100`}>
                           <IconComponent
-                            className={`w-6 h-6 text-${card.color}-700`}
+                            className={`w-6 h-6 text-${card.color}-600`}
                           />
                         </div>
                         <ArrowComponent
-                          className={`w-4 h-4 text-${card.color}-600`}
+                          className={`w-4 h-4 text-${card.color}-500`}
                         />
                       </div>
-                      <div className="space-y-2">
-                        <h3
-                          className={`text-sm font-medium text-${card.color}-600`}
-                        >
-                          {card.title}
-                        </h3>
-                        <div
-                          className={`text-2xl font-bold text-${card.color}-800`}
-                        >
-                          {card.value}
-                        </div>
+                      <div className="text-2xl font-bold text-blue-800 mb-1">
+                        {card.value}
                       </div>
+                      <div className="text-sm text-blue-600">{card.title}</div>
                     </div>
                   );
                 })}
               </div>
 
-              <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-8 shadow-lg border border-white/50">
-                <div className="flex items-center justify-between mb-6">
-                  <div>
-                    <h3 className="text-xl font-bold text-blue-800 mb-1">
+              {/* Payment History Table */}
+              <div className="bg-white/70 backdrop-blur-sm rounded-2xl shadow-lg border border-white/50">
+                <div className="p-6 border-b border-blue-200">
+                  <div className="flex items-center justify-between">
+                    <h3 className="text-lg font-bold text-blue-800">
                       Payment History
                     </h3>
-                    <p className="text-sm text-blue-500">
-                      Complete transaction history
-                    </p>
-                  </div>
-                  <div className="flex space-x-3">
-                    <select
-                      value={filterStatus}
-                      onChange={(e) => setFilterStatus(e.target.value)}
-                      className="px-4 py-2 bg-white border border-blue-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20"
-                    >
-                      <option value="all">All Status</option>
-                      <option value="confirmed">Confirmed</option>
-                      <option value="failed">Failed</option>
-                      <option value="pending">Pending</option>
-                    </select>
-                    <button className="flex items-center space-x-2 px-4 py-2 bg-blue-100 text-blue-700 rounded-xl text-sm font-medium hover:bg-blue-200 transition-all duration-200">
-                      <Download className="w-4 h-4" />
-                      <span>Export</span>
-                    </button>
+                    <div className="flex items-center space-x-4">
+                      <select
+                        value={filterStatus}
+                        onChange={(e) => setFilterStatus(e.target.value)}
+                        className="px-4 py-2 bg-white border border-blue-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+                      >
+                        <option value="all">All Status</option>
+                        <option value="confirmed">Confirmed</option>
+                        <option value="pending">Pending</option>
+                        <option value="failed">Failed</option>
+                      </select>
+                      <button className="flex items-center space-x-2 px-4 py-2 bg-blue-100 text-blue-700 rounded-xl hover:bg-blue-200 transition-all duration-200">
+                        <Download className="w-4 h-4" />
+                        <span>Export</span>
+                      </button>
+                    </div>
                   </div>
                 </div>
 
                 <div className="overflow-x-auto">
-                  <table className="w-full">
-                    <thead>
-                      <tr className="border-b border-blue-200">
-                        {[
-                          "Payment Reference",
-                          "Loan ID",
-                          "Amount Paid",
-                          "Payment Date",
-                          "Method",
-                          "For Installment",
-                          "Status",
-                          "Notes",
-                        ].map((header) => (
-                          <th
-                            key={header}
-                            className="text-left py-3 px-4 text-sm font-semibold text-blue-700"
-                          >
-                            {header}
+                  {loading ? (
+                    <div className="text-center py-12">
+                      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-4"></div>
+                      <p className="text-blue-600">
+                        Loading payment history...
+                      </p>
+                    </div>
+                  ) : error ? (
+                    <div className="text-center py-12">
+                      <AlertCircle className="w-12 h-12 text-red-300 mx-auto mb-4" />
+                      <p className="text-red-500">{error}</p>
+                    </div>
+                  ) : filteredHistory.length === 0 ? (
+                    <div className="text-center py-12">
+                      <Clock className="w-12 h-12 text-blue-300 mx-auto mb-4" />
+                      <p className="text-blue-500">No payment history found</p>
+                    </div>
+                  ) : (
+                    <table className="w-full">
+                      <thead className="bg-blue-50/50">
+                        <tr>
+                          <th className="text-left px-6 py-4 text-sm font-semibold text-blue-700">
+                            Payment ID
                           </th>
-                        ))}
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {filteredHistory.map((payment, index) => (
-                        <tr
-                          key={index}
-                          className="border-b border-blue-100 hover:bg-blue-50/50 transition-colors duration-200"
-                        >
-                          <td className="py-4 px-4 text-sm font-medium text-blue-800">
-                            {payment.paymentReference}
-                          </td>
-                          <td className="py-4 px-4 text-sm text-blue-700">
-                            {payment.loanId}
-                          </td>
-                          <td className="py-4 px-4 text-sm font-semibold text-blue-800">
-                            {formatCurrency(payment.amountPaid)}
-                          </td>
-                          <td className="py-4 px-4 text-sm text-blue-700">
-                            {formatDate(payment.paymentDate)}
-                          </td>
-                          <td className="py-4 px-4 text-sm text-blue-700">
-                            {payment.paymentMethod}
-                          </td>
-                          <td className="py-4 px-4 text-sm text-blue-700">
-                            {formatDate(payment.forInstallmentDate)}
-                          </td>
-                          <td className="py-4 px-4">
-                            <div
-                              className={`inline-flex items-center space-x-2 px-3 py-1 rounded-full text-xs font-medium border ${getStatusColor(
-                                payment.status
-                              )}`}
-                            >
-                              {getStatusIcon(payment.status)}
-                              <span className="capitalize">
-                                {payment.status}
-                              </span>
-                            </div>
-                          </td>
-                          <td className="py-4 px-4 text-sm text-blue-700 max-w-xs truncate">
-                            {payment.notes}
-                          </td>
+                          <th className="text-left px-6 py-4 text-sm font-semibold text-blue-700">
+                            Loan
+                          </th>
+                          <th className="text-left px-6 py-4 text-sm font-semibold text-blue-700">
+                            Amount
+                          </th>
+                          <th className="text-left px-6 py-4 text-sm font-semibold text-blue-700">
+                            Method
+                          </th>
+                          <th className="text-left px-6 py-4 text-sm font-semibold text-blue-700">
+                            Date
+                          </th>
+                          <th className="text-left px-6 py-4 text-sm font-semibold text-blue-700">
+                            Status
+                          </th>
+                          <th className="text-left px-6 py-4 text-sm font-semibold text-blue-700">
+                            Reference
+                          </th>
                         </tr>
-                      ))}
-                    </tbody>
-                  </table>
+                      </thead>
+                      <tbody className="divide-y divide-blue-100">
+                        {filteredHistory.map((payment) => {
+                          const loanInfo = getLoanInfo(payment.loan);
+                          return (
+                            <tr
+                              key={payment._id}
+                              className="hover:bg-blue-50/30 transition-colors duration-150"
+                            >
+                              <td className="px-6 py-4">
+                                <div className="text-sm font-medium text-blue-800">
+                                  #{payment._id.slice(-6).toUpperCase()}
+                                </div>
+                              </td>
+                              <td className="px-6 py-4">
+                                <div className="text-sm text-blue-700">
+                                  {loanInfo ? loanInfo.loanId : "Unknown Loan"}
+                                </div>
+                                <div className="text-xs text-blue-500">
+                                  {loanInfo ? loanInfo.loanType : ""}
+                                </div>
+                              </td>
+                              <td className="px-6 py-4">
+                                <div className="text-sm font-semibold text-blue-800">
+                                  {formatCurrency(payment.amountPaid)}
+                                </div>
+                              </td>
+                              <td className="px-6 py-4">
+                                <div className="flex items-center space-x-2">
+                                  {paymentMethods.find(
+                                    (m) => m.id === payment.paymentMethod
+                                  )?.icon &&
+                                    React.createElement(
+                                      paymentMethods.find(
+                                        (m) => m.id === payment.paymentMethod
+                                      )!.icon,
+                                      { className: "w-4 h-4 text-blue-600" }
+                                    )}
+                                  <span className="text-sm text-blue-700">
+                                    {payment.paymentMethod}
+                                  </span>
+                                </div>
+                              </td>
+                              <td className="px-6 py-4">
+                                <div className="text-sm text-blue-700">
+                                  {formatDate(payment.paymentDate)}
+                                </div>
+                                <div className="text-xs text-blue-500">
+                                  For: {formatDate(payment.forInstallmentDate)}
+                                </div>
+                              </td>
+                              <td className="px-6 py-4">
+                                <div
+                                  className={`inline-flex items-center space-x-1 px-3 py-1 rounded-full text-xs font-medium border ${getStatusColor(
+                                    payment.status
+                                  )}`}
+                                >
+                                  {getStatusIcon(payment.status)}
+                                  <span className="capitalize">
+                                    {payment.status}
+                                  </span>
+                                </div>
+                              </td>
+                              <td className="px-6 py-4">
+                                <div className="text-sm font-mono text-blue-700">
+                                  {payment.paymentReference}
+                                </div>
+                              </td>
+                            </tr>
+                          );
+                        })}
+                      </tbody>
+                    </table>
+                  )}
                 </div>
-
-                {filteredHistory.length === 0 && (
-                  <div className="text-center py-12">
-                    <Clock className="w-12 h-12 text-blue-300 mx-auto mb-4" />
-                    <p className="text-blue-500 text-lg font-medium">
-                      No payments found
-                    </p>
-                    <p className="text-blue-400 text-sm">
-                      Try adjusting your filter settings
-                    </p>
-                  </div>
-                )}
               </div>
             </div>
           )}
@@ -702,24 +896,22 @@ const Payment = () => {
           {activeTab === "auto-pay" && (
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
               <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-8 shadow-lg border border-white/50">
-                <div className="mb-6">
-                  <h3 className="text-xl font-bold text-blue-800 mb-2">
+                <div className="flex items-center space-x-3 mb-6">
+                  <Settings className="w-6 h-6 text-blue-600" />
+                  <h3 className="text-xl font-bold text-blue-800">
                     Auto Payment Settings
                   </h3>
-                  <p className="text-sm text-blue-500">
-                    Set up automatic payments for your loans
-                  </p>
                 </div>
 
                 <div className="space-y-6">
-                  <div className="flex items-center justify-between p-4 bg-gradient-to-r from-blue-50 to-purple-50 rounded-xl border border-blue-200">
+                  <div className="flex items-center justify-between p-4 bg-blue-50/50 rounded-xl border border-blue-200">
                     <div>
-                      <h4 className="text-lg font-semibold text-blue-800">
+                      <div className="font-semibold text-blue-800">
                         Enable Auto Payment
-                      </h4>
-                      <p className="text-sm text-blue-600">
+                      </div>
+                      <div className="text-sm text-blue-600">
                         Automatically pay your EMI on due date
-                      </p>
+                      </div>
                     </div>
                     <label className="relative inline-flex items-center cursor-pointer">
                       <input
@@ -733,25 +925,16 @@ const Payment = () => {
                   </div>
 
                   {autoPayEnabled && (
-                    <div className="space-y-4 animate-in slide-in-from-top-4 duration-300">
+                    <div className="space-y-4 p-4 bg-green-50/50 rounded-xl border border-green-200">
                       <div>
-                        <label className="block text-sm font-medium text-blue-700 mb-3">
-                          Select Loan for Auto Payment
+                        <label className="block text-sm font-medium text-green-700 mb-2">
+                          Default Payment Method
                         </label>
-                        <select className="w-full px-4 py-3 bg-white border border-blue-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all duration-200">
-                          {loans.map((loan) => (
-                            <option key={loan._id} value={loan._id}>
-                              {loan.loanId} - {loan.borrower} ({loan.loanType})
-                            </option>
-                          ))}
-                        </select>
-                      </div>
-
-                      <div>
-                        <label className="block text-sm font-medium text-blue-700 mb-3">
-                          Payment Method
-                        </label>
-                        <select className="w-full px-4 py-3 bg-white border border-blue-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all duration-200">
+                        <select
+                          value={paymentMethod}
+                          onChange={(e) => setPaymentMethod(e.target.value)}
+                          className="w-full px-4 py-3 bg-white border border-green-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-500/20"
+                        >
                           {paymentMethods.map((method) => (
                             <option key={method.id} value={method.id}>
                               {method.label}
@@ -760,35 +943,13 @@ const Payment = () => {
                         </select>
                       </div>
 
-                      <div>
-                        <label className="block text-sm font-medium text-blue-700 mb-3">
-                          Payment Date Preference
-                        </label>
-                        <div className="grid grid-cols-2 gap-3">
-                          <button className="p-3 border-2 border-blue-500 bg-blue-50 rounded-xl text-center">
-                            <div className="text-sm font-medium text-blue-700">
-                              On Due Date
-                            </div>
-                            <div className="text-xs text-blue-600 mt-1">
-                              Pay exactly on due date
-                            </div>
-                          </button>
-                          <button className="p-3 border-2 border-blue-200 rounded-xl text-center hover:border-blue-300">
-                            <div className="text-sm font-medium text-blue-700">
-                              3 Days Early
-                            </div>
-                            <div className="text-xs text-blue-600 mt-1">
-                              Pay 3 days before due
-                            </div>
-                          </button>
+                      <div className="flex items-start space-x-3 p-3 bg-yellow-50 rounded-lg border border-yellow-200">
+                        <Info className="w-5 h-5 text-yellow-600 mt-0.5" />
+                        <div className="text-sm text-yellow-700">
+                          <strong>Important:</strong> Auto payments will be
+                          processed 1 day before the due date. Ensure sufficient
+                          balance in your selected payment method.
                         </div>
-                      </div>
-
-                      <div className="pt-4">
-                        <button className="w-full py-3 bg-gradient-to-r from-green-500 to-emerald-500 text-white rounded-xl font-semibold hover:from-green-600 hover:to-emerald-600 transition-all duration-200 flex items-center justify-center space-x-2">
-                          <CheckCircle className="w-5 h-5" />
-                          <span>Save Auto Payment Settings</span>
-                        </button>
                       </div>
                     </div>
                   )}
@@ -796,79 +957,75 @@ const Payment = () => {
               </div>
 
               <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-8 shadow-lg border border-white/50">
-                <div className="mb-6">
-                  <h3 className="text-xl font-bold text-blue-800 mb-2">
-                    Benefits of Auto Payment
+                <div className="flex items-center space-x-3 mb-6">
+                  <Shield className="w-6 h-6 text-blue-600" />
+                  <h3 className="text-xl font-bold text-blue-800">
+                    Security & Benefits
                   </h3>
-                  <p className="text-sm text-blue-500">
-                    Why you should enable automatic payments
-                  </p>
                 </div>
 
                 <div className="space-y-4">
-                  {[
-                    {
-                      icon: CheckCircle,
-                      title: "Never Miss a Payment",
-                      description:
-                        "Automatic payments ensure you never miss your EMI due date",
-                    },
-                    {
-                      icon: Shield,
-                      title: "Secure & Reliable",
-                      description:
-                        "Bank-grade security with automated transaction processing",
-                    },
-                    {
-                      icon: Clock,
-                      title: "Save Time",
-                      description:
-                        "No need to manually process payments every month",
-                    },
-                    {
-                      icon: DollarSign,
-                      title: "Avoid Late Fees",
-                      description:
-                        "Prevent penalty charges from delayed payments",
-                    },
-                  ].map((benefit, index) => {
-                    const IconComponent = benefit.icon;
-                    return (
-                      <div
-                        key={index}
-                        className="flex items-start space-x-4 p-4 bg-gradient-to-r from-green-50 to-emerald-50 rounded-xl border border-green-200"
-                      >
-                        <div className="p-2 bg-green-100 rounded-xl">
-                          <IconComponent className="w-5 h-5 text-green-600" />
-                        </div>
-                        <div>
-                          <h4 className="text-sm font-semibold text-green-800 mb-1">
-                            {benefit.title}
-                          </h4>
-                          <p className="text-xs text-green-600">
-                            {benefit.description}
-                          </p>
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-
-                <div className="mt-6 p-4 bg-gradient-to-r from-yellow-50 to-orange-50 rounded-xl border border-yellow-200">
-                  <div className="flex items-start space-x-3">
-                    <Info className="w-5 h-5 text-yellow-600 mt-0.5" />
+                  <div className="flex items-start space-x-3 p-4 bg-green-50/50 rounded-xl">
+                    <CheckCircle className="w-5 h-5 text-green-600 mt-0.5" />
                     <div>
-                      <h4 className="text-sm font-semibold text-yellow-800 mb-1">
-                        Important Note
-                      </h4>
-                      <p className="text-xs text-yellow-700">
-                        Ensure sufficient balance in your selected payment
-                        method before the auto-debit date. You can disable auto
-                        payment anytime from this settings page.
-                      </p>
+                      <div className="font-semibold text-green-800">
+                        Never Miss a Payment
+                      </div>
+                      <div className="text-sm text-green-600">
+                        Automatic payments ensure you never miss a due date
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="flex items-start space-x-3 p-4 bg-blue-50/50 rounded-xl">
+                    <Shield className="w-5 h-5 text-blue-600 mt-0.5" />
+                    <div>
+                      <div className="font-semibold text-blue-800">
+                        Bank-Grade Security
+                      </div>
+                      <div className="text-sm text-blue-600">
+                        256-bit encryption protects your payment information
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="flex items-start space-x-3 p-4 bg-purple-50/50 rounded-xl">
+                    <Bell className="w-5 h-5 text-purple-600 mt-0.5" />
+                    <div>
+                      <div className="font-semibold text-purple-800">
+                        Payment Notifications
+                      </div>
+                      <div className="text-sm text-purple-600">
+                        Get notified before and after each automatic payment
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="flex items-start space-x-3 p-4 bg-orange-50/50 rounded-xl">
+                    <Settings className="w-5 h-5 text-orange-600 mt-0.5" />
+                    <div>
+                      <div className="font-semibold text-orange-800">
+                        Full Control
+                      </div>
+                      <div className="text-sm text-orange-600">
+                        Cancel or modify auto payments anytime
+                      </div>
                     </div>
                   </div>
                 </div>
+
+                {autoPayEnabled && (
+                  <div className="mt-6 p-4 bg-gradient-to-r from-green-500 to-blue-500 rounded-xl text-white">
+                    <div className="flex items-center space-x-2 mb-2">
+                      <CheckCircle className="w-5 h-5" />
+                      <span className="font-semibold">Auto Payment Active</span>
+                    </div>
+                    <div className="text-sm opacity-90">
+                      Your EMI will be automatically deducted using{" "}
+                      {paymentMethod} one day before the due date.
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
           )}

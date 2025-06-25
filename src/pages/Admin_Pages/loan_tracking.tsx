@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Search,
   Download,
@@ -17,26 +17,38 @@ import {
   MoreHorizontal,
 } from "lucide-react";
 import Sidebar from "../../components/Sidebar";
+import LoanService from "../../services/admin_Services/loan_Service";
 
 // Define proper types
+
 interface Loan {
-  id: string;
-  borrower: string;
+  _id: string;
+  user: string;
+  productType: string;
+  borrowerInfo: {
+    firstName: string;
+    middleNames?: string;
+    surname: string;
+    email: string;
+    phone: string;
+    mobile: string;
+  };
   amount: number;
-  disbursedAmount: number;
-  outstandingBalance: number;
-  status: "active" | "overdue" | "closed" | "pending" | "rejected";
-  type: string;
-  disbursedDate: string | null;
-  dueDate: string;
-  nextPaymentDate: string | null;
-  nextPaymentAmount: number;
+  balance: number;
+  status: "pending" | "approved" | "rejected" | "active" | "closed";
+  applicationDate: string;
+  approvalDate?: string;
+  startDate?: string;
+  endDate?: string;
   interestRate: number;
-  tenure: number;
-  completedPayments: number;
-  totalPayments: number;
-  overdueDays: number;
-  riskLevel: "low" | "medium" | "high";
+  term: number;
+  paymentSchedule: Array<{
+    dueDate: string;
+    amountDue: number;
+    amountPaid: number;
+    paidOn?: string;
+    status: "pending" | "paid" | "overdue";
+  }>;
 }
 
 const LoanTracking = () => {
@@ -44,127 +56,210 @@ const LoanTracking = () => {
   const [activeFilter, setActiveFilter] = useState("all");
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedLoan, setSelectedLoan] = useState<Loan | null>(null);
+  // Add these state variables and useEffect in your component
+  const [loans, setLoans] = useState<Loan[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  // Sample loan data
-  const loans: Loan[] = [
-    {
-      id: "LN001",
-      borrower: "John Doe",
-      amount: 50000,
-      disbursedAmount: 50000,
-      outstandingBalance: 35000,
-      status: "active",
-      type: "Personal Loan",
-      disbursedDate: "2024-01-15",
-      dueDate: "2025-01-15",
-      nextPaymentDate: "2025-06-15",
-      nextPaymentAmount: 4500,
-      interestRate: 12.5,
-      tenure: 12,
-      completedPayments: 6,
-      totalPayments: 12,
-      overdueDays: 0,
-      riskLevel: "low",
-    },
-    {
-      id: "LN002",
-      borrower: "Jane Smith",
-      amount: 120000,
-      disbursedAmount: 120000,
-      outstandingBalance: 95000,
-      status: "overdue",
-      type: "Business Loan",
-      disbursedDate: "2024-02-10",
-      dueDate: "2026-02-10",
-      nextPaymentDate: "2025-05-15",
-      nextPaymentAmount: 8500,
-      interestRate: 15.0,
-      tenure: 24,
-      completedPayments: 8,
-      totalPayments: 24,
-      overdueDays: 21,
-      riskLevel: "high",
-    },
-    {
-      id: "LN003",
-      borrower: "Mike Johnson",
-      amount: 75000,
-      disbursedAmount: 75000,
-      outstandingBalance: 0,
-      status: "closed",
-      type: "Home Loan",
-      disbursedDate: "2023-08-20",
-      dueDate: "2024-08-20",
-      nextPaymentDate: null,
-      nextPaymentAmount: 0,
-      interestRate: 10.5,
-      tenure: 12,
-      completedPayments: 12,
-      totalPayments: 12,
-      overdueDays: 0,
-      riskLevel: "low",
-    },
-    {
-      id: "LN004",
-      borrower: "Sarah Wilson",
-      amount: 30000,
-      disbursedAmount: 0,
-      outstandingBalance: 30000,
-      status: "pending",
-      type: "Personal Loan",
-      disbursedDate: null,
-      dueDate: "2025-12-05",
-      nextPaymentDate: null,
-      nextPaymentAmount: 2800,
-      interestRate: 11.0,
-      tenure: 12,
-      completedPayments: 0,
-      totalPayments: 12,
-      overdueDays: 0,
-      riskLevel: "medium",
-    },
-    {
-      id: "LN005",
-      borrower: "David Brown",
-      amount: 85000,
-      disbursedAmount: 85000,
-      outstandingBalance: 68000,
-      status: "active",
-      type: "Business Loan",
-      disbursedDate: "2024-03-01",
-      dueDate: "2025-03-01",
-      nextPaymentDate: "2025-06-20",
-      nextPaymentAmount: 7200,
-      interestRate: 13.5,
-      tenure: 12,
-      completedPayments: 3,
-      totalPayments: 12,
-      overdueDays: 0,
-      riskLevel: "medium",
-    },
-    {
-      id: "LN006",
-      borrower: "Emma Davis",
-      amount: 45000,
-      disbursedAmount: 45000,
-      outstandingBalance: 12000,
-      status: "overdue",
-      type: "Personal Loan",
-      disbursedDate: "2023-12-10",
-      dueDate: "2024-12-10",
-      nextPaymentDate: "2025-05-25",
-      nextPaymentAmount: 4000,
-      interestRate: 14.0,
-      tenure: 12,
-      completedPayments: 9,
-      totalPayments: 12,
-      overdueDays: 45,
-      riskLevel: "high",
-    },
-  ];
+  useEffect(() => {
+    const fetchLoans = async () => {
+      try {
+        setLoading(true);
+        const response = await LoanService.getAllLoans();
+        setLoans(response.data || response); // Adjust based on your API response structure
+        setError(null);
+      } catch (err: any) {
+        setError(err.message || "Failed to fetch loans");
+        console.error("Error fetching loans:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchLoans();
+  }, []);
+
+  const transformLoanData = (backendLoan: Loan) => {
+    const borrowerName = `${backendLoan.borrowerInfo.firstName} ${
+      backendLoan.borrowerInfo.middleNames || ""
+    } ${backendLoan.borrowerInfo.surname}`.trim();
+
+    // Calculate overdue days
+    const getOverdueDays = () => {
+      const overduePayments = backendLoan.paymentSchedule.filter(
+        (payment) => payment.status === "overdue"
+      );
+      if (overduePayments.length === 0) return 0;
+
+      const oldestOverdue = overduePayments[0];
+      const dueDate = new Date(oldestOverdue.dueDate);
+      const today = new Date();
+      return Math.floor(
+        (today.getTime() - dueDate.getTime()) / (1000 * 3600 * 24)
+      );
+    };
+
+    // Calculate payment progress
+    const totalPayments = backendLoan.paymentSchedule.length;
+    const completedPayments = backendLoan.paymentSchedule.filter(
+      (payment) => payment.status === "paid"
+    ).length;
+
+    // Get next payment info
+    const nextPayment = backendLoan.paymentSchedule.find(
+      (payment) => payment.status === "pending"
+    );
+
+    // Determine risk level based on status and overdue days
+    const overdueDays = getOverdueDays();
+    const getRiskLevel = () => {
+      if (overdueDays > 30) return "high";
+      if (overdueDays > 0 || backendLoan.status === "rejected") return "medium";
+      return "low";
+    };
+
+    return {
+      id: backendLoan._id,
+      borrower: borrowerName,
+      amount: backendLoan.amount || 0,
+      disbursedAmount: backendLoan.status === "active" ? backendLoan.amount : 0,
+      outstandingBalance: backendLoan.balance || 0,
+      status: backendLoan.status,
+      type: backendLoan.productType,
+      disbursedDate: backendLoan.startDate || null,
+      dueDate: backendLoan.endDate || "",
+      nextPaymentDate: nextPayment ? nextPayment.dueDate : null,
+      nextPaymentAmount: nextPayment ? nextPayment.amountDue : 0,
+      interestRate: backendLoan.interestRate || 0,
+      tenure: backendLoan.term || 0,
+      completedPayments,
+      totalPayments,
+      overdueDays,
+      riskLevel: getRiskLevel(),
+    };
+  };
+
+  // // Sample loan data
+  // const loans: Loan[] = [
+  //   {
+  //     id: "LN001",
+  //     borrower: "John Doe",
+  //     amount: 50000,
+  //     disbursedAmount: 50000,
+  //     outstandingBalance: 35000,
+  //     status: "active",
+  //     type: "Personal Loan",
+  //     disbursedDate: "2024-01-15",
+  //     dueDate: "2025-01-15",
+  //     nextPaymentDate: "2025-06-15",
+  //     nextPaymentAmount: 4500,
+  //     interestRate: 12.5,
+  //     tenure: 12,
+  //     completedPayments: 6,
+  //     totalPayments: 12,
+  //     overdueDays: 0,
+  //     riskLevel: "low",
+  //   },
+  //   {
+  //     id: "LN002",
+  //     borrower: "Jane Smith",
+  //     amount: 120000,
+  //     disbursedAmount: 120000,
+  //     outstandingBalance: 95000,
+  //     status: "overdue",
+  //     type: "Business Loan",
+  //     disbursedDate: "2024-02-10",
+  //     dueDate: "2026-02-10",
+  //     nextPaymentDate: "2025-05-15",
+  //     nextPaymentAmount: 8500,
+  //     interestRate: 15.0,
+  //     tenure: 24,
+  //     completedPayments: 8,
+  //     totalPayments: 24,
+  //     overdueDays: 21,
+  //     riskLevel: "high",
+  //   },
+  //   {
+  //     id: "LN003",
+  //     borrower: "Mike Johnson",
+  //     amount: 75000,
+  //     disbursedAmount: 75000,
+  //     outstandingBalance: 0,
+  //     status: "closed",
+  //     type: "Home Loan",
+  //     disbursedDate: "2023-08-20",
+  //     dueDate: "2024-08-20",
+  //     nextPaymentDate: null,
+  //     nextPaymentAmount: 0,
+  //     interestRate: 10.5,
+  //     tenure: 12,
+  //     completedPayments: 12,
+  //     totalPayments: 12,
+  //     overdueDays: 0,
+  //     riskLevel: "low",
+  //   },
+  //   {
+  //     id: "LN004",
+  //     borrower: "Sarah Wilson",
+  //     amount: 30000,
+  //     disbursedAmount: 0,
+  //     outstandingBalance: 30000,
+  //     status: "pending",
+  //     type: "Personal Loan",
+  //     disbursedDate: null,
+  //     dueDate: "2025-12-05",
+  //     nextPaymentDate: null,
+  //     nextPaymentAmount: 2800,
+  //     interestRate: 11.0,
+  //     tenure: 12,
+  //     completedPayments: 0,
+  //     totalPayments: 12,
+  //     overdueDays: 0,
+  //     riskLevel: "medium",
+  //   },
+  //   {
+  //     id: "LN005",
+  //     borrower: "David Brown",
+  //     amount: 85000,
+  //     disbursedAmount: 85000,
+  //     outstandingBalance: 68000,
+  //     status: "active",
+  //     type: "Business Loan",
+  //     disbursedDate: "2024-03-01",
+  //     dueDate: "2025-03-01",
+  //     nextPaymentDate: "2025-06-20",
+  //     nextPaymentAmount: 7200,
+  //     interestRate: 13.5,
+  //     tenure: 12,
+  //     completedPayments: 3,
+  //     totalPayments: 12,
+  //     overdueDays: 0,
+  //     riskLevel: "medium",
+  //   },
+  //   {
+  //     id: "LN006",
+  //     borrower: "Emma Davis",
+  //     amount: 45000,
+  //     disbursedAmount: 45000,
+  //     outstandingBalance: 12000,
+  //     status: "overdue",
+  //     type: "Personal Loan",
+  //     disbursedDate: "2023-12-10",
+  //     dueDate: "2024-12-10",
+  //     nextPaymentDate: "2025-05-25",
+  //     nextPaymentAmount: 4000,
+  //     interestRate: 14.0,
+  //     tenure: 12,
+  //     completedPayments: 9,
+  //     totalPayments: 12,
+  //     overdueDays: 45,
+  //     riskLevel: "high",
+  //   },
+  // ];
 
   // Filter loans based on active filter and search term
-  const filteredLoans = loans.filter((loan) => {
+  const transformedLoans = loans.map(transformLoanData);
+  const filteredLoans = transformedLoans.filter((loan) => {
     const matchesFilter =
       activeFilter === "all" ||
       loan.status === activeFilter ||
@@ -251,21 +346,22 @@ const LoanTracking = () => {
 
   // Calculate summary statistics
   const summaryStats = {
-    totalLoans: loans.length,
-    activeLoans: loans.filter((l) => l.status === "active").length,
-    overdueLoans: loans.filter((l) => l.overdueDays > 0).length,
-    totalOutstanding: loans.reduce(
+    totalLoans: transformedLoans.length,
+    activeLoans: transformedLoans.filter((l) => l.status === "active").length,
+    overdueLoans: transformedLoans.filter((l) => l.overdueDays > 0).length,
+    totalOutstanding: transformedLoans.reduce(
       (sum, loan) => sum + loan.outstandingBalance,
       0
     ),
-    totalDisbursed: loans.reduce((sum, loan) => sum + loan.disbursedAmount, 0),
+    totalDisbursed: transformedLoans.reduce(
+      (sum, loan) => sum + loan.disbursedAmount,
+      0
+    ),
   };
-
   return (
     <div className="flex h-screen bg-gradient-to-br from-orange-50 via-red-50 to-yellow-50">
       {/* Sidebar Component */}
       <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
-
       {/* Main Content */}
       <div className="flex-1 flex flex-col overflow-hidden lg:ml-0">
         {/* Header */}
@@ -465,8 +561,27 @@ const LoanTracking = () => {
               </div>
 
               <div className="flex items-center space-x-3">
-                <button className="flex items-center space-x-2 px-4 py-2 bg-orange-100 hover:bg-orange-200 rounded-xl text-sm font-medium text-orange-700 transition-all duration-200">
-                  <RefreshCw className="w-4 h-4" />
+                <button
+                  onClick={() => {
+                    const fetchLoans = async () => {
+                      try {
+                        setLoading(true);
+                        const response = await LoanService.getAllLoans();
+                        setLoans(response.data || response);
+                        setError(null);
+                      } catch (err: any) {
+                        setError(err.message || "Failed to fetch loans");
+                      } finally {
+                        setLoading(false);
+                      }
+                    };
+                    fetchLoans();
+                  }}
+                  className="flex items-center space-x-2 px-4 py-2 bg-orange-100 hover:bg-orange-200 rounded-xl text-sm font-medium text-orange-700 transition-all duration-200"
+                >
+                  <RefreshCw
+                    className={`w-4 h-4 ${loading ? "animate-spin" : ""}`}
+                  />
                   <span>Refresh</span>
                 </button>
                 <button className="flex items-center space-x-2 px-4 py-2 bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 rounded-xl text-sm font-medium text-white transition-all duration-200">
@@ -621,6 +736,25 @@ const LoanTracking = () => {
                 </tbody>
               </table>
             </div>
+            {/* // Add loading and error states to your JSX */}
+            {loading && (
+              <div className="flex items-center justify-center h-64">
+                <div className="flex items-center space-x-2">
+                  <RefreshCw className="w-6 h-6 text-orange-500 animate-spin" />
+                  <span className="text-orange-600">Loading loans...</span>
+                </div>
+              </div>
+            )}
+            {error && (
+              <div className="bg-red-50 border border-red-200 rounded-xl p-4 mb-6">
+                <div className="flex items-center space-x-2">
+                  <AlertTriangle className="w-5 h-5 text-red-600" />
+                  <div className="text-sm font-semibold text-red-800">
+                    {error}
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
         </main>
       </div>
