@@ -47,7 +47,7 @@ const PaymentManagement = () => {
   const [error, setError] = useState<string | null>(null);
   //   const [selectedPayment, setSelectedPayment] = useState<any>(null);
   const [showDetailsModal, setShowDetailsModal] = useState(false);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+
   const [selectedPayment, setSelectedPayment] = useState(null);
 
   // Fetch payments from backend
@@ -228,42 +228,10 @@ const PaymentManagement = () => {
       // Fallback: create payment object from table data
       const payment = payments.find((p) => p.id === paymentId);
       if (payment) {
-        const transformedPayment = {
-          _id: payment.id,
-          status: payment.status,
-          amountPaid: parseFloat(
-            payment.amountPaid.replace("₨", "").replace(",", "")
-          ),
-          paymentDate: payment.paymentDate,
-          paymentMethod: payment.paymentMethod,
-          paymentReference: payment.paymentReference,
-          forInstallmentDate: payment.forInstallmentDate,
-          notes: payment.notes,
-          createdAt: payment.paymentDate, // Add missing fields
-          updatedAt: payment.paymentDate,
-          loan: {
-            _id: payment.loanId,
-            loanAmount: parseFloat(
-              payment.loanAmount.replace("₨", "").replace(",", "")
-            ),
-            loanType: payment.loanType,
-          },
-          user: {
-            _id: payment.id, // placeholder
-            firstName: payment.borrowerName.split(" ")[0] || "Unknown",
-            lastName: payment.borrowerName.split(" ").slice(1).join(" ") || "",
-            email: payment.borrowerEmail,
-          },
-        };
         // setSelectedPayment(transformedPayment);
         setShowDetailsModal(true);
       }
     }
-  };
-
-  const handleCloseDetailsModal = () => {
-    setShowDetailsModal(false);
-    setSelectedPayment(null);
   };
 
   const getPendingCount = () => {
@@ -282,17 +250,6 @@ const PaymentManagement = () => {
     return payments.filter(
       (payment) => payment.status.toLowerCase() === "failed"
     ).length;
-  };
-
-  const getTotalAmount = () => {
-    return payments
-      .filter((payment) => payment.status.toLowerCase() === "confirmed")
-      .reduce((total, payment) => {
-        const amount = parseFloat(
-          payment.amountPaid.replace("₨", "").replace(",", "")
-        );
-        return total + amount;
-      }, 0);
   };
 
   return (
