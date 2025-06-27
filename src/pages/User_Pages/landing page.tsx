@@ -50,6 +50,9 @@ const LandingPage = () => {
     setIsDarkMode(!isDarkMode);
   };
 
+    const handleClick = () => {
+    navigate('/adminlogin');
+  };
   // Theme-aware classes
   const themeClasses = {
     bg: isDarkMode ? "bg-gray-950" : "bg-gray-50",
@@ -267,9 +270,12 @@ const LandingPage = () => {
                 } rounded-full border backdrop-blur-sm mb-8`}
               >
                 <Sparkles className="w-4 h-4 text-yellow-400 mr-2" />
-                <span className="text-sm font-semibold text-yellow-400 tracking-wide uppercase">
-                  POCKET FINANCE
-                </span>
+                <span
+      onClick={handleClick}
+      className="text-sm font-semibold text-yellow-400 tracking-wide uppercase cursor-pointer"
+    >
+      POCKET FINANCE
+    </span>
               </div>
 
               <h1 className="text-6xl lg:text-7xl font-bold leading-tight mb-8">
