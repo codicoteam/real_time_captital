@@ -217,6 +217,7 @@ const PaymentManagement = () => {
     }
   };
 
+  // 2. Update the handleViewDetails function (around line 210-240):
   const handleViewDetails = async (paymentId: string) => {
     try {
       const response = await PaymentService.getPaymentById(paymentId);
@@ -224,6 +225,7 @@ const PaymentManagement = () => {
       setShowDetailsModal(true);
     } catch (err) {
       console.error("Error fetching payment details:", err);
+      // Fallback: create payment object from table data
       const payment = payments.find((p) => p.id === paymentId);
       if (payment) {
         const transformedPayment = {
@@ -237,20 +239,23 @@ const PaymentManagement = () => {
           paymentReference: payment.paymentReference,
           forInstallmentDate: payment.forInstallmentDate,
           notes: payment.notes,
+          createdAt: payment.paymentDate, // Add missing fields
+          updatedAt: payment.paymentDate,
           loan: {
             _id: payment.loanId,
-            amount: parseFloat(
+            loanAmount: parseFloat(
               payment.loanAmount.replace("₨", "").replace(",", "")
             ),
-            productType: payment.loanType,
+            loanType: payment.loanType,
           },
           user: {
-            firstName: payment.borrowerName.split(" ")[0],
-            surname: payment.borrowerName.split(" ").slice(1).join(" "),
+            _id: payment.id, // placeholder
+            firstName: payment.borrowerName.split(" ")[0] || "Unknown",
+            lastName: payment.borrowerName.split(" ").slice(1).join(" ") || "",
             email: payment.borrowerEmail,
           },
         };
-        setSelectedPayment(transformedPayment);
+        // setSelectedPayment(transformedPayment);
         setShowDetailsModal(true);
       }
     }
@@ -294,7 +299,6 @@ const PaymentManagement = () => {
     <div className="flex h-screen bg-gradient-to-br from-orange-50 via-red-50 to-yellow-50">
       {/* Sidebar Component */}
       <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
-
       {/* Main Content */}
       <div className="flex-1 flex flex-col overflow-hidden lg:ml-0">
         {/* Header */}
@@ -456,15 +460,13 @@ const PaymentManagement = () => {
               <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-6 shadow-lg border border-white/50">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm text-blue-600 font-medium">
-                      Total Confirmed
-                    </p>
-                    <p className="text-2xl font-bold text-blue-800">
-                      ₨{getTotalAmount().toLocaleString()}
+                    <p className="text-sm text-red-600 font-medium">Failed</p>
+                    <p className="text-2xl font-bold text-red-800">
+                      {getFailedCount()}
                     </p>
                   </div>
-                  <div className="p-3 bg-blue-100 rounded-xl">
-                    <CreditCard className="w-6 h-6 text-blue-600" />
+                  <div className="p-3 bg-red-100 rounded-xl">
+                    <XCircle className="w-6 h-6 text-red-600" />
                   </div>
                 </div>
               </div>
@@ -678,7 +680,6 @@ const PaymentManagement = () => {
           )}
         </main>
       </div>
-
       {/* Mobile sidebar overlay */}
       {sidebarOpen && (
         <div
@@ -687,11 +688,14 @@ const PaymentManagement = () => {
         ></div>
       )}
 
-      {/* Payment Details Modal */}
-      {showDetailsModal && (
+      {showDetailsModal && selectedPayment && (
         <PaymentDetailsModal
-          selectedPayment={selectedPayment}
-          onClose={handleCloseDetailsModal}
+          payment={selectedPayment}
+          onClose={() => {
+            setShowDetailsModal(false);
+            setSelectedPayment(null);
+          }}
+          isOpen={showDetailsModal}
         />
       )}
     </div>

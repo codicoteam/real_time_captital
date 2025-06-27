@@ -94,9 +94,11 @@ const UserService = {
  */
 const handleAxiosError = (error: unknown, defaultMessage: string): never => {
   if (axios.isAxiosError(error)) {
-    throw error.response?.data || defaultMessage;
+    console.error("API Error:", error.response?.data || error.message);
+    throw error.response?.data || { message: defaultMessage };
   } else {
-    throw "An unexpected error occurred";
+    console.error("Unexpected Error:", error);
+    throw { message: "An unexpected error occurred" };
   }
 };
 

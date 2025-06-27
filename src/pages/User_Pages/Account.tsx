@@ -118,7 +118,9 @@ const Account = () => {
         if (storedUserId) {
           setUserId(storedUserId);
           const userData = await UserService.getUserById(storedUserId);
-          if (userData && userData.data) {
+
+          // Updated: Handle the response structure properly
+          if (userData && userData.success && userData.data) {
             setProfileData({
               firstName: userData.data.firstName || "",
               lastName: userData.data.lastName || "",
@@ -127,10 +129,24 @@ const Account = () => {
               address: userData.data.address || "",
               profilePicture: userData.data.profilePicture || "",
             });
+          } else if (userData && userData.firstName) {
+            // Fallback: if data is directly in userData
+            setProfileData({
+              firstName: userData.firstName || "",
+              lastName: userData.lastName || "",
+              email: userData.email || "",
+              phoneNumber: userData.phoneNumber || "",
+              address: userData.address || "",
+              profilePicture: userData.profilePicture || "",
+            });
+            console.log("User data loaded:", userData);
+            console.log("Profile data set:", profileData);
           }
         }
       } catch (error) {
         console.error("Error loading user data:", error);
+        // Optional: Add user feedback for error
+        alert("Failed to load user profile. Please refresh the page.");
       } finally {
         setLoading(false);
       }
@@ -432,15 +448,17 @@ const Account = () => {
               <div className="flex items-center space-x-3 pl-4 border-l border-blue-200/50">
                 <div className="text-right hidden sm:block">
                   <div className="text-sm font-semibold text-blue-700">
-                    {profileData.firstName} {profileData.lastName}
+                    {profileData.firstName && profileData.lastName
+                      ? `${profileData.firstName} ${profileData.lastName}`
+                      : "Loading..."}
                   </div>
                   <div className="text-xs text-blue-500">Account Settings</div>
                 </div>
                 <div className="relative">
                   <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-500 rounded-xl flex items-center justify-center shadow-lg shadow-blue-500/25">
                     <span className="text-white font-semibold text-sm">
-                      {profileData.firstName?.[0] || "U"}
-                      {profileData.lastName?.[0] || "U"}
+                      {profileData.firstName?.[0]?.toUpperCase() || "U"}
+                      {profileData.lastName?.[0]?.toUpperCase() || "U"}
                     </span>
                   </div>
                   <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-400 border-2 border-white rounded-full shadow-sm"></div>
