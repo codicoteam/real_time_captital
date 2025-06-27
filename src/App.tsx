@@ -8,9 +8,8 @@ import Users from "./pages/Admin_Pages/Users";
 import LoanManagement from "./pages/Admin_Pages/Loan_management";
 import LoanTracking from "./pages/Admin_Pages/loan_tracking";
 import Settings from "./pages/Admin_Pages/Settings";
-import Logout from "./pages/User_Pages/logout";
-import PaymentManagement from "./pages/Admin_Pages/Payment_management";
-
+import PaymentManagement from "./pages/Admin_Pages/payment_management";
+import ComingSoonPage from "./pages/Admin_Pages/Error";
 //user imports
 
 import UserDashboard from "./pages/User_Pages/Dashboard";
@@ -36,6 +35,7 @@ function App() {
         <Route path="/loan-tracking" element={<LoanTracking />} />
         <Route path="/settings" element={<Settings />} />
         <Route path="/payments" element={<PaymentManagement />} />
+        <Route path="/*" element={<ComingSoonPage />} />
 
         {/* User Routes */}
         <Route path="/" element={<Landingpage />} />
@@ -45,7 +45,6 @@ function App() {
         <Route path="/loan_application" element={<Loan_application />} />
         <Route path="/payment" element={<Payment />} />
         <Route path="/account" element={<Account />} />
-        <Route path="/logout" element={<Logout />} />
       </Routes>
     </Router>
   );
