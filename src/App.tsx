@@ -9,7 +9,6 @@ import LoanManagement from "./pages/Admin_Pages/Loan_management";
 import LoanTracking from "./pages/Admin_Pages/loan_tracking";
 import Settings from "./pages/Admin_Pages/Settings";
 import Logout from "./pages/User_Pages/logout";
-import PaymentManagement from "./pages/Admin_Pages/Payment_management";
 
 //user imports
 
@@ -21,6 +20,7 @@ import Userlogin from "./pages/User_Pages/Login";
 import UserSignup from "./pages/User_Pages/Signup";
 import AdminSignUp from "./pages/Admin_Pages/Signup";
 import Landingpage from "./pages/User_Pages/landing page";
+import PaymentManagement from "./pages/Admin_Pages/payment_management";
 
 function App() {
   return (

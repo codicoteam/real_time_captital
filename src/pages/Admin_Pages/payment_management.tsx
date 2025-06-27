@@ -39,6 +39,7 @@ interface Payment {
 }
 
 const PaymentManagement = () => {
+    const userName = localStorage.getItem('userName');
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [selectedFilter, setSelectedFilter] = useState("all");
   const [searchTerm, setSearchTerm] = useState("");
@@ -305,7 +306,7 @@ const PaymentManagement = () => {
               <div className="flex items-center space-x-3 pl-4 border-l border-orange-200/50">
                 <div className="text-right hidden sm:block">
                   <div className="text-sm font-semibold text-orange-700">
-                    Sarah Johnson
+                    {userName}
                   </div>
                   <div className="text-xs text-orange-500">Payment Manager</div>
                 </div>

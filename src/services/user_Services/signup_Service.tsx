@@ -13,6 +13,7 @@ interface RegisterData {
 }
 
 const SignupUser = async (userData: RegisterData) => {
+  console.log("register data ",userData )
   try {
     const response = await axios.post(`${BASE_URL}/signup`, userData);
 

@@ -15,6 +15,7 @@ import ApplicationHistory from "../../components/loan_component/Application_hist
 
 // Main Loan Application Page
 const LoanApplicationPage = () => {
+    const userName = localStorage.getItem('userName');
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [activeTab, setActiveTab] = useState("apply");
 
@@ -71,7 +72,7 @@ const LoanApplicationPage = () => {
               <div className="flex items-center space-x-3 pl-4 border-l border-blue-200/50">
                 <div className="text-right hidden sm:block">
                   <div className="text-sm font-semibold text-blue-700">
-                    Sarah Johnson
+                   {userName}
                   </div>
                   <div className="text-xs text-blue-500">Loan Manager</div>
                 </div>

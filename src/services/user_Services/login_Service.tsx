@@ -16,6 +16,10 @@ const loginUser = async (userData: LoginData) => {
 
     if (response.data.token) {
       localStorage.setItem("userToken", response.data.token);
+            localStorage.setItem("userName", response.data.user.name);
+      localStorage.setItem("userEmail", response.data.user.email);
+      localStorage.setItem("userId", response.data.user._id);
+
       console.log("User token stored successfully!");
     } else {
       alert("Login failed: No token received!");

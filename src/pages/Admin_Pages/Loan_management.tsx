@@ -44,6 +44,7 @@ const LoanManagement = () => {
   const [error, setError] = useState<string | null>(null);
   const [selectedLoan, setSelectedLoan] = useState<any>(null);
   const [showDetailsModal, setShowDetailsModal] = useState(false);
+    const userName = localStorage.getItem('userName');
 
   // Fetch loans from backend
   useEffect(() => {
@@ -307,7 +308,7 @@ const LoanManagement = () => {
               <div className="flex items-center space-x-3 pl-4 border-l border-orange-200/50">
                 <div className="text-right hidden sm:block">
                   <div className="text-sm font-semibold text-orange-700">
-                    Sarah Johnson
+                    {userName}
                   </div>
                   <div className="text-xs text-orange-500">Loan Manager</div>
                 </div>
