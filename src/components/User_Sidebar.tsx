@@ -5,7 +5,6 @@ import {
   User,
   ChevronRight,
   X,
-  Lock,
 } from "lucide-react";
 import { useNavigate, useLocation, type To } from "react-router-dom";
 
@@ -40,13 +39,6 @@ const Sidebar = ({ isOpen = true, onClose = () => {} }) => {
       label: "Account",
       subtitle: "Profile & Settings",
       path: "/account",
-      color: "from-purple-500 to-pink-600",
-    },
-    {
-      icon: Lock,
-      label: "Logout",
-      subtitle: "Logout from account",
-      path: "/logout",
       color: "from-purple-500 to-pink-600",
     },
   ];
