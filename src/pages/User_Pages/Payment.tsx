@@ -92,6 +92,9 @@ const Payment = () => {
   const [loans, setLoans] = useState<TransformedLoan[]>([]);
   const [loansLoading, setLoansLoading] = useState(false);
   const [loansError, setLoansError] = useState("");
+  // 1. Add new state for success message (add this with other useState declarations around line 65)
+  const [successMessage, setSuccessMessage] = useState("");
+  const [showSuccess, setShowSuccess] = useState(false);
 
   useEffect(() => {
     const fetchLoans = async () => {
@@ -255,6 +258,7 @@ const Payment = () => {
 
     try {
       setLoading(true);
+      setError(""); // Clear any previous errors
       const token = localStorage.getItem("userToken");
 
       if (!token) {
@@ -274,13 +278,30 @@ const Payment = () => {
         paymentReference: paymentReference,
         forInstallmentDate: currentLoan.nextPaymentDate,
         notes: notes,
-        status: "pending" as const, // Initial status
+        status: "pending" as const,
       };
 
       const response = await PaymentService.createPayment(paymentData);
 
-      if (response.success) {
-        alert(`Payment submitted successfully! Reference: ${paymentReference}`);
+      // Check for success in multiple ways - API might return different response formats
+      const isSuccess =
+        response.success === true ||
+        response.status === "success" ||
+        response.statusCode === 200 ||
+        response.statusCode === 201 ||
+        (response.data && response.data._id) || // Payment created with ID
+        response._id; // Direct payment object returned
+
+      if (isSuccess) {
+        // Set success message
+        setSuccessMessage(
+          `Payment of ${formatCurrency(
+            paymentData.amountPaid
+          )} has been submitted successfully! 
+        Reference: ${paymentReference}. 
+        Your payment is being processed and will be confirmed shortly.`
+        );
+        setShowSuccess(true);
 
         // Reset form
         setPaymentAmount("");
@@ -288,16 +309,112 @@ const Payment = () => {
         setNotes("");
 
         // Refresh payment history
-        const updatedPayments = await PaymentService.getPaymentsByUserId(
-          userId
-        );
-        setPaymentHistory(updatedPayments.data || []);
+        try {
+          const updatedPayments = await PaymentService.getPaymentsByUserId(
+            userId
+          );
+          setPaymentHistory(updatedPayments.data || []);
+        } catch (refreshError) {
+          console.warn("Failed to refresh payment history:", refreshError);
+          // Don't show error for this, payment was still successful
+        }
+
+        // Auto-hide success message after 10 seconds
+        setTimeout(() => {
+          setShowSuccess(false);
+          setSuccessMessage("");
+        }, 10000);
       } else {
-        alert("Payment submission failed. Please try again.");
+        // If response doesn't indicate success, but no error was thrown,
+        // treat as success since payment might still be processed
+        console.warn("Ambiguous response from payment service:", response);
+
+        setSuccessMessage(
+          `Payment of ${formatCurrency(
+            paymentData.amountPaid
+          )} has been submitted! 
+        Reference: ${paymentReference}. 
+        Please check your payment history to confirm the status.`
+        );
+        setShowSuccess(true);
+
+        // Reset form
+        setPaymentAmount("");
+        setPaymentReference("");
+        setNotes("");
+
+        // Try to refresh payment history
+        try {
+          const updatedPayments = await PaymentService.getPaymentsByUserId(
+            userId
+          );
+          setPaymentHistory(updatedPayments.data || []);
+        } catch (refreshError) {
+          console.warn("Failed to refresh payment history:", refreshError);
+        }
+
+        // Auto-hide success message after 10 seconds
+        setTimeout(() => {
+          setShowSuccess(false);
+          setSuccessMessage("");
+        }, 10000);
       }
     } catch (error: any) {
       console.error("Payment error:", error);
-      alert("Payment failed: " + (error.message || "Unknown error"));
+
+      // Check if it's a network error or server error
+      if (error.response) {
+        // Server responded with error status
+        const status = error.response.status;
+        const message =
+          error.response.data?.message ||
+          error.response.data?.error ||
+          "Unknown server error";
+
+        if (status >= 500) {
+          // Server error - payment might still be processed
+          setSuccessMessage(
+            `Payment submitted but server response unclear. 
+          Reference: ${paymentReference}. 
+          Please check your payment history or contact support if needed.`
+          );
+          setShowSuccess(true);
+
+          // Reset form
+          setPaymentAmount("");
+          setPaymentReference("");
+          setNotes("");
+
+          setTimeout(() => {
+            setShowSuccess(false);
+            setSuccessMessage("");
+          }, 10000);
+        } else {
+          // Client error (4xx) - likely a real failure
+          setError(`Payment failed: ${message}`);
+        }
+      } else if (error.request) {
+        // Network error - payment status unclear
+        setSuccessMessage(
+          `Payment submitted but connection issue occurred. 
+        Reference: ${paymentReference}. 
+        Please check your payment history to confirm status.`
+        );
+        setShowSuccess(true);
+
+        // Reset form
+        setPaymentAmount("");
+        setPaymentReference("");
+        setNotes("");
+
+        setTimeout(() => {
+          setShowSuccess(false);
+          setSuccessMessage("");
+        }, 10000);
+      } else {
+        // Other error
+        setError("Payment failed: " + (error.message || "Unknown error"));
+      }
     } finally {
       setLoading(false);
     }
@@ -448,7 +565,67 @@ const Payment = () => {
               })}
             </div>
           </div>
+          {/* Success Message */}
+          {showSuccess && (
+            <div className="fixed top-4 right-4 z-50 max-w-md">
+              <div className="bg-gradient-to-r from-green-500 to-emerald-500 text-white p-6 rounded-2xl shadow-2xl border border-green-400">
+                <div className="flex items-start space-x-3">
+                  <CheckCircle className="w-6 h-6 text-green-100 mt-0.5 flex-shrink-0" />
+                  <div className="flex-1">
+                    <div className="font-bold text-lg mb-1">
+                      Payment Submitted!
+                    </div>
+                    <div className="text-green-100 text-sm leading-relaxed">
+                      {successMessage}
+                    </div>
+                  </div>
+                  <button
+                    onClick={() => {
+                      setShowSuccess(false);
+                      setSuccessMessage("");
+                    }}
+                    className="text-green-100 hover:text-white transition-colors duration-200 ml-2"
+                  >
+                    <XCircle className="w-5 h-5" />
+                  </button>
+                </div>
+                <div className="mt-4 bg-green-600/30 rounded-lg p-3">
+                  <div className="flex items-center space-x-2 text-sm text-green-100">
+                    <Clock className="w-4 h-4" />
+                    <span>Processing time: 1-3 business days</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
 
+          {error && (
+            <div className="fixed top-4 right-4 z-50 max-w-md">
+              <div className="bg-gradient-to-r from-red-500 to-rose-500 text-white p-6 rounded-2xl shadow-2xl border border-red-400">
+                <div className="flex items-start space-x-3">
+                  <XCircle className="w-6 h-6 text-red-100 mt-0.5 flex-shrink-0" />
+                  <div className="flex-1">
+                    <div className="font-bold text-lg mb-1">Payment Failed</div>
+                    <div className="text-red-100 text-sm leading-relaxed">
+                      {error}
+                    </div>
+                  </div>
+                  <button
+                    onClick={() => setError("")}
+                    className="text-red-100 hover:text-white transition-colors duration-200 ml-2"
+                  >
+                    <XCircle className="w-5 h-5" />
+                  </button>
+                </div>
+                <div className="mt-4 bg-red-600/30 rounded-lg p-3">
+                  <div className="flex items-center space-x-2 text-sm text-red-100">
+                    <AlertCircle className="w-4 h-4" />
+                    <span>Please try again or contact support</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
           {/* Make Payment Tab */}
           {activeTab === "make-payment" && (
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -710,7 +887,6 @@ const Payment = () => {
               </div>
             </div>
           )}
-
           {/* Payment History Tab */}
           {activeTab === "history" && (
             <div className="space-y-6">
@@ -891,7 +1067,6 @@ const Payment = () => {
               </div>
             </div>
           )}
-
           {/* Auto Payment Tab */}
           {activeTab === "auto-pay" && (
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">

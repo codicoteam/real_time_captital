@@ -64,7 +64,19 @@ const ApplicationStatus: React.FC<ApplicationStatusProps> = ({
     setLoading(true);
     setError(null);
     try {
-      const response = await LoanService.getAllLoans();
+      const token = localStorage.getItem("userToken");
+
+      if (!token) {
+        setError("No authentication token found");
+        return;
+      }
+
+      // Decode the token to get user ID
+      const payload = JSON.parse(atob(token.split(".")[1]));
+      const userId = payload.id;
+
+      // Use getLoansByUserId instead of getAllLoans
+      const response = await LoanService.getLoansByUserId(userId);
 
       if (response.data) {
         setApplicationsData(response.data);

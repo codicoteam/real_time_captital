@@ -415,17 +415,6 @@ const ApplyNewLoan: React.FC = () => {
         </p>
       </div>
 
-      {submitMessage && (
-        <div
-          className={`mb-4 p-4 rounded-xl ${
-            submitMessage.type === "success"
-              ? "bg-green-100 text-green-700 border border-green-200"
-              : "bg-red-100 text-red-700 border border-red-200"
-          }`}
-        >
-          {submitMessage.text}
-        </div>
-      )}
       <form onSubmit={handleSubmit} className="space-y-8">
         {/* Product Information */}
         <div className="bg-blue-50/50 p-6 rounded-xl">
@@ -1232,6 +1221,17 @@ const ApplyNewLoan: React.FC = () => {
               {isSubmitting ? "Submitting..." : "Submit Loan Application"}
             </span>
           </button>
+          {submitMessage && (
+            <div
+              className={`mb-4 p-4 rounded-xl ${
+                submitMessage.type === "success"
+                  ? "bg-green-100 text-green-700 border border-green-200"
+                  : "bg-red-100 text-red-700 border border-red-200"
+              }`}
+            >
+              {submitMessage.text}
+            </div>
+          )}
         </div>
       </form>
     </div>

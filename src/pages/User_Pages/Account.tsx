@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   User,
   Bell,
@@ -13,26 +13,24 @@ import {
   Search,
   AlertCircle,
   CheckCircle,
+  Loader,
 } from "lucide-react";
 import Sidebar from "../../components/User_Sidebar";
+import UserService from "../../services/user_Services/users_Service";
 
-// Type definitions
+// Type definitions matching the backend model
 interface ProfileData {
   firstName: string;
   lastName: string;
   email: string;
-  phone: string;
+  phoneNumber: string;
   address: string;
-  dateOfBirth: string;
-  occupation: string;
-  annualIncome: string;
-  panNumber: string;
-  aadharNumber: string;
+  profilePicture?: string;
 }
 
 interface PasswordData {
   currentPassword: string;
-  newPassword: string;
+  password: string;
   confirmPassword: string;
 }
 
@@ -54,8 +52,9 @@ interface InputFieldProps {
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   disabled: boolean;
   error?: string;
-  showToggle?: { show: boolean };
+  showToggle?: boolean;
   onToggle?: () => void;
+  isPassword?: boolean;
 }
 
 interface ToggleSwitchProps {
@@ -70,29 +69,30 @@ const Account = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [activeTab, setActiveTab] = useState("profile");
   const [isEditing, setIsEditing] = useState(false);
-  const [showPassword, setShowPassword] = useState(false);
+  const [showCurrentPassword, setShowCurrentPassword] = useState(false);
+  const [showNewPassword, setShowNewPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+  const [userId, setUserId] = useState<string | null>(null);
 
-  const [profileData, setProfileData] = useState({
-    firstName: "John",
-    lastName: "Doe",
-    email: "john.doe@example.com",
-    phone: "+91 98765 43210",
-    address: "123 Main Street, Mumbai, Maharashtra",
-    dateOfBirth: "1990-05-15",
-    occupation: "Software Engineer",
-    annualIncome: "1200000",
-    panNumber: "ABCDE1234F",
-    aadharNumber: "1234 5678 9012",
+  // Profile data matching backend model
+  const [profileData, setProfileData] = useState<ProfileData>({
+    firstName: "",
+    lastName: "",
+    email: "",
+    phoneNumber: "",
+    address: "",
+    profilePicture: "",
   });
 
-  const [passwordData, setPasswordData] = useState({
+  const [passwordData, setPasswordData] = useState<PasswordData>({
     currentPassword: "",
-    newPassword: "",
+    password: "",
     confirmPassword: "",
   });
 
-  const [notifications, setNotifications] = useState({
+  const [notifications, setNotifications] = useState<NotificationData>({
     emailNotifications: true,
     smsNotifications: true,
     pushNotifications: false,
@@ -108,6 +108,37 @@ const Account = () => {
   );
   const [profileErrors, setProfileErrors] = useState<Partial<ProfileData>>({});
 
+  // Load user data on component mount
+  useEffect(() => {
+    const loadUserData = async () => {
+      try {
+        setLoading(true);
+        // Get user ID from localStorage or token
+        const storedUserId = localStorage.getItem("userId");
+        if (storedUserId) {
+          setUserId(storedUserId);
+          const userData = await UserService.getUserById(storedUserId);
+          if (userData && userData.data) {
+            setProfileData({
+              firstName: userData.data.firstName || "",
+              lastName: userData.data.lastName || "",
+              email: userData.data.email || "",
+              phoneNumber: userData.data.phoneNumber || "",
+              address: userData.data.address || "",
+              profilePicture: userData.data.profilePicture || "",
+            });
+          }
+        }
+      } catch (error) {
+        console.error("Error loading user data:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadUserData();
+  }, []);
+
   const handleChange = <T extends Record<string, any>>(
     setter: React.Dispatch<React.SetStateAction<T>>,
     field: keyof T,
@@ -122,7 +153,9 @@ const Account = () => {
     if (!profileData.email.trim()) errors.email = "Email is required";
     if (!/\S+@\S+\.\S+/.test(profileData.email))
       errors.email = "Invalid email format";
-    if (!profileData.phone.trim()) errors.phone = "Phone number is required";
+    if (!profileData.phoneNumber.trim())
+      errors.phoneNumber = "Phone number is required";
+    if (!profileData.address.trim()) errors.address = "Address is required";
     setProfileErrors(errors);
     return Object.keys(errors).length === 0;
   };
@@ -131,31 +164,59 @@ const Account = () => {
     const errors: Partial<PasswordData> = {};
     if (!passwordData.currentPassword)
       errors.currentPassword = "Current password is required";
-    if (!passwordData.newPassword)
-      errors.newPassword = "New password is required";
-    if (passwordData.newPassword.length < 8)
-      errors.newPassword = "Password must be at least 8 characters";
-    if (passwordData.newPassword !== passwordData.confirmPassword)
+    if (!passwordData.password) errors.password = "New password is required";
+    if (passwordData.password.length < 8)
+      errors.password = "Password must be at least 8 characters";
+    if (passwordData.password !== passwordData.confirmPassword)
       errors.confirmPassword = "Passwords do not match";
     setPasswordErrors(errors);
     return Object.keys(errors).length === 0;
   };
 
-  const handleProfileSave = () => {
-    if (validateProfile()) {
-      setIsEditing(false);
-      console.log("Profile saved:", profileData);
+  const handleProfileSave = async () => {
+    if (validateProfile() && userId) {
+      try {
+        setSaving(true);
+        const updateData = {
+          firstName: profileData.firstName,
+          lastName: profileData.lastName,
+          email: profileData.email,
+          phoneNumber: profileData.phoneNumber,
+          address: profileData.address,
+          profilePicture: profileData.profilePicture,
+        };
+
+        await UserService.updateUser(userId, updateData);
+        setIsEditing(false);
+        console.log("Profile updated successfully");
+      } catch (error) {
+        console.error("Error updating profile:", error);
+      } finally {
+        setSaving(false);
+      }
     }
   };
 
-  const handlePasswordSave = () => {
-    if (validatePassword()) {
-      console.log("Password changed");
-      setPasswordData({
-        currentPassword: "",
-        newPassword: "",
-        confirmPassword: "",
-      });
+  const handlePasswordSave = async () => {
+    if (validatePassword() && userId) {
+      try {
+        setSaving(true);
+        const updateData = {
+          password: passwordData.password,
+        };
+
+        await UserService.updateUser(userId, updateData);
+        setPasswordData({
+          currentPassword: "",
+          password: "",
+          confirmPassword: "",
+        });
+        console.log("Password updated successfully");
+      } catch (error) {
+        console.error("Error updating password:", error);
+      } finally {
+        setSaving(false);
+      }
     }
   };
 
@@ -165,7 +226,7 @@ const Account = () => {
     { id: "notifications", label: "Notifications", icon: Bell },
   ];
 
-  // Reusable Input Component
+  // Updated Input Component with proper password handling
   const InputField: React.FC<InputFieldProps> = ({
     label,
     type = "text",
@@ -173,44 +234,50 @@ const Account = () => {
     onChange,
     disabled,
     error,
-    showToggle,
+    showToggle = false,
     onToggle,
-  }) => (
-    <div>
-      <label className="block text-sm font-medium text-blue-700 mb-2">
-        {label}
-      </label>
-      <div className="relative">
-        <input
-          type={showToggle ? (showToggle.show ? "text" : "password") : type}
-          value={value}
-          onChange={onChange}
-          disabled={disabled}
-          className={`w-full px-4 py-3 ${
-            showToggle ? "pr-12" : ""
-          } rounded-xl border ${
-            error ? "border-red-300" : "border-blue-200/50"
-          } bg-white/50 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500/50 transition-all duration-200 ${
-            disabled ? "bg-gray-50 cursor-not-allowed" : ""
-          }`}
-        />
-        {showToggle && (
-          <button
-            type="button"
-            onClick={onToggle}
-            className="absolute right-3 top-1/2 transform -translate-y-1/2 text-blue-500 hover:text-blue-700"
-          >
-            {showToggle.show ? (
-              <EyeOff className="w-5 h-5" />
-            ) : (
-              <Eye className="w-5 h-5" />
-            )}
-          </button>
-        )}
+    isPassword = false,
+  }) => {
+    // Determine the actual input type
+    const inputType = isPassword ? (showToggle ? "text" : "password") : type;
+
+    return (
+      <div>
+        <label className="block text-sm font-medium text-blue-700 mb-2">
+          {label}
+        </label>
+        <div className="relative">
+          <input
+            type={inputType}
+            value={value}
+            onChange={onChange}
+            disabled={disabled}
+            className={`w-full px-4 py-3 ${
+              isPassword ? "pr-12" : ""
+            } rounded-xl border ${
+              error ? "border-red-300" : "border-blue-200/50"
+            } bg-white/50 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500/50 transition-all duration-200 ${
+              disabled ? "bg-gray-50 cursor-not-allowed" : ""
+            }`}
+          />
+          {isPassword && onToggle && (
+            <button
+              type="button"
+              onClick={onToggle}
+              className="absolute right-3 top-1/2 transform -translate-y-1/2 text-blue-500 hover:text-blue-700 transition-colors duration-200"
+            >
+              {showToggle ? (
+                <EyeOff className="w-5 h-5" />
+              ) : (
+                <Eye className="w-5 h-5" />
+              )}
+            </button>
+          )}
+        </div>
+        {error && <p className="text-red-500 text-sm mt-1">{error}</p>}
       </div>
-      {error && <p className="text-red-500 text-sm mt-1">{error}</p>}
-    </div>
-  );
+    );
+  };
 
   // Reusable Toggle Component
   const ToggleSwitch: React.FC<ToggleSwitchProps> = ({
@@ -239,15 +306,12 @@ const Account = () => {
     </div>
   );
 
+  // Profile fields matching backend model
   const profileFields = [
     { key: "firstName", label: "First Name", type: "text" },
     { key: "lastName", label: "Last Name", type: "text" },
     { key: "email", label: "Email Address", type: "email" },
-    { key: "phone", label: "Phone Number", type: "tel" },
-    { key: "dateOfBirth", label: "Date of Birth", type: "date" },
-    { key: "occupation", label: "Occupation", type: "text" },
-    { key: "annualIncome", label: "Annual Income (₹)", type: "number" },
-    { key: "panNumber", label: "PAN Number", type: "text" },
+    { key: "phoneNumber", label: "Phone Number", type: "tel" },
   ];
 
   const notificationSections = [
@@ -314,6 +378,17 @@ const Account = () => {
     },
   ];
 
+  if (loading) {
+    return (
+      <div className="flex h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 items-center justify-center">
+        <div className="flex items-center space-x-2">
+          <Loader className="w-6 h-6 animate-spin text-blue-600" />
+          <span className="text-blue-600 font-medium">Loading profile...</span>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="flex h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50">
       <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
@@ -364,8 +439,8 @@ const Account = () => {
                 <div className="relative">
                   <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-500 rounded-xl flex items-center justify-center shadow-lg shadow-blue-500/25">
                     <span className="text-white font-semibold text-sm">
-                      {profileData.firstName[0]}
-                      {profileData.lastName[0]}
+                      {profileData.firstName?.[0] || "U"}
+                      {profileData.lastName?.[0] || "U"}
                     </span>
                   </div>
                   <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-400 border-2 border-white rounded-full shadow-sm"></div>
@@ -386,8 +461,8 @@ const Account = () => {
                   <div className="relative">
                     <div className="w-24 h-24 bg-gradient-to-br from-blue-500 to-purple-500 rounded-2xl flex items-center justify-center shadow-lg shadow-blue-500/25">
                       <span className="text-white font-bold text-2xl">
-                        {profileData.firstName[0]}
-                        {profileData.lastName[0]}
+                        {profileData.firstName?.[0] || "U"}
+                        {profileData.lastName?.[0] || "U"}
                       </span>
                     </div>
                     <button className="absolute -bottom-2 -right-2 p-2 bg-white rounded-xl shadow-lg border border-blue-200/50 hover:bg-blue-50 transition-all duration-200">
@@ -398,11 +473,9 @@ const Account = () => {
                     <h1 className="text-3xl font-bold text-blue-800">
                       {profileData.firstName} {profileData.lastName}
                     </h1>
-                    <p className="text-blue-600 mt-1">
-                      {profileData.occupation}
-                    </p>
+                    <p className="text-blue-600 mt-1">{profileData.email}</p>
                     <p className="text-sm text-blue-500 mt-2">
-                      Member since January 2024
+                      Member since registration
                     </p>
                   </div>
                 </div>
@@ -412,10 +485,6 @@ const Account = () => {
                     <span className="text-sm font-medium text-green-700">
                       Verified Account
                     </span>
-                  </div>
-                  <div className="text-sm text-blue-600">
-                    Credit Score:{" "}
-                    <span className="font-bold text-blue-800">750</span>
                   </div>
                 </div>
               </div>
@@ -461,15 +530,22 @@ const Account = () => {
                         onClick={() =>
                           isEditing ? handleProfileSave() : setIsEditing(true)
                         }
-                        className="flex items-center space-x-2 px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-500 text-white rounded-xl font-medium hover:from-blue-600 hover:to-purple-600 transition-all duration-200"
+                        disabled={saving}
+                        className="flex items-center space-x-2 px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-500 text-white rounded-xl font-medium hover:from-blue-600 hover:to-purple-600 transition-all duration-200 disabled:opacity-50"
                       >
-                        {isEditing ? (
+                        {saving ? (
+                          <Loader className="w-4 h-4 animate-spin" />
+                        ) : isEditing ? (
                           <Save className="w-4 h-4" />
                         ) : (
                           <Edit3 className="w-4 h-4" />
                         )}
                         <span>
-                          {isEditing ? "Save Changes" : "Edit Profile"}
+                          {saving
+                            ? "Saving..."
+                            : isEditing
+                            ? "Save Changes"
+                            : "Edit Profile"}
                         </span>
                       </button>
                     </div>
@@ -480,7 +556,9 @@ const Account = () => {
                           key={field.key}
                           label={field.label}
                           type={field.type}
-                          value={profileData[field.key as keyof ProfileData]}
+                          value={
+                            profileData[field.key as keyof ProfileData] || ""
+                          }
                           onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                             handleChange(
                               setProfileData,
@@ -488,10 +566,8 @@ const Account = () => {
                               e.target.value
                             )
                           }
-                          disabled={!isEditing}
+                          disabled={!isEditing || saving}
                           error={profileErrors[field.key as keyof ProfileData]}
-                          showToggle={undefined}
-                          onToggle={undefined}
                         />
                       ))}
 
@@ -508,12 +584,19 @@ const Account = () => {
                               e.target.value
                             )
                           }
-                          disabled={!isEditing}
+                          disabled={!isEditing || saving}
                           rows={3}
                           className={`w-full px-4 py-3 rounded-xl border border-blue-200/50 bg-white/50 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500/50 transition-all duration-200 ${
-                            !isEditing ? "bg-gray-50 cursor-not-allowed" : ""
+                            !isEditing || saving
+                              ? "bg-gray-50 cursor-not-allowed"
+                              : ""
                           }`}
                         />
+                        {profileErrors.address && (
+                          <p className="text-red-500 text-sm mt-1">
+                            {profileErrors.address}
+                          </p>
+                        )}
                       </div>
                     </div>
 
@@ -521,15 +604,17 @@ const Account = () => {
                       <div className="flex space-x-4">
                         <button
                           onClick={() => setIsEditing(false)}
-                          className="px-6 py-3 bg-gray-100 text-gray-700 rounded-xl font-medium hover:bg-gray-200 transition-all duration-200"
+                          disabled={saving}
+                          className="px-6 py-3 bg-gray-100 text-gray-700 rounded-xl font-medium hover:bg-gray-200 transition-all duration-200 disabled:opacity-50"
                         >
                           Cancel
                         </button>
                         <button
                           onClick={handleProfileSave}
-                          className="px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-500 text-white rounded-xl font-medium hover:from-blue-600 hover:to-purple-600 transition-all duration-200"
+                          disabled={saving}
+                          className="px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-500 text-white rounded-xl font-medium hover:from-blue-600 hover:to-purple-600 transition-all duration-200 disabled:opacity-50"
                         >
-                          Save Changes
+                          {saving ? "Saving..." : "Save Changes"}
                         </button>
                       </div>
                     )}
@@ -563,26 +648,29 @@ const Account = () => {
                               e.target.value
                             )
                           }
-                          disabled={false}
+                          disabled={saving}
                           error={passwordErrors.currentPassword}
-                          showToggle={{ show: showPassword }}
-                          onToggle={() => setShowPassword(!showPassword)}
+                          isPassword={true}
+                          showToggle={showCurrentPassword}
+                          onToggle={() =>
+                            setShowCurrentPassword(!showCurrentPassword)
+                          }
                         />
                         <InputField
                           label="New Password"
-                          type="password"
-                          value={passwordData.newPassword}
+                          value={passwordData.password}
                           onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                             handleChange(
                               setPasswordData,
-                              "newPassword",
+                              "password",
                               e.target.value
                             )
                           }
-                          disabled={false}
-                          error={passwordErrors.newPassword}
-                          showToggle={undefined}
-                          onToggle={undefined}
+                          disabled={saving}
+                          error={passwordErrors.password}
+                          isPassword={true}
+                          showToggle={showNewPassword}
+                          onToggle={() => setShowNewPassword(!showNewPassword)}
                         />
                         <InputField
                           label="Confirm New Password"
@@ -594,18 +682,25 @@ const Account = () => {
                               e.target.value
                             )
                           }
-                          disabled={false}
+                          disabled={saving}
                           error={passwordErrors.confirmPassword}
-                          showToggle={{ show: showConfirmPassword }}
+                          isPassword={true}
+                          showToggle={showConfirmPassword}
                           onToggle={() =>
                             setShowConfirmPassword(!showConfirmPassword)
                           }
                         />
                         <button
                           onClick={handlePasswordSave}
-                          className="px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-500 text-white rounded-xl font-medium hover:from-blue-600 hover:to-purple-600 transition-all duration-200"
+                          disabled={saving}
+                          className="flex items-center space-x-2 px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-500 text-white rounded-xl font-medium hover:from-blue-600 hover:to-purple-600 transition-all duration-200 disabled:opacity-50"
                         >
-                          Update Password
+                          {saving && (
+                            <Loader className="w-4 h-4 animate-spin" />
+                          )}
+                          <span>
+                            {saving ? "Updating..." : "Update Password"}
+                          </span>
                         </button>
                       </div>
                     </div>
@@ -618,11 +713,6 @@ const Account = () => {
                         {[
                           {
                             icon: CheckCircle,
-                            text: "Two-factor authentication enabled",
-                            color: "green",
-                          },
-                          {
-                            icon: CheckCircle,
                             text: "Email verification completed",
                             color: "green",
                           },
@@ -633,7 +723,7 @@ const Account = () => {
                           },
                           {
                             icon: AlertCircle,
-                            text: "Document verification pending",
+                            text: "Two-factor authentication recommended",
                             color: "orange",
                           },
                         ].map((item, index) => (
@@ -703,6 +793,59 @@ const Account = () => {
                           </div>
                         </div>
                       ))}
+                    </div>
+
+                    <div className="bg-gradient-to-br from-amber-50 to-orange-50 rounded-2xl p-6">
+                      <h3 className="text-lg font-semibold text-amber-800 mb-4">
+                        Notification Delivery
+                      </h3>
+                      <p className="text-amber-700 text-sm mb-4">
+                        Configure when and how you receive notifications
+                      </p>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div className="bg-white/50 rounded-xl p-4">
+                          <h4 className="font-medium text-amber-800 mb-2">
+                            Email Frequency
+                          </h4>
+                          <select className="w-full px-3 py-2 rounded-lg border border-amber-200 bg-white focus:outline-none focus:ring-2 focus:ring-amber-500/20">
+                            <option>Immediate</option>
+                            <option>Daily digest</option>
+                            <option>Weekly summary</option>
+                          </select>
+                        </div>
+                        <div className="bg-white/50 rounded-xl p-4">
+                          <h4 className="font-medium text-amber-800 mb-2">
+                            Quiet Hours
+                          </h4>
+                          <div className="flex space-x-2">
+                            <input
+                              type="time"
+                              className="flex-1 px-3 py-2 rounded-lg border border-amber-200 bg-white focus:outline-none focus:ring-2 focus:ring-amber-500/20"
+                              defaultValue="22:00"
+                            />
+                            <span className="self-center text-amber-600">
+                              to
+                            </span>
+                            <input
+                              type="time"
+                              className="flex-1 px-3 py-2 rounded-lg border border-amber-200 bg-white focus:outline-none focus:ring-2 focus:ring-amber-500/20"
+                              defaultValue="08:00"
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="flex justify-end">
+                      <button
+                        onClick={() =>
+                          console.log("Notification preferences saved")
+                        }
+                        className="flex items-center space-x-2 px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-500 text-white rounded-xl font-medium hover:from-blue-600 hover:to-purple-600 transition-all duration-200"
+                      >
+                        <Save className="w-4 h-4" />
+                        <span>Save Preferences</span>
+                      </button>
                     </div>
                   </div>
                 )}

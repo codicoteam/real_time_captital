@@ -51,19 +51,31 @@ const UserDashboard = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  // Fetch loans from backend
+  // Updated useEffect for fetching loans by user ID
   useEffect(() => {
     const fetchLoans = async () => {
       try {
         setLoading(true);
-        const response = await LoanService.getAllLoans();
+        const token = localStorage.getItem("userToken");
 
-        // Get all loans without filtering
-        const allLoans = response.data || [];
+        if (!token) {
+          setError("No authentication token found");
+          return;
+        }
 
-        setLoans(allLoans);
+        // Decode the token to get user ID
+        const payload = JSON.parse(atob(token.split(".")[1]));
+        const userId = payload.id;
 
-        if (allLoans.length === 0) {
+        // Use getLoansByUserId instead of getAllLoans
+        const response = await LoanService.getLoansByUserId(userId);
+
+        // Get user's loans only
+        const userLoans = response.data || [];
+
+        setLoans(userLoans);
+
+        if (userLoans.length === 0) {
           setError("No loans found");
         }
       } catch (err: any) {
