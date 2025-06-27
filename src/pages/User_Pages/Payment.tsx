@@ -76,7 +76,7 @@ interface TransformedLoan {
 }
 
 const Payment = () => {
-    const userName = localStorage.getItem('userName');
+  const userName = localStorage.getItem("userName");
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [activeTab, setActiveTab] = useState("make-payment");
   const [selectedLoan, setSelectedLoan] = useState(0);
@@ -532,9 +532,7 @@ const Payment = () => {
                   <div className="text-xs text-blue-500">Loan Manager</div>
                 </div>
                 <div className="relative">
-                  <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-500 rounded-xl flex items-center justify-center shadow-lg shadow-blue-500/25">
-                    <span className="text-white font-semibold text-sm">SJ</span>
-                  </div>
+                  <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-500 rounded-xl flex items-center justify-center shadow-lg shadow-blue-500/25"></div>
                   <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-400 border-2 border-white rounded-full shadow-sm"></div>
                 </div>
                 <ChevronDown className="w-4 h-4 text-blue-400" />

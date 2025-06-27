@@ -582,7 +582,7 @@ const Dashboard = () => {
 
               {/* Scrollable Users List */}
               <div className="space-y-4 max-h-80 overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-orange-200 scrollbar-track-orange-50">
-                {users.map((user, index) => (
+                {users.map((user) => (
                   <div
                     key={user.id}
                     className="group flex items-center justify-between p-4 bg-gradient-to-r from-white/50 to-orange-50/30 rounded-xl border border-orange-200/30 hover:border-orange-300/50 transition-all duration-300 hover:shadow-md"
@@ -765,7 +765,7 @@ const Dashboard = () => {
             </div>
 
             <div className="space-y-4 max-h-96 overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-orange-200 scrollbar-track-orange-50">
-              {getPendingLoans().map((loan, index) => (
+              {getPendingLoans().map((loan) => (
                 <div
                   key={loan.id}
                   className="group flex items-center justify-between p-6 bg-gradient-to-r from-white/50 to-orange-50/30 rounded-xl border border-orange-200/30 hover:border-orange-300/50 transition-all duration-300 hover:shadow-md"

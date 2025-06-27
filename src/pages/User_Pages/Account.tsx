@@ -75,6 +75,7 @@ const Account = () => {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [userId, setUserId] = useState<string | null>(null);
+    const userName = localStorage.getItem('userName');
 
   // Profile data matching backend model
   const [profileData, setProfileData] = useState<ProfileData>({
@@ -448,9 +449,7 @@ const Account = () => {
               <div className="flex items-center space-x-3 pl-4 border-l border-blue-200/50">
                 <div className="text-right hidden sm:block">
                   <div className="text-sm font-semibold text-blue-700">
-                    {profileData.firstName && profileData.lastName
-                      ? `${profileData.firstName} ${profileData.lastName}`
-                      : "Loading..."}
+                     {userName}
                   </div>
                   <div className="text-xs text-blue-500">Account Settings</div>
                 </div>
@@ -479,8 +478,7 @@ const Account = () => {
                   <div className="relative">
                     <div className="w-24 h-24 bg-gradient-to-br from-blue-500 to-purple-500 rounded-2xl flex items-center justify-center shadow-lg shadow-blue-500/25">
                       <span className="text-white font-bold text-2xl">
-                        {profileData.firstName?.[0] || "U"}
-                        {profileData.lastName?.[0] || "U"}
+                          {userName}
                       </span>
                     </div>
                     <button className="absolute -bottom-2 -right-2 p-2 bg-white rounded-xl shadow-lg border border-blue-200/50 hover:bg-blue-50 transition-all duration-200">
@@ -489,7 +487,7 @@ const Account = () => {
                   </div>
                   <div>
                     <h1 className="text-3xl font-bold text-blue-800">
-                      {profileData.firstName} {profileData.lastName}
+                        {userName}
                     </h1>
                     <p className="text-blue-600 mt-1">{profileData.email}</p>
                     <p className="text-sm text-blue-500 mt-2">
