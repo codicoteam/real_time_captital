@@ -50,12 +50,33 @@ interface Loan {
     status: "pending" | "paid" | "overdue";
   }>;
 }
+interface TransformedLoan {
+  id: string;
+  borrower: string;
+  amount: number;
+  disbursedAmount: number;
+  outstandingBalance: number;
+  status: "pending" | "approved" | "rejected" | "active" | "closed";
+  type: string;
+  disbursedDate: string | null;
+  dueDate: string;
+  nextPaymentDate: string | null;
+  nextPaymentAmount: number;
+  interestRate: number;
+  tenure: number;
+  completedPayments: number;
+  totalPayments: number;
+  overdueDays: number;
+  riskLevel: string;
+}
 
 const LoanTracking = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [activeFilter, setActiveFilter] = useState("all");
   const [searchTerm, setSearchTerm] = useState("");
-  const [selectedLoan, setSelectedLoan] = useState<Loan | null>(null);
+  const [selectedLoan, setSelectedLoan] = useState<TransformedLoan | null>(
+    null
+  );
   // Add these state variables and useEffect in your component
   const [loans, setLoans] = useState<Loan[]>([]);
   const [loading, setLoading] = useState(true);
@@ -138,124 +159,6 @@ const LoanTracking = () => {
       riskLevel: getRiskLevel(),
     };
   };
-
-  // // Sample loan data
-  // const loans: Loan[] = [
-  //   {
-  //     id: "LN001",
-  //     borrower: "John Doe",
-  //     amount: 50000,
-  //     disbursedAmount: 50000,
-  //     outstandingBalance: 35000,
-  //     status: "active",
-  //     type: "Personal Loan",
-  //     disbursedDate: "2024-01-15",
-  //     dueDate: "2025-01-15",
-  //     nextPaymentDate: "2025-06-15",
-  //     nextPaymentAmount: 4500,
-  //     interestRate: 12.5,
-  //     tenure: 12,
-  //     completedPayments: 6,
-  //     totalPayments: 12,
-  //     overdueDays: 0,
-  //     riskLevel: "low",
-  //   },
-  //   {
-  //     id: "LN002",
-  //     borrower: "Jane Smith",
-  //     amount: 120000,
-  //     disbursedAmount: 120000,
-  //     outstandingBalance: 95000,
-  //     status: "overdue",
-  //     type: "Business Loan",
-  //     disbursedDate: "2024-02-10",
-  //     dueDate: "2026-02-10",
-  //     nextPaymentDate: "2025-05-15",
-  //     nextPaymentAmount: 8500,
-  //     interestRate: 15.0,
-  //     tenure: 24,
-  //     completedPayments: 8,
-  //     totalPayments: 24,
-  //     overdueDays: 21,
-  //     riskLevel: "high",
-  //   },
-  //   {
-  //     id: "LN003",
-  //     borrower: "Mike Johnson",
-  //     amount: 75000,
-  //     disbursedAmount: 75000,
-  //     outstandingBalance: 0,
-  //     status: "closed",
-  //     type: "Home Loan",
-  //     disbursedDate: "2023-08-20",
-  //     dueDate: "2024-08-20",
-  //     nextPaymentDate: null,
-  //     nextPaymentAmount: 0,
-  //     interestRate: 10.5,
-  //     tenure: 12,
-  //     completedPayments: 12,
-  //     totalPayments: 12,
-  //     overdueDays: 0,
-  //     riskLevel: "low",
-  //   },
-  //   {
-  //     id: "LN004",
-  //     borrower: "Sarah Wilson",
-  //     amount: 30000,
-  //     disbursedAmount: 0,
-  //     outstandingBalance: 30000,
-  //     status: "pending",
-  //     type: "Personal Loan",
-  //     disbursedDate: null,
-  //     dueDate: "2025-12-05",
-  //     nextPaymentDate: null,
-  //     nextPaymentAmount: 2800,
-  //     interestRate: 11.0,
-  //     tenure: 12,
-  //     completedPayments: 0,
-  //     totalPayments: 12,
-  //     overdueDays: 0,
-  //     riskLevel: "medium",
-  //   },
-  //   {
-  //     id: "LN005",
-  //     borrower: "David Brown",
-  //     amount: 85000,
-  //     disbursedAmount: 85000,
-  //     outstandingBalance: 68000,
-  //     status: "active",
-  //     type: "Business Loan",
-  //     disbursedDate: "2024-03-01",
-  //     dueDate: "2025-03-01",
-  //     nextPaymentDate: "2025-06-20",
-  //     nextPaymentAmount: 7200,
-  //     interestRate: 13.5,
-  //     tenure: 12,
-  //     completedPayments: 3,
-  //     totalPayments: 12,
-  //     overdueDays: 0,
-  //     riskLevel: "medium",
-  //   },
-  //   {
-  //     id: "LN006",
-  //     borrower: "Emma Davis",
-  //     amount: 45000,
-  //     disbursedAmount: 45000,
-  //     outstandingBalance: 12000,
-  //     status: "overdue",
-  //     type: "Personal Loan",
-  //     disbursedDate: "2023-12-10",
-  //     dueDate: "2024-12-10",
-  //     nextPaymentDate: "2025-05-25",
-  //     nextPaymentAmount: 4000,
-  //     interestRate: 14.0,
-  //     tenure: 12,
-  //     completedPayments: 9,
-  //     totalPayments: 12,
-  //     overdueDays: 45,
-  //     riskLevel: "high",
-  //   },
-  // ];
 
   // Filter loans based on active filter and search term
   const transformedLoans = loans.map(transformLoanData);
@@ -480,9 +383,12 @@ const LoanTracking = () => {
                 <div className="p-3 bg-yellow-100 rounded-xl">
                   <TrendingUp className="w-6 h-6 text-yellow-600" />
                 </div>
+                <div className="p-3 bg-blue-100 rounded-xl">
+                  <DollarSign className="w-6 h-6 text-blue-600" />
+                </div>
                 <div>
                   <div className="text-2xl font-bold text-orange-800">
-                    ₨{(summaryStats.totalDisbursed / 1000000).toFixed(1)}M
+                    {(summaryStats.totalDisbursed / 1000000).toFixed(1)}
                   </div>
                   <div className="text-sm text-orange-600">Total Disbursed</div>
                 </div>
@@ -494,9 +400,12 @@ const LoanTracking = () => {
                 <div className="p-3 bg-orange-100 rounded-xl">
                   <TrendingDown className="w-6 h-6 text-orange-600" />
                 </div>
+                <div className="p-3 bg-blue-100 rounded-xl">
+                  <DollarSign className="w-6 h-6 text-blue-600" />
+                </div>
                 <div>
                   <div className="text-2xl font-bold text-orange-800">
-                    ₨{(summaryStats.totalOutstanding / 1000000).toFixed(1)}M
+                    {(summaryStats.totalOutstanding / 1000000).toFixed(1)}
                   </div>
                   <div className="text-sm text-orange-600">Outstanding</div>
                 </div>
@@ -721,7 +630,7 @@ const LoanTracking = () => {
                       <td className="py-4 px-6">
                         <div className="flex items-center space-x-2">
                           <button
-                            onClick={() => setSelectedLoan(loan)}
+                            onClick={() => setSelectedLoan(loan)} // This now works because loan is TransformedLoan
                             className="p-2 rounded-lg bg-orange-100 hover:bg-orange-200 text-orange-700 transition-colors duration-200"
                           >
                             <Eye className="w-4 h-4" />
