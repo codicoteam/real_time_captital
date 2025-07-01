@@ -7,6 +7,7 @@ import {
   X,
 } from "lucide-react";
 import { useNavigate, useLocation, type To } from "react-router-dom";
+import logo from "../assets/logo.png";
 
 const Sidebar = ({ isOpen = true, onClose = () => {} }) => {
   const navigate = useNavigate();
@@ -48,22 +49,30 @@ const Sidebar = ({ isOpen = true, onClose = () => {} }) => {
         <div className="absolute inset-0 bg-gradient-to-br from-orange-200/20 via-transparent to-red-200/20 animate-pulse"></div>
 
         {/* Header */}
+        {/* Header */}
         <div className="relative flex items-center justify-between h-20 px-8 border-b border-orange-200/40 bg-orange-50/60 backdrop-blur-sm">
           <div className="flex items-center space-x-3">
-            <div className="relative">
+            {/* <div className="relative">
               <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-orange-400 to-red-500 shadow-lg shadow-orange-500/25 flex items-center justify-center">
                 <div className="w-6 h-6 rounded-lg bg-white/30 backdrop-blur-sm flex items-center justify-center">
                   <div className="w-3 h-3 bg-white rounded-sm"></div>
                 </div>
               </div>
               <div className="absolute -top-1 -right-1 w-4 h-4 bg-gradient-to-r from-orange-400 to-red-400 rounded-full animate-pulse shadow-lg shadow-orange-400/50"></div>
-            </div>
-            <div>
-              <span className="text-xl font-bold bg-gradient-to-r from-orange-800 to-red-700 bg-clip-text text-transparent">
-                Pocket
-              </span>
-              <div className="text-xs text-orange-600/80 font-medium">
-                Loan Management
+            </div> */}
+            <div className="flex items-center space-x-2">
+              <img
+                src={logo}
+                alt="Pocket Logo"
+                className="w-15 h-15 object-contain"
+              />
+              <div>
+                <span className="text-xl font-bold bg-gradient-to-r from-orange-800 to-red-700 bg-clip-text text-transparent">
+                  Pocket.
+                </span>
+                <div className="text-xs text-orange-600/80 font-medium">
+                  Loan Management
+                </div>
               </div>
             </div>
           </div>

@@ -406,11 +406,11 @@ const ApplyNewLoan: React.FC = () => {
   return (
     <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-8 shadow-lg border border-white/50">
       <div className="mb-8">
-        <h3 className="text-xl font-bold text-blue-800 mb-2 flex items-center">
-          <Plus className="w-6 h-6 mr-2 text-blue-600" />
+        <h3 className="text-xl font-bold text-black mb-2 flex items-center">
+          <Plus className="w-6 h-6 mr-2 text-orange-500" />
           Apply for New Loan
         </h3>
-        <p className="text-sm text-blue-500">
+        <p className="text-sm text-gray-600">
           Fill out the comprehensive loan application form
         </p>
       </div>
@@ -418,16 +418,16 @@ const ApplyNewLoan: React.FC = () => {
       <form onSubmit={handleSubmit} className="space-y-8">
         {/* Product Information */}
         <div className="bg-blue-50/50 p-6 rounded-xl">
-          <h4 className="text-lg font-semibold text-blue-800 mb-4">
+          <h4 className="text-lg font-semibold text-black mb-4">
             Product Information
           </h4>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
-              <label className="block text-sm font-medium text-blue-700 mb-2">
+              <label className="block text-sm font-medium text-gray-600 mb-2">
                 Product Type *
               </label>
               <select
-                className="w-full px-4 py-3 border border-blue-200 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
+                className="w-full px-4 py-3 border border-orange-300 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
                 value={formData.productType}
                 onChange={(e) =>
                   setFormData({ ...formData, productType: e.target.value })
@@ -444,15 +444,15 @@ const ApplyNewLoan: React.FC = () => {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-blue-700 mb-2">
+              <label className="block text-sm font-medium text-gray-600 mb-2">
                 Loan Amount *
               </label>
               <div className="relative">
-                <DollarSign className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-blue-400" />
+                <DollarSign className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-orange-500" />
                 <input
                   type="number"
                   placeholder="Enter amount"
-                  className="w-full pl-10 pr-4 py-3 border border-blue-200 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
+                  className="w-full pl-10 pr-4 py-3 border border-orange-300 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
                   value={formData.amount}
                   onChange={(e) =>
                     setFormData({ ...formData, amount: e.target.value })
@@ -463,13 +463,13 @@ const ApplyNewLoan: React.FC = () => {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-blue-700 mb-2">
+              <label className="block text-sm font-medium text-gray-600 mb-2">
                 Term (months) *
               </label>
               <input
                 type="number"
                 placeholder="Loan term"
-                className="w-full px-4 py-3 border border-blue-200 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
+                className="w-full px-4 py-3 border border-orange-300 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
                 value={formData.term}
                 onChange={(e) =>
                   setFormData({ ...formData, term: e.target.value })
@@ -482,17 +482,17 @@ const ApplyNewLoan: React.FC = () => {
 
         {/* Borrower Information */}
         <div className="bg-green-50/50 p-6 rounded-xl">
-          <h4 className="text-lg font-semibold text-blue-800 mb-4">
+          <h4 className="text-lg font-semibold text-black mb-4">
             Borrower Information
           </h4>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             <div>
-              <label className="block text-sm font-medium text-blue-700 mb-2">
+              <label className="block text-sm font-medium text-gray-600 mb-2">
                 First Name *
               </label>
               <input
                 type="text"
-                className="w-full px-4 py-3 border border-blue-200 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
+                className="w-full px-4 py-3 border border-orange-300 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
                 value={formData.firstName}
                 onChange={(e) =>
                   setFormData({ ...formData, firstName: e.target.value })
@@ -502,12 +502,12 @@ const ApplyNewLoan: React.FC = () => {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-blue-700 mb-2">
+              <label className="block text-sm font-medium text-gray-600 mb-2">
                 Middle Names
               </label>
               <input
                 type="text"
-                className="w-full px-4 py-3 border border-blue-200 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
+                className="w-full px-4 py-3 border border-orange-300 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
                 value={formData.middleNames}
                 onChange={(e) =>
                   setFormData({ ...formData, middleNames: e.target.value })
@@ -516,12 +516,12 @@ const ApplyNewLoan: React.FC = () => {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-blue-700 mb-2">
+              <label className="block text-sm font-medium text-gray-600 mb-2">
                 Surname *
               </label>
               <input
                 type="text"
-                className="w-full px-4 py-3 border border-blue-200 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
+                className="w-full px-4 py-3 border border-orange-300 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
                 value={formData.surname}
                 onChange={(e) =>
                   setFormData({ ...formData, surname: e.target.value })
@@ -531,12 +531,12 @@ const ApplyNewLoan: React.FC = () => {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-blue-700 mb-2">
+              <label className="block text-sm font-medium text-gray-600 mb-2">
                 ID Number *
               </label>
               <input
                 type="text"
-                className="w-full px-4 py-3 border border-blue-200 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
+                className="w-full px-4 py-3 border border-orange-300 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
                 value={formData.idNumber}
                 onChange={(e) =>
                   setFormData({ ...formData, idNumber: e.target.value })
@@ -546,12 +546,12 @@ const ApplyNewLoan: React.FC = () => {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-blue-700 mb-2">
+              <label className="block text-sm font-medium text-gray-600 mb-2">
                 Email *
               </label>
               <input
                 type="email"
-                className="w-full px-4 py-3 border border-blue-200 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
+                className="w-full px-4 py-3 border border-orange-300 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
                 value={formData.email}
                 onChange={(e) =>
                   setFormData({ ...formData, email: e.target.value })
@@ -561,12 +561,12 @@ const ApplyNewLoan: React.FC = () => {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-blue-700 mb-2">
+              <label className="block text-sm font-medium text-gray-600 mb-2">
                 Mobile *
               </label>
               <input
                 type="tel"
-                className="w-full px-4 py-3 border border-blue-200 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
+                className="w-full px-4 py-3 border border-orange-300 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
                 value={formData.mobile}
                 onChange={(e) =>
                   setFormData({ ...formData, mobile: e.target.value })
@@ -576,11 +576,11 @@ const ApplyNewLoan: React.FC = () => {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-blue-700 mb-2">
+              <label className="block text-sm font-medium text-gray-600 mb-2">
                 Marital Status
               </label>
               <select
-                className="w-full px-4 py-3 border border-blue-200 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
+                className="w-full px-4 py-3 border border-orange-300 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
                 value={formData.maritalStatus}
                 onChange={(e) =>
                   setFormData({ ...formData, maritalStatus: e.target.value })
@@ -596,12 +596,12 @@ const ApplyNewLoan: React.FC = () => {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-blue-700 mb-2">
+              <label className="block text-sm font-medium text-gray-600 mb-2">
                 Children
               </label>
               <input
                 type="number"
-                className="w-full px-4 py-3 border border-blue-200 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
+                className="w-full px-4 py-3 border border-orange-300 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
                 value={formData.children}
                 onChange={(e) =>
                   setFormData({ ...formData, children: e.target.value })
@@ -610,12 +610,12 @@ const ApplyNewLoan: React.FC = () => {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-blue-700 mb-2">
+              <label className="block text-sm font-medium text-gray-600 mb-2">
                 Dependents
               </label>
               <input
                 type="number"
-                className="w-full px-4 py-3 border border-blue-200 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
+                className="w-full px-4 py-3 border border-orange-300 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
                 value={formData.dependents}
                 onChange={(e) =>
                   setFormData({ ...formData, dependents: e.target.value })
@@ -626,14 +626,14 @@ const ApplyNewLoan: React.FC = () => {
 
           {/* Mobile Money Options */}
           <div className="mt-4">
-            <label className="block text-sm font-medium text-blue-700 mb-2">
+            <label className="block text-sm font-medium text-black mb-2">
               Mobile Money Services
             </label>
             <div className="flex space-x-6">
               <label className="flex items-center">
                 <input
                   type="checkbox"
-                  className="mr-2 text-blue-600"
+                  className="mr-2 text-gray-600"
                   checked={formData.ecocash}
                   onChange={(e) =>
                     setFormData({ ...formData, ecocash: e.target.checked })
@@ -644,7 +644,7 @@ const ApplyNewLoan: React.FC = () => {
               <label className="flex items-center">
                 <input
                   type="checkbox"
-                  className="mr-2 text-blue-600"
+                  className="mr-2 text-gray-600"
                   checked={formData.oneMoney}
                   onChange={(e) =>
                     setFormData({ ...formData, oneMoney: e.target.checked })
@@ -655,7 +655,7 @@ const ApplyNewLoan: React.FC = () => {
               <label className="flex items-center">
                 <input
                   type="checkbox"
-                  className="mr-2 text-blue-600"
+                  className="mr-2 text-gray-600"
                   checked={formData.innsBucks}
                   onChange={(e) =>
                     setFormData({ ...formData, innsBucks: e.target.checked })
@@ -669,17 +669,17 @@ const ApplyNewLoan: React.FC = () => {
 
         {/* Current Address */}
         <div className="bg-purple-50/50 p-6 rounded-xl">
-          <h4 className="text-lg font-semibold text-blue-800 mb-4">
+          <h4 className="text-lg font-semibold text-black mb-4">
             Current Address
           </h4>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-blue-700 mb-2">
+              <label className="block text-sm font-medium text-gray-600 mb-2">
                 Street Address *
               </label>
               <input
                 type="text"
-                className="w-full px-4 py-3 border border-blue-200 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
+                className="w-full px-4 py-3 border border-orange-300 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
                 value={formData.street}
                 onChange={(e) =>
                   setFormData({ ...formData, street: e.target.value })
@@ -689,12 +689,12 @@ const ApplyNewLoan: React.FC = () => {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-blue-700 mb-2">
+              <label className="block text-sm font-medium text-gray-600 mb-2">
                 City *
               </label>
               <input
                 type="text"
-                className="w-full px-4 py-3 border border-blue-200 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
+                className="w-full px-4 py-3 border border-orange-300 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
                 value={formData.city}
                 onChange={(e) =>
                   setFormData({ ...formData, city: e.target.value })
@@ -704,11 +704,11 @@ const ApplyNewLoan: React.FC = () => {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-blue-700 mb-2">
+              <label className="block text-sm font-medium text-gray-600 mb-2">
                 Province *
               </label>
               <select
-                className="w-full px-4 py-3 border border-blue-200 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
+                className="w-full px-4 py-3 border border-orange-300 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
                 value={formData.province}
                 onChange={(e) =>
                   setFormData({ ...formData, province: e.target.value })
@@ -725,12 +725,12 @@ const ApplyNewLoan: React.FC = () => {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-blue-700 mb-2">
+              <label className="block text-sm font-medium text-gray-600 mb-2">
                 Years at Address
               </label>
               <input
                 type="number"
-                className="w-full px-4 py-3 border border-blue-200 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
+                className="w-full px-4 py-3 border border-orange-300 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
                 value={formData.historyYears}
                 onChange={(e) =>
                   setFormData({ ...formData, historyYears: e.target.value })
@@ -741,25 +741,25 @@ const ApplyNewLoan: React.FC = () => {
             <div className="flex items-center">
               <input
                 type="checkbox"
-                className="mr-2 text-blue-600"
+                className="mr-2 text-gray-600"
                 checked={formData.owned}
                 onChange={(e) =>
                   setFormData({ ...formData, owned: e.target.checked })
                 }
               />
-              <label className="text-sm font-medium text-blue-700">
+              <label className="text-sm font-medium text-gray-700">
                 Own Property
               </label>
             </div>
 
             {!formData.owned && (
               <div>
-                <label className="block text-sm font-medium text-blue-700 mb-2">
+                <label className="block text-sm font-medium text-gray-600 mb-2">
                   Monthly Rent
                 </label>
                 <input
                   type="number"
-                  className="w-full px-4 py-3 border border-blue-200 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
+                  className="w-full px-4 py-3 border border-orange-300 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
                   value={formData.rentAmount}
                   onChange={(e) =>
                     setFormData({ ...formData, rentAmount: e.target.value })
@@ -772,16 +772,16 @@ const ApplyNewLoan: React.FC = () => {
 
         {/* Employment/Business Information */}
         <div className="bg-yellow-50/50 p-6 rounded-xl">
-          <h4 className="text-lg font-semibold text-blue-800 mb-4">
+          <h4 className="text-lg font-semibold text-black mb-4">
             Employment/Business Information
           </h4>
 
           <div className="mb-4">
-            <label className="block text-sm font-medium text-blue-700 mb-2">
+            <label className="block text-sm font-medium text-gray-600 mb-2">
               Employment Type *
             </label>
             <select
-              className="w-full px-4 py-3 border border-blue-200 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
+              className="w-full px-4 py-3 border border-orange-300 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
               value={formData.employmentType}
               onChange={(e) =>
                 setFormData({ ...formData, employmentType: e.target.value })
@@ -798,12 +798,12 @@ const ApplyNewLoan: React.FC = () => {
           {formData.employmentType === "employed" && (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-blue-700 mb-2">
+                <label className="block text-sm font-medium text-gray-600 mb-2">
                   Company *
                 </label>
                 <input
                   type="text"
-                  className="w-full px-4 py-3 border border-blue-200 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
+                  className="w-full px-4 py-3 border border-orange-300 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
                   value={formData.company}
                   onChange={(e) =>
                     setFormData({ ...formData, company: e.target.value })
@@ -813,12 +813,12 @@ const ApplyNewLoan: React.FC = () => {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-blue-700 mb-2">
+                <label className="block text-sm font-medium text-gray-600 mb-2">
                   Job Title *
                 </label>
                 <input
                   type="text"
-                  className="w-full px-4 py-3 border border-blue-200 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
+                  className="w-full px-4 py-3 border border-orange-300 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
                   value={formData.jobTitle}
                   onChange={(e) =>
                     setFormData({ ...formData, jobTitle: e.target.value })
@@ -828,14 +828,14 @@ const ApplyNewLoan: React.FC = () => {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-blue-700 mb-2">
+                <label className="block text-sm font-medium text-gray-700 mb-2">
                   Monthly Salary *
                 </label>
                 <div className="relative">
-                  <DollarSign className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-blue-400" />
+                  <DollarSign className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-orange-500" />
                   <input
                     type="number"
-                    className="w-full pl-10 pr-4 py-3 border border-blue-200 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
+                    className="w-full pl-10 pr-4 py-3 border border-orange-300 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
                     value={formData.salary}
                     onChange={(e) =>
                       setFormData({ ...formData, salary: e.target.value })
@@ -846,12 +846,12 @@ const ApplyNewLoan: React.FC = () => {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-blue-700 mb-2">
+                <label className="block text-sm font-medium text-gray-600 mb-2">
                   Contact Email
                 </label>
                 <input
                   type="email"
-                  className="w-full px-4 py-3 border border-blue-200 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
+                  className="w-full px-4 py-3 border border-orange-300 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
                   value={formData.contactEmail}
                   onChange={(e) =>
                     setFormData({ ...formData, contactEmail: e.target.value })
@@ -865,12 +865,12 @@ const ApplyNewLoan: React.FC = () => {
             formData.employmentType === "business") && (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-blue-700 mb-2">
+                <label className="block text-sm font-medium text-gray-600 mb-2">
                   Business Name *
                 </label>
                 <input
                   type="text"
-                  className="w-full px-4 py-3 border border-blue-200 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
+                  className="w-full px-4 py-3 border border-orange-300 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
                   value={formData.businessName}
                   onChange={(e) =>
                     setFormData({ ...formData, businessName: e.target.value })
@@ -880,12 +880,12 @@ const ApplyNewLoan: React.FC = () => {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-blue-700 mb-2">
+                <label className="block text-sm font-medium text-gray-600 mb-2">
                   Business Description
                 </label>
                 <input
                   type="text"
-                  className="w-full px-4 py-3 border border-blue-200 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
+                  className="w-full px-4 py-3 border border-orange-300 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
                   value={formData.businessDescription}
                   onChange={(e) =>
                     setFormData({
@@ -897,14 +897,14 @@ const ApplyNewLoan: React.FC = () => {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-blue-700 mb-2">
+                <label className="block text-sm font-medium text-gray-600 mb-2">
                   Monthly Net Income *
                 </label>
                 <div className="relative">
-                  <DollarSign className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-blue-400" />
+                  <DollarSign className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-orange-500" />
                   <input
                     type="number"
-                    className="w-full pl-10 pr-4 py-3 border border-blue-200 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
+                    className="w-full pl-10 pr-4 py-3 border border-orange-300 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
                     value={formData.netIncome}
                     onChange={(e) =>
                       setFormData({ ...formData, netIncome: e.target.value })
@@ -917,13 +917,13 @@ const ApplyNewLoan: React.FC = () => {
               <div className="flex items-center">
                 <input
                   type="checkbox"
-                  className="mr-2 text-blue-600"
+                  className="mr-2 text-gray-600"
                   checked={formData.ownPremises}
                   onChange={(e) =>
                     setFormData({ ...formData, ownPremises: e.target.checked })
                   }
                 />
-                <label className="text-sm font-medium text-blue-700">
+                <label className="text-sm font-medium text-black">
                   Own Business Premises
                 </label>
               </div>
@@ -933,17 +933,17 @@ const ApplyNewLoan: React.FC = () => {
 
         {/* Bank References */}
         <div className="bg-indigo-50/50 p-6 rounded-xl">
-          <h4 className="text-lg font-semibold text-blue-800 mb-4">
+          <h4 className="text-lg font-semibold text-black mb-4">
             Bank References
           </h4>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-blue-700 mb-2">
+              <label className="block text-sm font-medium text-gray-600 mb-2">
                 Bank Institution
               </label>
               <input
                 type="text"
-                className="w-full px-4 py-3 border border-blue-200 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
+                className="w-full px-4 py-3 border border-orange-300 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
                 value={formData.bankInstitution}
                 onChange={(e) =>
                   setFormData({ ...formData, bankInstitution: e.target.value })
@@ -952,12 +952,12 @@ const ApplyNewLoan: React.FC = () => {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-blue-700 mb-2">
+              <label className="block text-sm font-medium text-gray-600 mb-2">
                 Current Account Number
               </label>
               <input
                 type="text"
-                className="w-full px-4 py-3 border border-blue-200 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
+                className="w-full px-4 py-3 border border-orange-300 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
                 value={formData.currentAccount}
                 onChange={(e) =>
                   setFormData({ ...formData, currentAccount: e.target.value })
@@ -966,12 +966,12 @@ const ApplyNewLoan: React.FC = () => {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-blue-700 mb-2">
+              <label className="block text-sm font-medium text-gray-600 mb-2">
                 Branch
               </label>
               <input
                 type="text"
-                className="w-full px-4 py-3 border border-blue-200 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
+                className="w-full px-4 py-3 border border-orange-300 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
                 value={formData.branch}
                 onChange={(e) =>
                   setFormData({ ...formData, branch: e.target.value })
@@ -980,14 +980,14 @@ const ApplyNewLoan: React.FC = () => {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-blue-700 mb-2">
+              <label className="block text-sm font-medium text-gray-600 mb-2">
                 Existing Loan Balance
               </label>
               <div className="relative">
-                <DollarSign className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-blue-400" />
+                <DollarSign className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-orange-500" />
                 <input
                   type="number"
-                  className="w-full pl-10 pr-4 py-3 border border-blue-200 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
+                  className="w-full pl-10 pr-4 py-3 border border-orange-300 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
                   value={formData.loanBalance}
                   onChange={(e) =>
                     setFormData({ ...formData, loanBalance: e.target.value })
@@ -1000,14 +1000,14 @@ const ApplyNewLoan: React.FC = () => {
 
         {/* Bankruptcy Declaration */}
         <div className="bg-red-50/50 p-6 rounded-xl">
-          <h4 className="text-lg font-semibold text-blue-800 mb-4">
+          <h4 className="text-lg font-semibold text-black mb-4">
             Bankruptcy Declaration
           </h4>
 
           <div className="flex items-center mb-4">
             <input
               type="checkbox"
-              className="mr-2 text-blue-600"
+              className="mr-2 text-graye-600"
               checked={formData.hasDeclaredBankruptcy}
               onChange={(e) =>
                 setFormData({
@@ -1016,19 +1016,19 @@ const ApplyNewLoan: React.FC = () => {
                 })
               }
             />
-            <label className="text-sm font-medium text-blue-700">
+            <label className="text-sm font-medium text-gray-700">
               Have you ever declared bankruptcy?
             </label>
           </div>
 
           {formData.hasDeclaredBankruptcy && (
             <div>
-              <label className="block text-sm font-medium text-blue-700 mb-2">
+              <label className="block text-sm font-medium text-gray-600 mb-2">
                 Bankruptcy Date
               </label>
               <input
                 type="date"
-                className="w-full px-4 py-3 border border-blue-200 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
+                className="w-full px-4 py-3 border border-orage-300 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
                 value={formData.bankruptcyDate}
                 onChange={(e) =>
                   setFormData({ ...formData, bankruptcyDate: e.target.value })
@@ -1040,19 +1040,19 @@ const ApplyNewLoan: React.FC = () => {
 
         {/* Financial Summary */}
         <div className="bg-emerald-50/50 p-6 rounded-xl">
-          <h4 className="text-lg font-semibold text-blue-800 mb-4">
+          <h4 className="text-lg font-semibold text-black mb-4">
             Financial Summary
           </h4>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             <div>
-              <label className="block text-sm font-medium text-blue-700 mb-2">
+              <label className="block text-sm font-medium text-gray-600 mb-2">
                 Monthly Rental Income
               </label>
               <div className="relative">
-                <DollarSign className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-blue-400" />
+                <DollarSign className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-orange-500" />
                 <input
                   type="number"
-                  className="w-full pl-10 pr-4 py-3 border border-blue-200 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
+                  className="w-full pl-10 pr-4 py-3 border border-orange-300 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
                   value={formData.rentalIncome}
                   onChange={(e) =>
                     setFormData({ ...formData, rentalIncome: e.target.value })
@@ -1062,14 +1062,14 @@ const ApplyNewLoan: React.FC = () => {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-blue-700 mb-2">
+              <label className="block text-sm font-medium text-gray-700 mb-2">
                 Investment Income
               </label>
               <div className="relative">
-                <DollarSign className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-blue-400" />
+                <DollarSign className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-orange-500" />
                 <input
                   type="number"
-                  className="w-full pl-10 pr-4 py-3 border border-blue-200 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
+                  className="w-full pl-10 pr-4 py-3 border border-orange-300 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
                   value={formData.investmentIncome}
                   onChange={(e) =>
                     setFormData({
@@ -1082,14 +1082,14 @@ const ApplyNewLoan: React.FC = () => {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-blue-700 mb-2">
+              <label className="block text-sm font-medium text-gray-700 mb-2">
                 Other Income
               </label>
               <div className="relative">
-                <DollarSign className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-blue-400" />
+                <DollarSign className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-orange-500" />
                 <input
                   type="number"
-                  className="w-full pl-10 pr-4 py-3 border border-blue-200 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
+                  className="w-full pl-10 pr-4 py-3 border border-orange-300 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
                   value={formData.otherIncome}
                   onChange={(e) =>
                     setFormData({ ...formData, otherIncome: e.target.value })
@@ -1099,14 +1099,14 @@ const ApplyNewLoan: React.FC = () => {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-blue-700 mb-2">
+              <label className="block text-sm font-medium text-gray-600 mb-2">
                 Monthly Rent Payment
               </label>
               <div className="relative">
-                <DollarSign className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-blue-400" />
+                <DollarSign className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-orang-500" />
                 <input
                   type="number"
-                  className="w-full pl-10 pr-4 py-3 border border-blue-200 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
+                  className="w-full pl-10 pr-4 py-3 border border-orange-300 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
                   value={formData.rent}
                   onChange={(e) =>
                     setFormData({ ...formData, rent: e.target.value })
@@ -1116,14 +1116,14 @@ const ApplyNewLoan: React.FC = () => {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-blue-700 mb-2">
+              <label className="block text-sm font-medium text-gray-600 mb-2">
                 School Fees
               </label>
               <div className="relative">
-                <DollarSign className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-blue-400" />
+                <DollarSign className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-orange-500" />
                 <input
                   type="number"
-                  className="w-full pl-10 pr-4 py-3 border border-blue-200 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
+                  className="w-full pl-10 pr-4 py-3 border border-orange-300 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
                   value={formData.schoolFees}
                   onChange={(e) =>
                     setFormData({ ...formData, schoolFees: e.target.value })
@@ -1133,14 +1133,14 @@ const ApplyNewLoan: React.FC = () => {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-blue-700 mb-2">
+              <label className="block text-sm font-medium text-gray-600 mb-2">
                 Rates and Bills
               </label>
               <div className="relative">
-                <DollarSign className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-blue-400" />
+                <DollarSign className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-orange-500" />
                 <input
                   type="number"
-                  className="w-full pl-10 pr-4 py-3 border border-blue-200 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
+                  className="w-full pl-10 pr-4 py-3 border border-orange-300 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
                   value={formData.ratesAndBills}
                   onChange={(e) =>
                     setFormData({ ...formData, ratesAndBills: e.target.value })
@@ -1150,14 +1150,14 @@ const ApplyNewLoan: React.FC = () => {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-blue-700 mb-2">
+              <label className="block text-sm font-medium text-gray-600 mb-2">
                 Current Loan Repayments
               </label>
               <div className="relative">
-                <DollarSign className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-blue-400" />
+                <DollarSign className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-orange-500" />
                 <input
                   type="number"
-                  className="w-full pl-10 pr-4 py-3 border border-blue-200 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
+                  className="w-full pl-10 pr-4 py-3 border border-orange-300 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
                   value={formData.loanRepayments}
                   onChange={(e) =>
                     setFormData({ ...formData, loanRepayments: e.target.value })
@@ -1167,14 +1167,14 @@ const ApplyNewLoan: React.FC = () => {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-blue-700 mb-2">
+              <label className="block text-sm font-medium text-gray-600 mb-2">
                 Other Debts
               </label>
               <div className="relative">
-                <DollarSign className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-blue-400" />
+                <DollarSign className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-orange-500" />
                 <input
                   type="number"
-                  className="w-full pl-10 pr-4 py-3 border border-blue-200 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
+                  className="w-full pl-10 pr-4 py-3 border border-orange-300 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
                   value={formData.otherDebts}
                   onChange={(e) =>
                     setFormData({ ...formData, otherDebts: e.target.value })
@@ -1184,14 +1184,14 @@ const ApplyNewLoan: React.FC = () => {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-blue-700 mb-2">
+              <label className="block text-sm font-medium text-gray-600 mb-2">
                 Business Expenses
               </label>
               <div className="relative">
-                <DollarSign className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-blue-400" />
+                <DollarSign className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-orange-300" />
                 <input
                   type="number"
-                  className="w-full pl-10 pr-4 py-3 border border-blue-200 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
+                  className="w-full pl-10 pr-4 py-3 border border-orange-300 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
                   value={formData.businessExpenses}
                   onChange={(e) =>
                     setFormData({
@@ -1213,7 +1213,7 @@ const ApplyNewLoan: React.FC = () => {
             className={`${
               isSubmitting
                 ? "bg-gray-400 cursor-not-allowed"
-                : "bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 transform hover:scale-105"
+                : "bg-gradient-to-r from-red-500 via-orange-500 to-yellow-500 text-white rounded-xl text-sm font-medium hover:from-red-600 hover:via-orange-600 hover:to-yellow-600  transform hover:scale-105"
             } text-white px-8 py-4 rounded-xl font-semibold flex items-center space-x-2 transition-all duration-200 shadow-lg hover:shadow-xl`}
           >
             <Send className="w-5 h-5" />

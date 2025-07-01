@@ -7,6 +7,7 @@ import {
   X,
 } from "lucide-react";
 import { useNavigate, useLocation, type To } from "react-router-dom";
+import logo from "../assets/logo.png";
 
 const Sidebar = ({ isOpen = true, onClose = () => {} }) => {
   const navigate = useNavigate();
@@ -18,14 +19,14 @@ const Sidebar = ({ isOpen = true, onClose = () => {} }) => {
       label: "Dashboard",
       subtitle: "Loan Overview",
       path: "/userdashboard",
-      color: "from-blue-500 to-purple-600",
+      color: "from-orange-500 to-red-600",
     },
     {
       icon: FileText,
       label: "Loan Application",
       subtitle: "Apply & Manage",
       path: "/loan_application",
-      color: "from-emerald-500 to-teal-600",
+      color: "from-orange-500 to-red-600",
     },
     {
       icon: CreditCard,
@@ -39,7 +40,7 @@ const Sidebar = ({ isOpen = true, onClose = () => {} }) => {
       label: "Account",
       subtitle: "Profile & Settings",
       path: "/account",
-      color: "from-purple-500 to-pink-600",
+      color: "from-orange-500 to-red-600",
     },
   ];
 
@@ -71,7 +72,7 @@ const Sidebar = ({ isOpen = true, onClose = () => {} }) => {
 
         <div className="relative flex items-center justify-between h-24 px-8 border-b border-slate-700/50 bg-slate-800/50 backdrop-blur-xl">
           <div className="flex items-center space-x-4">
-            <div className="relative group">
+            {/* <div className="relative group">
               <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-blue-500 via-purple-600 to-pink-500 shadow-2xl flex items-center justify-center group-hover:scale-110 group-hover:rotate-3 transform transition-transform">
                 <div className="w-8 h-8 rounded-xl bg-white/20 backdrop-blur-sm flex items-center justify-center">
                   <div className="w-4 h-4 bg-white rounded-lg shadow-lg" />
@@ -80,14 +81,22 @@ const Sidebar = ({ isOpen = true, onClose = () => {} }) => {
               <div className="absolute -top-1 -right-1 w-5 h-5 bg-gradient-to-r from-green-400 to-emerald-500 rounded-full animate-bounce shadow-lg shadow-green-400/50">
                 <div className="w-full h-full rounded-full bg-white/30 animate-ping"></div>
               </div>
-            </div>
-            <div>
-              <h1 className="text-2xl font-bold bg-gradient-to-r from-white via-blue-100 to-purple-200 bg-clip-text text-transparent">
-                Pocket.
-              </h1>
-              <p className="text-xs text-slate-400 font-medium tracking-wide">
-                Financial Solutions
-              </p>
+            </div> */}
+            <div className="flex items-center space-x-3">
+              {/* Add your logo image here */}
+              <img
+                src={logo}
+                alt="Pocket Logo"
+                className="w-15 h-15 object-contain"
+              />
+              <div>
+                <h1 className="text-2xl font-bold bg-gradient-to-r from-white via-blue-100 to-purple-200 bg-clip-text text-transparent">
+                  Pocket.
+                </h1>
+                <p className="text-xs text-slate-400 font-medium tracking-wide">
+                  Financial Solutions
+                </p>
+              </div>
             </div>
           </div>
           <button

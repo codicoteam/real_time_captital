@@ -108,7 +108,7 @@ const ApplicationStatus: React.FC<ApplicationStatusProps> = ({
       case "approved":
         return {
           color: "text-green-700",
-          bgColor: "bg-green-100 border-green-200",
+          bgColor: "bg-white border-gray-200",
           icon: CheckCircle,
           text: "Approved",
           description:
@@ -117,7 +117,7 @@ const ApplicationStatus: React.FC<ApplicationStatusProps> = ({
       case "active":
         return {
           color: "text-blue-700",
-          bgColor: "bg-blue-100 border-blue-200",
+          bgColor: "bg-white border-gray-200",
           icon: CheckCircle,
           text: "Active",
           description: "Your loan is currently active and running",
@@ -125,7 +125,7 @@ const ApplicationStatus: React.FC<ApplicationStatusProps> = ({
       case "pending":
         return {
           color: "text-orange-700",
-          bgColor: "bg-orange-100 border-orange-200",
+          bgColor: "bg-white border-gray-200",
           icon: Clock,
           text: "Pending Review",
           description: "Your application is being reviewed by our team",
@@ -133,7 +133,7 @@ const ApplicationStatus: React.FC<ApplicationStatusProps> = ({
       case "rejected":
         return {
           color: "text-red-700",
-          bgColor: "bg-red-100 border-red-200",
+          bgColor: "bg-white border-gray-200",
           icon: XCircle,
           text: "Rejected",
           description: "Unfortunately, your loan application was not approved",
@@ -141,7 +141,7 @@ const ApplicationStatus: React.FC<ApplicationStatusProps> = ({
       case "closed":
         return {
           color: "text-gray-700",
-          bgColor: "bg-gray-100 border-gray-200",
+          bgColor: "bg-white border-gray-200",
           icon: FileText,
           text: "Closed",
           description: "This loan has been completed or closed",
@@ -149,7 +149,7 @@ const ApplicationStatus: React.FC<ApplicationStatusProps> = ({
       default:
         return {
           color: "text-gray-700",
-          bgColor: "bg-gray-100 border-gray-200",
+          bgColor: "bg-white border-gray-200",
           icon: Clock,
           text: status,
           description: "Status information",
@@ -184,7 +184,7 @@ const ApplicationStatus: React.FC<ApplicationStatusProps> = ({
         }
         return 85;
       case "approved":
-        return 75;
+        return 100;
       case "pending":
         return 25;
       case "rejected":
@@ -216,15 +216,15 @@ const ApplicationStatus: React.FC<ApplicationStatusProps> = ({
       <div className="mb-8">
         <div className="flex items-center justify-between">
           <div>
-            <h3 className="text-xl font-bold text-blue-800 mb-2 flex items-center">
+            <h3 className="text-xl font-bold text-black mb-2 flex items-center">
               <FileText className="w-6 h-6 mr-2 text-blue-600" />
               Loan Applications Status
             </h3>
-            <p className="text-sm text-blue-500">
+            <p className="text-sm text-gray-600">
               Track your current loan applications and active loans
             </p>
             {lastUpdated && (
-              <p className="text-xs text-blue-400 mt-1">
+              <p className="text-xs text-gray-600 mt-1">
                 Last updated: {lastUpdated.toLocaleTimeString()}
               </p>
             )}
@@ -263,16 +263,16 @@ const ApplicationStatus: React.FC<ApplicationStatusProps> = ({
       ) : applicationsData.length === 0 ? (
         <div className="text-center py-12">
           <FileText className="w-16 h-16 text-blue-300 mx-auto mb-4" />
-          <p className="text-blue-600 text-lg mb-2 font-medium">
+          <p className="text-black text-lg mb-2 font-medium">
             No loan applications found
           </p>
-          <p className="text-blue-500 text-sm">
+          <p className="text-gray-600 text-sm">
             You don't have any loan applications yet. Apply for a loan to get
             started.
           </p>
         </div>
       ) : (
-        <div className="space-y-6">
+        <div className="space-y-4">
           {applicationsData.map((loan) => {
             const statusConfig = getStatusConfig(loan.status);
             const StatusIcon = statusConfig.icon;
@@ -281,23 +281,23 @@ const ApplicationStatus: React.FC<ApplicationStatusProps> = ({
             return (
               <div
                 key={loan._id}
-                className={`p-6 border-2 rounded-xl hover:shadow-lg transition-all duration-300 ${statusConfig.bgColor}`}
+                className={`p-4 border rounded-lg hover:shadow-md transition-all duration-300 ${statusConfig.bgColor}`}
               >
                 {/* Header */}
-                <div className="flex items-center justify-between mb-4">
-                  <div className="flex items-center space-x-4">
-                    <div className="p-3 bg-white/80 rounded-xl shadow-sm">
-                      <CreditCard className="w-6 h-6 text-blue-600" />
+                <div className="flex items-center justify-between mb-3">
+                  <div className="flex items-center space-x-3">
+                    <div className="p-2 bg-gray-50 rounded-lg">
+                      <CreditCard className="w-5 h-5 text-blue-600" />
                     </div>
                     <div>
-                      <h4 className="font-bold text-blue-900 text-lg">
+                      <h4 className="font-bold text-black text-base">
                         {getProductTypeDisplay(loan.productType)}
                       </h4>
-                      <p className="text-blue-700 font-semibold">
+                      <p className="text-black font-semibold text-sm">
                         {formatCurrency(loan.amount)}
                       </p>
                       {loan.borrowerInfo?.firstName && (
-                        <p className="text-blue-600 text-sm flex items-center mt-1">
+                        <p className="text-gray-600 text-xs flex items-center mt-1">
                           <User className="w-3 h-3 mr-1" />
                           {loan.borrowerInfo.firstName}{" "}
                           {loan.borrowerInfo.surname}
@@ -307,63 +307,63 @@ const ApplicationStatus: React.FC<ApplicationStatusProps> = ({
                   </div>
 
                   <div
-                    className={`px-4 py-2 rounded-full text-sm font-bold flex items-center ${statusConfig.color} bg-white/80`}
+                    className={`px-3 py-1 rounded-full text-xs font-bold flex items-center ${statusConfig.color} bg-gray-50`}
                   >
-                    <StatusIcon className="w-4 h-4 mr-2" />
+                    <StatusIcon className="w-3 h-3 mr-1" />
                     {statusConfig.text}
                   </div>
                 </div>
 
                 {/* Status Description */}
-                <div className="mb-4 p-3 bg-white/60 rounded-lg">
-                  <p className="text-sm text-blue-700">
+                <div className="mb-3 p-2 bg-gray-50 rounded-md">
+                  <p className="text-xs text-gray-600">
                     {statusConfig.description}
                   </p>
                 </div>
 
                 {/* Progress Bar */}
-                <div className="mb-4">
-                  <div className="flex justify-between text-sm mb-2">
-                    <span className="text-blue-700 font-medium">
+                <div className="mb-3">
+                  <div className="flex justify-between text-xs mb-1">
+                    <span className="text-gray-600 font-medium">
                       Application Progress
                     </span>
-                    <span className="text-blue-900 font-bold">{progress}%</span>
+                    <span className="text-black font-bold">{progress}%</span>
                   </div>
-                  <div className="w-full bg-blue-200/60 rounded-full h-3 shadow-inner">
+                  <div className="w-full bg-gray-200 rounded-full h-2">
                     <div
-                      className="h-full bg-gradient-to-r from-blue-500 to-purple-600 rounded-full transition-all duration-1000 shadow-sm"
+                      className="h-full bg-gradient-to-r from-orange-500 to-purple-400 rounded-full transition-all duration-1000"
                       style={{ width: `${progress}%` }}
                     ></div>
                   </div>
                 </div>
 
                 {/* Loan Details */}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 mb-3">
                   {loan.interestRate && (
-                    <div className="flex items-center text-sm">
-                      <DollarSign className="w-4 h-4 mr-2 text-blue-600" />
-                      <span className="text-blue-600">Interest Rate: </span>
-                      <span className="font-semibold text-blue-800 ml-1">
+                    <div className="flex items-center text-xs">
+                      <DollarSign className="w-3 h-3 mr-1 text-gray-600" />
+                      <span className="text-gray-600">Interest Rate: </span>
+                      <span className="font-semibold text-black ml-1">
                         {loan.interestRate}%
                       </span>
                     </div>
                   )}
 
                   {loan.term && (
-                    <div className="flex items-center text-sm">
-                      <Calendar className="w-4 h-4 mr-2 text-blue-600" />
-                      <span className="text-blue-600">Term: </span>
-                      <span className="font-semibold text-blue-800 ml-1">
+                    <div className="flex items-center text-xs">
+                      <Calendar className="w-3 h-3 mr-1 text-gray-600" />
+                      <span className="text-gray-600">Term: </span>
+                      <span className="font-semibold text-black ml-1">
                         {loan.term} months
                       </span>
                     </div>
                   )}
 
                   {loan.balance !== undefined && loan.status === "active" && (
-                    <div className="flex items-center text-sm">
-                      <CreditCard className="w-4 h-4 mr-2 text-blue-600" />
-                      <span className="text-blue-600">Balance: </span>
-                      <span className="font-semibold text-blue-800 ml-1">
+                    <div className="flex items-center text-xs">
+                      <CreditCard className="w-3 h-3 mr-1 text-gray-600" />
+                      <span className="text-gray-600">Balance: </span>
+                      <span className="font-semibold text-black ml-1">
                         {formatCurrency(loan.balance)}
                       </span>
                     </div>
@@ -371,11 +371,8 @@ const ApplicationStatus: React.FC<ApplicationStatusProps> = ({
                 </div>
 
                 {/* Footer */}
-                <div className="flex justify-between items-center text-sm text-blue-600 pt-4 border-t border-blue-200/50">
-                  <span className="font-medium">
-                    Application ID: {loan._id.slice(-8).toUpperCase()}
-                  </span>
-                  <div className="flex items-center space-x-4">
+                <div className="flex justify-end items-center text-xs text-gray-600 pt-3 border-t border-gray-200">
+                  <div className="flex items-center space-x-3">
                     <span>Applied: {formatDate(loan.applicationDate)}</span>
                     {loan.approvalDate && (
                       <span>Approved: {formatDate(loan.approvalDate)}</span>

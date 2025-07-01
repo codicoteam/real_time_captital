@@ -845,7 +845,7 @@ const ApplicationHistory: React.FC<ApplicationHistoryProps> = ({
                       </span>
                       <button
                         onClick={() => handleViewDetails(application)}
-                        className="p-2 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-xl hover:from-blue-600 hover:to-indigo-700 transition-all duration-200 shadow-lg hover:shadow-xl"
+                        className="p-2 bg-gradient-to-r from-orange-500 to-orange-300 text-white rounded-xl hover:from-blue-600 hover:to-indigo-700 transition-all duration-200 shadow-lg hover:shadow-xl"
                         title="View Details"
                       >
                         <Eye className="w-4 h-4" />
