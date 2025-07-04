@@ -52,8 +52,6 @@ const Adminlogin = () => {
     }
   };
 
- 
-
   return (
     <div className="min-h-screen bg-gradient-to-br from-orange-900 via-red-900 to-amber-900 flex items-center justify-center p-2 sm:p-4 lg:p-8 relative overflow-hidden">
       {/* Animated Background Elements */}
@@ -99,15 +97,12 @@ const Adminlogin = () => {
 
               {/* Welcome Text */}
               <div className="mb-6 sm:mb-8">
-
-                <Link
-                    to="/userlogin"
-                  >
+                <Link to="/userlogin">
                   <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white mb-2 animate-fadeIn">
-                  Welcome Back! 👋
-                </h1>
-                  </Link>
-               
+                    Welcome Back! 👋
+                  </h1>
+                </Link>
+
                 <p className="text-gray-300 text-sm sm:text-base">
                   Ready to manage your finances like a pro?
                 </p>
