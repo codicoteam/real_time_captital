@@ -4,6 +4,7 @@ import {
   CreditCard,
   TrendingUp,
   Settings,
+  
   X,
 } from "lucide-react";
 import { useNavigate, useLocation, type To } from "react-router-dom";
@@ -17,7 +18,8 @@ const Sidebar = ({ isOpen = true, onClose = () => {} }) => {
     { icon: Users, label: "Users", path: "/users" },
     { icon: CreditCard, label: "Loan Management", path: "/loan-management" },
     { icon: TrendingUp, label: "Loan Tracking", path: "/loan-tracking" },
-    { icon: Settings, label: "Payments", path: "/payments" },
+    { icon: CreditCard, label: "Payments", path: "/payments" },
+    { icon: Users, label: "Chat", path: "/chat" },
     { icon: Settings, label: "Settings", path: "/settingss" },
   ];
 

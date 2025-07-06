@@ -15,6 +15,7 @@ import {
   ChevronDown,
   RefreshCw,
   MoreHorizontal,
+  X,
 } from "lucide-react";
 import Sidebar from "../../components/Sidebar";
 import LoanService from "../../services/admin_Services/loan_Service";
@@ -77,17 +78,46 @@ const LoanTracking = () => {
   const [selectedLoan, setSelectedLoan] = useState<TransformedLoan | null>(
     null
   );
-  // Add these state variables and useEffect in your component
   const [loans, setLoans] = useState<Loan[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [showNotifications, setShowNotifications] = useState(false);
+  const [showExportOptions, setShowExportOptions] = useState(false);
+
+  // Mock notification data
+  const notifications = [
+    {
+      id: 1,
+      title: "Payment Overdue",
+      message: "Loan #L-10025 is overdue by 15 days",
+      date: "10 mins ago",
+      read: false,
+      type: "alert"
+    },
+    {
+      id: 2,
+      title: "New Loan Application",
+      message: "John Smith has applied for a personal loan",
+      date: "2 hours ago",
+      read: false,
+      type: "info"
+    },
+    {
+      id: 3,
+      title: "Payment Received",
+      message: "Payment of ₨25,000 received for Loan #L-10018",
+      date: "1 day ago",
+      read: true,
+      type: "success"
+    }
+  ];
 
   useEffect(() => {
     const fetchLoans = async () => {
       try {
         setLoading(true);
         const response = await LoanService.getAllLoans();
-        setLoans(response.data || response); // Adjust based on your API response structure
+        setLoans(response.data || response);
         setError(null);
       } catch (err: any) {
         setError(err.message || "Failed to fetch loans");
@@ -100,12 +130,31 @@ const LoanTracking = () => {
     fetchLoans();
   }, []);
 
+  // Close popups when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as HTMLElement;
+      
+      if (showNotifications && !target.closest('.notifications-container') && !target.closest('.notifications-button')) {
+        setShowNotifications(false);
+      }
+      
+      if (showExportOptions && !target.closest('.export-container') && !target.closest('.export-button')) {
+        setShowExportOptions(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [showNotifications, showExportOptions]);
+
   const transformLoanData = (backendLoan: Loan) => {
     const borrowerName = `${backendLoan.borrowerInfo.firstName} ${
       backendLoan.borrowerInfo.middleNames || ""
     } ${backendLoan.borrowerInfo.surname}`.trim();
 
-    // Calculate overdue days
     const getOverdueDays = () => {
       const overduePayments = backendLoan.paymentSchedule.filter(
         (payment) => payment.status === "overdue"
@@ -120,18 +169,15 @@ const LoanTracking = () => {
       );
     };
 
-    // Calculate payment progress
     const totalPayments = backendLoan.paymentSchedule.length;
     const completedPayments = backendLoan.paymentSchedule.filter(
       (payment) => payment.status === "paid"
     ).length;
 
-    // Get next payment info
     const nextPayment = backendLoan.paymentSchedule.find(
       (payment) => payment.status === "pending"
     );
 
-    // Determine risk level based on status and overdue days
     const overdueDays = getOverdueDays();
     const getRiskLevel = () => {
       if (overdueDays > 30) return "high";
@@ -160,7 +206,6 @@ const LoanTracking = () => {
     };
   };
 
-  // Filter loans based on active filter and search term
   const transformedLoans = loans.map(transformLoanData);
   const filteredLoans = transformedLoans.filter((loan) => {
     const matchesFilter =
@@ -176,7 +221,6 @@ const LoanTracking = () => {
     return matchesFilter && matchesSearch;
   });
 
-  // Get status badge
   const getStatusBadge = (status: string, overdueDays: number) => {
     if (overdueDays > 0) {
       return (
@@ -221,7 +265,6 @@ const LoanTracking = () => {
     }
   };
 
-  // Get risk level badge
   const getRiskBadge = (riskLevel: string) => {
     switch (riskLevel) {
       case "low":
@@ -247,7 +290,6 @@ const LoanTracking = () => {
     }
   };
 
-  // Calculate summary statistics
   const summaryStats = {
     totalLoans: transformedLoans.length,
     activeLoans: transformedLoans.filter((l) => l.status === "active").length,
@@ -261,14 +303,21 @@ const LoanTracking = () => {
       0
     ),
   };
+
+  const handleExport = (format: string) => {
+    setShowExportOptions(false);
+    alert(`Exporting data in ${format} format...`);
+  };
+
   return (
-    <div className="flex h-screen bg-gradient-to-br from-orange-50 via-red-50 to-yellow-50">
+    <div className="flex h-screen bg-gradient-to-br from-orange-50 via-red-50 to-yellow-50 relative">
       {/* Sidebar Component */}
       <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+      
       {/* Main Content */}
       <div className="flex-1 flex flex-col overflow-hidden lg:ml-0">
         {/* Header */}
-        <header className="bg-white/80 backdrop-blur-xl shadow-sm border-b border-orange-200/50 px-6 py-4 relative">
+        <header className="bg-white/80 backdrop-blur-xl shadow-sm border-b border-orange-200/50 px-6 py-4 relative z-10">
           <div className="absolute inset-0 bg-gradient-to-r from-orange-500/5 to-red-500/5"></div>
           <div className="relative flex items-center justify-between">
             <div className="flex items-center">
@@ -303,14 +352,79 @@ const LoanTracking = () => {
               </div>
 
               {/* Notifications */}
-              <button className="relative p-2 rounded-xl bg-orange-100/50 hover:bg-orange-200/50 transition-all duration-200 group">
-                <Bell className="w-5 h-5 text-orange-600 group-hover:text-orange-700" />
-                <div className="absolute -top-1 -right-1 w-4 h-4 bg-gradient-to-r from-red-500 to-orange-500 rounded-full flex items-center justify-center">
-                  <span className="text-xs text-white font-medium">
-                    {summaryStats.overdueLoans}
-                  </span>
-                </div>
-              </button>
+              <div className="relative">
+                <button 
+                  onClick={() => setShowNotifications(!showNotifications)}
+                  className="notifications-button relative p-2 rounded-xl bg-orange-100/50 hover:bg-orange-200/50 transition-all duration-200 group"
+                >
+                  <Bell className="w-5 h-5 text-orange-600 group-hover:text-orange-700" />
+                  <div className="absolute -top-1 -right-1 w-4 h-4 bg-gradient-to-r from-red-500 to-orange-500 rounded-full flex items-center justify-center">
+                    <span className="text-xs text-white font-medium">
+                      {summaryStats.overdueLoans}
+                    </span>
+                  </div>
+                </button>
+
+                {/* Notification Dropdown */}
+                {showNotifications && (
+                  <div className="notifications-container absolute right-0 mt-2 w-80 bg-white rounded-xl shadow-lg border border-orange-200/50 z-[100]">
+                    <div className="p-4 border-b border-orange-200/50 flex justify-between items-center">
+                      <h3 className="font-semibold text-orange-800">Notifications</h3>
+                      <button 
+                        onClick={() => setShowNotifications(false)}
+                        className="p-1 rounded-full hover:bg-orange-100"
+                      >
+                        <X className="w-4 h-4 text-orange-500" />
+                      </button>
+                    </div>
+                    <div className="max-h-96 overflow-y-auto">
+                      {notifications.map((notification) => (
+                        <div 
+                          key={notification.id}
+                          className={`p-4 border-b border-orange-200/30 hover:bg-orange-50/50 cursor-pointer transition-colors ${
+                            !notification.read ? "bg-blue-50/50" : ""
+                          }`}
+                        >
+                          <div className="flex items-start space-x-3">
+                            <div className={`mt-1 flex-shrink-0 ${
+                              notification.type === 'alert' ? 'text-red-500' : 
+                              notification.type === 'info' ? 'text-blue-500' : 
+                              'text-green-500'
+                            }`}>
+                              {notification.type === 'alert' ? (
+                                <AlertTriangle className="w-5 h-5" />
+                              ) : notification.type === 'info' ? (
+                                <Bell className="w-5 h-5" />
+                              ) : (
+                                <CheckCircle className="w-5 h-5" />
+                              )}
+                            </div>
+                            <div className="flex-1">
+                              <h4 className="text-sm font-semibold text-orange-800">
+                                {notification.title}
+                              </h4>
+                              <p className="text-sm text-orange-600 mt-1">
+                                {notification.message}
+                              </p>
+                              <div className="text-xs text-orange-400 mt-2">
+                                {notification.date}
+                              </div>
+                            </div>
+                            {!notification.read && (
+                              <div className="w-2 h-2 bg-red-500 rounded-full"></div>
+                            )}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                    <div className="p-3 bg-orange-50/50 text-center">
+                      <button className="text-sm font-medium text-orange-600 hover:text-orange-800">
+                        Mark all as read
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </div>
 
               {/* User Profile */}
               <div className="flex items-center space-x-3 pl-4 border-l border-orange-200/50">
@@ -333,7 +447,7 @@ const LoanTracking = () => {
         </header>
 
         {/* Main Content */}
-        <main className="flex-1 overflow-y-auto p-6 space-y-8">
+        <main className="flex-1 overflow-y-auto p-6 space-y-8 relative z-0">
           {/* Summary Cards */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
             <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-6 shadow-lg border border-white/50">
@@ -493,10 +607,41 @@ const LoanTracking = () => {
                   />
                   <span>Refresh</span>
                 </button>
-                <button className="flex items-center space-x-2 px-4 py-2 bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 rounded-xl text-sm font-medium text-white transition-all duration-200">
-                  <Download className="w-4 h-4" />
-                  <span>Export</span>
-                </button>
+                <div className="relative">
+                  <button 
+                    onClick={() => setShowExportOptions(!showExportOptions)}
+                    className="export-button flex items-center space-x-2 px-4 py-2 bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 rounded-xl text-sm font-medium text-white transition-all duration-200"
+                  >
+                    <Download className="w-4 h-4" />
+                    <span>Export</span>
+                  </button>
+
+                  {/* Export Options Dropdown */}
+                  {showExportOptions && (
+                    <div className="export-container absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-lg border border-orange-200/50 z-[100]">
+                      <div className="py-1">
+                        <button
+                          onClick={() => handleExport("CSV")}
+                          className="block w-full text-left px-4 py-2 text-sm text-orange-700 hover:bg-orange-50"
+                        >
+                          Export as CSV
+                        </button>
+                        <button
+                          onClick={() => handleExport("Excel")}
+                          className="block w-full text-left px-4 py-2 text-sm text-orange-700 hover:bg-orange-50"
+                        >
+                          Export as Excel
+                        </button>
+                        <button
+                          onClick={() => handleExport("PDF")}
+                          className="block w-full text-left px-4 py-2 text-sm text-orange-700 hover:bg-orange-50"
+                        >
+                          Export as PDF
+                        </button>
+                      </div>
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
           </div>
@@ -630,7 +775,7 @@ const LoanTracking = () => {
                       <td className="py-4 px-6">
                         <div className="flex items-center space-x-2">
                           <button
-                            onClick={() => setSelectedLoan(loan)} // This now works because loan is TransformedLoan
+                            onClick={() => setSelectedLoan(loan)}
                             className="p-2 rounded-lg bg-orange-100 hover:bg-orange-200 text-orange-700 transition-colors duration-200"
                           >
                             <Eye className="w-4 h-4" />
@@ -645,7 +790,6 @@ const LoanTracking = () => {
                 </tbody>
               </table>
             </div>
-            {/* // Add loading and error states to your JSX */}
             {loading && (
               <div className="flex items-center justify-center h-64">
                 <div className="flex items-center space-x-2">
@@ -670,7 +814,7 @@ const LoanTracking = () => {
 
       {/* Loan Details Modal */}
       {selectedLoan && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-[200] flex items-center justify-center p-4">
           <div className="bg-white rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
             <div className="p-6 border-b border-orange-200/50">
               <div className="flex items-center justify-between">

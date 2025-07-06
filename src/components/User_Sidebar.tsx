@@ -41,6 +41,13 @@ const Sidebar = ({ isOpen = true, onClose = () => {} }) => {
       path: "/account",
       color: "from-purple-500 to-pink-600",
     },
+    {
+      icon: User,
+      label: "Chart",
+      subtitle: "chart",
+      path: "/chart",
+      color: "from-orange-500 to-pink-600",
+    },
   ];
 
   const handleNavigation = (path: To) => {
