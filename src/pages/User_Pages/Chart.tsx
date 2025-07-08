@@ -1,7 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Search, Send, Paperclip, Smile, Mic, Play, Pause, X, Menu } from "lucide-react";
+import { Search, Send, Paperclip, Smile, Mic, Play, Pause, X, Menu, Loader2 } from "lucide-react";
 import EmojiPicker from 'emoji-picker-react';
 import Sidebar from "../../components/User_Sidebar";
+import AdminService from "../../services/admin_Services/admin_service";
 
 interface Message {
   id: string;
@@ -17,18 +18,44 @@ interface Message {
 
 interface Contact {
   id: string;
-  name: string;
-  email: string;
-  avatar?: string;
-  lastMessage: string;
-  timestamp: string;
+  firstName?: string;
+  lastName?: string;
+  email?: string;
+  contactNumber?: string;
+  profilePicture?: string;
+  lastMessage?: string;
+  timestamp?: string;
   unreadCount?: number;
   isOnline?: boolean;
+  role?: string;
+  permissions?: string[];
+  settings?: {
+    interestRate?: number;
+    loanTerms?: string[];
+    workflows?: Record<string, string>;
+  };
+  notifications?: Array<{
+    message: string;
+    type: string;
+    read: boolean;
+    _id: string;
+    createdAt: string;
+  }>;
+  auditTrail?: Array<{
+    action: string;
+    entity: string;
+    entityId: string;
+    performedBy: string;
+    _id: string;
+    performedAt: string;
+  }>;
 }
+
+const FALLBACK_AVATAR = 'https://ui-avatars.com/api/?background=random&name=';
 
 const Interface = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [selectedContact, setSelectedContact] = useState<string>('admin');
+  const [selectedContact, setSelectedContact] = useState<string>('');
   const [message, setMessage] = useState('');
   const [messages, setMessages] = useState<Message[]>([
     {
@@ -48,21 +75,83 @@ const Interface = () => {
   const [audioBlob, setAudioBlob] = useState<Blob | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
-  const [contacts, setContacts] = useState<Contact[]>([
-    {
-      id: 'admin',
-      name: 'admin@example.com',
-      email: 'admin@example.com',
-      lastMessage: 'Welcome to your chat!',
-      timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-      isOnline: true
-    }
-  ]);
+  const [contacts, setContacts] = useState<Contact[]>([]);
+  const [loadingContacts, setLoadingContacts] = useState(true);
+  const [adminDetails, setAdminDetails] = useState<{
+    email: string;
+    firstName: string;
+    lastName: string;
+    id: string;
+  } | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+
   const fileInputRef = useRef<HTMLInputElement>(null);
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
   const currentContact = contacts.find(c => c.id === selectedContact);
+
+  useEffect(() => {
+    const fetchAdminData = async () => {
+      setLoading(true);
+      setLoadingContacts(true);
+      setError('');
+
+      try {
+        const token = localStorage.getItem("userToken");
+
+        if (!token) {
+          setError("No authentication token found. Please login again.");
+          return;
+        }
+
+        const response = await AdminService.getAllAdmins(token);
+        
+        if (response && response.data) {
+          const adminsData = Array.isArray(response.data) ? response.data : [response.data];
+          
+          const formattedAdmins = adminsData.map((admin: any) => ({
+            id: admin._id || '',
+            firstName: admin.firstName || 'Unknown',
+            lastName: admin.lastName || 'User',
+            email: admin.email || 'No email',
+            contactNumber: admin.contactNumber || '',
+            profilePicture: admin.profilePicture || '',
+            role: admin.role || 'user',
+            permissions: admin.permissions || [],
+            settings: admin.settings || {},
+            notifications: admin.notifications || [],
+            auditTrail: admin.auditTrail || [],
+            isOnline: true,
+            lastMessage: 'Available to chat',
+            timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+          }));
+
+          setContacts(formattedAdmins);
+          if (formattedAdmins.length > 0) {
+            setSelectedContact(formattedAdmins[0].id);
+            setAdminDetails({
+              id: formattedAdmins[0].id,
+              firstName: formattedAdmins[0].firstName || 'Unknown',
+              lastName: formattedAdmins[0].lastName || 'User',
+              email: formattedAdmins[0].email || 'No email'
+            });
+          }
+        } else {
+          setError("Invalid response format from server");
+        }
+      } catch (err: any) {
+        console.error("Error fetching admin data:", err);
+        setError(err.response?.data?.message || err.message || "Failed to fetch admins");
+      } finally {
+        setLoading(false);
+        setLoadingContacts(false);
+      }
+    };
+
+    fetchAdminData();
+  }, []);
 
   const generateMessageId = () => Date.now().toString();
 
@@ -127,11 +216,6 @@ const Interface = () => {
     if (e.key === 'Enter') {
       handleSendMessage();
     }
-  };
-
-  const onEmojiClick = (emojiData: any) => {
-    setMessage(prev => prev + emojiData.emoji);
-    setShowEmojiPicker(false);
   };
 
   const handleFileUpload = () => {
@@ -231,14 +315,41 @@ const Interface = () => {
     };
   }, []);
 
+  const filteredContacts = contacts.filter(contact => {
+    const searchLower = searchQuery.toLowerCase();
+    const firstName = contact.firstName?.toLowerCase() || '';
+    const lastName = contact.lastName?.toLowerCase() || '';
+    const email = contact.email?.toLowerCase() || '';
+    
+    return (
+      firstName.includes(searchLower) ||
+      lastName.includes(searchLower) ||
+      email.includes(searchLower)
+    );
+  });
+
+  const getInitials = (contact: Contact) => {
+    const first = contact.firstName?.[0] || '';
+    const last = contact.lastName?.[0] || '';
+    return first + last || 'UU';
+  };
+
+  const getFullName = (contact: Contact) => {
+    return `${contact.firstName || ''} ${contact.lastName || ''}`.trim() || 'Unknown User';
+  };
+
+  const getAvatarUrl = (contact: Contact) => {
+    if (contact.profilePicture) {
+      return contact.profilePicture;
+    }
+    return `${FALLBACK_AVATAR}${encodeURIComponent(getFullName(contact))}`;
+  };
+
   return (
     <div className="flex h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-sky-50">
-      {/* Sidebar Component - Always visible */}
       <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
 
-      {/* Main Content */}
       <div className="flex-1 flex flex-col overflow-hidden lg:ml-0">
-        {/* Header - Simplified version */}
         <header className="bg-white/80 backdrop-blur-xl shadow-sm border-b border-blue-200/50 px-6 py-4 relative">
           <div className="absolute inset-0 bg-gradient-to-r from-blue-500/5 to-indigo-500/5"></div>
           <div className="relative flex items-center justify-between">
@@ -249,15 +360,22 @@ const Interface = () => {
               >
                 <Menu className="w-5 h-5 text-blue-600" />
               </button>
+              {adminDetails && (
+                <div className="hidden md:flex items-center gap-2">
+                  <div className="w-8 h-8 bg-gradient-to-br from-blue-400 to-indigo-500 rounded-full flex items-center justify-center text-white text-xs font-semibold">
+                    {getInitials(adminDetails)}
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium text-gray-700">{adminDetails.email}</p>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         </header>
 
-        {/* Chat Content */}
         <div className="flex-1 flex overflow-hidden">
-          {/* Contacts Sidebar */}
           <div className="w-80 bg-white/70 backdrop-blur-sm border-r border-blue-200/50 flex flex-col">
-            {/* Search Bar */}
             <div className="p-4 border-b border-blue-200/50">
               <div className="relative">
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-blue-400 w-4 h-4" />
@@ -271,49 +389,102 @@ const Interface = () => {
               </div>
             </div>
 
-            {/* Contacts List */}
             <div className="flex-1 overflow-y-auto">
-              {contacts.map((contact) => (
-                <div
-                  key={contact.id}
-                  onClick={() => setSelectedContact(contact.id)}
-                  className={`p-4 border-b border-blue-200/30 cursor-pointer hover:bg-blue-50/50 transition-colors ${
-                    selectedContact === contact.id ? 'bg-blue-50/70 border-r-4 border-r-blue-500' : ''
-                  }`}
-                >
-                  <div className="flex items-center gap-3">
-                    <div className="relative">
-                      <div className="w-12 h-12 bg-gradient-to-br from-blue-400 to-indigo-500 rounded-xl flex items-center justify-center text-white font-semibold shadow-lg shadow-blue-500/25">
-                        {contact.name.split(' ').map(n => n[0]).join('')}
+              {loadingContacts ? (
+                <div className="flex flex-col items-center justify-center h-full">
+                  <Loader2 className="w-8 h-8 text-blue-500 animate-spin" />
+                  <p className="mt-2 text-sm text-gray-500">Loading contacts...</p>
+                </div>
+              ) : error ? (
+                <div className="flex flex-col items-center justify-center h-full p-4">
+                  <div className="text-red-500 text-center">
+                    <p>Error loading contacts</p>
+                    <p className="text-sm mt-2">{error}</p>
+                  </div>
+                  <button 
+                    onClick={() => window.location.reload()}
+                    className="mt-4 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
+                  >
+                    Retry
+                  </button>
+                </div>
+              ) : (
+                filteredContacts.map((contact) => (
+                  <div
+                    key={contact.id}
+                    onClick={() => setSelectedContact(contact.id)}
+                    className={`p-4 border-b border-blue-200/30 cursor-pointer hover:bg-blue-50/50 transition-colors ${
+                      selectedContact === contact.id ? 'bg-blue-50/70 border-r-4 border-r-blue-500' : ''
+                    }`}
+                  >
+                    <div className="flex items-center gap-3">
+                      <div className="relative">
+                        <div className="w-12 h-12 rounded-xl overflow-hidden shadow-lg shadow-blue-500/25 flex items-center justify-center bg-gradient-to-br from-blue-400 to-indigo-500">
+                          <img 
+                            src={getAvatarUrl(contact)}
+                            alt={getFullName(contact)}
+                            className="w-full h-full object-cover"
+                            onError={(e) => {
+                              const target = e.target as HTMLImageElement;
+                              target.src = `${FALLBACK_AVATAR}${encodeURIComponent(getFullName(contact))}`;
+                              target.className = "w-full h-full object-cover";
+                              target.parentElement!.className = "w-12 h-12 rounded-xl overflow-hidden shadow-lg shadow-blue-500/25 flex items-center justify-center bg-gradient-to-br from-blue-400 to-indigo-500";
+                            }}
+                          />
+                        </div>
+                        {contact.isOnline && (
+                          <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-white shadow-sm"></div>
+                        )}
                       </div>
-                      {contact.isOnline && (
-                        <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-white shadow-sm"></div>
-                      )}
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center justify-between">
-                        <h3 className="font-medium text-blue-800 truncate">{contact.name}</h3>
-                        <span className="text-xs text-blue-500 flex-shrink-0">{contact.timestamp}</span>
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center justify-between">
+                          <h3 className="font-medium text-blue-800 truncate">
+                            {getFullName(contact)}
+                            {contact.role === 'superadmin' && (
+                              <span className="ml-1 text-xs bg-purple-100 text-purple-800 px-1.5 py-0.5 rounded">Super</span>
+                            )}
+                          </h3>
+                          <span className="text-xs text-blue-500 flex-shrink-0">{contact.timestamp}</span>
+                        </div>
+                        <p className="text-sm text-blue-600 truncate mt-1">{contact.email}</p>
+                        <p className="text-xs text-gray-500 mt-1">{contact.lastMessage}</p>
+                        {contact.notifications && contact.notifications.length > 0 && (
+                          <div className="flex items-center mt-1">
+                            <span className="inline-block w-2 h-2 bg-red-500 rounded-full mr-1"></span>
+                            <span className="text-xs text-gray-500">
+                              {contact.notifications.length} unread notification(s)
+                            </span>
+                          </div>
+                        )}
                       </div>
-                      <p className="text-sm text-blue-600 truncate mt-1">{contact.lastMessage}</p>
                     </div>
                   </div>
-                </div>
-              ))}
+                ))
+              )}
             </div>
           </div>
 
-          {/* Main Chat Area */}
           <div className="flex-1 flex flex-col">
-            {/* Chat Header */}
             {currentContact && (
               <div className="bg-gradient-to-r from-blue-500 to-indigo-500 text-white p-4 border-b border-blue-600">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 bg-white text-blue-500 rounded-xl flex items-center justify-center font-semibold shadow-lg">
-                    {currentContact.name.split(' ').map(n => n[0]).join('')}
+                  <div className="relative">
+                    <div className="w-10 h-10 rounded-xl overflow-hidden bg-white flex items-center justify-center shadow-lg">
+                      <img 
+                        src={getAvatarUrl(currentContact)}
+                        alt={getFullName(currentContact)}
+                        className="w-full h-full object-cover"
+                        onError={(e) => {
+                          const target = e.target as HTMLImageElement;
+                          target.src = `${FALLBACK_AVATAR}${encodeURIComponent(getFullName(currentContact))}`;
+                          target.className = "w-full h-full object-cover";
+                          target.parentElement!.className = "w-10 h-10 rounded-xl overflow-hidden bg-white flex items-center justify-center shadow-lg";
+                        }}
+                      />
+                    </div>
                   </div>
                   <div className="flex-1">
-                    <h2 className="font-semibold">{currentContact.name}</h2>
+                    <h2 className="font-semibold">{getFullName(currentContact)}</h2>
                     <div className="text-sm opacity-80">
                       {currentContact.isOnline ? 'Online' : 'Offline'}
                     </div>
@@ -351,7 +522,6 @@ const Interface = () => {
               </div>
             )}
 
-            {/* Messages Area */}
             <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-blue-50/50">
               {messages.map((msg) => (
                 <div
@@ -359,9 +529,19 @@ const Interface = () => {
                   className={`flex ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`}
                 >
                   <div className="flex items-end gap-2 max-w-[70%]">
-                    {msg.sender === 'contact' && (
-                      <div className="w-8 h-8 bg-gradient-to-br from-blue-400 to-indigo-500 rounded-xl flex items-center justify-center text-white text-xs font-semibold flex-shrink-0 shadow-lg shadow-blue-500/25">
-                        {currentContact?.name.split(' ').map(n => n[0]).join('') || 'C'}
+                    {msg.sender === 'contact' && currentContact && (
+                      <div className="w-8 h-8 rounded-xl overflow-hidden bg-gradient-to-br from-blue-400 to-indigo-500 flex items-center justify-center text-white text-xs font-semibold flex-shrink-0 shadow-lg shadow-blue-500/25">
+                        <img 
+                          src={getAvatarUrl(currentContact)}
+                          alt={getFullName(currentContact)}
+                          className="w-full h-full object-cover"
+                          onError={(e) => {
+                            const target = e.target as HTMLImageElement;
+                            target.src = `${FALLBACK_AVATAR}${encodeURIComponent(getFullName(currentContact))}`;
+                            target.className = "w-full h-full object-cover";
+                            target.parentElement!.className = "w-8 h-8 rounded-xl overflow-hidden bg-gradient-to-br from-blue-400 to-indigo-500 flex items-center justify-center text-white text-xs font-semibold flex-shrink-0 shadow-lg shadow-blue-500/25";
+                          }}
+                        />
                       </div>
                     )}
                     <div className="space-y-1">
@@ -412,11 +592,19 @@ const Interface = () => {
                 </div>
               ))}
               
-              {isTyping && (
+              {isTyping && currentContact && (
                 <div className="flex justify-start">
                   <div className="flex items-end gap-2 max-w-[70%]">
-                    <div className="w-8 h-8 bg-gradient-to-br from-blue-400 to-indigo-500 rounded-xl flex items-center justify-center text-white text-xs font-semibold shadow-lg shadow-blue-500/25">
-                      {currentContact?.name.split(' ').map(n => n[0]).join('') || 'C'}
+                    <div className="w-8 h-8 rounded-xl overflow-hidden bg-gradient-to-br from-blue-400 to-indigo-500 flex items-center justify-center text-white text-xs font-semibold shadow-lg shadow-blue-500/25">
+                      {currentContact.profilePicture ? (
+                        <img 
+                          src={currentContact.profilePicture} 
+                          alt={getFullName(currentContact)}
+                          className="w-full h-full object-cover"
+                        />
+                      ) : (
+                        <span>{getInitials(currentContact)}</span>
+                      )}
                     </div>
                     <div className="bg-white text-blue-800 px-4 py-3 rounded-2xl rounded-bl-sm shadow-sm animate-pulse">
                       <div className="flex items-center gap-1">
@@ -471,12 +659,14 @@ const Interface = () => {
               </div>
             )}
 
-            {/* Message Input */}
             <div className="p-4 border-t border-blue-200/50 bg-white/70 backdrop-blur-sm relative">
               {showEmojiPicker && (
                 <div className="absolute bottom-16 right-4 z-50">
                   <EmojiPicker 
-                    onEmojiClick={onEmojiClick}
+                    onEmojiClick={(emojiData) => {
+                      setMessage(prev => prev + emojiData.emoji);
+                      setShowEmojiPicker(false);
+                    }}
                     width={300}
                     height={350}
                     previewConfig={{ showPreview: false }}
@@ -504,7 +694,7 @@ const Interface = () => {
                     type="text"
                     value={message}
                     onChange={(e) => setMessage(e.target.value)}
-                    onKeyPress={handleKeyPress}
+                    onKeyDown={handleKeyPress}
                     placeholder="Type something..."
                     className="w-full px-4 py-3 pr-20 bg-blue-100/50 border border-blue-200/50 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500/50 text-blue-800 placeholder:text-blue-500/70 transition-all duration-200"
                   />
@@ -536,7 +726,6 @@ const Interface = () => {
         </div>
       </div>
 
-      {/* Mobile Sidebar Overlay */}
       {sidebarOpen && (
         <div
           className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40 lg:hidden transition-opacity duration-300"

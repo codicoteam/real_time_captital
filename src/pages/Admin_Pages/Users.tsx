@@ -17,7 +17,6 @@ import {
   UserCheck,
   Loader2,
   X,
-  Edit3,
 } from "lucide-react";
 import UserService from "../../services/admin_Services/user_Service";
 import UserDetailsModal from "../../components/user_component/view_User";
