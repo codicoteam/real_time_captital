@@ -65,7 +65,7 @@ const KycDocuments: React.FC<KycDocumentsProps> = ({
   const [selectedDocType, setSelectedDocType] = useState<string | null>(null);
 
   // Add debug state
-  const [debugInfo, setDebugInfo] = useState<{
+  const [, setDebugInfo] = useState<{
     userId: string | null;
     token: string | null;
     apiResponse: any;
@@ -522,7 +522,7 @@ const KycDocuments: React.FC<KycDocumentsProps> = ({
       </div>
 
       {/* Debug Information (remove this in production) */}
-      <div className="mb-6 p-4 bg-gray-50 rounded-lg border">
+      {/* <div className="mb-6 p-4 bg-gray-50 rounded-lg border">
         <h3 className="font-semibold text-gray-700 mb-2">Debug Information:</h3>
         <div className="text-sm text-gray-600 space-y-1">
           <p>
@@ -548,7 +548,7 @@ const KycDocuments: React.FC<KycDocumentsProps> = ({
             </details>
           )}
         </div>
-      </div>
+      </div> */}
 
       {/* Progress Bar */}
       <div className="mb-6">
