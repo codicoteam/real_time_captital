@@ -12,6 +12,7 @@ import Sidebar from "../../components/User_Sidebar";
 import Apply_new_loan from "../../components/loan_component/Apply_new_loan";
 import Application_Status from "../../components/loan_component/Application_Status";
 import ApplicationHistory from "../../components/loan_component/Application_history";
+import KycDocuments from "../../components/loan_component/kyc_Doc";
 
 // Main Loan Application Page
 const LoanApplicationPage = () => {
@@ -23,6 +24,7 @@ const LoanApplicationPage = () => {
     { id: "apply", label: "Apply New Loan", icon: Plus },
     { id: "status", label: "Application Status", icon: FileText },
     { id: "history", label: "History", icon: Clock },
+    { id: "kyc", label: "KYC Documents", icon: Clock },
   ];
 
   return (
@@ -118,6 +120,7 @@ const LoanApplicationPage = () => {
             {activeTab === "apply" && <Apply_new_loan />}
             {activeTab === "status" && <Application_Status />}
             {activeTab === "history" && <ApplicationHistory />}
+            {activeTab === "kyc" && <KycDocuments />}
           </div>
         </main>
       </div>
