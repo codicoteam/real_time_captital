@@ -6,6 +6,7 @@ import {
   ChevronRight,
   X,
   Lock,
+  Bell,
 } from "lucide-react";
 import { useNavigate, useLocation, type To } from "react-router-dom";
 
@@ -40,6 +41,13 @@ const Sidebar = ({ isOpen = true, onClose = () => {} }) => {
       label: "Account",
       subtitle: "Profile & Settings",
       path: "/account",
+      color: "from-purple-500 to-pink-600",
+    },
+   {
+      icon: Bell,
+      label: "Notifications",
+      subtitle: "Check what's new",
+      path: "/Notifications",
       color: "from-purple-500 to-pink-600",
     },
        {

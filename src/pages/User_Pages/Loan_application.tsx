@@ -1,7 +1,6 @@
 import { useState } from "react";
 import {
   Menu,
-  Bell,
   Search,
   ChevronDown,
   Plus,
@@ -9,6 +8,7 @@ import {
   Clock,
 } from "lucide-react";
 import Sidebar from "../../components/User_Sidebar";
+import NotificationBell from '../../components/Notificationsbell';
 import Apply_new_loan from "../../components/loan_component/Apply_new_loan";
 import Application_Status from "../../components/loan_component/Application_Status";
 import ApplicationHistory from "../../components/loan_component/Application_history";
@@ -61,12 +61,7 @@ const LoanApplicationPage = () => {
                 />
               </div>
 
-              <button className="relative p-2 rounded-xl bg-blue-100/50 hover:bg-blue-200/50 transition-all duration-200 group">
-                <Bell className="w-5 h-5 text-blue-600 group-hover:text-blue-700" />
-                <div className="absolute -top-1 -right-1 w-4 h-4 bg-gradient-to-r from-red-500 to-orange-500 rounded-full flex items-center justify-center">
-                  <span className="text-xs text-white font-medium">2</span>
-                </div>
-              </button>
+              <NotificationBell />
 
               <div className="flex items-center space-x-3 pl-4 border-l border-blue-200/50">
                 <div className="text-right hidden sm:block">

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import {
   Menu,
   Search,
@@ -13,6 +13,24 @@ import WorkflowManagement from "../../components/settingspage_components/workflo
 
 const Settings = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [, setShowNotifications] = useState(false);
+  const notificationRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (
+        notificationRef.current &&
+        !notificationRef.current.contains(event.target as Node)
+      ) {
+        setShowNotifications(false);
+      }
+    }
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   return (
     <div className="flex h-screen bg-gradient-to-br from-orange-50 via-red-50 to-yellow-50">
@@ -53,13 +71,21 @@ const Settings = () => {
                 />
               </div>
 
-              {/* Notifications */}
-              <button className="relative p-2 rounded-xl bg-orange-100/50 hover:bg-orange-200/50 transition-all duration-200 group">
-                <Bell className="w-5 h-5 text-orange-600 group-hover:text-orange-700" />
-                <div className="absolute -top-1 -right-1 w-4 h-4 bg-gradient-to-r from-red-500 to-orange-500 rounded-full flex items-center justify-center">
-                  <span className="text-xs text-white font-medium">3</span>
-                </div>
-              </button>
+              {/* Notifications with Dropdown */}
+              <div className="relative" ref={notificationRef}>
+                <button
+                  onClick={() => setShowNotifications((prev) => !prev)}
+                  className="relative p-2 rounded-xl bg-orange-100/50 hover:bg-orange-200/50 transition-all duration-200 group"
+                >
+                  <Bell className="w-5 h-5 text-orange-600 group-hover:text-orange-700" />
+                  <div className="absolute -top-1 -right-1 w-4 h-4 bg-gradient-to-r from-red-500 to-orange-500 rounded-full flex items-center justify-center">
+                    <span className="text-xs text-white font-medium">3</span>
+                  </div>
+                </button>
+
+                
+                
+              </div>
 
               {/* User Profile */}
               <div className="flex items-center space-x-3 pl-4 border-l border-orange-200/50">

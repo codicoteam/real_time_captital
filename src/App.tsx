@@ -8,6 +8,12 @@ import Users from "./pages/Admin_Pages/Users";
 import LoanManagement from "./pages/Admin_Pages/Loan_management";
 import LoanTracking from "./pages/Admin_Pages/loan_tracking";
 import Settings from "./pages/Admin_Pages/Settings";
+import Notification from "./pages/Admin_Pages/notification";
+import AdminLogout from "./pages/Admin_Pages/Adminlogout";
+import AdminNotifications from "./pages/Admin_Pages/adminNotifications";
+import Collaterals from "./pages/Admin_Pages/collaterals";
+
+
 
 //user imports
 
@@ -19,6 +25,7 @@ import Userlogin from "./pages/User_Pages/Login";
 import UserSignup from "./pages/User_Pages/Signup";
 import AdminSignUp from "./pages/Admin_Pages/Signup";
 import Landingpage from "./pages/User_Pages/landing page";
+import Notifications from "./pages/User_Pages/Notifications";
 import Logout from "./pages/User_Pages/logout";
 function App() {
   return (
@@ -33,6 +40,10 @@ function App() {
         <Route path="/loan-management" element={<LoanManagement />} />
         <Route path="/loan-tracking" element={<LoanTracking />} />
         <Route path="/settings" element={<Settings />} />
+        <Route path="/notification" element={<Notification />} />
+        <Route path="/adminlogout" element={<AdminLogout />} />
+        <Route path="/collaterals" element={<Collaterals />} />
+        <Route path="/admin/notifications/admin" element={<AdminNotifications />} />
 
         {/* User Routes */}
         <Route path="/" element={<Landingpage />} />
@@ -42,7 +53,8 @@ function App() {
         <Route path="/loan_application" element={<Loan_application />} />
         <Route path="/payment" element={<Payment />} />
         <Route path="/account" element={<Account />} />
-         <Route path="/Logout" element={<Logout />} />
+        <Route path="/Logout" element={<Logout />} />
+        <Route path="/Notifications" element={<Notifications />} />
       </Routes>
     </Router>
   );
