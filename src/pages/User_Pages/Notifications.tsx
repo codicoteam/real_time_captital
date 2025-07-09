@@ -78,15 +78,17 @@ const NotificationsPage: React.FC = () => {
             </div>
           ) : (
             <>
-              <div className="flex items-center justify-between mb-6">
-                <h1 className="text-2xl font-bold text-orange-700">Notifications</h1>
-                <button
-                  onClick={handleMarkAllAsRead}
-                  className="px-3 py-1.5 text-sm bg-orange-400 text-white rounded hover:bg-orange-700"
+          <div className="flex items-center mb-6">
+             <h1 className="text-2xl font-bold text-orange-700">Notifications</h1>
+           <button
+             onClick={handleMarkAllAsRead}
+              className="ml-90 px-3 py-1.5 text-sm bg-orange-400 text-white rounded hover:bg-orange-700"
                 >
                   Mark All as Read
-                </button>
-              </div>
+             </button>
+          </div>
+
+
 
               {notifications.length === 0 ? (
                 <div className="flex flex-col items-center justify-center mt-20 text-center text-gray-600">
