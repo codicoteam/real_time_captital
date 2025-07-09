@@ -441,7 +441,7 @@ const Account = () => {
                   className="pl-10 pr-4 py-2 w-64 bg-blue-100/50 border border-blue-200/50 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500/50 transition-all duration-200"
                 />
               </div>             
-              <NotificationBell />
+              <NotificationBell userId={""} />
               <div className="flex items-center space-x-3 pl-4 border-l border-blue-200/50">
                 <div className="text-right hidden sm:block">
                   <div className="text-sm font-semibold text-blue-700">
