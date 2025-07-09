@@ -4,7 +4,6 @@ import {
   Percent,
   Clock,
   Menu,
-  Bell,
   Search,
   ChevronDown,
   CreditCard,
@@ -14,8 +13,10 @@ import {
   Download,
   Calculator,
   Loader2,
+  Bell,
 } from "lucide-react";
 import Sidebar from "../../components/User_Sidebar";
+import NotificationBell from '../../components/Notificationsbell';
 import LoanService from "../../services/user_Services/loan_Service"; // Adjust path as needed
 
 interface Loan {
@@ -298,6 +299,9 @@ const UserDashboard = () => {
                   <span className="text-xs text-white font-medium">3</span>
                 </div>
               </button>
+            
+              <NotificationBell />
+
 
               {/* User Profile */}
               <div className="flex items-center space-x-3 pl-4 border-l border-gray-300">

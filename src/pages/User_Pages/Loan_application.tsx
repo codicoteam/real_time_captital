@@ -1,14 +1,15 @@
 import { useState } from "react";
 import {
   Menu,
-  Bell,
   Search,
   ChevronDown,
   Plus,
   FileText,
   Clock,
+  Bell,
 } from "lucide-react";
 import Sidebar from "../../components/User_Sidebar";
+import NotificationBell from '../../components/Notificationsbell';
 import Apply_new_loan from "../../components/loan_component/Apply_new_loan";
 import Application_Status from "../../components/loan_component/Application_Status";
 import ApplicationHistory from "../../components/loan_component/Application_history";
@@ -70,6 +71,7 @@ const LoanApplicationPage = () => {
                   <span className="text-xs text-white font-bold">2</span>
                 </div>
               </button>
+              <NotificationBell />
 
               <div className="flex items-center space-x-3 pl-4 border-l border-orange-200/50">
                 <div className="text-right hidden sm:block">

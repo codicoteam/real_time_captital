@@ -42,6 +42,7 @@ const LoanManagement = () => {
   );
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [selectedLoan, setSelectedLoan] = useState<any>(null);
   const [showDetailsModal, setShowDetailsModal] = useState(false);
     const userName = localStorage.getItem('userName');
@@ -56,6 +57,7 @@ const LoanManagement = () => {
 
         // Transform the backend data to match your UI structure
         const transformedLoans: LoanApplication[] =
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           response.data?.map((loan: any) => ({
             id: loan._id || loan.id || "",
             applicant:
@@ -79,6 +81,7 @@ const LoanManagement = () => {
           })) || [];
 
         setLoanApplications(transformedLoans);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       } catch (err: any) {
         const errorMessage = err?.message || err || "Failed to fetch loans";
         setError(errorMessage);

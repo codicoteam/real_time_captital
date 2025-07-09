@@ -4,7 +4,6 @@ import {
   TrendingUp,
   Users,
   Menu,
-  Bell,
   Search,
   ChevronDown,
   Target,
@@ -64,6 +63,7 @@ interface Payment {
   amount: string | number;
   createdAt: string;
 }
+import NotificationBell from '../../components/Notificationsbell';
 
 const Dashboard = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -425,12 +425,8 @@ const Dashboard = () => {
               </div>
 
               {/* Notifications */}
-              <button className="relative p-2 rounded-xl bg-orange-100/50 hover:bg-orange-200/50 transition-all duration-200 group">
-                <Bell className="w-5 h-5 text-orange-600 group-hover:text-orange-700" />
-                <div className="absolute -top-1 -right-1 w-4 h-4 bg-gradient-to-r from-red-500 to-orange-500 rounded-full flex items-center justify-center">
-                  <span className="text-xs text-white font-medium">5</span>
-                </div>
-              </button>
+               <NotificationBell />
+            
 
               {/* User Profile */}
               <div className="flex items-center space-x-3 pl-4 border-l border-orange-200/50">

@@ -9,6 +9,12 @@ import LoanManagement from "./pages/Admin_Pages/Loan_management";
 import LoanTracking from "./pages/Admin_Pages/loan_tracking";
 import Settings from "./pages/Admin_Pages/Settings";
 import ComingSoonPage from "./pages/Admin_Pages/Error";
+import Notification from "./pages/Admin_Pages/notification";
+import AdminLogout from "./pages/Admin_Pages/Adminlogout";
+import AdminNotifications from "./pages/Admin_Pages/adminNotifications";
+import Collaterals from "./pages/Admin_Pages/collaterals";
+
+
 
 //user imports
 
@@ -22,6 +28,8 @@ import AdminSignUp from "./pages/Admin_Pages/Signup";
 import Landingpage from "./pages/User_Pages/landing page";
 import PaymentManagement from "./pages/Admin_Pages/payment_management";
 
+import Notifications from "./pages/User_Pages/Notifications";
+import Logout from "./pages/User_Pages/logout";
 function App() {
   return (
     <Router>
@@ -37,6 +45,10 @@ function App() {
         <Route path="/settings" element={<Settings />} />
         <Route path="/payments" element={<PaymentManagement />} />
         <Route path="/*" element={<ComingSoonPage />} />
+        <Route path="/notification" element={<Notification />} />
+        <Route path="/adminlogout" element={<AdminLogout />} />
+        <Route path="/collaterals" element={<Collaterals />} />
+        <Route path="/admin/notifications/admin" element={<AdminNotifications />} />
 
         {/* User Routes */}
         <Route path="/" element={<Landingpage />} />
@@ -46,6 +58,8 @@ function App() {
         <Route path="/loan_application" element={<Loan_application />} />
         <Route path="/payment" element={<Payment />} />
         <Route path="/account" element={<Account />} />
+        <Route path="/Logout" element={<Logout />} />
+        <Route path="/Notifications" element={<Notifications />} />
       </Routes>
     </Router>
   );

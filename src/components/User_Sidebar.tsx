@@ -5,6 +5,8 @@ import {
   User,
   ChevronRight,
   X,
+  Lock,
+  Bell,
 } from "lucide-react";
 import { useNavigate, useLocation, type To } from "react-router-dom";
 import logo from "../assets/logo.png";
@@ -41,6 +43,20 @@ const Sidebar = ({ isOpen = true, onClose = () => {} }) => {
       subtitle: "Profile & Settings",
       path: "/account",
       color: "from-orange-500 to-red-600",
+    },
+   {
+      icon: Bell,
+      label: "Notifications",
+      subtitle: "Check what's new",
+      path: "/Notifications",
+      color: "from-purple-500 to-pink-600",
+    },
+       {
+      icon: Lock,
+      label: "Logout",
+      subtitle: "Logout your account",
+      path: "/Logout",
+      color: "from-purple-500 to-pink-600",
     },
   ];
 

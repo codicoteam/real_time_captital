@@ -17,6 +17,7 @@ import {
 } from "lucide-react";
 import Sidebar from "../../components/User_Sidebar";
 import UserService from "../../services/user_Services/users_Service";
+import NotificationBell from "../../components/Notificationbelll";
 
 // Type definitions matching the backend model
 interface ProfileData {
@@ -439,13 +440,8 @@ const Account = () => {
                   placeholder="Search settings..."
                   className="pl-10 pr-4 py-2 w-64 bg-blue-100/50 border border-blue-200/50 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500/50 transition-all duration-200"
                 />
-              </div>
-              <button className="relative p-2 rounded-xl bg-blue-100/50 hover:bg-blue-200/50 transition-all duration-200 group">
-                <Bell className="w-5 h-5 text-blue-600 group-hover:text-blue-700" />
-                <div className="absolute -top-1 -right-1 w-4 h-4 bg-gradient-to-r from-red-500 to-orange-500 rounded-full flex items-center justify-center">
-                  <span className="text-xs text-white font-medium">3</span>
-                </div>
-              </button>
+              </div>             
+              <NotificationBell />
               <div className="flex items-center space-x-3 pl-4 border-l border-blue-200/50">
                 <div className="text-right hidden sm:block">
                   <div className="text-sm font-semibold text-blue-700">
