@@ -15,11 +15,12 @@ import {
   AlertCircle,
   CheckCircle,
   XCircle,
+  Bell,
 } from "lucide-react";
-import Sidebar from "../../components/Sidebar"; // Import the Sidebar component
-import LoanService from "../../services/admin_Services/loan_Service"; // Import LoanService
-import PaymentService from "../../services/user_Services/payment_Service"; // Import PaymentService
-import UserService from "../../services/admin_Services/user_Service"; // Import UserService
+import Sidebar from "../../components/Sidebar";
+import LoanService from "../../services/admin_Services/loan_Service";
+import PaymentService from "../../services/user_Services/payment_Service";
+import UserService from "../../services/admin_Services/user_Service";
 
 interface User {
   id: number;
@@ -32,22 +33,21 @@ interface User {
   createdAt?: string;
 }
 
-// Updated interfaces to match your backend model
 interface Loan {
-  _id?: string; // MongoDB uses _id
-  id?: number; // Keep both for compatibility
-  user?: string | number; // This will be the user ObjectId
-  userId?: number; // Keep for compatibility
+  _id?: string;
+  id?: number;
+  user?: string | number;
+  userId?: number;
   amount?: string | number;
   status: string;
   createdAt?: string;
-  applicationDate?: string; // Your model uses applicationDate
+  applicationDate?: string;
   timestamps?: {
     createdAt: string;
     updatedAt: string;
   };
-  productType?: string; // This is loanType in your model
-  loanType?: string; // Keep for compatibility
+  productType?: string;
+  loanType?: string;
   riskLevel?: string;
   borrowerInfo?: {
     firstName?: string;
@@ -65,6 +65,15 @@ interface Payment {
 }
 import NotificationBell from '../../components/Notificationsbell';
 
+interface Notification {
+  id: number;
+  title: string;
+  message: string;
+  time: string;
+  read: boolean;
+  type: 'loan' | 'payment' | 'system';
+}
+
 const Dashboard = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [loans, setLoans] = useState<Loan[]>([]);
@@ -72,21 +81,75 @@ const Dashboard = () => {
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [notificationsOpen, setNotificationsOpen] = useState(false);
+  const [notifications, setNotifications] = useState<Notification[]>([
+    {
+      id: 1,
+      title: "New Loan Application",
+      message: "John Doe has submitted a new loan application for ₨50,000",
+      time: "10 minutes ago",
+      read: false,
+      type: 'loan'
+    },
+    {
+      id: 2,
+      title: "Payment Received",
+      message: "Payment of ₨12,500 received from Jane Smith",
+      time: "2 hours ago",
+      read: false,
+      type: 'payment'
+    },
+    {
+      id: 3,
+      title: "System Update",
+      message: "Scheduled maintenance this weekend",
+      time: "1 day ago",
+      read: true,
+      type: 'system'
+    },
+    {
+      id: 4,
+      title: "Loan Approved",
+      message: "Loan application #L-10045 has been approved",
+      time: "3 days ago",
+      read: true,
+      type: 'loan'
+    },
+    {
+      id: 5,
+      title: "New User Registered",
+      message: "Michael Brown has registered as a new borrower",
+      time: "1 week ago",
+      read: true,
+      type: 'system'
+    },
+  ]);
+
+  // Close notifications when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as HTMLElement;
+      if (!target.closest('.notifications-popup') && !target.closest('.notification-bell')) {
+        setNotificationsOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
 
   // Fetch data from backend
-  // Replace your existing useEffect with this updated version
   useEffect(() => {
     const fetchLoans = async () => {
       try {
         const loansResponse = await LoanService.getAllLoans();
         setLoans(loansResponse.data || loansResponse || []);
-        console.log(
-          "Loans fetched successfully:",
-          loansResponse.data || loansResponse
-        );
       } catch (err) {
         console.error("Error fetching loans:", err);
-        setLoans([]); // Set empty array on error
+        setLoans([]);
       }
     };
 
@@ -94,13 +157,9 @@ const Dashboard = () => {
       try {
         const paymentsResponse = await PaymentService.getAllPayments();
         setPayments(paymentsResponse.data || paymentsResponse || []);
-        console.log(
-          "Payments fetched successfully:",
-          paymentsResponse.data || paymentsResponse
-        );
       } catch (err) {
         console.error("Error fetching payments:", err);
-        setPayments([]); // Set empty array on error
+        setPayments([]);
       }
     };
 
@@ -108,73 +167,121 @@ const Dashboard = () => {
       try {
         const usersResponse = await UserService.getAllUsers();
         setUsers(usersResponse.data || usersResponse || []);
-        console.log(
-          "Users fetched successfully:",
-          usersResponse.data || usersResponse
-        );
       } catch (err) {
         console.error("Error fetching users:", err);
-        setUsers([]); // Set empty array on error
+        setUsers([]);
       }
     };
 
     const fetchAllData = async () => {
       setLoading(true);
       setError(null);
-
-      // Fetch all data separately - each can fail independently
       await Promise.allSettled([fetchLoans(), fetchPayments(), fetchUsers()]);
-
       setLoading(false);
     };
 
     fetchAllData();
   }, []);
 
-  // Also add this additional useEffect to debug what data you're getting
-  useEffect(() => {
-    console.log("Current state:", {
-      loans: loans.length,
-      payments: payments.length,
-      users: users.length,
-      loansData: loans,
-      paymentsData: payments,
-      usersData: users,
+  // Search function that filters across all data
+  const searchAllData = () => {
+    if (!searchTerm.trim()) {
+      return {
+        loans: loans,
+        users: users,
+        payments: payments,
+      };
+    }
+
+    const searchLower = searchTerm.toLowerCase();
+
+    const filteredLoans = loans.filter(loan => {
+      const borrowerName = loan.borrowerInfo 
+        ? `${loan.borrowerInfo.firstName || ''} ${loan.borrowerInfo.surname || ''}`.toLowerCase()
+        : '';
+      const loanType = (loan.productType || loan.loanType || '').toLowerCase();
+      const amount = loan.amount?.toString().toLowerCase() || '';
+      const status = loan.status.toLowerCase();
+
+      return (
+        borrowerName.includes(searchLower) ||
+        loanType.includes(searchLower) ||
+        amount.includes(searchLower) ||
+        status.includes(searchLower)
+      );
     });
-  }, [loans, payments, users]);
+
+    const filteredUsers = users.filter(user => {
+      const fullName = `${user.firstName} ${user.lastName}`.toLowerCase();
+      const email = user.email?.toLowerCase() || '';
+      const phone = user.phoneNumber?.toLowerCase() || '';
+      const address = user.address?.toLowerCase() || '';
+
+      return (
+        fullName.includes(searchLower) ||
+        email.includes(searchLower) ||
+        phone.includes(searchLower) ||
+        address.includes(searchLower)
+      );
+    });
+
+    const filteredPayments = payments.filter(payment => {
+      const amount = payment.amount?.toString().toLowerCase() || '';
+      const date = payment.createdAt.toLowerCase();
+
+      return (
+        amount.includes(searchLower) ||
+        date.includes(searchLower)
+      );
+    });
+
+    return {
+      loans: filteredLoans,
+      users: filteredUsers,
+      payments: filteredPayments,
+    };
+  };
+
+  const { loans: searchedLoans, users: searchedUsers, payments: searchedPayments } = searchAllData();
+
+  // Toggle notification read status
+  const toggleNotificationRead = (id: number) => {
+    setNotifications(notifications.map(notification => 
+      notification.id === id ? {...notification, read: !notification.read} : notification
+    ));
+  };
+
+  // Mark all notifications as read
+  const markAllAsRead = () => {
+    setNotifications(notifications.map(notification => ({
+      ...notification,
+      read: true
+    })));
+  };
 
   // Calculate metrics from backend data
-  // Updated calculateMetrics function to show total users instead of active borrowers
   const calculateMetrics = () => {
-    const totalLoans = loans.length;
-    const totalUsers = users.length; // Changed from activeBorrowers to totalUsers
+    const totalLoans = searchedLoans.length;
+    const totalUsers = searchedUsers.length;
 
-    // Fixed: Add null/undefined checks and proper type conversion
-    const totalPayments = payments.reduce((sum, payment) => {
-      // Check if payment and payment.amount exist and are valid
+    const totalPayments = searchedPayments.reduce((sum, payment) => {
       if (!payment || payment.amount === null || payment.amount === undefined) {
         return sum;
       }
-
-      // Convert to number safely
-      const amount =
-        typeof payment.amount === "number"
-          ? payment.amount
-          : parseFloat(payment.amount.toString());
-
-      // Only add if it's a valid number
+      const amount = typeof payment.amount === "number"
+        ? payment.amount
+        : parseFloat(payment.amount.toString());
       return sum + (isNaN(amount) ? 0 : amount);
     }, 0);
 
-    // Get previous period data for trends (simplified calculation)
     const currentMonth = new Date().getMonth();
-    const currentMonthLoans = loans.filter((loan) => {
+    const currentMonthLoans = searchedLoans.filter((loan) => {
       const createdAt = loan.createdAt;
       return createdAt
         ? new Date(createdAt).getMonth() === currentMonth
         : false;
     }).length;
-    const previousMonthLoans = loans.filter((loan) => {
+    const previousMonthLoans = searchedLoans.filter((loan) => {
       const createdAt = loan.createdAt;
       return createdAt
         ? new Date(createdAt).getMonth() === currentMonth - 1
@@ -190,7 +297,7 @@ const Dashboard = () => {
 
     return {
       totalLoans,
-      totalUsers, // Changed from activeBorrowers to totalUsers
+      totalUsers,
       totalPayments,
       loanTrend: loanTrend > 0 ? `+${loanTrend}%` : `${loanTrend}%`,
     };
@@ -209,8 +316,8 @@ const Dashboard = () => {
       icon: DollarSign,
     },
     {
-      label: "Total Users", // Changed from "Active Borrowers" to "Total Users"
-      value: metrics.totalUsers.toString(), // Changed from activeBorrowers to totalUsers
+      label: "Total Users",
+      value: metrics.totalUsers.toString(),
       unit: "",
       trend: "+8%",
       color: "from-red-500 to-orange-600",
@@ -229,21 +336,13 @@ const Dashboard = () => {
   ];
 
   // Get pending loans
-  // Updated getPendingLoans function
   const getPendingLoans = () => {
-    console.log("All loans:", loans); // Debug log
-    console.log("Filtering for pending loans...");
-
-    const pendingLoans = loans.filter((loan) => {
-      console.log(`Loan ${loan._id || loan.id}: status = "${loan.status}"`);
+    const pendingLoans = searchedLoans.filter((loan) => {
       return loan.status === "pending" && (loan._id || loan.id);
     });
 
-    console.log("Pending loans found:", pendingLoans);
-
     return pendingLoans
       .sort((a, b) => {
-        // Handle different date field names from your model
         const dateA = new Date(
           a.applicationDate || a.createdAt || a.timestamps?.createdAt || 0
         );
@@ -254,8 +353,7 @@ const Dashboard = () => {
       })
       .slice(0, 6)
       .map((loan) => {
-        // Try to find user by different possible ID fields
-        const user = users.find(
+        const user = searchedUsers.find(
           (u) =>
             u.id === loan.userId ||
             u.id === loan.user ||
@@ -263,7 +361,6 @@ const Dashboard = () => {
             u.id.toString() === loan.user?.toString()
         );
 
-        // Handle borrower name - check borrowerInfo first, then user
         let borrowerName = "Unknown User";
         if (loan.borrowerInfo?.firstName && loan.borrowerInfo?.surname) {
           borrowerName = `${loan.borrowerInfo.firstName} ${loan.borrowerInfo.surname}`;
@@ -271,7 +368,6 @@ const Dashboard = () => {
           borrowerName = `${user.firstName} ${user.lastName}`;
         }
 
-        // Handle email - check borrowerInfo first, then user
         let email = "No email";
         if (loan.borrowerInfo?.email) {
           email = loan.borrowerInfo.email;
@@ -279,7 +375,6 @@ const Dashboard = () => {
           email = user.email;
         }
 
-        // Safe amount conversion
         let formattedAmount = "₨0";
         if (loan.amount !== null && loan.amount !== undefined) {
           const amount =
@@ -292,7 +387,6 @@ const Dashboard = () => {
           }
         }
 
-        // Handle date field - your model uses applicationDate
         const dateField =
           loan.applicationDate || loan.createdAt || loan.timestamps?.createdAt;
 
@@ -324,9 +418,9 @@ const Dashboard = () => {
   };
 
   const calculateRiskAssessment = () => {
-    if (loans.length === 0) return { low: 0, medium: 0, high: 0 };
+    if (searchedLoans.length === 0) return { low: 0, medium: 0, high: 0 };
 
-    const riskCounts = loans.reduce(
+    const riskCounts = searchedLoans.reduce(
       (acc, loan) => {
         const risk = loan.riskLevel || "low";
         acc[risk as keyof typeof acc] =
@@ -336,7 +430,7 @@ const Dashboard = () => {
       { low: 0, medium: 0, high: 0 }
     );
 
-    const total = loans.length;
+    const total = searchedLoans.length;
     return {
       low: Math.round((riskCounts.low / total) * 100),
       medium: Math.round((riskCounts.medium / total) * 100),
@@ -392,7 +486,7 @@ const Dashboard = () => {
       {/* Main Content */}
       <div className="flex-1 flex flex-col overflow-hidden lg:ml-0">
         {/* Header */}
-        <header className="bg-white/80 backdrop-blur-xl shadow-sm border-b border-orange-200/50 px-6 py-4 relative">
+        <header className="bg-white/80 backdrop-blur-xl shadow-sm border-b border-orange-200/50 px-6 py-4 relative z-10">
           <div className="absolute inset-0 bg-gradient-to-r from-orange-500/5 to-red-500/5"></div>
           <div className="relative flex items-center justify-between">
             <div className="flex items-center">
@@ -419,14 +513,110 @@ const Dashboard = () => {
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-orange-400" />
                 <input
                   type="text"
-                  placeholder="Search loans..."
+                  placeholder="Search loans, users, payments..."
                   className="pl-10 pr-4 py-2 w-64 bg-orange-100/50 border border-orange-200/50 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500/50 transition-all duration-200"
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
                 />
               </div>
 
               {/* Notifications */}
                <NotificationBell />
             
+              <div className="relative">
+                <button 
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setNotificationsOpen(!notificationsOpen);
+                  }}
+                  className="notification-bell relative p-2 rounded-xl bg-orange-100/50 hover:bg-orange-200/50 transition-all duration-200 group"
+                >
+                  <Bell className="w-5 h-5 text-orange-600 group-hover:text-orange-700" />
+                  <div className="absolute -top-1 -right-1 w-4 h-4 bg-gradient-to-r from-red-500 to-orange-500 rounded-full flex items-center justify-center">
+                    <span className="text-xs text-white font-medium">
+                      {notifications.filter(n => !n.read).length}
+                    </span>
+                  </div>
+                </button>
+
+                {/* Enhanced Notifications Popup */}
+                {notificationsOpen && (
+                  <div className="notifications-popup fixed right-6 top-20 w-96 bg-white rounded-xl shadow-2xl border border-orange-200/50 z-[9999] overflow-hidden transform transition-all duration-300 ease-in-out">
+                    <div className="p-5 bg-gradient-to-r from-orange-50 to-red-50 border-b border-orange-200/50 flex justify-between items-center">
+                      <h3 className="font-bold text-lg text-orange-800">Notifications</h3>
+                      <div className="flex items-center space-x-3">
+                        <button 
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            markAllAsRead();
+                          }}
+                          className="text-sm font-medium text-orange-600 hover:text-orange-700 transition-colors"
+                        >
+                          Mark all as read
+                        </button>
+                        <button 
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setNotificationsOpen(false);
+                          }}
+                          className="text-orange-500 hover:text-orange-700"
+                        >
+                          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                            <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
+                          </svg>
+                        </button>
+                      </div>
+                    </div>
+                    <div className="max-h-[70vh] overflow-y-auto">
+                      {notifications.length > 0 ? (
+                        notifications.map(notification => (
+                          <div 
+                            key={notification.id}
+                            className={`p-5 border-b border-orange-100/50 hover:bg-orange-50/50 cursor-pointer transition-colors ${!notification.read ? 'bg-orange-50' : ''}`}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              toggleNotificationRead(notification.id);
+                            }}
+                          >
+                            <div className="flex items-start space-x-4">
+                              <div className={`mt-1 flex-shrink-0 w-3 h-3 rounded-full ${
+                                notification.read ? 'bg-orange-200' : 'bg-orange-500'
+                              }`}></div>
+                              <div className="flex-1">
+                                <div className="flex justify-between items-start">
+                                  <h4 className="font-semibold text-lg text-orange-800">{notification.title}</h4>
+                                  <span className="text-xs text-orange-400">{notification.time}</span>
+                                </div>
+                                <p className="text-base text-orange-600 mt-2">{notification.message}</p>
+                                <div className="mt-3 flex items-center">
+                                  <span className={`inline-block px-2 py-1 text-xs font-medium rounded-full ${
+                                    notification.type === 'loan' 
+                                      ? 'bg-purple-100 text-purple-800' 
+                                      : notification.type === 'payment' 
+                                        ? 'bg-green-100 text-green-800' 
+                                        : 'bg-blue-100 text-blue-800'
+                                  }`}>
+                                    {notification.type.charAt(0).toUpperCase() + notification.type.slice(1)}
+                                  </span>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        ))
+                      ) : (
+                        <div className="p-8 text-center">
+                          <Bell className="w-12 h-12 mx-auto text-orange-300 mb-4" />
+                          <p className="text-lg text-orange-500 font-medium">No notifications to display</p>
+                          <p className="text-sm text-orange-400 mt-1">You're all caught up!</p>
+                        </div>
+                      )}
+                    </div>
+                    <div className="p-4 bg-gradient-to-r from-orange-50 to-red-50 border-t border-orange-200/50 text-center">
+                      
+                    </div>
+                  </div>
+                )}
+              </div>
 
               {/* User Profile */}
               <div className="flex items-center space-x-3 pl-4 border-l border-orange-200/50">
@@ -450,6 +640,28 @@ const Dashboard = () => {
 
         {/* Dashboard Content */}
         <main className="flex-1 overflow-y-auto p-6 space-y-8">
+          {/* Search Results Summary */}
+          {searchTerm && (
+            <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-4 shadow-lg border border-orange-200/50">
+              <div className="flex items-center justify-between">
+                <h3 className="text-sm font-medium text-orange-600">
+                  Search results for: <span className="font-semibold">"{searchTerm}"</span>
+                </h3>
+                <button 
+                  onClick={() => setSearchTerm("")}
+                  className="text-xs text-orange-500 hover:text-orange-700"
+                >
+                  Clear search
+                </button>
+              </div>
+              <div className="flex space-x-6 mt-2 text-xs text-orange-500">
+                <span>{searchedLoans.length} loans</span>
+                <span>{searchedUsers.length} users</span>
+                <span>{searchedPayments.length} payments</span>
+              </div>
+            </div>
+          )}
+
           {/* Hero Section */}
           <div className="relative rounded-3xl px-10 py-20 text-white overflow-hidden bg-gradient-to-br from-orange-900 via-red-900 to-yellow-900 shadow-2xl min-h-[300px]">
             {/* Background image layer */}
@@ -564,7 +776,7 @@ const Dashboard = () => {
                     System Users
                   </h3>
                   <p className="text-sm text-orange-500">
-                    {users.length} registered users
+                    {searchedUsers.length} registered users
                   </p>
                 </div>
                 <div className="flex items-center space-x-3">
@@ -578,7 +790,7 @@ const Dashboard = () => {
 
               {/* Scrollable Users List */}
               <div className="space-y-4 max-h-80 overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-orange-200 scrollbar-track-orange-50">
-                {users.map((user) => (
+                {searchedUsers.map((user) => (
                   <div
                     key={user.id}
                     className="group flex items-center justify-between p-4 bg-gradient-to-r from-white/50 to-orange-50/30 rounded-xl border border-orange-200/30 hover:border-orange-300/50 transition-all duration-300 hover:shadow-md"
@@ -638,7 +850,7 @@ const Dashboard = () => {
                   </div>
                 ))}
 
-                {users.length === 0 && (
+                {searchedUsers.length === 0 && (
                   <div className="text-center py-12">
                     <div className="w-16 h-16 bg-orange-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
                       <User className="w-8 h-8 text-orange-400" />
@@ -647,7 +859,7 @@ const Dashboard = () => {
                       No Users Found
                     </h4>
                     <p className="text-orange-500 text-sm">
-                      Users will appear here once they register.
+                      {searchTerm ? "No users match your search" : "Users will appear here once they register"}
                     </p>
                   </div>
                 )}
@@ -858,7 +1070,7 @@ const Dashboard = () => {
                     No Pending Loans
                   </h4>
                   <p className="text-orange-500 text-sm">
-                    All loan applications have been processed.
+                    {searchTerm ? "No pending loans match your search" : "All loan applications have been processed"}
                   </p>
                 </div>
               )}

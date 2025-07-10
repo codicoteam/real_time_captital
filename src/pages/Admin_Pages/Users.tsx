@@ -18,6 +18,7 @@ import {
   Loader2,
   X,
 
+ 
 } from "lucide-react";
 import UserService from "../../services/admin_Services/user_Service";
 import UserDetailsModal from "../../components/user_component/view_User";
@@ -247,6 +248,7 @@ const UserManagement = () => {
         await UserService.deleteUser(userId.toString());
         setUsers(users.filter((user) => user._id !== userId && user.id !== userId));
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        setUsers(users.filter((user) => user._id !== userId && user.id !== userId));
       } catch (err: any) {
         console.error("Error deleting user:", err);
         setError(err.message || "Failed to delete user");
