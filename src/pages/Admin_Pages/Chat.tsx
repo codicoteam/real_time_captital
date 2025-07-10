@@ -6,7 +6,16 @@ import UserService from "../../services/admin_Services/user_Service";
 
 // Firebase imports
 import { initializeApp } from 'firebase/app';
-import { getFirestore, collection, query, where, orderBy, addDoc, serverTimestamp, onSnapshot } from 'firebase/firestore';
+import {  
+  getFirestore, 
+  collection, 
+  query, 
+  where, 
+  orderBy, 
+  onSnapshot,
+  addDoc,
+  serverTimestamp 
+} from 'firebase/firestore';
 import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 
 // Firebase configuration (replace with your config)
@@ -89,6 +98,7 @@ const ChatInterface = () => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const animationRef = useRef<number | null>(null);
   const progressIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  
 
   // Load contacts from your user management system
   useEffect(() => {
@@ -149,6 +159,7 @@ const ChatInterface = () => {
             fileUrl: data.fileUrl,
             audioUrl: data.audioUrl,
             audioDuration: data.audioDuration
+            
           });
         }
       });
