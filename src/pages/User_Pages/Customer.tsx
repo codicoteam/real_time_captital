@@ -3,7 +3,6 @@ import {
   Menu,
   Search,
   ChevronDown,
-  Plus,
   Bell,
   Users,
   Eye,
