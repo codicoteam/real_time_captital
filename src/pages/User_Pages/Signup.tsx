@@ -9,6 +9,8 @@ import {
   Phone,
   Mail,
   MapPin,
+  Camera,
+  Users,
 } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import SignupUser from "../../services/user_Services/signup_Service";
@@ -21,6 +23,9 @@ interface FormData {
   password: string;
   confirmPassword: string;
   address: string;
+  profilePicture: string;
+  role: "customer" | "agent";
+  createdByAgent: null;
 }
 
 const UserSignup = () => {
@@ -32,6 +37,9 @@ const UserSignup = () => {
     password: "",
     confirmPassword: "",
     address: "",
+    profilePicture: "",
+    role: "customer",
+    createdByAgent: null,
   });
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -39,6 +47,7 @@ const UserSignup = () => {
   const [, setMousePosition] = useState({ x: 0, y: 0 });
   const [isHovered, setIsHovered] = useState(false);
   const [passwordStrength, setPasswordStrength] = useState(0);
+  const [profilePreview, setProfilePreview] = useState<string>("");
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -66,13 +75,34 @@ const UserSignup = () => {
   }, [formData.password]);
 
   const handleInputChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >
   ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
       [name]: value,
     }));
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      // Create preview URL
+      const previewUrl = URL.createObjectURL(file);
+      setProfilePreview(previewUrl);
+
+      // Convert file to base64 or handle file upload as needed
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setFormData((prev) => ({
+          ...prev,
+          profilePicture: reader.result as string,
+        }));
+      };
+      reader.readAsDataURL(file);
+    }
   };
 
   const validateForm = () => {
@@ -128,8 +158,21 @@ const UserSignup = () => {
       // Remove confirmPassword from the data sent to the server
       const { confirmPassword, ...signupData } = formData;
 
+      // Clean up data - remove empty optional fields
+      const cleanedData = {
+        ...signupData,
+        // Only include createdByAgent if it's not empty and role is customer
+        ...(signupData.createdByAgent && signupData.role === "customer"
+          ? { createdByAgent: signupData.createdByAgent }
+          : {}),
+        // Only include profilePicture if it's not empty
+        ...(signupData.profilePicture
+          ? { profilePicture: signupData.profilePicture }
+          : {}),
+      };
+
       // Call the actual signup service
-      const response = await SignupUser(signupData);
+      const response = await SignupUser(cleanedData);
 
       console.log("Signup successful:", response);
       alert("Account created successfully!");
@@ -216,6 +259,75 @@ const UserSignup = () => {
 
               {/* Signup Form */}
               <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
+                {/* Profile Picture Upload */}
+                <div className="flex justify-center mb-6">
+                  <div className="relative group">
+                    <div className="w-20 h-20 sm:w-24 sm:h-24 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full flex items-center justify-center cursor-pointer hover:bg-white/15 transition-all duration-300">
+                      {profilePreview ? (
+                        <img
+                          src={profilePreview}
+                          alt="Profile Preview"
+                          className="w-full h-full object-cover rounded-full"
+                        />
+                      ) : (
+                        <Camera className="w-8 h-8 text-gray-400" />
+                      )}
+                    </div>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={handleFileChange}
+                      className="absolute inset-0 opacity-0 cursor-pointer"
+                    />
+                    <div className="absolute -bottom-2 -right-2 w-6 h-6 bg-gradient-to-br from-orange-500 to-red-500 rounded-full flex items-center justify-center">
+                      <Camera className="w-3 h-3 text-white" />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Role Selection */}
+                <div className="group">
+                  <div className="relative">
+                    <Users className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+                    <select
+                      name="role"
+                      value={formData.role}
+                      onChange={handleInputChange}
+                      className="w-full pl-10 pr-4 py-3 sm:py-4 bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all duration-300 group-hover:bg-white/15"
+                    >
+                      <option
+                        value="customer"
+                        className="bg-gray-800 text-white"
+                      >
+                        Customer
+                      </option>
+                      <option value="agent" className="bg-gray-800 text-white">
+                        Agent
+                      </option>
+                    </select>
+                  </div>
+                </div>
+
+                {/* Created By Agent Field - only show for customers */}
+                {formData.role === "customer" && (
+                  <div className="group">
+                    <div className="relative">
+                      <User className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+                      <input
+                        type="text"
+                        name="createdByAgent"
+                        placeholder="Agent ID (optional)"
+                        // value={formData.createdByAgent}
+                        onChange={handleInputChange}
+                        className="w-full pl-10 pr-4 py-3 sm:py-4 bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all duration-300 group-hover:bg-white/15"
+                      />
+                    </div>
+                    <p className="text-xs text-gray-400 mt-1 ml-2">
+                      Enter the ID of the agent who referred you (optional)
+                    </p>
+                  </div>
+                )}
+
                 {/* Name Fields */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div className="group">

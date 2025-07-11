@@ -39,11 +39,27 @@ const UserService = {
   },
 
   /**
+   * Get users by agent ID
+   */
+  getUsersByAgentId: async (agentId: string): Promise<any> => {
+    try {
+      const response = await axios.get(`${BASE_URL}/agent/${agentId}`, {
+        headers: {
+          Authorization: `Bearer ${getAuthToken()}`,
+        },
+      });
+      return response.data;
+    } catch (error: unknown) {
+      handleAxiosError(error, "Failed to retrieve users by agent");
+    }
+  },
+
+  /**
    * Create a new user
    */
   createUser: async (userData: any): Promise<any> => {
     try {
-      const response = await axios.post(`${BASE_URL}/create`, userData, {
+      const response = await axios.post(`${BASE_URL}/signup`, userData, {
         headers: {
           Authorization: `Bearer ${getAuthToken()}`,
           "Content-Type": "application/json",

@@ -9,7 +9,7 @@ import {
   ChevronDown,
   AlertTriangle,
 } from "lucide-react";
-import Sidebar from "../../components/Sidebar";
+// import Sidebar from "../../components/Sidebar";
 import { useNavigate } from "react-router-dom";
 
 // Mock Sidebar component since we can't import external files
@@ -47,71 +47,10 @@ const Error = () => {
   return (
     <div className="flex h-screen bg-gradient-to-br from-green-50 via-emerald-50 to-green-100">
       {/* Sidebar Component */}
-      <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+      {/* <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} /> */}
 
       {/* Main Content */}
       <div className="flex-1 flex flex-col overflow-hidden lg:ml-0">
-        {/* Header */}
-        <header className="bg-white/80 backdrop-blur-xl shadow-sm border-b border-green-200/50 px-6 py-4 relative">
-          <div className="absolute inset-0 bg-gradient-to-r from-green-500/5 to-emerald-500/5"></div>
-          <div className="relative flex items-center justify-between">
-            <div className="flex items-center">
-              <button
-                onClick={() => setSidebarOpen(true)}
-                className="lg:hidden mr-4 p-2 rounded-xl bg-green-100/50 hover:bg-green-200/50 transition-all duration-200"
-              >
-                <Menu className="w-5 h-5 text-green-600" />
-              </button>
-              <div className="flex items-center space-x-3">
-                <div className="flex items-center space-x-2 text-sm">
-                  <span className="text-slate-500">Error</span>
-                  <span className="text-slate-300">›</span>
-                  <span className="text-slate-700 font-medium">
-                    Page Not Found
-                  </span>
-                </div>
-              </div>
-            </div>
-
-            <div className="flex items-center space-x-4">
-              {/* Search */}
-              <div className="relative hidden md:block">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-slate-400" />
-                <input
-                  type="text"
-                  placeholder="Search members..."
-                  className="pl-10 pr-4 py-2 w-64 bg-green-100/50 border border-green-200/50 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-green-500/20 focus:border-green-500/50 transition-all duration-200"
-                />
-              </div>
-
-              {/* Notifications */}
-              <button className="relative p-2 rounded-xl bg-green-100/50 hover:bg-green-200/50 transition-all duration-200 group">
-                <Bell className="w-5 h-5 text-green-600 group-hover:text-green-700" />
-                <div className="absolute -top-1 -right-1 w-4 h-4 bg-gradient-to-r from-red-500 to-pink-500 rounded-full flex items-center justify-center">
-                  <span className="text-xs text-white font-medium">5</span>
-                </div>
-              </button>
-
-              {/* User Profile */}
-              <div className="flex items-center space-x-3 pl-4 border-l border-green-200/50">
-                <div className="text-right hidden sm:block">
-                  <div className="text-sm font-semibold text-slate-700">
-                    Pastor David
-                  </div>
-                  <div className="text-xs text-slate-500">Senior Pastor</div>
-                </div>
-                <div className="relative">
-                  <div className="w-10 h-10 bg-gradient-to-br from-green-500 to-emerald-500 rounded-xl flex items-center justify-center shadow-lg shadow-green-500/25">
-                    <span className="text-white font-semibold text-sm">PD</span>
-                  </div>
-                  <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-400 border-2 border-white rounded-full shadow-sm"></div>
-                </div>
-                <ChevronDown className="w-4 h-4 text-slate-400" />
-              </div>
-            </div>
-          </div>
-        </header>
-
         {/* 404 Content */}
         <main className="flex-1 flex items-center justify-center p-6 relative overflow-hidden">
           {/* Background Pattern */}

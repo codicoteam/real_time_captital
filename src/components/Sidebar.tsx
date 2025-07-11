@@ -4,9 +4,8 @@ import {
   CreditCard,
   TrendingUp,
   Settings,
-   Lock,
+  Lock,
   Bell,
-  
   X,
 } from "lucide-react";
 import { useNavigate, useLocation, type To } from "react-router-dom";
@@ -24,10 +23,10 @@ const Sidebar = ({ isOpen = true, onClose = () => {} }) => {
     { icon: CreditCard, label: "Payments", path: "/payments" },
     { icon: Users, label: "Chat", path: "/chat" },
     { icon: Settings, label: "Settings", path: "/settingss" },
-    { icon: Lock, label: "Collaterals", path: "/collaterals" }, 
-    { icon: Settings, label: "Settings", path: "/settings" }, 
-    { icon: Bell, label: "Notifications", path: "/notification" }, 
-    { icon: Lock, label: "Admin Logout", path: "/Adminlogout" }, 
+    { icon: Lock, label: "Collaterals", path: "/collaterals" },
+    { icon: Settings, label: "Settings", path: "/settings" },
+    { icon: Bell, label: "Notifications", path: "/notification" },
+    { icon: Lock, label: "Admin Logout", path: "/Adminlogout" },
   ];
 
   const handleNavigation = (path: To) => {
@@ -57,25 +56,16 @@ const Sidebar = ({ isOpen = true, onClose = () => {} }) => {
         <div className="absolute inset-0 bg-gradient-to-br from-orange-200/20 via-transparent to-red-200/20 animate-pulse"></div>
 
         {/* Header */}
-        {/* Header */}
-        <div className="relative flex items-center justify-between h-20 px-8 border-b border-orange-200/40 bg-orange-50/60 backdrop-blur-sm">
+        <div className="relative flex items-center justify-between h-18 px-6 border-b border-orange-200/40 bg-orange-50/60 backdrop-blur-sm">
           <div className="flex items-center space-x-3">
-            {/* <div className="relative">
-              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-orange-400 to-red-500 shadow-lg shadow-orange-500/25 flex items-center justify-center">
-                <div className="w-6 h-6 rounded-lg bg-white/30 backdrop-blur-sm flex items-center justify-center">
-                  <div className="w-3 h-3 bg-white rounded-sm"></div>
-                </div>
-              </div>
-              <div className="absolute -top-1 -right-1 w-4 h-4 bg-gradient-to-r from-orange-400 to-red-400 rounded-full animate-pulse shadow-lg shadow-orange-400/50"></div>
-            </div> */}
             <div className="flex items-center space-x-2">
               <img
                 src={logo}
                 alt="Pocket Logo"
-                className="w-15 h-15 object-contain"
+                className="w-12 h-12 object-contain"
               />
               <div>
-                <span className="text-xl font-bold bg-gradient-to-r from-orange-800 to-red-700 bg-clip-text text-transparent">
+                <span className="text-lg font-bold bg-gradient-to-r from-orange-800 to-red-700 bg-clip-text text-transparent">
                   Pocket.
                 </span>
                 <div className="text-xs text-orange-600/80 font-medium">
@@ -93,7 +83,7 @@ const Sidebar = ({ isOpen = true, onClose = () => {} }) => {
         </div>
 
         {/* Navigation */}
-        <nav className="relative mt-8 px-4 space-y-2">
+        <nav className="relative mt-6 px-4 space-y-1.5">
           {sidebarItems.map((item, index) => {
             const IconComponent = item.icon;
             // Check if current path matches the item path
@@ -102,47 +92,47 @@ const Sidebar = ({ isOpen = true, onClose = () => {} }) => {
             return (
               <div
                 key={index}
-                className={`group relative flex items-center px-4 py-4 text-sm font-medium rounded-2xl transition-all duration-300 ${
+                className={`group relative flex items-center px-4 py-3 text-sm font-medium rounded-xl transition-all duration-300 ${
                   isActive
-                    ? "text-white bg-gradient-to-r from-orange-500/90 to-red-500/90 shadow-lg shadow-orange-500/25 transform scale-105 backdrop-blur-sm"
-                    : "text-orange-800/80 hover:text-orange-900 hover:bg-orange-100/50 hover:transform hover:scale-105"
+                    ? "text-white bg-gradient-to-r from-orange-500/90 to-red-500/90 shadow-md shadow-orange-500/20 transform scale-[1.02] backdrop-blur-sm"
+                    : "text-orange-800/80 hover:text-orange-900 hover:bg-orange-100/50 hover:transform hover:scale-[1.01]"
                 } cursor-pointer`}
                 onClick={() => handleNavigation(item.path)}
               >
                 {/* Active indicator */}
                 {isActive && (
-                  <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-8 bg-gradient-to-b from-red-400 to-orange-500 rounded-r-full shadow-lg shadow-orange-400/50"></div>
+                  <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-6 bg-gradient-to-b from-red-400 to-orange-500 rounded-r-full shadow-md shadow-orange-400/40"></div>
                 )}
 
                 {/* Icon container */}
                 <div
-                  className={`relative p-2 rounded-xl mr-4 transition-all duration-300 ${
+                  className={`relative p-2 rounded-lg mr-3 transition-all duration-300 ${
                     isActive
                       ? "bg-white/30 backdrop-blur-sm"
                       : "bg-orange-200/40 group-hover:bg-orange-200/60"
                   }`}
                 >
-                  <IconComponent className="w-5 h-5" />
+                  <IconComponent className="w-4 h-4" />
                   {isActive && (
-                    <div className="absolute inset-0 bg-gradient-to-r from-orange-400/20 to-red-400/20 rounded-xl animate-pulse"></div>
+                    <div className="absolute inset-0 bg-gradient-to-r from-orange-400/20 to-red-400/20 rounded-lg animate-pulse"></div>
                   )}
                 </div>
 
                 <span className="relative z-10">{item.label}</span>
 
                 {/* Hover glow effect */}
-                <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-orange-500/0 via-red-400/0 to-orange-500/0 group-hover:from-orange-500/10 group-hover:via-red-400/5 group-hover:to-orange-500/10 transition-all duration-500"></div>
+                <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-orange-500/0 via-red-400/0 to-orange-500/0 group-hover:from-orange-500/10 group-hover:via-red-400/5 group-hover:to-orange-500/10 transition-all duration-500"></div>
               </div>
             );
           })}
         </nav>
 
         {/* Bottom decoration */}
-        <div className="absolute bottom-8 left-4 right-4">
+        <div className="absolute bottom-6 left-4 right-4">
           <div className="h-px bg-gradient-to-r from-transparent via-orange-300/60 to-transparent"></div>
-          <div className="mt-4 text-center">
-            <div className="inline-flex items-center space-x-2 px-4 py-2 rounded-full bg-orange-50/70 border border-orange-200/50 backdrop-blur-sm">
-              <div className="w-2 h-2 bg-orange-400 rounded-full animate-pulse"></div>
+          <div className="mt-3 text-center">
+            <div className="inline-flex items-center space-x-2 px-3 py-1.5 rounded-full bg-orange-50/70 border border-orange-200/50 backdrop-blur-sm">
+              <div className="w-1.5 h-1.5 bg-orange-400 rounded-full animate-pulse"></div>
               <span className="text-xs text-orange-700/80 font-medium">
                 System Online
               </span>

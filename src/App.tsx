@@ -25,6 +25,7 @@ import AdminSignUp from "./pages/Admin_Pages/Signup";
 import Landingpage from "./pages/User_Pages/landing page";
 import PaymentManagement from "./pages/Admin_Pages/payment_management";
 import Chart from "./pages/User_Pages/Chart";
+import CustomerPage from "./pages/User_Pages/Customer";
 
 import Notifications from "./pages/User_Pages/Notifications";
 import Logout from "./pages/User_Pages/logout";
@@ -43,11 +44,14 @@ function App() {
         <Route path="/settings" element={<Settings />} />
         <Route path="/payments" element={<PaymentManagement />} />
         <Route path="/chat" element={<ChatInterface />} />
-        <Route path="/*" element={<ComingSoonPage />} />
+
         <Route path="/notification" element={<Notifications />} />
         {/* <Route path="/adminlogout" element={<AdminLogout />} /> */}
         <Route path="/collaterals" element={<CollateralManagement />} />
-        <Route path="/admin/notifications/admin" element={<AdminNotifications />} />
+        <Route
+          path="/admin/notifications/admin"
+          element={<AdminNotifications />}
+        />
 
         {/* User Routes */}
         <Route path="/" element={<Landingpage />} />
@@ -60,6 +64,10 @@ function App() {
         <Route path="/account" element={<Account />} />
         <Route path="/Logout" element={<Logout />} />
         <Route path="/Notifications" element={<Notifications />} />
+         <Route path="/customer" element={<CustomerPage />} />
+
+
+        <Route path="/*" element={<ComingSoonPage />} />
       </Routes>
     </Router>
   );

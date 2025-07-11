@@ -16,7 +16,7 @@ import {
   Bell,
 } from "lucide-react";
 import Sidebar from "../../components/User_Sidebar";
-import NotificationBell from '../../components/Notificationsbell';
+import NotificationBell from "../../components/Notificationsbell";
 import LoanService from "../../services/user_Services/loan_Service"; // Adjust path as needed
 
 interface Loan {
@@ -108,15 +108,81 @@ const UserDashboard = () => {
     return (
       <div className="flex h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50">
         <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
-        <div className="flex-1 flex items-center justify-center">
-          <div className="text-center bg-white/70 backdrop-blur-sm rounded-2xl p-8 shadow-lg border border-white/50">
-            <AlertCircle className="w-12 h-12 text-orange-500 mx-auto mb-4" />
-            <h2 className="text-xl font-bold text-blue-800 mb-2">
-              No Active Loans
-            </h2>
-            <p className="text-blue-600">
-              {error || "You don't have any active loans at the moment."}
-            </p>
+
+        {/* Main Content */}
+        <div className="flex-1 flex flex-col overflow-hidden lg:ml-0">
+          {/* Header */}
+          <header className="bg-white/80 backdrop-blur-xl shadow-sm border-b border-blue-200/50 px-6 py-4 relative">
+            <div className="absolute inset-0 bg-gradient-to-r from-blue-500/5 to-purple-500/5"></div>
+            <div className="relative flex items-center justify-between">
+              <div className="flex items-center">
+                <button
+                  onClick={() => setSidebarOpen(true)}
+                  className="lg:hidden mr-4 p-2 rounded-xl bg-gradient-to-r from-red-500 via-orange-500 to-yellow-500 hover:from-red-600 hover:via-orange-600 hover:to-yellow-600 transition-all duration-200"
+                >
+                  <Menu className="w-5 h-5 text-white" />
+                </button>
+                <div className="flex items-center space-x-3">
+                  <div className="flex items-center space-x-2 text-sm">
+                    <span className="text-gray-600">Dashboard</span>
+                    <span className="text-gray-400">›</span>
+                    <span className="text-black font-medium">Loan Details</span>
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex items-center space-x-4">
+                {/* Search */}
+                <div className="relative hidden md:block">
+                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-500" />
+                  <input
+                    type="text"
+                    placeholder="Search loans..."
+                    className="pl-10 pr-4 py-2 w-64 bg-gray-100/50 border border-gray-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-red-500/20 focus:border-red-500/50 transition-all duration-200"
+                  />
+                </div>
+
+                {/* Notifications */}
+                <button className="relative p-2 rounded-xl bg-gray-100/50 hover:bg-gray-200/50 transition-all duration-200 group">
+                  <Bell className="w-5 h-5 text-gray-600 group-hover:text-black" />
+                  <div className="absolute -top-1 -right-1 w-4 h-4 bg-gradient-to-r from-red-500 to-orange-500 rounded-full flex items-center justify-center">
+                    <span className="text-xs text-white font-medium">3</span>
+                  </div>
+                </button>
+
+                <NotificationBell />
+
+                {/* User Profile */}
+                <div className="flex items-center space-x-3 pl-4 border-l border-gray-300">
+                  <div className="text-right hidden sm:block">
+                    <div className="text-sm font-semibold text-black">User</div>
+                    <div className="text-xs text-gray-600">Borrower</div>
+                  </div>
+                  <div className="relative">
+                    <div className="w-10 h-10 bg-gradient-to-r from-red-500 via-orange-500 to-yellow-500 rounded-xl flex items-center justify-center shadow-lg shadow-red-500/25">
+                      <span className="text-white font-semibold text-sm">
+                        U
+                      </span>
+                    </div>
+                    <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-400 border-2 border-white rounded-full shadow-sm"></div>
+                  </div>
+                  <ChevronDown className="w-4 h-4 text-gray-500" />
+                </div>
+              </div>
+            </div>
+          </header>
+
+          {/* No Loans Content */}
+          <div className="flex-1 flex items-center justify-center">
+            <div className="text-center bg-white/70 backdrop-blur-sm rounded-2xl p-8 shadow-lg border border-white/50">
+              <AlertCircle className="w-12 h-12 text-orange-500 mx-auto mb-4" />
+              <h2 className="text-xl font-bold text-blue-800 mb-2">
+                No Active Loans
+              </h2>
+              <p className="text-blue-600">
+                {error || "You don't have any active loans at the moment."}
+              </p>
+            </div>
           </div>
         </div>
       </div>
@@ -299,9 +365,8 @@ const UserDashboard = () => {
                   <span className="text-xs text-white font-medium">3</span>
                 </div>
               </button>
-            
-              <NotificationBell />
 
+              <NotificationBell />
 
               {/* User Profile */}
               <div className="flex items-center space-x-3 pl-4 border-l border-gray-300">
@@ -601,13 +666,13 @@ const UserDashboard = () => {
 
                 {/* Action Buttons */}
                 <div className="flex space-x-3 pt-4">
-                  <button className="flex-1 px-4 py-3 bg-gradient-to-r from-red-500 via-orange-500 to-yellow-500 text-white rounded-xl text-sm font-medium hover:from-red-600 hover:via-orange-600 hover:to-yellow-600 transition-all duration-200 flex items-center justify-center space-x-2">
-                    <Calculator className="w-4 h-4" />
-                    <span>EMI Calculator</span>
+                  <button className="flex-1 px-4 py-3 bg-gradient-to-r from-red-500 via-orange-500 to-yellow-500 text-white rounded-xl text-sm font-medium hover:from-red-600 hover:via-orange-600 hover:to-yellow-600 transition-all duration-200 flex items-center space-x-2">
+                    <CreditCard className="w-4 h-4" />
+                    <span>Make Payment</span>
                   </button>
                   <button className="flex-1 px-4 py-3 bg-white border border-gray-300 text-gray-700 rounded-xl text-sm font-medium hover:bg-gray-50 transition-all duration-200 flex items-center justify-center space-x-2">
                     <Download className="w-4 h-4" />
-                    <span>Download</span>
+                    <span>Download Statement</span>
                   </button>
                 </div>
               </div>
@@ -616,79 +681,67 @@ const UserDashboard = () => {
 
           {/* Payment Schedule */}
           <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-8 shadow-lg border border-white/50">
-            <div className="flex items-center justify-between mb-8">
-              <div>
-                <h3 className="text-xl font-bold text-black mb-1">
-                  Payment Schedule
-                </h3>
-                <p className="text-sm text-gray-600">
-                  Upcoming payments and history
-                </p>
-              </div>
-              <div className="flex space-x-3">
-                <button className="px-4 py-2 bg-gray-100 text-gray-700 rounded-xl text-sm font-medium hover:bg-gray-200 transition-all duration-200">
-                  View All
-                </button>
-                <button className="px-4 py-2 bg-gradient-to-r from-red-500 via-orange-500 to-yellow-500 text-white rounded-xl text-sm font-medium hover:from-red-600 hover:via-orange-600 hover:to-yellow-600 transition-all duration-200">
-                  Make Payment
-                </button>
-              </div>
+            <div className="mb-8">
+              <h3 className="text-xl font-bold text-black mb-1">
+                Payment Schedule
+              </h3>
+              <p className="text-sm text-gray-600">
+                Upcoming and past payment details
+              </p>
             </div>
 
             <div className="overflow-x-auto">
               <table className="w-full">
                 <thead>
-                  <tr className="border-b border-gray-200">
-                    <th className="text-left py-4 px-2 text-sm font-semibold text-gray-600">
+                  <tr className="text-left border-b border-gray-200">
+                    <th className="pb-3 text-sm font-semibold text-gray-600">
                       Month
                     </th>
-                    <th className="text-left py-4 px-2 text-sm font-semibold text-gray-600">
+                    <th className="pb-3 text-sm font-semibold text-gray-600">
                       Due Date
                     </th>
-                    <th className="text-right py-4 px-2 text-sm font-semibold text-gray-600">
+                    <th className="pb-3 text-sm font-semibold text-gray-600">
                       EMI Amount
                     </th>
-                    <th className="text-right py-4 px-2 text-sm font-semibold text-gray-600">
+                    <th className="pb-3 text-sm font-semibold text-gray-600">
                       Principal
                     </th>
-                    <th className="text-right py-4 px-2 text-sm font-semibold text-gray-600">
+                    <th className="pb-3 text-sm font-semibold text-gray-600">
                       Interest
                     </th>
-                    <th className="text-right py-4 px-2 text-sm font-semibold text-gray-600">
+                    <th className="pb-3 text-sm font-semibold text-gray-600">
                       Balance
                     </th>
-                    <th className="text-center py-4 px-2 text-sm font-semibold text-gray-600">
+                    <th className="pb-3 text-sm font-semibold text-gray-600">
                       Status
                     </th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-gray-100">
+                <tbody>
                   {paymentSchedule.map((payment, index) => (
                     <tr
                       key={index}
-                      className={`hover:bg-gray-50/50 transition-colors duration-150 ${
-                        payment.status === "Due" ? "bg-orange-50/50" : ""
-                      }`}
+                      className="border-b border-gray-100 hover:bg-gray-50/50 transition-colors"
                     >
-                      <td className="py-4 px-2 text-sm text-black font-medium">
+                      <td className="py-4 text-sm font-medium text-black">
                         {payment.month}
                       </td>
-                      <td className="py-4 px-2 text-sm text-gray-600">
+                      <td className="py-4 text-sm text-gray-600">
                         {formatDate(payment.date)}
                       </td>
-                      <td className="py-4 px-2 text-sm text-black font-semibold text-right">
+                      <td className="py-4 text-sm font-semibold text-black">
                         {formatCurrency(payment.emi)}
                       </td>
-                      <td className="py-4 px-2 text-sm text-gray-600 text-right">
+                      <td className="py-4 text-sm text-gray-600">
                         {formatCurrency(payment.principal)}
                       </td>
-                      <td className="py-4 px-2 text-sm text-gray-600 text-right">
+                      <td className="py-4 text-sm text-gray-600">
                         {formatCurrency(payment.interest)}
                       </td>
-                      <td className="py-4 px-2 text-sm text-black font-semibold text-right">
+                      <td className="py-4 text-sm text-gray-600">
                         {formatCurrency(payment.balance)}
                       </td>
-                      <td className="py-4 px-2 text-center">
+                      <td className="py-4">
                         <span
                           className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium ${
                             payment.status === "Paid"
@@ -717,55 +770,31 @@ const UserDashboard = () => {
                 </tbody>
               </table>
             </div>
+          </div>
 
-            {/* Payment Schedule Summary */}
-            <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div className="bg-gradient-to-br from-green-50 to-emerald-50 rounded-xl p-4 border border-green-200/50">
-                <div className="flex items-center space-x-3">
-                  <div className="p-2 bg-green-100 rounded-lg">
-                    <CheckCircle className="w-5 h-5 text-green-600" />
-                  </div>
-                  <div>
-                    <div className="text-sm text-gray-600">Payments Made</div>
-                    <div className="text-lg font-bold text-black">
-                      {
-                        paymentSchedule.filter((p) => p.status === "Paid")
-                          .length
-                      }
-                    </div>
-                  </div>
-                </div>
-              </div>
+          {/* EMI Calculator */}
+          <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-8 shadow-lg border border-white/50">
+            <div className="mb-8">
+              <h3 className="text-xl font-bold text-black mb-1">
+                EMI Calculator
+              </h3>
+              <p className="text-sm text-gray-600">
+                Calculate EMI for different loan amounts
+              </p>
+            </div>
 
-              <div className="bg-gradient-to-br from-orange-50 to-amber-50 rounded-xl p-4 border border-orange-200/50">
-                <div className="flex items-center space-x-3">
-                  <div className="p-2 bg-orange-100 rounded-lg">
-                    <Clock className="w-5 h-5 text-orange-600" />
-                  </div>
-                  <div>
-                    <div className="text-sm text-gray-600">Due Soon</div>
-                    <div className="text-lg font-bold text-black">
-                      {paymentSchedule.filter((p) => p.status === "Due").length}
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl p-4 border border-blue-200/50">
-                <div className="flex items-center space-x-3">
-                  <div className="p-2 bg-blue-100 rounded-lg">
-                    <TrendingUp className="w-5 h-5 text-blue-600" />
-                  </div>
-                  <div>
-                    <div className="text-sm text-gray-600">Upcoming</div>
-                    <div className="text-lg font-bold text-black">
-                      {
-                        paymentSchedule.filter((p) => p.status === "Upcoming")
-                          .length
-                      }
-                    </div>
-                  </div>
-                </div>
+            <div className="flex items-center justify-center">
+              <div className="text-center">
+                <Calculator className="w-12 h-12 text-blue-600 mx-auto mb-4" />
+                <h4 className="text-lg font-semibold text-black mb-2">
+                  EMI Calculator
+                </h4>
+                <p className="text-sm text-gray-600 mb-4">
+                  Coming soon - Interactive EMI calculator
+                </p>
+                <button className="px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-500 text-white rounded-xl text-sm font-medium hover:from-blue-600 hover:to-purple-600 transition-all duration-200">
+                  Open Calculator
+                </button>
               </div>
             </div>
           </div>
