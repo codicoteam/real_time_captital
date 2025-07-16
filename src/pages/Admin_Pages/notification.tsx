@@ -13,6 +13,9 @@ import {
   Bell,
   BellRing
 } from "lucide-react";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import NotificationService from "../../services/admin_Services/notification_service";
 
 interface Notification {
   id: string;
@@ -24,11 +27,10 @@ interface Notification {
   read?: boolean;
 }
 
-// Mock Sidebar Component
+// Sidebar Component
 const Sidebar: React.FC<{ isOpen: boolean; onClose: () => void }> = ({ isOpen, onClose }) => {
   return (
     <>
-      {/* Overlay */}
       {isOpen && (
         <div 
           className="fixed inset-0 bg-black bg-opacity-50 z-40 lg:hidden"
@@ -36,7 +38,6 @@ const Sidebar: React.FC<{ isOpen: boolean; onClose: () => void }> = ({ isOpen, o
         />
       )}
       
-      {/* Sidebar */}
       <div className={`fixed left-0 top-0 h-full w-64 bg-white shadow-lg transform transition-transform duration-300 z-50 lg:translate-x-0 ${
         isOpen ? 'translate-x-0' : '-translate-x-full'
       }`}>
@@ -73,7 +74,7 @@ const Sidebar: React.FC<{ isOpen: boolean; onClose: () => void }> = ({ isOpen, o
   );
 };
 
-// Mock Adminbell Component
+// Notification Bell Component
 const Adminbell: React.FC<{ 
   notifications: Notification[]; 
   onViewAll: () => void; 
@@ -116,7 +117,7 @@ const Adminbell: React.FC<{
           <div className="max-h-64 overflow-y-auto">
             {notifications.slice(0, 5).map((notification) => (
               <div
-                key={notification.id}
+                key={`notification-${notification.id}`}
                 className={`p-3 border-b border-orange-100 hover:bg-orange-50 ${
                   !notification.read ? 'bg-orange-25' : ''
                 }`}
@@ -128,7 +129,9 @@ const Adminbell: React.FC<{
                     </p>
                     <div className="flex items-center space-x-2 mt-1">
                       <span className="text-xs text-gray-500">
-                        From: {notification.sender}
+                        {notification.type === 'sent' 
+                          ? `To: ${notification.recipient}`
+                          : `From: ${notification.sender}`}
                       </span>
                       <span className="text-xs text-gray-400">
                         {new Date(notification.timestamp).toLocaleTimeString()}
@@ -155,23 +158,7 @@ const Adminbell: React.FC<{
   );
 };
 
-// Mock Toast Components
-const toast = {
-  success: (message: string) => {
-    console.log('SUCCESS:', message);
-    // You can implement your own toast logic here
-  },
-  error: (message: string) => {
-    console.log('ERROR:', message);
-    // You can implement your own toast logic here
-  }
-};
-
-const ToastContainer: React.FC<{ position: string; autoClose: number; hideProgressBar: boolean }> = () => {
-  // Mock toast container - replace with actual implementation
-  return <div className="fixed top-4 right-4 z-50"></div>;
-};
-
+// Main Notifications Component
 const Notifications: React.FC = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [recipient, setRecipient] = useState("");
@@ -181,72 +168,56 @@ const Notifications: React.FC = () => {
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [activeTab, setActiveTab] = useState<'all' | 'sent' | 'received'>('all');
 
-  // Mock notifications data - replace with actual API call
   useEffect(() => {
-    const mockNotifications: Notification[] = [
+    // Initialize with a welcome notification
+    const initialNotifications: Notification[] = [
       {
-        id: '1',
-        type: 'sent',
-        recipient: 'user123',
-        message: 'Your order has been confirmed',
-        timestamp: '2024-01-15T10:30:00Z',
-      },
-      {
-        id: '2',
+        id: 'welcome-1',
         type: 'received',
-        sender: 'admin456',
-        message: 'System maintenance scheduled for tonight',
-        timestamp: '2024-01-15T09:15:00Z',
-        read: true,
-      },
-      {
-        id: '3',
-        type: 'sent',
-        recipient: 'user789',
-        message: 'Welcome to our platform!',
-        timestamp: '2024-01-14T16:45:00Z',
-      },
-      {
-        id: '4',
-        type: 'received',
-        sender: 'support',
-        message: 'Your ticket has been resolved',
-        timestamp: '2024-01-14T14:20:00Z',
-        read: false,
-      },
+        sender: 'System',
+        message: 'Welcome to the admin dashboard!',
+        timestamp: new Date().toISOString(),
+        read: false
+      }
     ];
-    setNotifications(mockNotifications);
+    setNotifications(initialNotifications);
   }, []);
 
   const handleSendNotification = async () => {
     if (!recipient || !message) {
-      toast.error("Both fields are required.");
+      toast.error("Both recipient and message are required");
       return;
     }
 
     setLoading(true);
 
     try {
-      // Mock API call - replace with actual implementation
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      const notificationData = {
+        recipient,
+        message
+      };
+
+      // Send the notification using the service
+      const response = await NotificationService.sendNotification(notificationData);
       
-      toast.success("✅ Notification sent!");
-      
-      // Add to local notifications list
+      // Add the sent notification to our local state
       const newNotification: Notification = {
-        id: Date.now().toString(),
+        id: response.id || `notification-${Date.now()}`,
         type: 'sent',
         recipient,
         message,
         timestamp: new Date().toISOString(),
       };
-      setNotifications(prev => [newNotification, ...prev]);
       
+      setNotifications(prev => [newNotification, ...prev]);
+      toast.success("Notification sent successfully!");
+      
+      // Clear the form
       setRecipient("");
       setMessage("");
-    } catch (error) {
+    } catch (error: any) {
       console.error("Notification error:", error);
-      toast.error("Server error.");
+      toast.error(typeof error === 'string' ? error : "Failed to send notification");
     } finally {
       setLoading(false);
     }
@@ -264,7 +235,6 @@ const Notifications: React.FC = () => {
     if (activeTab === 'all') return true;
     return notification.type === activeTab;
   });
-
 
   return (
     <div className="flex h-screen bg-gradient-to-br from-orange-50 via-red-50 to-yellow-50">
@@ -314,12 +284,12 @@ const Notifications: React.FC = () => {
               {/* User Info */}
               <div className="flex items-center space-x-3 pl-4 border-l border-orange-200/50">
                 <div className="text-right hidden sm:block">
-                  <div className="text-sm font-semibold text-orange-700">Sarah Johnson</div>
+                  <div className="text-sm font-semibold text-orange-700">Admin User</div>
                   <div className="text-xs text-orange-500">Administrator</div>
                 </div>
                 <div className="relative">
                   <div className="w-10 h-10 bg-gradient-to-br from-orange-500 to-red-500 rounded-xl flex items-center justify-center shadow-lg shadow-orange-500/25">
-                    <span className="text-white font-semibold text-sm">SJ</span>
+                    <span className="text-white font-semibold text-sm">AD</span>
                   </div>
                   <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-400 border-2 border-white rounded-full shadow-sm"></div>
                 </div>
@@ -397,8 +367,6 @@ const Notifications: React.FC = () => {
             </button>
           </div>
         </main>
-
-        <ToastContainer position="top-right" autoClose={2000} hideProgressBar />
       </div>
 
       {/* View All Notifications Modal */}
@@ -463,7 +431,7 @@ const Notifications: React.FC = () => {
                 <div className="space-y-4">
                   {filteredNotifications.map((notification) => (
                     <div
-                      key={notification.id}
+                      key={`full-notification-${notification.id}`}
                       className={`p-4 rounded-lg border transition-all ${
                         notification.type === 'received' && !notification.read
                           ? 'bg-orange-50 border-orange-200'

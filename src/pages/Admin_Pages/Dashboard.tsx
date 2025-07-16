@@ -63,7 +63,7 @@ interface Payment {
   amount: string | number;
   createdAt: string;
 }
-import NotificationBell from '../../components/Notificationsbell';
+
 
 interface Notification {
   id: number;
@@ -521,7 +521,7 @@ const Dashboard = () => {
               </div>
 
               {/* Notifications */}
-               <NotificationBell />
+              
             
               <div className="relative">
                 <button 

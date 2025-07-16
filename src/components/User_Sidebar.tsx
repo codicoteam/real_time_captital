@@ -7,6 +7,8 @@ import {
   X,
   Lock,
   Bell,
+  BarChart3,
+  Users,
 } from "lucide-react";
 import { useNavigate, useLocation, type To } from "react-router-dom";
 import logo from "../assets/logo.png";
@@ -44,38 +46,43 @@ const Sidebar = ({ isOpen = true, onClose = () => {} }) => {
       path: "/account",
       color: "from-orange-500 to-red-600",
     },
-   {
+    {
       icon: Bell,
       label: "Notifications",
       subtitle: "Check what's new",
-      path: "/Notifications",
-      color: "from-purple-500 to-pink-600",
-    },
-       {
-      icon: Lock,
-      label: "Logout",
-      subtitle: "Logout your account",
-      path: "/Logout",
+      path: "/notifications",
       color: "from-purple-500 to-pink-600",
     },
     {
-      icon: User,
+      icon: BarChart3,
       label: "Chart",
-      subtitle: "chart",
+      subtitle: "Analytics",
       path: "/chart",
-      color: "from-orange-500 to-pink-600",
+      color: "from-blue-500 to-purple-600",
+    },
+    {
+      icon: Users,
+      label: "Customers",
+      path: "/Custormer",
+      color: "from-green-500 to-blue-600",
+    },
+    {
+      icon: Lock,
+      label: "Logout",
+      subtitle: "Sign out",
+      path: "/logout",
+      color: "from-gray-500 to-red-600",
     },
   ];
 
   const handleNavigation = (path: To) => {
     navigate(path);
-    if (window.innerWidth < 1024) {
-      onClose();
-    }
+    onClose(); // Always close sidebar on navigation for mobile
   };
 
   return (
     <>
+      {/* Mobile backdrop */}
       {isOpen && (
         <div
           className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 lg:hidden"
@@ -83,54 +90,44 @@ const Sidebar = ({ isOpen = true, onClose = () => {} }) => {
         />
       )}
 
+      {/* Sidebar */}
       <aside
-        className={`fixed inset-y-0 left-0 z-50 w-80 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 transform ${
+        className={`fixed inset-y-0 left-0 z-50 w-full max-w-sm sm:max-w-xs lg:max-w-sm xl:max-w-md bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 transform ${
           isOpen ? "translate-x-0" : "-translate-x-full"
-        } transition-all duration-700 ease-out lg:translate-x-0 lg:static lg:inset-0 overflow-hidden`}
+        } transition-all duration-300 ease-out lg:translate-x-0 lg:static lg:inset-0 overflow-hidden flex flex-col`}
       >
-        <div className="absolute inset-0 bg-gradient-to-br from-blue-600/10 via-purple-600/5 to-pink-600/10 animate-pulse"></div>
-        <div className="absolute top-0 left-0 w-full h-full bg-radial-gradient from-blue-600/20 via-transparent to-transparent"></div>
-        <div className="absolute top-20 right-8 w-32 h-32 bg-gradient-to-r from-blue-500/30 to-purple-500/30 rounded-full blur-3xl animate-pulse"></div>
-        <div className="absolute bottom-40 left-6 w-24 h-24 bg-gradient-to-r from-purple-500/20 to-pink-500/20 rounded-full blur-2xl animate-pulse"></div>
+        {/* Background decorations */}
+        <div className="absolute inset-0 bg-gradient-to-br from-blue-600/5 via-purple-600/5 to-pink-600/5"></div>
+        <div className="absolute top-10 right-4 w-20 h-20 bg-gradient-to-r from-blue-500/20 to-purple-500/20 rounded-full blur-2xl"></div>
+        <div className="absolute bottom-20 left-4 w-16 h-16 bg-gradient-to-r from-purple-500/15 to-pink-500/15 rounded-full blur-xl"></div>
 
-        <div className="relative flex items-center justify-between h-24 px-8 border-b border-slate-700/50 bg-slate-800/50 backdrop-blur-xl">
-          <div className="flex items-center space-x-4">
-            {/* <div className="relative group">
-              <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-blue-500 via-purple-600 to-pink-500 shadow-2xl flex items-center justify-center group-hover:scale-110 group-hover:rotate-3 transform transition-transform">
-                <div className="w-8 h-8 rounded-xl bg-white/20 backdrop-blur-sm flex items-center justify-center">
-                  <div className="w-4 h-4 bg-white rounded-lg shadow-lg" />
-                </div>
-              </div>
-              <div className="absolute -top-1 -right-1 w-5 h-5 bg-gradient-to-r from-green-400 to-emerald-500 rounded-full animate-bounce shadow-lg shadow-green-400/50">
-                <div className="w-full h-full rounded-full bg-white/30 animate-ping"></div>
-              </div>
-            </div> */}
-            <div className="flex items-center space-x-3">
-              {/* Add your logo image here */}
-              <img
-                src={logo}
-                alt="Pocket Logo"
-                className="w-15 h-15 object-contain"
-              />
-              <div>
-                <h1 className="text-2xl font-bold bg-gradient-to-r from-white via-blue-100 to-purple-200 bg-clip-text text-transparent">
-                  Pocket.
-                </h1>
-                <p className="text-xs text-slate-400 font-medium tracking-wide">
-                  Financial Solutions
-                </p>
-              </div>
+        {/* Header */}
+        <div className="relative flex items-center justify-between h-16 sm:h-20 px-4 sm:px-6 border-b border-slate-700/50 bg-slate-800/50 backdrop-blur-xl flex-shrink-0">
+          <div className="flex items-center space-x-3">
+            <img
+              src={logo}
+              alt="Pocket Logo"
+              className="w-8 h-8 sm:w-10 sm:h-10 object-contain"
+            />
+            <div>
+              <h1 className="text-lg sm:text-xl font-bold bg-gradient-to-r from-white via-blue-100 to-purple-200 bg-clip-text text-transparent">
+                Pocket.
+              </h1>
+              <p className="text-xs text-slate-400 font-medium tracking-wide hidden sm:block">
+                Financial Solutions
+              </p>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="lg:hidden p-3 rounded-xl bg-slate-700/50 hover:bg-slate-600/50 transition-all duration-300 border border-slate-600/50 group"
+            className="lg:hidden p-2 rounded-lg bg-slate-700/50 hover:bg-slate-600/50 transition-all duration-200 border border-slate-600/50 group"
           >
-            <X className="w-5 h-5 text-slate-300 group-hover:text-white transition-colors" />
+            <X className="w-4 h-4 text-slate-300 group-hover:text-white transition-colors" />
           </button>
         </div>
 
-        <nav className="relative mt-12 px-6 space-y-3">
+        {/* Navigation */}
+        <nav className="relative flex-1 overflow-y-auto px-3 sm:px-4 py-4 space-y-1 sm:space-y-2 scrollbar-hide">
           {sidebarItems.map((item, index) => {
             const IconComponent = item.icon;
             const isActive = location.pathname === item.path;
@@ -138,27 +135,30 @@ const Sidebar = ({ isOpen = true, onClose = () => {} }) => {
             return (
               <div
                 key={index}
-                className={`group relative flex items-center px-6 py-5 rounded-2xl transition-all duration-500 cursor-pointer transform ${
+                className={`group relative flex items-center px-3 sm:px-4 py-3 sm:py-4 rounded-xl transition-all duration-300 cursor-pointer ${
                   isActive
-                    ? `bg-gradient-to-r ${item.color} shadow-2xl shadow-blue-500/25 scale-105 translate-x-2`
-                    : "hover:bg-slate-700/50 hover:scale-105 hover:translate-x-1"
+                    ? `bg-gradient-to-r ${item.color} shadow-lg shadow-blue-500/20 scale-[1.02]`
+                    : "hover:bg-slate-700/50 hover:scale-[1.02]"
                 }`}
                 onClick={() => handleNavigation(item.path)}
               >
+                {/* Active background glow */}
                 {isActive && (
                   <div
-                    className={`absolute inset-0 rounded-2xl bg-gradient-to-r ${item.color} opacity-20 blur-xl animate-pulse`}
+                    className={`absolute inset-0 rounded-xl bg-gradient-to-r ${item.color} opacity-10 blur-lg`}
                   />
                 )}
+
+                {/* Icon */}
                 <div
-                  className={`relative p-3 rounded-xl mr-5 transition-all duration-500 ${
+                  className={`relative p-2 sm:p-2.5 rounded-lg mr-3 sm:mr-4 transition-all duration-300 flex-shrink-0 ${
                     isActive
-                      ? "bg-white/20 backdrop-blur-sm shadow-lg"
+                      ? "bg-white/20 backdrop-blur-sm shadow-md"
                       : "bg-slate-700/50 group-hover:bg-slate-600/50"
                   }`}
                 >
                   <IconComponent
-                    className={`w-6 h-6 transition-all duration-500 ${
+                    className={`w-4 h-4 sm:w-5 sm:h-5 transition-all duration-300 ${
                       isActive
                         ? "text-white"
                         : "text-slate-300 group-hover:text-white"
@@ -166,9 +166,10 @@ const Sidebar = ({ isOpen = true, onClose = () => {} }) => {
                   />
                 </div>
 
-                <div className="flex-1 relative z-10">
+                {/* Text content */}
+                <div className="flex-1 relative z-10 min-w-0">
                   <div
-                    className={`font-semibold text-lg ${
+                    className={`font-semibold text-sm sm:text-base truncate ${
                       isActive
                         ? "text-white"
                         : "text-slate-200 group-hover:text-white"
@@ -176,50 +177,67 @@ const Sidebar = ({ isOpen = true, onClose = () => {} }) => {
                   >
                     {item.label}
                   </div>
-                  <div
-                    className={`text-sm ${
-                      isActive
-                        ? "text-white/80"
-                        : "text-slate-400 group-hover:text-slate-300"
-                    }`}
-                  >
-                    {item.subtitle}
-                  </div>
+                  {item.subtitle && (
+                    <div
+                      className={`text-xs sm:text-sm truncate ${
+                        isActive
+                          ? "text-white/80"
+                          : "text-slate-400 group-hover:text-slate-300"
+                      }`}
+                    >
+                      {item.subtitle}
+                    </div>
+                  )}
                 </div>
 
+                {/* Arrow */}
                 <ChevronRight
-                  className={`w-5 h-5 transition-all duration-500 ${
+                  className={`w-4 h-4 transition-all duration-300 flex-shrink-0 ${
                     isActive
                       ? "text-white opacity-100 translate-x-1"
                       : "text-slate-400 opacity-0 group-hover:opacity-100 group-hover:translate-x-1"
                   }`}
                 />
 
-                <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-transparent via-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 animate-pulse"></div>
+                {/* Hover effect overlay */}
+                <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-transparent via-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
               </div>
             );
           })}
         </nav>
 
-        <div className="absolute bottom-8 left-6 right-6">
-          <div className="h-px bg-gradient-to-r from-transparent via-slate-600 to-transparent mb-6"></div>
+        {/* Footer status */}
+        <div className="relative px-4 pb-4 flex-shrink-0">
+          <div className="h-px bg-gradient-to-r from-transparent via-slate-600 to-transparent mb-4"></div>
           <div className="flex items-center justify-center">
-            <div className="flex items-center space-x-3 px-6 py-3 rounded-full bg-slate-800/60 border border-slate-700/50 backdrop-blur-xl">
+            <div className="flex items-center space-x-2 sm:space-x-3 px-3 sm:px-4 py-2 sm:py-3 rounded-full bg-slate-800/60 border border-slate-700/50 backdrop-blur-xl">
               <div className="flex space-x-1">
-                <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
-                <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse delay-150"></div>
-                <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse delay-300"></div>
+                <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-green-400 rounded-full animate-pulse"></div>
+                <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-green-400 rounded-full animate-pulse delay-150"></div>
+                <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-green-400 rounded-full animate-pulse delay-300"></div>
               </div>
-              <span className="text-sm text-slate-300 font-medium">
+              <span className="text-xs sm:text-sm text-slate-300 font-medium">
                 All Systems Online
               </span>
             </div>
           </div>
         </div>
 
-        <div className="absolute top-1/2 right-0 w-px h-32 bg-gradient-to-b from-transparent via-blue-500/50 to-transparent"></div>
-        <div className="absolute bottom-1/4 left-0 w-px h-24 bg-gradient-to-b from-transparent via-purple-500/50 to-transparent"></div>
+        {/* Decorative lines */}
+        <div className="absolute top-1/2 right-0 w-px h-16 sm:h-24 bg-gradient-to-b from-transparent via-blue-500/30 to-transparent"></div>
+        <div className="absolute bottom-1/4 left-0 w-px h-12 sm:h-16 bg-gradient-to-b from-transparent via-purple-500/30 to-transparent"></div>
       </aside>
+
+      {/* Custom scrollbar styles */}
+      <style>{`
+        .scrollbar-hide {
+          -ms-overflow-style: none;
+          scrollbar-width: none;
+        }
+        .scrollbar-hide::-webkit-scrollbar {
+          display: none;
+        }
+      `}</style>
     </>
   );
 };
