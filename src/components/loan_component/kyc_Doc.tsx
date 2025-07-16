@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import supabase from "../../supabaseConfig/supabaseClient";
 
 import {
   FileText,
@@ -109,6 +110,108 @@ const KycDocuments: React.FC<KycDocumentsProps> = ({
       required: false,
     },
   ];
+
+  // Function to upload document to Supabase
+  const uploadDocumentToSupabase = async (file: File, documentType: string) => {
+    try {
+      if (!file) return null;
+
+      // Check if file is an image or PDF
+      const allowedTypes = [
+        "image/jpeg",
+        "image/jpg",
+        "image/png",
+        "application/pdf",
+      ];
+      if (!allowedTypes.includes(file.type)) {
+        throw new Error(
+          "Invalid file type. Please upload an image (JPG, PNG) or PDF."
+        );
+      }
+
+      // Check file size (10MB limit)
+      if (file.size > 10 * 1024 * 1024) {
+        throw new Error("File size must be less than 10MB");
+      }
+
+      // Get user ID for folder structure
+      const userId = getUserId();
+      if (!userId) {
+        throw new Error("User ID not found. Please log in again.");
+      }
+
+      // Create a unique file name with folder structure
+      const fileExtension = file.name.split(".").pop();
+      const fileName = `${userId}/${documentType}_${Date.now()}.${fileExtension}`;
+
+      console.log("Uploading file to Supabase:", fileName);
+
+      // Upload file to the Supabase bucket
+      const { data, error } = await supabase.storage
+        .from("pocketkycdocs")
+        .upload(fileName, file, {
+          cacheControl: "3600",
+          upsert: false,
+        });
+
+      if (error) {
+        console.error("Supabase upload error:", error);
+        throw new Error(`Error uploading file: ${error.message}`);
+      }
+
+      console.log("File uploaded successfully:", data);
+
+      // Get the public URL of the uploaded file
+      const { data: publicData } = supabase.storage
+        .from("pocketkycdocs")
+        .getPublicUrl(fileName);
+
+      if (publicData) {
+        console.log("Public URL generated:", publicData.publicUrl);
+        return publicData.publicUrl;
+      }
+
+      return null;
+    } catch (error) {
+      console.error("Error in document upload:", error);
+      throw error;
+    }
+  };
+
+  // Function to delete document from Supabase
+  const deleteDocumentFromSupabase = async (documentUrl: string) => {
+    try {
+      if (!documentUrl) return;
+
+      // Extract file path from URL
+      const urlParts = documentUrl.split("/");
+      const bucketIndex = urlParts.findIndex(
+        (part) => part === "pocketkycdocs"
+      );
+
+      if (bucketIndex === -1) {
+        console.log("Not a Supabase URL, skipping deletion");
+        return;
+      }
+
+      const filePath = urlParts.slice(bucketIndex + 1).join("/");
+      console.log("Deleting file from Supabase:", filePath);
+
+      const { error } = await supabase.storage
+        .from("pocketkycdocs")
+        .remove([filePath]);
+
+      if (error) {
+        console.error("Error deleting file from Supabase:", error);
+        // Don't throw error here as the main document deletion should continue
+      } else {
+        console.log("File deleted successfully from Supabase");
+      }
+    } catch (error) {
+      console.error("Error in file deletion:", error);
+      // Don't throw error here as the main document deletion should continue
+    }
+  };
 
   // Enhanced getUserId function with better error handling
   const getUserId = () => {
@@ -256,7 +359,6 @@ const KycDocuments: React.FC<KycDocumentsProps> = ({
   };
 
   // Create KYC document with all required fields
-  // Create KYC document with all required fields
   const createKycDocument = async (documentData: Partial<KycDocument>) => {
     try {
       const userId = getUserId();
@@ -331,6 +433,22 @@ const KycDocuments: React.FC<KycDocumentsProps> = ({
     setDeleting(kycData._id);
     try {
       console.log("Deleting KYC document with ID:", kycData._id);
+
+      // Delete associated files from Supabase first
+      const documentsToDelete = [
+        kycData.nationalId,
+        kycData.passportPhoto,
+        kycData.proofOfResident,
+        kycData.paySlip,
+        kycData.proofOfEmployment,
+      ].filter(Boolean); // Remove empty strings
+
+      // Delete files from Supabase
+      for (const docUrl of documentsToDelete) {
+        await deleteDocumentFromSupabase(docUrl);
+      }
+
+      // Delete from database
       await KycService.deleteKyc(kycData._id);
       setKycData(null);
       setSuccess("KYC document deleted successfully");
@@ -342,7 +460,7 @@ const KycDocuments: React.FC<KycDocumentsProps> = ({
     }
   };
 
-  // Handle file upload with proper error handling
+  // Handle file upload with Supabase integration
   const handleFileUpload = async (file: File) => {
     if (!selectedDocType) return;
 
@@ -351,74 +469,68 @@ const KycDocuments: React.FC<KycDocumentsProps> = ({
     setSuccess(null);
 
     try {
-      // Validate file
-      if (file.size > 10 * 1024 * 1024) {
-        // 10MB limit
-        throw new Error("File size must be less than 10MB");
+      console.log("Starting file upload for:", selectedDocType);
+
+      // Upload file to Supabase and get the URL
+      const uploadedFileUrl = await uploadDocumentToSupabase(
+        file,
+        selectedDocType
+      );
+
+      if (!uploadedFileUrl) {
+        throw new Error("Failed to upload file to storage");
       }
 
-      const allowedTypes = ["image/jpeg", "image/png", "application/pdf"];
-      if (!allowedTypes.includes(file.type)) {
-        throw new Error("File must be JPG, PNG, or PDF");
+      console.log("File uploaded successfully, URL:", uploadedFileUrl);
+
+      // If there's an existing document with this type, delete the old file
+      if (kycData && kycData[selectedDocType as keyof KycDocument]) {
+        const oldFileUrl = kycData[
+          selectedDocType as keyof KycDocument
+        ] as string;
+        if (oldFileUrl) {
+          console.log("Deleting old file:", oldFileUrl);
+          await deleteDocumentFromSupabase(oldFileUrl);
+        }
       }
 
-      if (onUpload) {
-        await onUpload(selectedDocType, file);
+      // Update the document data with the new URL
+      const documentUpdate = {
+        [selectedDocType]: uploadedFileUrl,
+      };
+
+      let result;
+      if (kycData) {
+        // Update existing document
+        result = await updateKycDocument(documentUpdate);
       } else {
-        const reader = new FileReader();
-        reader.onload = async (e) => {
-          try {
-            const fileData = e.target?.result as string;
-
-            const documentUpdate = {
-              [selectedDocType]: fileData,
-            };
-
-            let result;
-            if (kycData) {
-              // Update existing document
-              result = await updateKycDocument(documentUpdate);
-            } else {
-              // Create new document - need to handle this differently
-              // For new documents, we should create with placeholder values for required fields
-              const baseDocument = {
-                nationalId: selectedDocType === "nationalId" ? fileData : "",
-                passportPhoto:
-                  selectedDocType === "passportPhoto" ? fileData : "",
-                proofOfResident:
-                  selectedDocType === "proofOfResident" ? fileData : "",
-                paySlip: selectedDocType === "paySlip" ? fileData : "",
-                proofOfEmployment:
-                  selectedDocType === "proofOfEmployment" ? fileData : "",
-              };
-              result = await createKycDocument(baseDocument);
-            }
-
-            // Refresh the data after successful upload
-            await fetchKycDocuments();
-            setShowUploadModal(false);
-            setSelectedDocType(null);
-            setSuccess(
-              `${
-                documentTypes.find((d) => d.key === selectedDocType)?.label
-              } uploaded successfully`
-            );
-
-            setTimeout(() => setSuccess(null), 3000);
-          } catch (uploadError: any) {
-            console.error("Error in file upload:", uploadError);
-            setError(uploadError.message || "Failed to upload document");
-          }
+        // Create new document
+        const baseDocument = {
+          nationalId: selectedDocType === "nationalId" ? uploadedFileUrl : "",
+          passportPhoto:
+            selectedDocType === "passportPhoto" ? uploadedFileUrl : "",
+          proofOfResident:
+            selectedDocType === "proofOfResident" ? uploadedFileUrl : "",
+          paySlip: selectedDocType === "paySlip" ? uploadedFileUrl : "",
+          proofOfEmployment:
+            selectedDocType === "proofOfEmployment" ? uploadedFileUrl : "",
         };
-
-        reader.onerror = () => {
-          setError("Failed to read file");
-        };
-
-        reader.readAsDataURL(file);
+        result = await createKycDocument(baseDocument);
       }
+
+      // Refresh the data after successful upload
+      await fetchKycDocuments();
+      setShowUploadModal(false);
+      setSelectedDocType(null);
+      setSuccess(
+        `${
+          documentTypes.find((d) => d.key === selectedDocType)?.label
+        } uploaded successfully`
+      );
+
+      setTimeout(() => setSuccess(null), 3000);
     } catch (err: any) {
-      console.error("Error uploading file:", err);
+      console.error("Error in file upload:", err);
       setError(err.message || "Failed to upload document");
     } finally {
       setUploading(null);
@@ -521,35 +633,6 @@ const KycDocuments: React.FC<KycDocumentsProps> = ({
           )}
         </div>
       </div>
-
-      {/* Debug Information (remove this in production) */}
-      {/* <div className="mb-6 p-4 bg-gray-50 rounded-lg border">
-        <h3 className="font-semibold text-gray-700 mb-2">Debug Information:</h3>
-        <div className="text-sm text-gray-600 space-y-1">
-          <p>
-            <strong>User ID:</strong> {debugInfo.userId || "Not found"}
-          </p>
-          <p>
-            <strong>Token:</strong> {debugInfo.token || "Not found"}
-          </p>
-          <p>
-            <strong>KYC Data:</strong> {kycData ? "Found" : "Not found"}
-          </p>
-          <p>
-            <strong>Loading:</strong> {loading ? "Yes" : "No"}
-          </p>
-          {debugInfo.apiResponse && (
-            <details className="mt-2">
-              <summary className="cursor-pointer font-medium">
-                API Response
-              </summary>
-              <pre className="mt-1 text-xs bg-white p-2 rounded border overflow-auto">
-                {JSON.stringify(debugInfo.apiResponse, null, 2)}
-              </pre>
-            </details>
-          )}
-        </div>
-      </div> */}
 
       {/* Progress Bar */}
       <div className="mb-6">
@@ -737,6 +820,17 @@ const KycDocuments: React.FC<KycDocumentsProps> = ({
                 </span>
               </label>
             </div>
+
+            {uploading && (
+              <div className="mt-4 p-3 bg-blue-50 border border-blue-200 rounded-md">
+                <div className="flex items-center">
+                  <RefreshCw className="w-4 h-4 text-blue-600 mr-2 animate-spin" />
+                  <span className="text-blue-800 text-sm">
+                    Uploading document...
+                  </span>
+                </div>
+              </div>
+            )}
           </div>
         </div>
       )}

@@ -27,8 +27,9 @@ import PaymentManagement from "./pages/Admin_Pages/payment_management";
 import Chart from "./pages/User_Pages/Chart";
 import CustomerPage from "./pages/User_Pages/Customer";
 
-import Notifications from "./pages/User_Pages/Notifications";
+import NotificationsPage from "./pages/User_Pages/Notifications";
 import Logout from "./pages/User_Pages/logout";
+
 function App() {
   return (
     <Router>
@@ -65,7 +66,7 @@ function App() {
         <Route path="/chart" element={<Chart />} />
         <Route path="/account" element={<Account />} />
         <Route path="/Logout" element={<Logout />} />
-        <Route path="/Notifications" element={<Notifications />} />
+        <Route path="/usernotifications" element={<NotificationsPage />} />
         <Route path="/customer" element={<CustomerPage />} />
 
         <Route path="/*" element={<ComingSoonPage />} />
