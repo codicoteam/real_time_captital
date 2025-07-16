@@ -12,7 +12,7 @@ import ComingSoonPage from "./pages/Admin_Pages/Error";
 import ChatInterface from "./pages/Admin_Pages/Chat";
 import CollateralManagement from "./pages/Admin_Pages/collaterals";
 import AdminNotifications from "./pages/Admin_Pages/adminNotifications";
-
+import Notification from "./pages/Admin_Pages/notification";
 //user imports
 
 import UserDashboard from "./pages/User_Pages/Dashboard";
@@ -45,7 +45,9 @@ function App() {
         <Route path="/payments" element={<PaymentManagement />} />
         <Route path="/chat" element={<ChatInterface />} />
 
-        <Route path="/notification" element={<Notifications />} />
+        {/* <Route path="/notification" element={<Notifications />} /> */}
+        <Route path="/*" element={<ComingSoonPage />} />
+        <Route path="/notifications" element={<Notification />} />
         {/* <Route path="/adminlogout" element={<AdminLogout />} /> */}
         <Route path="/collaterals" element={<CollateralManagement />} />
         <Route
@@ -64,8 +66,7 @@ function App() {
         <Route path="/account" element={<Account />} />
         <Route path="/Logout" element={<Logout />} />
         <Route path="/Notifications" element={<Notifications />} />
-         <Route path="/customer" element={<CustomerPage />} />
-
+        <Route path="/customer" element={<CustomerPage />} />
 
         <Route path="/*" element={<ComingSoonPage />} />
       </Routes>

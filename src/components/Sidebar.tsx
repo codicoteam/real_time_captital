@@ -6,6 +6,7 @@ import {
   Settings,
   Lock,
   Bell,
+  ChevronRight,
   X,
 } from "lucide-react";
 import { useNavigate, useLocation, type To } from "react-router-dom";
@@ -16,17 +17,66 @@ const Sidebar = ({ isOpen = true, onClose = () => {} }) => {
   const location = useLocation();
 
   const sidebarItems = [
-    { icon: LayoutDashboard, label: "Dashboard", path: "/admindashboard" },
-    { icon: Users, label: "Users", path: "/users" },
-    { icon: CreditCard, label: "Loan Management", path: "/loan-management" },
-    { icon: TrendingUp, label: "Loan Tracking", path: "/loan-tracking" },
-    { icon: CreditCard, label: "Payments", path: "/payments" },
-    { icon: Users, label: "Chat", path: "/chat" },
-    { icon: Settings, label: "Settings", path: "/settingss" },
-    { icon: Lock, label: "Collaterals", path: "/collaterals" },
-    { icon: Settings, label: "Settings", path: "/settings" },
-    { icon: Bell, label: "Notifications", path: "/notification" },
-    { icon: Lock, label: "Admin Logout", path: "/Adminlogout" },
+    {
+      icon: LayoutDashboard,
+      label: "Dashboard",
+      path: "/admindashboard",
+      color: "from-amber-500 to-orange-500",
+    },
+    {
+      icon: Users,
+      label: "Users",
+      path: "/users",
+      color: "from-amber-400 to-orange-400",
+    },
+    {
+      icon: CreditCard,
+      label: "Loan Management",
+      path: "/loan-management",
+      color: "from-amber-300 to-orange-300",
+    },
+    {
+      icon: TrendingUp,
+      label: "Loan Tracking",
+      path: "/loan-tracking",
+      color: "from-amber-400 to-orange-400",
+    },
+    {
+      icon: CreditCard,
+      label: "Payments",
+      path: "/payments",
+      color: "from-amber-500 to-orange-500",
+    },
+    {
+      icon: Users,
+      label: "Chat",
+      path: "/chat",
+      color: "from-amber-300 to-orange-300",
+    },
+    {
+      icon: Settings,
+      label: "Settings",
+      path: "/settings",
+      color: "from-amber-400 to-orange-400",
+    },
+    {
+      icon: Lock,
+      label: "Collaterals",
+      path: "/collaterals",
+      color: "from-amber-500 to-orange-500",
+    },
+    {
+      icon: Bell,
+      label: "Notifications",
+      path: "/notifications",
+      color: "from-amber-300 to-orange-300",
+    },
+    {
+      icon: Lock,
+      label: "Admin Logout",
+      path: "/Adminlogout",
+      color: "from-amber-600 to-orange-600",
+    },
   ];
 
   const handleNavigation = (path: To) => {
@@ -38,108 +88,145 @@ const Sidebar = ({ isOpen = true, onClose = () => {} }) => {
 
   return (
     <>
-      {/* Mobile sidebar backdrop */}
+      {/* Mobile backdrop */}
       {isOpen && (
         <div
-          className="fixed inset-0 bg-black/20 z-20 lg:hidden"
+          className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 lg:hidden"
           onClick={onClose}
         />
       )}
 
       {/* Sidebar */}
-      <div
-        className={`fixed inset-y-0 left-0 z-50 w-72 bg-gradient-to-b from-orange-50/80 via-red-50/70 to-orange-100/80 backdrop-blur-xl border-r border-orange-200/40 transform ${
+      <aside
+        className={`fixed inset-y-0 left-0 z-50 w-full max-w-sm sm:max-w-xs lg:max-w-sm xl:max-w-md bg-gradient-to-br from-amber-50 via-orange-50 to-amber-100 transform ${
           isOpen ? "translate-x-0" : "-translate-x-full"
-        } transition-all duration-500 ease-out lg:translate-x-0 lg:static lg:inset-0 shadow-2xl overflow-y-auto`}
+        } transition-all duration-300 ease-out lg:translate-x-0 lg:static lg:inset-0 overflow-hidden flex flex-col border-r border-orange-200`}
       >
-        {/* Subtle animated background pattern */}
-        <div className="absolute inset-0 bg-gradient-to-br from-orange-200/20 via-transparent to-red-200/20 animate-pulse"></div>
+        {/* Background decorations */}
+        <div className="absolute inset-0 bg-gradient-to-br from-amber-100/20 via-orange-100/20 to-amber-100/20"></div>
+        <div className="absolute top-10 right-4 w-20 h-20 bg-gradient-to-r from-amber-200/30 to-orange-200/30 rounded-full blur-2xl"></div>
+        <div className="absolute bottom-20 left-4 w-16 h-16 bg-gradient-to-r from-orange-200/20 to-amber-200/20 rounded-full blur-xl"></div>
 
         {/* Header */}
-        <div className="relative flex items-center justify-between h-18 px-6 border-b border-orange-200/40 bg-orange-50/60 backdrop-blur-sm">
+        <div className="relative flex items-center justify-between h-16 sm:h-20 px-4 sm:px-6 border-b border-orange-200 bg-white/30 backdrop-blur-sm flex-shrink-0">
           <div className="flex items-center space-x-3">
-            <div className="flex items-center space-x-2">
-              <img
-                src={logo}
-                alt="Pocket Logo"
-                className="w-12 h-12 object-contain"
-              />
-              <div>
-                <span className="text-lg font-bold bg-gradient-to-r from-orange-800 to-red-700 bg-clip-text text-transparent">
-                  Pocket.
-                </span>
-                <div className="text-xs text-orange-600/80 font-medium">
-                  Loan Management
-                </div>
-              </div>
+            <img
+              src={logo}
+              alt="Pocket Logo"
+              className="w-8 h-8 sm:w-10 sm:h-10 object-contain"
+            />
+            <div>
+              <h1 className="text-lg sm:text-xl font-bold bg-gradient-to-r from-amber-700 to-orange-700 bg-clip-text text-transparent">
+                Pocket.
+              </h1>
+              <p className="text-xs text-orange-600/80 font-medium tracking-wide hidden sm:block">
+                Loan Management
+              </p>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="lg:hidden p-2 rounded-xl bg-orange-100/60 hover:bg-orange-200/60 transition-all duration-200 border border-orange-200/50"
+            className="lg:hidden p-2 rounded-lg bg-orange-100/70 hover:bg-orange-200/70 transition-all duration-200 border border-orange-200/50 group"
           >
-            <X className="w-5 h-5 text-orange-700" />
+            <X className="w-4 h-4 text-orange-700 group-hover:text-orange-800 transition-colors" />
           </button>
         </div>
 
         {/* Navigation */}
-        <nav className="relative mt-6 px-4 space-y-1.5">
+        <nav className="relative flex-1 overflow-y-auto px-3 sm:px-4 py-4 space-y-1 sm:space-y-2 scrollbar-hide">
           {sidebarItems.map((item, index) => {
             const IconComponent = item.icon;
-            // Check if current path matches the item path
             const isActive = location.pathname === item.path;
 
             return (
               <div
                 key={index}
-                className={`group relative flex items-center px-4 py-3 text-sm font-medium rounded-xl transition-all duration-300 ${
+                className={`group relative flex items-center px-3 sm:px-4 py-3 sm:py-4 rounded-xl transition-all duration-300 cursor-pointer ${
                   isActive
-                    ? "text-white bg-gradient-to-r from-orange-500/90 to-red-500/90 shadow-md shadow-orange-500/20 transform scale-[1.02] backdrop-blur-sm"
-                    : "text-orange-800/80 hover:text-orange-900 hover:bg-orange-100/50 hover:transform hover:scale-[1.01]"
-                } cursor-pointer`}
+                    ? `bg-gradient-to-r ${item.color} shadow-lg shadow-orange-400/20 scale-[1.02] text-white`
+                    : "hover:bg-orange-100/50 hover:scale-[1.02] text-orange-800"
+                }`}
                 onClick={() => handleNavigation(item.path)}
               >
-                {/* Active indicator */}
+                {/* Active background glow */}
                 {isActive && (
                   <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-6 bg-gradient-to-b from-red-400 to-orange-500 rounded-r-full shadow-md shadow-orange-400/40"></div>
                 )}
 
-                {/* Icon container */}
+                {/* Icon */}
                 <div
                   className={`relative p-2 rounded-lg mr-3 transition-all duration-300 ${
                     isActive
-                      ? "bg-white/30 backdrop-blur-sm"
-                      : "bg-orange-200/40 group-hover:bg-orange-200/60"
+                      ? "bg-white/20 backdrop-blur-sm shadow-md"
+                      : "bg-orange-100/70 group-hover:bg-orange-200/50"
                   }`}
                 >
-                  <IconComponent className="w-4 h-4" />
-                  {isActive && (
-                    <div className="absolute inset-0 bg-gradient-to-r from-orange-400/20 to-red-400/20 rounded-lg animate-pulse"></div>
-                  )}
+                  <IconComponent
+                    className={`w-4 h-4 sm:w-5 sm:h-5 transition-all duration-300 ${
+                      isActive ? "text-white" : "text-orange-700"
+                    }`}
+                  />
                 </div>
 
-                <span className="relative z-10">{item.label}</span>
+                {/* Text content */}
+                <div className="flex-1 relative z-10 min-w-0">
+                  <div
+                    className={`font-semibold text-sm sm:text-base truncate ${
+                      isActive ? "text-white" : "text-orange-800"
+                    }`}
+                  >
+                    {item.label}
+                  </div>
+                </div>
 
-                {/* Hover glow effect */}
-                <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-orange-500/0 via-red-400/0 to-orange-500/0 group-hover:from-orange-500/10 group-hover:via-red-400/5 group-hover:to-orange-500/10 transition-all duration-500"></div>
+                {/* Arrow */}
+                <ChevronRight
+                  className={`w-4 h-4 transition-all duration-300 flex-shrink-0 ${
+                    isActive
+                      ? "text-white opacity-100 translate-x-1"
+                      : "text-orange-600 opacity-0 group-hover:opacity-100 group-hover:translate-x-1"
+                  }`}
+                />
+
+                {/* Hover effect overlay */}
+                <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-transparent via-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
               </div>
             );
           })}
         </nav>
 
-        {/* Bottom decoration */}
-        <div className="absolute bottom-6 left-4 right-4">
-          <div className="h-px bg-gradient-to-r from-transparent via-orange-300/60 to-transparent"></div>
-          <div className="mt-3 text-center">
-            <div className="inline-flex items-center space-x-2 px-3 py-1.5 rounded-full bg-orange-50/70 border border-orange-200/50 backdrop-blur-sm">
-              <div className="w-1.5 h-1.5 bg-orange-400 rounded-full animate-pulse"></div>
-              <span className="text-xs text-orange-700/80 font-medium">
+        {/* Footer status */}
+        <div className="relative px-4 pb-4 flex-shrink-0">
+          <div className="h-px bg-gradient-to-r from-transparent via-orange-300 to-transparent mb-4"></div>
+          <div className="flex items-center justify-center">
+            <div className="flex items-center space-x-2 sm:space-x-3 px-3 sm:px-4 py-2 sm:py-3 rounded-full bg-orange-100/60 border border-orange-200/50 backdrop-blur-sm">
+              <div className="flex space-x-1">
+                <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-amber-500 rounded-full animate-pulse"></div>
+                <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-amber-500 rounded-full animate-pulse delay-150"></div>
+                <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-amber-500 rounded-full animate-pulse delay-300"></div>
+              </div>
+              <span className="text-xs sm:text-sm text-orange-800 font-medium">
                 System Online
               </span>
             </div>
           </div>
         </div>
-      </div>
+
+        {/* Decorative lines */}
+        <div className="absolute top-1/2 right-0 w-px h-16 sm:h-24 bg-gradient-to-b from-transparent via-amber-400/30 to-transparent"></div>
+        <div className="absolute bottom-1/4 left-0 w-px h-12 sm:h-16 bg-gradient-to-b from-transparent via-orange-400/30 to-transparent"></div>
+      </aside>
+
+      {/* Custom scrollbar styles */}
+      <style>{`
+        .scrollbar-hide {
+          -ms-overflow-style: none;
+          scrollbar-width: none;
+        }
+        .scrollbar-hide::-webkit-scrollbar {
+          display: none;
+        }
+      `}</style>
     </>
   );
 };
