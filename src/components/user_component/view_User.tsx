@@ -16,6 +16,7 @@ import {
   XCircle as XCircleIcon,
 } from "lucide-react";
 import KycService from "../../services/user_Services/kyc_Service";
+import supabase from "../../supabaseConfig/supabaseClient";
 
 interface User {
   _id: string;
@@ -48,6 +49,30 @@ interface UserDetailsModalProps {
   selectedUser: User | null;
   onClose: () => void;
 }
+
+// Utility function to get Supabase URL for KYC documents
+const getSupabaseUrl = async (fileName: string): Promise<string> => {
+  if (!fileName || fileName.trim() === "") {
+    return "";
+  }
+
+  try {
+    // Check if it's already a full URL
+    if (fileName.startsWith("http://") || fileName.startsWith("https://")) {
+      return fileName;
+    }
+
+    // Get the public URL from Supabase storage
+    const { data } = supabase.storage
+      .from("pocketkcydocs")
+      .getPublicUrl(fileName);
+
+    return data.publicUrl || "";
+  } catch (error) {
+    console.error("Error getting Supabase URL:", error);
+    return "";
+  }
+};
 
 // Utility function to decode JWT token
 const decodeToken = (token: string) => {
@@ -121,12 +146,45 @@ const UserDetailsModal: React.FC<UserDetailsModalProps> = ({
   const [isLoadingKyc, setIsLoadingKyc] = useState(false);
   const [processingKyc, setProcessingKyc] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [documentUrls, setDocumentUrls] = useState<{ [key: string]: string }>(
+    {}
+  );
 
   useEffect(() => {
     if (selectedUser && activeTab === "kyc") {
       fetchKycDocuments();
     }
   }, [selectedUser, activeTab]);
+
+  // Function to fetch and cache document URLs
+  const fetchDocumentUrls = async (documents: KycDocument[]) => {
+    const urlMap: { [key: string]: string } = {};
+
+    for (const doc of documents) {
+      const documentFields = [
+        { key: "nationalId", value: doc.nationalId },
+        { key: "passportPhoto", value: doc.passportPhoto },
+        { key: "proofOfResident", value: doc.proofOfResident },
+        { key: "paySlip", value: doc.paySlip },
+        { key: "proofOfEmployment", value: doc.proofOfEmployment },
+      ];
+
+      for (const field of documentFields) {
+        if (field.value) {
+          const cacheKey = `${doc._id}-${field.key}`;
+          try {
+            const url = await getSupabaseUrl(field.value);
+            urlMap[cacheKey] = url;
+          } catch (error) {
+            console.error(`Error fetching URL for ${field.key}:`, error);
+            urlMap[cacheKey] = "";
+          }
+        }
+      }
+    }
+
+    setDocumentUrls(urlMap);
+  };
 
   const fetchKycDocuments = async () => {
     if (!selectedUser) return;
@@ -201,6 +259,11 @@ const UserDetailsModal: React.FC<UserDetailsModalProps> = ({
       documents = documents.filter((doc) => doc != null);
 
       setKycDocuments(documents);
+
+      // Fetch URLs for all documents
+      if (documents.length > 0) {
+        await fetchDocumentUrls(documents);
+      }
     } catch (error) {
       console.error("Error fetching KYC documents:", error);
       setError("Failed to load KYC documents. Please try again.");
@@ -271,6 +334,42 @@ const UserDetailsModal: React.FC<UserDetailsModalProps> = ({
       }
     } finally {
       setProcessingKyc(null);
+    }
+  };
+
+  // Function to get document URL from cache
+  const getDocumentUrl = (docId: string, fieldKey: string): string => {
+    const cacheKey = `${docId}-${fieldKey}`;
+    return documentUrls[cacheKey] || "";
+  };
+
+  // Function to handle document download
+  const handleDownload = async (
+    docId: string,
+    fieldKey: string,
+    fileName: string,
+    label: string
+  ) => {
+    try {
+      const url = getDocumentUrl(docId, fieldKey);
+      if (!url) {
+        console.error("No URL found for document");
+        return;
+      }
+
+      const response = await fetch(url);
+      const blob = await response.blob();
+      const downloadUrl = window.URL.createObjectURL(blob);
+
+      const a = document.createElement("a");
+      a.href = downloadUrl;
+      a.download = `${label}_${selectedUser?.firstName}_${selectedUser?.lastName}_${fileName}`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      window.URL.revokeObjectURL(downloadUrl);
+    } catch (error) {
+      console.error("Error downloading document:", error);
     }
   };
 
@@ -354,43 +453,58 @@ const UserDetailsModal: React.FC<UserDetailsModalProps> = ({
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {documents.map((document) => (
-            <div key={document.key} className="space-y-2">
-              <label className="text-sm font-medium text-orange-600">
-                {document.label}
-              </label>
-              <div className="bg-orange-50/30 p-3 rounded-lg">
-                {document.value ? (
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm text-orange-800 truncate">
-                      {document.value.split("/").pop() || "Document uploaded"}
-                    </span>
-                    <div className="flex space-x-2">
-                      <button
-                        onClick={() => window.open(document.value, "_blank")}
-                        className="p-1 text-orange-600 hover:text-orange-700 hover:bg-orange-100 rounded"
-                      >
-                        <Eye className="w-4 h-4" />
-                      </button>
-                      <button
-                        onClick={() => {
-                          const a = window.document.createElement("a");
-                          a.href = document.value!;
-                          a.download = `${document.label}_${selectedUser.firstName}_${selectedUser.lastName}`;
-                          a.click();
-                        }}
-                        className="p-1 text-orange-600 hover:text-orange-700 hover:bg-orange-100 rounded"
-                      >
-                        <Download className="w-4 h-4" />
-                      </button>
+          {documents.map((document) => {
+            const documentUrl = getDocumentUrl(doc._id, document.key);
+
+            return (
+              <div key={document.key} className="space-y-2">
+                <label className="text-sm font-medium text-orange-600">
+                  {document.label}
+                </label>
+                <div className="bg-orange-50/30 p-3 rounded-lg">
+                  {document.value && documentUrl ? (
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm text-orange-800 truncate">
+                        {document.value.split("/").pop() || "Document uploaded"}
+                      </span>
+                      <div className="flex space-x-2">
+                        <button
+                          onClick={() => window.open(documentUrl, "_blank")}
+                          className="p-1 text-orange-600 hover:text-orange-700 hover:bg-orange-100 rounded"
+                          title="View document"
+                        >
+                          <Eye className="w-4 h-4" />
+                        </button>
+                        <button
+                          onClick={() =>
+                            handleDownload(
+                              doc._id,
+                              document.key,
+                              document.value!,
+                              document.label
+                            )
+                          }
+                          className="p-1 text-orange-600 hover:text-orange-700 hover:bg-orange-100 rounded"
+                          title="Download document"
+                        >
+                          <Download className="w-4 h-4" />
+                        </button>
+                      </div>
                     </div>
-                  </div>
-                ) : (
-                  <span className="text-sm text-gray-500">Not uploaded</span>
-                )}
+                  ) : document.value ? (
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm text-orange-800 truncate">
+                        {document.value.split("/").pop() || "Document uploaded"}
+                      </span>
+                      <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-orange-500"></div>
+                    </div>
+                  ) : (
+                    <span className="text-sm text-gray-500">Not uploaded</span>
+                  )}
+                </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
 
         <div className="flex items-center justify-between pt-4 border-t border-orange-200/50">
