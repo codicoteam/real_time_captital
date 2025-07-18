@@ -1,7 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import Sidebar from "../../components/Sidebar";
 
-import { Search, Filter, Eye, Download, AlertCircle, CheckCircle, Clock, Package, MoreHorizontal } from 'lucide-react';
+import { Search, Filter, Eye, Download, AlertCircle, CheckCircle, Clock, Package, MoreHorizontal, X } from 'lucide-react';
 
 // Types
 interface Collateral {
@@ -132,18 +132,18 @@ const CollateralManagement: React.FC = () => {
     const getStatusColor = (status: string, type: 'loan' | 'collateral') => {
       if (type === 'loan') {
         switch (status) {
-          case 'pending': return 'bg-yellow-100 text-yellow-600 border border-yellow-200';
-          case 'active': return 'bg-green-100 text-green-600 border border-green-200';
-          case 'completed': return 'bg-blue-100 text-blue-600 border border-blue-200';
-          case 'defaulted': return 'bg-red-100 text-red-600 border border-red-200';
-          default: return 'bg-gray-100 text-gray-600 border border-gray-200';
+          case 'pending': return 'bg-yellow-100 text-yellow-700 border border-yellow-200';
+          case 'active': return 'bg-green-100 text-green-700 border border-green-200';
+          case 'completed': return 'bg-blue-100 text-blue-700 border border-blue-200';
+          case 'defaulted': return 'bg-red-100 text-red-700 border border-red-200';
+          default: return 'bg-gray-100 text-gray-700 border border-gray-200';
         }
       } else {
         switch (status) {
-          case 'deposited': return 'bg-blue-100 text-blue-600 border border-blue-200';
-          case 'returned': return 'bg-green-100 text-green-600 border border-green-200';
-          case 'seized': return 'bg-red-100 text-red-600 border border-red-200';
-          default: return 'bg-gray-100 text-gray-600 border border-gray-200';
+          case 'deposited': return 'bg-blue-100 text-blue-700 border border-blue-200';
+          case 'returned': return 'bg-green-100 text-green-700 border border-green-200';
+          case 'seized': return 'bg-red-100 text-red-700 border border-red-200';
+          default: return 'bg-gray-100 text-gray-700 border border-gray-200';
         }
       }
     };
@@ -172,64 +172,62 @@ const CollateralManagement: React.FC = () => {
     }, [collaterals]);
 
     return (
-      
       <div className="grid grid-cols-1 md:grid-cols-5 gap-4 mb-6">
-        
-        <div className="bg-white p-4 rounded-lg shadow-sm">
+        <div className="bg-white/90 backdrop-blur-sm p-4 rounded-xl shadow-md border border-orange-100 hover:shadow-lg transition-all duration-300">
           <div className="flex items-center">
-            <div className="p-3 rounded-full bg-blue-100">
-              <Package className="h-6 w-6 text-blue-600" />
+            <div className="p-3 rounded-full bg-gradient-to-br from-blue-500 to-blue-600 shadow-lg">
+              <Package className="h-6 w-6 text-white" />
             </div>
             <div className="ml-4">
-              <p className="text-sm font-medium text-gray-500">Total Collaterals</p>
+              <p className="text-sm font-medium text-gray-600">Total Collaterals</p>
               <p className="text-2xl font-bold text-gray-900">{stats.total}</p>
             </div>
           </div>
         </div>
         
-        <div className="bg-white p-4 rounded-lg shadow-sm">
+        <div className="bg-white/90 backdrop-blur-sm p-4 rounded-xl shadow-md border border-orange-100 hover:shadow-lg transition-all duration-300">
           <div className="flex items-center">
-            <div className="p-3 rounded-full bg-green-100">
-              <CheckCircle className="h-6 w-6 text-green-600" />
+            <div className="p-3 rounded-full bg-gradient-to-br from-green-500 to-green-600 shadow-lg">
+              <CheckCircle className="h-6 w-6 text-white" />
             </div>
             <div className="ml-4">
-              <p className="text-sm font-medium text-gray-500">Deposited</p>
+              <p className="text-sm font-medium text-gray-600">Deposited</p>
               <p className="text-2xl font-bold text-gray-900">{stats.deposited}</p>
             </div>
           </div>
         </div>
         
-        <div className="bg-white p-4 rounded-lg shadow-sm">
+        <div className="bg-white/90 backdrop-blur-sm p-4 rounded-xl shadow-md border border-orange-100 hover:shadow-lg transition-all duration-300">
           <div className="flex items-center">
-            <div className="p-3 rounded-full bg-red-100">
-              <AlertCircle className="h-6 w-6 text-red-600" />
+            <div className="p-3 rounded-full bg-gradient-to-br from-red-500 to-red-600 shadow-lg">
+              <AlertCircle className="h-6 w-6 text-white" />
             </div>
             <div className="ml-4">
-              <p className="text-sm font-medium text-gray-500">Overdue</p>
+              <p className="text-sm font-medium text-gray-600">Overdue</p>
               <p className="text-2xl font-bold text-gray-900">{stats.seized}</p>
             </div>
           </div>
         </div>
         
-        <div className="bg-white p-4 rounded-lg shadow-sm">
+        <div className="bg-white/90 backdrop-blur-sm p-4 rounded-xl shadow-md border border-orange-100 hover:shadow-lg transition-all duration-300">
           <div className="flex items-center">
-            <div className="p-3 rounded-full bg-orange-100">
-              <span className="text-orange-600 font-bold text-lg">Rs</span>
+            <div className="p-3 rounded-full bg-gradient-to-br from-orange-500 to-orange-600 shadow-lg">
+              <span className="text-white font-bold text-lg">Rs</span>
             </div>
             <div className="ml-4">
-              <p className="text-sm font-medium text-gray-500">Total Disbursed</p>
+              <p className="text-sm font-medium text-gray-600">Total Disbursed</p>
               <p className="text-2xl font-bold text-orange-600">Rs{(stats.totalValue / 1000).toFixed(1)}M</p>
             </div>
           </div>
         </div>
         
-        <div className="bg-white p-4 rounded-lg shadow-sm">
+        <div className="bg-white/90 backdrop-blur-sm p-4 rounded-xl shadow-md border border-orange-100 hover:shadow-lg transition-all duration-300">
           <div className="flex items-center">
-            <div className="p-3 rounded-full bg-yellow-100">
-              <span className="text-yellow-600 font-bold text-lg">Rs</span>
+            <div className="p-3 rounded-full bg-gradient-to-br from-yellow-500 to-yellow-600 shadow-lg">
+              <span className="text-white font-bold text-lg">Rs</span>
             </div>
             <div className="ml-4">
-              <p className="text-sm font-medium text-gray-500">Outstanding</p>
+              <p className="text-sm font-medium text-gray-600">Outstanding</p>
               <p className="text-2xl font-bold text-yellow-600">Rs{((stats.totalValue * 0.8) / 1000).toFixed(1)}M</p>
             </div>
           </div>
@@ -257,29 +255,28 @@ const CollateralManagement: React.FC = () => {
   };
 
   const getRiskColor = (risk: string) => {
-    if (risk === 'High Risk') return 'text-red-600';
-    return 'text-green-600';
+    if (risk === 'High Risk') return 'text-red-600 font-semibold';
+    return 'text-green-600 font-semibold';
   };
 
-
   return (  
-
-     <div className="flex h-screen bg-gradient-to-br from-orange-50 via-red-50 to-yellow-50">
+    <div className="flex h-screen bg-gradient-to-br from-orange-50 via-red-50 to-yellow-50">
       {/* Sidebar Component */}
-      <Sidebar  />
-    <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <div className="bg-white shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16">
-            <div className="flex items-center">
-              <div className="flex-shrink-0">
-                <div className="w-8 h-8 bg-orange-500 rounded-lg flex items-center justify-center">
-                  <Package className="h-5 w-5 text-white" />
-                </div>
+      <Sidebar />
+      
+      {/* Main Content */}
+      <div className="flex-1 flex flex-col overflow-hidden">
+        {/* Header */}
+        <div className="bg-white/80 backdrop-blur-xl shadow-sm border-b border-orange-200/50 px-6 py-4 relative">
+          <div className="absolute inset-0 bg-gradient-to-r from-orange-500/5 to-red-500/5" />
+          <div className="relative flex items-center justify-between">
+            <div className="flex items-center space-x-4">
+              <div className="w-10 h-10 bg-gradient-to-br from-orange-500 to-red-500 rounded-xl flex items-center justify-center shadow-lg">
+                <Package className="h-6 w-6 text-white" />
               </div>
-              <div className="ml-4">
-                <h1 className="text-xl font-semibold text-gray-900">Collateral Management</h1>
+              <div>
+                <h1 className="text-2xl font-bold text-orange-700">Collateral Management</h1>
+                <p className="text-sm text-orange-600">Track and manage loan collaterals</p>
               </div>
             </div>
             <div className="flex items-center space-x-4">
@@ -289,7 +286,7 @@ const CollateralManagement: React.FC = () => {
                   setStatusFilter('all');
                   setCollateralFilter('all');
                 }}
-                className="bg-orange-500 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-orange-600 transition-colors flex items-center cursor-pointer"
+                className="bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 flex items-center shadow-lg hover:shadow-xl transform hover:scale-105"
               >
                 <Filter className="h-4 w-4 mr-2" />
                 Refresh
@@ -297,215 +294,255 @@ const CollateralManagement: React.FC = () => {
             </div>
           </div>
         </div>
-      </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-        {/* Statistics */}
-        <Statistics />
+        {/* Scrollable Content */}
+        <div className="flex-1 overflow-y-auto p-6">
+          {/* Statistics */}
+          <Statistics />
 
-        {/* Filter Tabs */}
-        <div className="mb-6">
-          <div className="flex space-x-1 bg-white p-1 rounded-lg shadow-sm">
-            {['all', 'deposited', 'returned', 'seized'].map((status) => (
-              <button
-                key={status}
-                onClick={() => setCollateralFilter(status)}
-                className={`px-4 py-2 rounded-md text-sm font-medium cursor-pointer ${
-                  collateralFilter === status
-                    ? 'bg-orange-500 text-white'
-                    : 'text-gray-500 hover:text-gray-700'
-                }`}
-              >
-                {status === 'all' ? 'All Collaterals' : status.charAt(0).toUpperCase() + status.slice(1)}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {/* Search and Filters */}
-        <div className="bg-white p-4 rounded-lg shadow-sm mb-6">
-          <div className="flex flex-col md:flex-row gap-4">
-            <div className="flex-1 relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
-              <input
-                type="text"
-                placeholder="Search collaterals..."
-                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-              />
+          {/* Filter Tabs */}
+          <div className="mb-6">
+            <div className="flex space-x-1 bg-white/90 backdrop-blur-sm p-1 rounded-xl shadow-md border border-orange-100">
+              {['all', 'deposited', 'returned', 'seized'].map((status) => (
+                <button
+                  key={status}
+                  onClick={() => setCollateralFilter(status)}
+                  className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
+                    collateralFilter === status
+                      ? 'bg-gradient-to-r from-orange-500 to-red-500 text-white shadow-lg transform scale-105'
+                      : 'text-gray-600 hover:text-orange-600 hover:bg-orange-50'
+                  }`}
+                >
+                  {status === 'all' ? 'All Collaterals' : status.charAt(0).toUpperCase() + status.slice(1)}
+                </button>
+              ))}
             </div>
           </div>
-        </div>
 
-        {/* Collaterals Table */}
-        <div className="bg-white rounded-lg shadow-sm overflow-hidden">
-          <div className="px-6 py-4 border-b border-gray-200">
-            <h2 className="text-lg font-semibold text-gray-900">Collateral Tracking</h2>
-            <p className="text-sm text-gray-500">{filteredCollaterals.length} collaterals found</p>
+          {/* Search and Filters */}
+          <div className="bg-white/90 backdrop-blur-sm p-4 rounded-xl shadow-md border border-orange-100 mb-6">
+            <div className="flex flex-col md:flex-row gap-4">
+              <div className="flex-1 relative">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-orange-400 h-4 w-4" />
+                <input
+                  type="text"
+                  placeholder="Search collaterals..."
+                  className="w-full pl-10 pr-4 py-2 border border-orange-200 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent bg-white/70 backdrop-blur-sm"
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                />
+              </div>
+            </div>
           </div>
-          
-          <div className="overflow-x-auto">
-            <table className="w-full">
-              <thead className="bg-gray-50">
-                <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Collateral ID
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Client
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Type
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Amount
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Outstanding
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Status
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Next Payment
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Risk
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Actions
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="bg-white divide-y divide-gray-200">
-                {filteredCollaterals.map((collateral) => (
-                  <tr key={collateral.id} className="hover:bg-gray-50">
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm font-medium text-gray-900">{collateral.id}</div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm font-medium text-gray-900">{collateral.clientName}</div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div>
-                        <div className="text-sm text-orange-600 font-medium">{collateral.itemType}</div>
-                        <div className="text-sm text-gray-500">{collateral.itemDescription.substring(0, 30)}...</div>
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm font-medium text-gray-900">{formatCurrency(collateral.appraisalValue)}</div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm font-medium text-gray-900">{formatCurrency(collateral.loanAmount)}</div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <StatusBadge status={collateral.loanStatus} type="loan" />
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div>
-                        <div className="text-sm text-gray-900">{formatDate(collateral.dueDate)}</div>
-                        <div className="text-xs text-gray-400">{collateral.loanStatus === 'pending' ? 'Pending' : 'Next Payment'}</div>
-                      </div>
-                    </td>
-                    <td className={`px-6 py-4 whitespace-nowrap font-semibold ${getRiskColor(getRiskLevel(collateral))}`}>
-                      {getRiskLevel(collateral)}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">
-                      <button
-                        onClick={() => {
-                          setSelectedCollateral(collateral);
-                          setShowDetails(true);
-                        }}
-                        className="text-orange-500 hover:text-orange-700 cursor-pointer"
-                        title="View Details"
-                      >
-                        <Eye className="w-5 h-5" />
-                      </button>
-                      <button
-                        onClick={() => alert('Download feature coming soon!')}
-                        className="text-gray-400 hover:text-gray-600 cursor-pointer"
-                        title="Download"
-                      >
-                        <Download className="w-5 h-5" />
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-                {filteredCollaterals.length === 0 && (
+
+          {/* Collaterals Table */}
+          <div className="bg-white/90 backdrop-blur-sm rounded-xl shadow-md border border-orange-100 overflow-hidden">
+            <div className="px-6 py-4 border-b border-orange-200 bg-gradient-to-r from-orange-50 to-red-50">
+              <h2 className="text-lg font-semibold text-orange-700">Collateral Tracking</h2>
+              <p className="text-sm text-orange-600">{filteredCollaterals.length} collaterals found</p>
+            </div>
+            
+            <div className="overflow-x-auto">
+              <table className="w-full">
+                <thead className="bg-gradient-to-r from-orange-100 to-red-100">
                   <tr>
-                    <td colSpan={9} className="text-center py-8 text-gray-500">
-                      No collaterals found.
-                    </td>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-orange-700 uppercase tracking-wider">
+                      Collateral ID
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-orange-700 uppercase tracking-wider">
+                      Client
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-orange-700 uppercase tracking-wider">
+                      Type
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-orange-700 uppercase tracking-wider">
+                      Amount
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-orange-700 uppercase tracking-wider">
+                      Outstanding
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-orange-700 uppercase tracking-wider">
+                      Status
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-orange-700 uppercase tracking-wider">
+                      Next Payment
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-orange-700 uppercase tracking-wider">
+                      Risk
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-orange-700 uppercase tracking-wider">
+                      Actions
+                    </th>
                   </tr>
-                )}
-              </tbody>
-            </table>
+                </thead>
+                <tbody className="bg-white/70 backdrop-blur-sm divide-y divide-orange-100">
+                  {filteredCollaterals.map((collateral) => (
+                    <tr key={collateral.id} className="hover:bg-orange-50/50 transition-colors duration-200">
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="text-sm font-medium text-gray-900">{collateral.id}</div>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="text-sm font-medium text-gray-900">{collateral.clientName}</div>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div>
+                          <div className="text-sm text-orange-600 font-medium">{collateral.itemType}</div>
+                          <div className="text-sm text-gray-500">{collateral.itemDescription.substring(0, 30)}...</div>
+                        </div>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="text-sm font-medium text-gray-900">{formatCurrency(collateral.appraisalValue)}</div>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="text-sm font-medium text-gray-900">{formatCurrency(collateral.loanAmount)}</div>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <StatusBadge status={collateral.loanStatus} type="loan" />
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div>
+                          <div className="text-sm text-gray-900">{formatDate(collateral.dueDate)}</div>
+                          <div className="text-xs text-gray-400">{collateral.loanStatus === 'pending' ? 'Pending' : 'Next Payment'}</div>
+                        </div>
+                      </td>
+                      <td className={`px-6 py-4 whitespace-nowrap ${getRiskColor(getRiskLevel(collateral))}`}>
+                        {getRiskLevel(collateral)}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                        <div className="flex items-center space-x-2">
+                          <button
+                            onClick={() => {
+                              setSelectedCollateral(collateral);
+                              setShowDetails(true);
+                            }}
+                            className="text-orange-500 hover:text-orange-700 p-1 rounded-full hover:bg-orange-50 transition-all duration-200"
+                            title="View Details"
+                          >
+                            <Eye className="w-4 h-4" />
+                          </button>
+                          <button
+                            onClick={() => alert('Download feature coming soon!')}
+                            className="text-gray-400 hover:text-gray-600 p-1 rounded-full hover:bg-gray-50 transition-all duration-200"
+                            title="Download"
+                          >
+                            <Download className="w-4 h-4" />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                  {filteredCollaterals.length === 0 && (
+                    <tr>
+                      <td colSpan={9} className="text-center py-12 text-gray-500">
+                        <div className="flex flex-col items-center space-y-2">
+                          <Package className="w-12 h-12 text-gray-300" />
+                          <div className="text-lg font-medium">No collaterals found</div>
+                          <div className="text-sm">Try adjusting your search or filters</div>
+                        </div>
+                      </td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
 
         {/* Details Modal */}
         {showDetails && selectedCollateral && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40">
-            <div className="bg-white rounded-lg shadow-lg max-w-3xl w-full max-h-[90vh] overflow-y-auto p-6 relative">
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
+            <div className="bg-white/95 backdrop-blur-sm rounded-2xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto p-8 relative mx-4 border border-orange-200">
               <button
                 onClick={() => setShowDetails(false)}
-                className="absolute top-4 right-4 text-gray-400 hover:text-gray-700 cursor-pointer"
+                className="absolute top-6 right-6 text-gray-400 hover:text-gray-700 p-2 rounded-full hover:bg-gray-100 transition-all duration-200"
                 aria-label="Close details"
               >
-                <MoreHorizontal className="w-6 h-6 rotate-45" />
+                <X className="w-6 h-6" />
               </button>
 
-              <h3 className="text-xl font-semibold mb-4">Collateral Details - {selectedCollateral.id}</h3>
-
-              <div className="space-y-4">
-                <div>
-                  <h4 className="font-semibold text-gray-700">Client Information</h4>
-                  <p>{selectedCollateral.clientName} (ID: {selectedCollateral.clientId})</p>
-                </div>
-                <div>
-                  <h4 className="font-semibold text-gray-700">Item</h4>
-                  <p>{selectedCollateral.itemType} - {selectedCollateral.itemDescription}</p>
-                  <p>Condition: {selectedCollateral.condition}</p>
-                </div>
-                <div>
-                  <h4 className="font-semibold text-gray-700">Values</h4>
-                  <p>Estimated Value: {formatCurrency(selectedCollateral.estimatedValue)}</p>
-                  <p>Appraisal Value: {formatCurrency(selectedCollateral.appraisalValue)}</p>
-                </div>
-                <div>
-                  <h4 className="font-semibold text-gray-700">Loan & Collateral Status</h4>
-                  <p>Loan Status: <StatusBadge status={selectedCollateral.loanStatus} type="loan" /></p>
-                  <p>Collateral Status: <StatusBadge status={selectedCollateral.collateralStatus} type="collateral" /></p>
-                </div>
-                <div>
-                  <h4 className="font-semibold text-gray-700">Dates & Location</h4>
-                  <p>Deposit Date: {formatDate(selectedCollateral.depositDate)}</p>
-                  <p>Due Date: {formatDate(selectedCollateral.dueDate)}</p>
-                  <p>Location: {selectedCollateral.location}</p>
-                </div>
-                <div>
-                  <h4 className="font-semibold text-gray-700">Documents</h4>
-                  <ul className="list-disc list-inside">
-                    {selectedCollateral.documents.map((doc, i) => (
-                      <li key={i} className="text-orange-600 cursor-pointer hover:underline" onClick={() => alert(`Open document: ${doc}`)}>
-                        {doc}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-                {selectedCollateral.notes && (
-                  <div>
-                    <h4 className="font-semibold text-gray-700">Notes</h4>
-                    <p>{selectedCollateral.notes}</p>
-                  </div>
-                )}
+              <div className="mb-6">
+                <h3 className="text-2xl font-bold text-orange-700 mb-2">Collateral Details</h3>
+                <div className="text-orange-600 font-medium">{selectedCollateral.id}</div>
               </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="space-y-4">
+                  <div className="bg-gradient-to-r from-orange-50 to-red-50 p-4 rounded-lg border border-orange-200">
+                    <h4 className="font-semibold text-orange-700 mb-2">Client Information</h4>
+                    <p className="text-gray-700">{selectedCollateral.clientName}</p>
+                    <p className="text-sm text-gray-500">ID: {selectedCollateral.clientId}</p>
+                  </div>
+                  
+                  <div className="bg-gradient-to-r from-orange-50 to-red-50 p-4 rounded-lg border border-orange-200">
+                    <h4 className="font-semibold text-orange-700 mb-2">Item Details</h4>
+                    <p className="text-gray-700 font-medium">{selectedCollateral.itemType}</p>
+                    <p className="text-gray-600 text-sm mb-2">{selectedCollateral.itemDescription}</p>
+                    <p className="text-gray-700">Condition: <span className="font-medium">{selectedCollateral.condition}</span></p>
+                  </div>
+                  
+                  <div className="bg-gradient-to-r from-orange-50 to-red-50 p-4 rounded-lg border border-orange-200">
+                    <h4 className="font-semibold text-orange-700 mb-2">Values</h4>
+                    <div className="space-y-1">
+                      <p className="text-gray-700">Estimated Value: <span className="font-medium">{formatCurrency(selectedCollateral.estimatedValue)}</span></p>
+                      <p className="text-gray-700">Appraisal Value: <span className="font-medium">{formatCurrency(selectedCollateral.appraisalValue)}</span></p>
+                      <p className="text-gray-700">Loan Amount: <span className="font-medium">{formatCurrency(selectedCollateral.loanAmount)}</span></p>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="space-y-4">
+                  <div className="bg-gradient-to-r from-orange-50 to-red-50 p-4 rounded-lg border border-orange-200">
+                    <h4 className="font-semibold text-orange-700 mb-2">Status Information</h4>
+                    <div className="space-y-2">
+                      <div className="flex items-center space-x-2">
+                        <span className="text-gray-700">Loan Status:</span>
+                        <StatusBadge status={selectedCollateral.loanStatus} type="loan" />
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <span className="text-gray-700">Collateral Status:</span>
+                        <StatusBadge status={selectedCollateral.collateralStatus} type="collateral" />
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div className="bg-gradient-to-r from-orange-50 to-red-50 p-4 rounded-lg border border-orange-200">
+                    <h4 className="font-semibold text-orange-700 mb-2">Dates & Location</h4>
+                    <div className="space-y-1">
+                      <p className="text-gray-700">Deposit Date: <span className="font-medium">{formatDate(selectedCollateral.depositDate)}</span></p>
+                      <p className="text-gray-700">Due Date: <span className="font-medium">{formatDate(selectedCollateral.dueDate)}</span></p>
+                      <p className="text-gray-700">Location: <span className="font-medium">{selectedCollateral.location}</span></p>
+                    </div>
+                  </div>
+                  
+                  <div className="bg-gradient-to-r from-orange-50 to-red-50 p-4 rounded-lg border border-orange-200">
+                    <h4 className="font-semibold text-orange-700 mb-2">Documents</h4>
+                    <div className="space-y-1">
+                      {selectedCollateral.documents.map((doc, i) => (
+                        <div key={i} className="flex items-center space-x-2">
+                          <div className="w-2 h-2 bg-orange-500 rounded-full"></div>
+                          <span 
+                            className="text-orange-600 hover:text-orange-700 cursor-pointer hover:underline text-sm" 
+                            onClick={() => alert(`Open document: ${doc}`)}
+                          >
+                            {doc}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {selectedCollateral.notes && (
+                <div className="mt-6 bg-gradient-to-r from-orange-50 to-red-50 p-4 rounded-lg border border-orange-200">
+                  <h4 className="font-semibold text-orange-700 mb-2">Notes</h4>
+                  <p className="text-gray-700">{selectedCollateral.notes}</p>
+                </div>
+              )}
             </div>
           </div>
         )}
       </div>
-    </div>
     </div>
   );
 };

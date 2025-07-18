@@ -1,11 +1,11 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import Sidebar from '../../components/User_Sidebar';
-import { IoClose } from 'react-icons/io5';
-import { FiLogOut } from 'react-icons/fi';
-import { Menu, ChevronDown } from 'lucide-react';
-import { toast, ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import Sidebar from "../../components/User_Sidebar";
+import { IoClose } from "react-icons/io5";
+import { FiLogOut } from "react-icons/fi";
+import { Menu, ChevronDown } from "lucide-react";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Logout = () => {
   const [showLogout, setShowModal] = useState(false);
@@ -46,17 +46,8 @@ const Logout = () => {
                   <span className="text-orange-300">›</span>
                   <span className="text-orange-700 font-medium">Logout</span>
                 </div>
-                  {/* Main Content */}
-                   <main className="flex-1 overflow-y-auto p-6">
-                      <div
-                        onClick={() => setShowModal(true)}
-                         className="cursor-pointer max-w-sm mx-auto mt-5 bg-white rounded-xl shadow-lg hover:shadow-xl p-4 flex flex-col items-center space-y-4 transition"
-                              >
-                           <span className="text-xl font-semibold text-orange-700"><FiLogOut size={2} className="text-red-500" />Click To Logout</span>
-                        </div>
-                    </main>
-                </div>
-             </div>
+              </div>
+            </div>
 
             <div className="flex items-center space-x-4">
               <div className="flex items-center space-x-3 pl-4 border-l border-orange-200/50">
@@ -78,51 +69,106 @@ const Logout = () => {
           </div>
         </header>
 
+        {/* Main Content */}
+        <main className="flex-1 overflow-y-auto p-6 flex items-center justify-center">
+          <div className="max-w-md w-full">
+            {/* Logout Card */}
+            <div className="bg-white/90 backdrop-blur-sm rounded-2xl shadow-xl border border-orange-200/50 p-8 text-center transform hover:scale-105 transition-all duration-300">
+              <div className="mb-6">
+                <div className="w-16 h-16 bg-gradient-to-br from-orange-500 to-red-500 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg shadow-orange-500/25">
+                  <FiLogOut className="w-8 h-8 text-white" />
+                </div>
+                <h2 className="text-2xl font-bold text-orange-700 mb-2">
+                  Ready to Leave?
+                </h2>
+                <p className="text-orange-600/80 text-sm">
+                  Click the button below to securely log out of your account
+                </p>
+              </div>
 
+              <button
+                onClick={() => setShowModal(true)}
+                className="w-full bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white font-semibold py-3 px-6 rounded-xl shadow-lg shadow-orange-500/25 hover:shadow-orange-500/40 transform hover:scale-105 transition-all duration-200 focus:outline-none focus:ring-4 focus:ring-orange-500/20"
+              >
+                <div className="flex items-center justify-center space-x-2">
+                  <FiLogOut className="w-5 h-5" />
+                  <span>Logout</span>
+                </div>
+              </button>
+            </div>
+
+            {/* Additional Info */}
+            <div className="mt-6 text-center">
+              <p className="text-orange-500/70 text-sm">
+                You will be redirected to the login page after logout
+              </p>
+            </div>
+          </div>
+        </main>
 
         {/* Logout Modal */}
         {showLogout && (
           <div
             onClick={() => setShowModal(false)}
-            className="fixed bg-black/50 min-h-screen z-50 w-screen flex justify-center items-center top-0 left-0"
+            className="fixed bg-black/50 backdrop-blur-sm min-h-screen z-50 w-screen flex justify-center items-center top-0 left-0"
           >
             <div
               onClick={(e) => e.stopPropagation()}
-              className="bg-white p-6 rounded relative"
+              className="bg-white/95 backdrop-blur-sm p-8 rounded-2xl shadow-2xl border border-orange-200/50 relative max-w-md w-full mx-4 transform animate-pulse"
             >
-              <div className="flex flex-col gap-4 max-w-[400px]">
-                <h2 className="text-xl font-bold">Logout</h2>
-                <p className="text-gray-700">
-                  Are you sure you want to logout?
+              <div className="flex flex-col items-center text-center">
+                <div className="w-16 h-16 bg-gradient-to-br from-red-500 to-orange-500 rounded-2xl flex items-center justify-center mb-4 shadow-lg shadow-red-500/25">
+                  <FiLogOut className="w-8 h-8 text-white" />
+                </div>
+
+                <h2 className="text-2xl font-bold text-orange-700 mb-2">
+                  Confirm Logout
+                </h2>
+                <p className="text-orange-600/80 mb-8 text-sm">
+                  Are you sure you want to logout? You will need to sign in
+                  again to access your account.
                 </p>
-                <div className="flex gap-4 mt-5">
+
+                <div className="flex gap-4 w-full">
                   <button
                     onClick={handleConfirm}
-                    className="bg-orange-500 text-white px-4 py-2 hover:bg-gray-600"
+                    className="flex-1 bg-gradient-to-r from-red-500 to-orange-500 hover:from-red-600 hover:to-orange-600 text-white font-semibold py-3 px-6 rounded-xl shadow-lg shadow-red-500/25 hover:shadow-red-500/40 transform hover:scale-105 transition-all duration-200 focus:outline-none focus:ring-4 focus:ring-red-500/20"
                   >
-                    Confirm
+                    Yes, Logout
                   </button>
                   <button
                     onClick={() => setShowModal(false)}
-                    className="bg-orange-500 text-white px-4 py-2 hover:bg-gray-600"
+                    className="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold py-3 px-6 rounded-xl border border-gray-300 hover:border-gray-400 transform hover:scale-105 transition-all duration-200 focus:outline-none focus:ring-4 focus:ring-gray-500/20"
                   >
                     Cancel
                   </button>
                 </div>
               </div>
-              <div
+
+              <button
                 onClick={() => setShowModal(false)}
-                className="absolute top-2 right-2 cursor-pointer"
+                className="absolute top-4 right-4 p-2 rounded-full bg-gray-100 hover:bg-gray-200 transition-all duration-200 focus:outline-none focus:ring-4 focus:ring-gray-500/20"
               >
-                <IoClose size={30} />
-              </div>
+                <IoClose className="w-5 h-5 text-gray-500" />
+              </button>
             </div>
           </div>
         )}
       </div>
 
       {/* Toast Container */}
-      <ToastContainer position="top-right" autoClose={1500} hideProgressBar />
+      <ToastContainer
+        position="top-right"
+        autoClose={1500}
+        hideProgressBar
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
     </div>
   );
 };
