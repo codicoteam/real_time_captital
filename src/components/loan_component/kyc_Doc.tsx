@@ -53,7 +53,7 @@ interface KycDocumentsProps {
 
 const KycDocuments: React.FC<KycDocumentsProps> = ({
   documents,
-  onUpload,
+
   onView,
 }) => {
   const [kycData, setKycData] = useState<KycDocument | null>(null);
@@ -499,10 +499,9 @@ const KycDocuments: React.FC<KycDocumentsProps> = ({
         [selectedDocType]: uploadedFileUrl,
       };
 
-      let result;
       if (kycData) {
         // Update existing document
-        result = await updateKycDocument(documentUpdate);
+        await updateKycDocument(documentUpdate);
       } else {
         // Create new document
         const baseDocument = {
@@ -515,7 +514,7 @@ const KycDocuments: React.FC<KycDocumentsProps> = ({
           proofOfEmployment:
             selectedDocType === "proofOfEmployment" ? uploadedFileUrl : "",
         };
-        result = await createKycDocument(baseDocument);
+        await createKycDocument(baseDocument);
       }
 
       // Refresh the data after successful upload
