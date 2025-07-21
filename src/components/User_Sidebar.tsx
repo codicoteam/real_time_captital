@@ -19,49 +19,42 @@ const Sidebar = ({ isOpen = true, onClose = () => {} }) => {
     {
       icon: LayoutDashboard,
       label: "Dashboard",
-      subtitle: "Loan Overview",
       path: "/userdashboard",
       color: "from-orange-500 to-red-600",
     },
     {
       icon: FileText,
       label: "Loan Application",
-      subtitle: "Apply & Manage",
       path: "/loan_application",
       color: "from-orange-500 to-red-600",
     },
     {
       icon: CreditCard,
       label: "Payment",
-      subtitle: "Transactions",
       path: "/payment",
       color: "from-orange-500 to-red-600",
     },
     {
       icon: User,
       label: "Chat",
-      subtitle: "chat",
       path: "/chart",
       color: "from-orange-500 to-pink-600",
     },
     {
       icon: User,
       label: "My Customers",
-      subtitle: "agent customers",
       path: "/customer",
       color: "from-orange-500 to-pink-600",
     },
     {
       icon: Bell,
       label: "Notifications",
-      subtitle: "Check what's new",
       path: "/usernotifications",
       color: "from-orange-500 to-red-600",
     },
     {
       icon: User,
       label: "Account",
-      subtitle: "Profile & Settings",
       path: "/account",
       color: "from-orange-500 to-red-600",
     },
@@ -69,7 +62,6 @@ const Sidebar = ({ isOpen = true, onClose = () => {} }) => {
     {
       icon: Lock,
       label: "Logout",
-      subtitle: "Sign out",
       path: "/logout",
       color: "from-orange-500 to-red-600",
     },
@@ -85,24 +77,19 @@ const Sidebar = ({ isOpen = true, onClose = () => {} }) => {
       {/* Mobile backdrop */}
       {isOpen && (
         <div
-          className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 lg:hidden"
+          className="fixed inset-0 bg-black/30 backdrop-blur-sm z-40 lg:hidden"
           onClick={onClose}
         />
       )}
 
       {/* Sidebar */}
       <aside
-        className={`fixed inset-y-0 left-0 z-50 w-72 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 transform ${
+        className={`fixed inset-y-0 left-0 z-50 w-72 bg-gray-50 transform ${
           isOpen ? "translate-x-0" : "-translate-x-full"
-        } transition-all duration-300 ease-out lg:translate-x-0 lg:static lg:inset-0 overflow-hidden flex flex-col`}
+        } transition-all duration-300 ease-out lg:translate-x-0 lg:static lg:inset-0 overflow-hidden flex flex-col border-r border-gray-200`}
       >
-        {/* Background decorations */}
-        <div className="absolute inset-0 bg-gradient-to-br from-blue-600/5 via-purple-600/5 to-pink-600/5"></div>
-        <div className="absolute top-10 right-4 w-16 h-16 bg-gradient-to-r from-blue-500/20 to-purple-500/20 rounded-full blur-2xl"></div>
-        <div className="absolute bottom-20 left-4 w-12 h-12 bg-gradient-to-r from-purple-500/15 to-pink-500/15 rounded-full blur-xl"></div>
-
         {/* Header */}
-        <div className="relative flex items-center justify-between h-16 px-4 border-b border-slate-700/50 bg-slate-800/50 backdrop-blur-xl flex-shrink-0">
+        <div className="relative flex items-center justify-between h-16 px-4 border-b border-gray-200 bg-white flex-shrink-0">
           <div className="flex items-center space-x-3">
             <img
               src={logo}
@@ -110,24 +97,22 @@ const Sidebar = ({ isOpen = true, onClose = () => {} }) => {
               className="w-8 h-8 object-contain"
             />
             <div>
-              <h1 className="text-lg font-bold bg-gradient-to-r from-white via-blue-100 to-purple-200 bg-clip-text text-transparent">
-                Pocket.
-              </h1>
-              <p className="text-xs text-slate-400 font-medium tracking-wide">
+              <h1 className="text-lg font-bold text-gray-800">Pocket.</h1>
+              <p className="text-xs text-gray-500 font-medium tracking-wide">
                 Financial Solutions
               </p>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="lg:hidden p-1.5 rounded-lg bg-slate-700/50 hover:bg-slate-600/50 transition-all duration-200 border border-slate-600/50 group"
+            className="lg:hidden p-1.5 rounded-lg bg-gray-100 hover:bg-gray-200 transition-all duration-200 border border-gray-300 group"
           >
-            <X className="w-4 h-4 text-slate-300 group-hover:text-white transition-colors" />
+            <X className="w-4 h-4 text-gray-600 group-hover:text-gray-800 transition-colors" />
           </button>
         </div>
 
         {/* Navigation */}
-        <nav className="relative flex-1 overflow-y-auto px-3 py-4 space-y-2 scrollbar-hide">
+        <nav className="relative flex-1 overflow-y-auto px-3 py-4 space-y-1 scrollbar-hide">
           {sidebarItems.map((item, index) => {
             const IconComponent = item.icon;
             const isActive = location.pathname === item.path;
@@ -135,33 +120,24 @@ const Sidebar = ({ isOpen = true, onClose = () => {} }) => {
             return (
               <div
                 key={index}
-                className={`group relative flex items-center px-4 py-3.5 rounded-lg transition-all duration-300 cursor-pointer ${
+                className={`group relative flex items-center px-4 py-3 rounded-lg transition-all duration-300 cursor-pointer ${
                   isActive
-                    ? `bg-gradient-to-r ${item.color} shadow-lg shadow-blue-500/20`
-                    : "hover:bg-slate-700/50"
+                    ? `bg-gradient-to-r ${item.color} shadow-lg shadow-orange-500/20`
+                    : "hover:bg-gray-100"
                 }`}
                 onClick={() => handleNavigation(item.path)}
               >
-                {/* Active background glow */}
-                {isActive && (
-                  <div
-                    className={`absolute inset-0 rounded-lg bg-gradient-to-r ${item.color} opacity-10 blur-lg`}
-                  />
-                )}
-
                 {/* Icon */}
                 <div
-                  className={`relative p-2.5 rounded-lg mr-4 transition-all duration-300 ${
-                    isActive
-                      ? "bg-white/20 backdrop-blur-sm shadow-md"
-                      : "bg-slate-700/40 group-hover:bg-slate-600/40"
+                  className={`relative p-2 rounded-lg mr-3 transition-all duration-300 ${
+                    isActive ? "bg-white/20 backdrop-blur-sm" : "bg-transparent"
                   }`}
                 >
                   <IconComponent
                     className={`w-5 h-5 transition-all duration-300 ${
                       isActive
                         ? "text-white"
-                        : "text-slate-300 group-hover:text-white"
+                        : "text-gray-600 group-hover:text-gray-800"
                     }`}
                   />
                 </div>
@@ -172,22 +148,11 @@ const Sidebar = ({ isOpen = true, onClose = () => {} }) => {
                     className={`font-medium text-sm ${
                       isActive
                         ? "text-white"
-                        : "text-slate-200 group-hover:text-white"
+                        : "text-gray-700 group-hover:text-gray-900"
                     }`}
                   >
                     {item.label}
                   </div>
-                  {item.subtitle && (
-                    <div
-                      className={`text-xs ${
-                        isActive
-                          ? "text-white/70"
-                          : "text-slate-400 group-hover:text-slate-300"
-                      }`}
-                    >
-                      {item.subtitle}
-                    </div>
-                  )}
                 </div>
 
                 {/* Arrow */}
@@ -195,11 +160,9 @@ const Sidebar = ({ isOpen = true, onClose = () => {} }) => {
                   className={`w-4 h-4 transition-all duration-300 ${
                     isActive
                       ? "text-white opacity-100 translate-x-0.5"
-                      : "text-slate-400 opacity-0 group-hover:opacity-100 group-hover:translate-x-0.5"
+                      : "text-gray-400 opacity-0 group-hover:opacity-100 group-hover:translate-x-0.5"
                   }`}
                 />
-
-                <div className="absolute inset-0 rounded-lg bg-gradient-to-r from-transparent via-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
               </div>
             );
           })}
@@ -207,24 +170,20 @@ const Sidebar = ({ isOpen = true, onClose = () => {} }) => {
 
         {/* Footer status */}
         <div className="relative px-4 pb-4 flex-shrink-0">
-          <div className="h-px bg-gradient-to-r from-transparent via-slate-600 to-transparent mb-4"></div>
+          <div className="h-px bg-gray-200 mb-4"></div>
           <div className="flex items-center justify-center">
-            <div className="flex items-center space-x-2 px-3 py-2 rounded-full bg-slate-800/60 border border-slate-700/50 backdrop-blur-xl">
+            <div className="flex items-center space-x-2 px-3 py-2 rounded-full bg-white border border-gray-200 shadow-sm">
               <div className="flex space-x-1">
                 <div className="w-1.5 h-1.5 bg-green-400 rounded-full animate-pulse"></div>
                 <div className="w-1.5 h-1.5 bg-green-400 rounded-full animate-pulse delay-150"></div>
                 <div className="w-1.5 h-1.5 bg-green-400 rounded-full animate-pulse delay-300"></div>
               </div>
-              <span className="text-xs text-slate-300 font-medium">
+              <span className="text-xs text-gray-600 font-medium">
                 All Systems Online
               </span>
             </div>
           </div>
         </div>
-
-        {/* Decorative lines */}
-        <div className="absolute top-1/2 right-0 w-px h-20 bg-gradient-to-b from-transparent via-blue-500/30 to-transparent"></div>
-        <div className="absolute bottom-1/4 left-0 w-px h-14 bg-gradient-to-b from-transparent via-purple-500/30 to-transparent"></div>
       </aside>
 
       {/* Custom scrollbar styles */}
