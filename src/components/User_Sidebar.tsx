@@ -11,7 +11,7 @@ import {
 import { useNavigate, useLocation, type To } from "react-router-dom";
 import logo from "../assets/logo.png";
 
-const Sidebar = ({ isOpen = true, onClose = () => {} }) => {
+const UserSidebar = ({ isOpen = true, onClose = () => {} }) => {
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -200,4 +200,4 @@ const Sidebar = ({ isOpen = true, onClose = () => {} }) => {
   );
 };
 
-export default Sidebar;
+export default UserSidebar;

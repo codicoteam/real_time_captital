@@ -21,61 +21,61 @@ const Sidebar = ({ isOpen = true, onClose = () => {} }) => {
       icon: LayoutDashboard,
       label: "Dashboard",
       path: "/admindashboard",
-      color: "from-amber-500 to-orange-500",
+      color: "from-orange-500 to-red-600",
     },
     {
       icon: Users,
       label: "Users",
       path: "/users",
-      color: "from-amber-400 to-orange-400",
+      color: "from-orange-500 to-red-600",
     },
     {
       icon: CreditCard,
       label: "Loan Management",
       path: "/loan-management",
-      color: "from-amber-300 to-orange-300",
+      color: "from-orange-500 to-red-600",
     },
     {
       icon: TrendingUp,
       label: "Loan Tracking",
       path: "/loan-tracking",
-      color: "from-amber-400 to-orange-400",
+      color: "from-orange-500 to-red-600",
     },
     {
       icon: CreditCard,
       label: "Payments",
       path: "/payments",
-      color: "from-amber-500 to-orange-500",
+      color: "from-orange-500 to-red-600",
     },
     {
       icon: Users,
       label: "Chat",
       path: "/chat",
-      color: "from-amber-300 to-orange-300",
+      color: "from-orange-500 to-red-600",
     },
     {
       icon: Settings,
       label: "Settings",
       path: "/settings",
-      color: "from-amber-400 to-orange-400",
+      color: "from-orange-500 to-red-600",
     },
     {
       icon: Lock,
       label: "Collaterals",
       path: "/collaterals",
-      color: "from-amber-500 to-orange-500",
+      color: "from-orange-500 to-red-600",
     },
     {
       icon: Bell,
       label: "Notifications",
       path: "/notifications",
-      color: "from-amber-300 to-orange-300",
+      color: "from-orange-500 to-red-600",
     },
     {
       icon: Lock,
       label: "Admin Logout",
       path: "/Adminlogout",
-      color: "from-amber-600 to-orange-600",
+      color: "from-orange-500 to-red-600",
     },
   ];
 
@@ -91,24 +91,19 @@ const Sidebar = ({ isOpen = true, onClose = () => {} }) => {
       {/* Mobile backdrop */}
       {isOpen && (
         <div
-          className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 lg:hidden"
+          className="fixed inset-0 bg-black/30 backdrop-blur-sm z-40 lg:hidden"
           onClick={onClose}
         />
       )}
 
       {/* Sidebar */}
       <aside
-        className={`fixed inset-y-0 left-0 z-50 w-72 bg-gradient-to-br from-amber-50 via-orange-50 to-amber-100 transform ${
+        className={`fixed inset-y-0 left-0 z-50 w-72 bg-gray-50 transform ${
           isOpen ? "translate-x-0" : "-translate-x-full"
-        } transition-all duration-300 ease-out lg:translate-x-0 lg:static lg:inset-0 overflow-hidden flex flex-col border-r border-orange-200`}
+        } transition-all duration-300 ease-out lg:translate-x-0 lg:static lg:inset-0 overflow-hidden flex flex-col border-r border-gray-200`}
       >
-        {/* Background decorations */}
-        <div className="absolute inset-0 bg-gradient-to-br from-amber-100/20 via-orange-100/20 to-amber-100/20"></div>
-        <div className="absolute top-10 right-4 w-16 h-16 bg-gradient-to-r from-amber-200/30 to-orange-200/30 rounded-full blur-2xl"></div>
-        <div className="absolute bottom-20 left-4 w-12 h-12 bg-gradient-to-r from-orange-200/20 to-amber-200/20 rounded-full blur-xl"></div>
-
         {/* Header */}
-        <div className="relative flex items-center justify-between h-16 px-4 border-b border-orange-200 bg-white/30 backdrop-blur-sm flex-shrink-0">
+        <div className="relative flex items-center justify-between h-16 px-4 border-b border-gray-200 bg-white flex-shrink-0">
           <div className="flex items-center space-x-3">
             <img
               src={logo}
@@ -116,24 +111,22 @@ const Sidebar = ({ isOpen = true, onClose = () => {} }) => {
               className="w-8 h-8 object-contain"
             />
             <div>
-              <h1 className="text-lg font-bold bg-gradient-to-r from-amber-700 to-orange-700 bg-clip-text text-transparent">
-                Pocket.
-              </h1>
-              <p className="text-xs text-orange-600/80 font-medium tracking-wide">
+              <h1 className="text-lg font-bold text-gray-800">Pocket.</h1>
+              <p className="text-xs text-gray-500 font-medium tracking-wide">
                 Loan Management
               </p>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="lg:hidden p-1.5 rounded-lg bg-orange-100/70 hover:bg-orange-200/70 transition-all duration-200 border border-orange-200/50 group"
+            className="lg:hidden p-1.5 rounded-lg bg-gray-100 hover:bg-gray-200 transition-all duration-200 border border-gray-300 group"
           >
-            <X className="w-4 h-4 text-orange-700 group-hover:text-orange-800 transition-colors" />
+            <X className="w-4 h-4 text-gray-600 group-hover:text-gray-800 transition-colors" />
           </button>
         </div>
 
         {/* Navigation */}
-        <nav className="relative flex-1 overflow-y-auto px-3 py-4 space-y-2 scrollbar-hide">
+        <nav className="relative flex-1 overflow-y-auto px-3 py-4 space-y-1 scrollbar-hide">
           {sidebarItems.map((item, index) => {
             const IconComponent = item.icon;
             const isActive = location.pathname === item.path;
@@ -141,29 +134,24 @@ const Sidebar = ({ isOpen = true, onClose = () => {} }) => {
             return (
               <div
                 key={index}
-                className={`group relative flex items-center px-4 py-3.5 rounded-lg transition-all duration-300 cursor-pointer ${
+                className={`group relative flex items-center px-4 py-3 rounded-lg transition-all duration-300 cursor-pointer ${
                   isActive
-                    ? `bg-gradient-to-r ${item.color} shadow-lg shadow-orange-400/20 text-white`
-                    : "hover:bg-orange-100/50 text-orange-800"
+                    ? `bg-gradient-to-r ${item.color} shadow-lg shadow-orange-500/20`
+                    : "hover:bg-gray-100"
                 }`}
                 onClick={() => handleNavigation(item.path)}
               >
-                {/* Active background glow */}
-                {isActive && (
-                  <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-6 bg-gradient-to-b from-red-400 to-orange-500 rounded-r-full shadow-md shadow-orange-400/40"></div>
-                )}
-
                 {/* Icon */}
                 <div
-                  className={`relative p-2.5 rounded-lg mr-4 transition-all duration-300 ${
-                    isActive
-                      ? "bg-white/20 backdrop-blur-sm shadow-md"
-                      : "bg-orange-100/70 group-hover:bg-orange-200/50"
+                  className={`relative p-2 rounded-lg mr-3 transition-all duration-300 ${
+                    isActive ? "bg-white/20 backdrop-blur-sm" : "bg-transparent"
                   }`}
                 >
                   <IconComponent
                     className={`w-5 h-5 transition-all duration-300 ${
-                      isActive ? "text-white" : "text-orange-700"
+                      isActive
+                        ? "text-white"
+                        : "text-gray-600 group-hover:text-gray-800"
                     }`}
                   />
                 </div>
@@ -171,8 +159,10 @@ const Sidebar = ({ isOpen = true, onClose = () => {} }) => {
                 {/* Text content */}
                 <div className="flex-1 relative z-10 min-w-0">
                   <div
-                    className={`font-semibold text-sm truncate ${
-                      isActive ? "text-white" : "text-orange-800"
+                    className={`font-medium text-sm ${
+                      isActive
+                        ? "text-white"
+                        : "text-gray-700 group-hover:text-gray-900"
                     }`}
                   >
                     {item.label}
@@ -181,15 +171,12 @@ const Sidebar = ({ isOpen = true, onClose = () => {} }) => {
 
                 {/* Arrow */}
                 <ChevronRight
-                  className={`w-4 h-4 transition-all duration-300 flex-shrink-0 ${
+                  className={`w-4 h-4 transition-all duration-300 ${
                     isActive
-                      ? "text-white opacity-100 translate-x-1"
-                      : "text-orange-600 opacity-0 group-hover:opacity-100 group-hover:translate-x-1"
+                      ? "text-white opacity-100 translate-x-0.5"
+                      : "text-gray-400 opacity-0 group-hover:opacity-100 group-hover:translate-x-0.5"
                   }`}
                 />
-
-                {/* Hover effect overlay */}
-                <div className="absolute inset-0 rounded-lg bg-gradient-to-r from-transparent via-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
               </div>
             );
           })}
@@ -197,24 +184,20 @@ const Sidebar = ({ isOpen = true, onClose = () => {} }) => {
 
         {/* Footer status */}
         <div className="relative px-4 pb-4 flex-shrink-0">
-          <div className="h-px bg-gradient-to-r from-transparent via-orange-300 to-transparent mb-4"></div>
+          <div className="h-px bg-gray-200 mb-4"></div>
           <div className="flex items-center justify-center">
-            <div className="flex items-center space-x-2 px-3 py-2 rounded-full bg-orange-100/60 border border-orange-200/50 backdrop-blur-sm">
+            <div className="flex items-center space-x-2 px-3 py-2 rounded-full bg-white border border-gray-200 shadow-sm">
               <div className="flex space-x-1">
-                <div className="w-1.5 h-1.5 bg-amber-500 rounded-full animate-pulse"></div>
-                <div className="w-1.5 h-1.5 bg-amber-500 rounded-full animate-pulse delay-150"></div>
-                <div className="w-1.5 h-1.5 bg-amber-500 rounded-full animate-pulse delay-300"></div>
+                <div className="w-1.5 h-1.5 bg-green-400 rounded-full animate-pulse"></div>
+                <div className="w-1.5 h-1.5 bg-green-400 rounded-full animate-pulse delay-150"></div>
+                <div className="w-1.5 h-1.5 bg-green-400 rounded-full animate-pulse delay-300"></div>
               </div>
-              <span className="text-xs text-orange-800 font-medium">
+              <span className="text-xs text-gray-600 font-medium">
                 System Online
               </span>
             </div>
           </div>
         </div>
-
-        {/* Decorative lines */}
-        <div className="absolute top-1/2 right-0 w-px h-20 bg-gradient-to-b from-transparent via-amber-400/30 to-transparent"></div>
-        <div className="absolute bottom-1/4 left-0 w-px h-14 bg-gradient-to-b from-transparent via-orange-400/30 to-transparent"></div>
       </aside>
 
       {/* Custom scrollbar styles */}

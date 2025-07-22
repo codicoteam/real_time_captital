@@ -38,7 +38,9 @@ const LoanManagement = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [selectedFilter, setSelectedFilter] = useState("all");
   const [searchTerm, setSearchTerm] = useState("");
-  const [loanApplications, setLoanApplications] = useState<LoanApplication[]>([]);
+  const [loanApplications, setLoanApplications] = useState<LoanApplication[]>(
+    []
+  );
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -53,12 +55,17 @@ const LoanManagement = () => {
     loanType: "",
     amount: "",
   });
-  
-  const userName = localStorage.getItem('userName');
+
+  const userName = localStorage.getItem("userName");
 
   // Mock notifications data
   const notifications = [
-    { id: 1, title: "New application received", time: "2 mins ago", read: false },
+    {
+      id: 1,
+      title: "New application received",
+      time: "2 mins ago",
+      read: false,
+    },
     { id: 2, title: "Loan approved", time: "1 hour ago", read: false },
     { id: 3, title: "System maintenance", time: "3 hours ago", read: true },
   ];
@@ -97,7 +104,7 @@ const LoanManagement = () => {
           })) || [];
 
         setLoanApplications(transformedLoans);
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
       } catch (err: any) {
         const errorMessage = err?.message || err || "Failed to fetch loans";
         setError(errorMessage);
@@ -286,7 +293,7 @@ const LoanManagement = () => {
   };
 
   return (
-    <div className="flex h-screen bg-gradient-to-br from-orange-50 via-red-50 to-yellow-50">
+    <div className="flex h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50">
       {/* Sidebar Component */}
       <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
 
@@ -305,9 +312,9 @@ const LoanManagement = () => {
               </button>
               <div className="flex items-center space-x-3">
                 <div className="flex items-center space-x-2 text-sm">
-                  <span className="text-orange-500">Dashboard</span>
-                  <span className="text-orange-300">›</span>
-                  <span className="text-orange-700 font-medium">
+                  <span className="text-black">Dashboard</span>
+                  <span className="text-black">›</span>
+                  <span className="text-gray-700 font-medium">
                     Loan Management
                   </span>
                 </div>
@@ -329,24 +336,26 @@ const LoanManagement = () => {
 
               {/* Notifications */}
               <div className="relative">
-                <button 
+                <button
                   onClick={() => setShowNotifications(!showNotifications)}
                   className="relative p-2 rounded-xl bg-orange-100/50 hover:bg-orange-200/50 transition-all duration-200 group"
                 >
                   <Bell className="w-5 h-5 text-orange-600 group-hover:text-orange-700" />
                   <div className="absolute -top-1 -right-1 w-4 h-4 bg-gradient-to-r from-red-500 to-orange-500 rounded-full flex items-center justify-center">
                     <span className="text-xs text-white font-medium">
-                      {notifications.filter(n => !n.read).length}
+                      {notifications.filter((n) => !n.read).length}
                     </span>
                   </div>
                 </button>
-                
+
                 {/* Notifications dropdown */}
                 {showNotifications && (
                   <div className="absolute right-0 mt-2 w-80 bg-white rounded-xl shadow-lg border border-orange-200/50 z-50">
                     <div className="p-4 border-b border-orange-200/50 flex justify-between items-center">
-                      <h3 className="font-medium text-orange-800">Notifications</h3>
-                      <button 
+                      <h3 className="font-medium text-orange-800">
+                        Notifications
+                      </h3>
+                      <button
                         onClick={() => setShowNotifications(false)}
                         className="text-orange-500 hover:text-orange-700"
                       >
@@ -355,17 +364,23 @@ const LoanManagement = () => {
                     </div>
                     <div className="divide-y divide-orange-200/30 max-h-96 overflow-y-auto">
                       {notifications.map((notification) => (
-                        <div 
-                          key={notification.id} 
-                          className={`p-4 hover:bg-orange-50/50 cursor-pointer ${!notification.read ? 'bg-orange-50' : ''}`}
+                        <div
+                          key={notification.id}
+                          className={`p-4 hover:bg-orange-50/50 cursor-pointer ${
+                            !notification.read ? "bg-orange-50" : ""
+                          }`}
                         >
                           <div className="flex justify-between">
-                            <p className="font-medium text-orange-800">{notification.title}</p>
+                            <p className="font-medium text-orange-800">
+                              {notification.title}
+                            </p>
                             {!notification.read && (
                               <span className="h-2 w-2 bg-orange-500 rounded-full"></span>
                             )}
                           </div>
-                          <p className="text-xs text-orange-500 mt-1">{notification.time}</p>
+                          <p className="text-xs text-orange-500 mt-1">
+                            {notification.time}
+                          </p>
                         </div>
                       ))}
                     </div>
@@ -412,14 +427,14 @@ const LoanManagement = () => {
               </p>
             </div>
             <div className="flex items-center space-x-3">
-              <button 
+              <button
                 onClick={() => setShowExportModal(true)}
                 className="px-4 py-2 bg-orange-100/60 text-orange-700 rounded-xl font-medium hover:bg-orange-200/60 transition-all duration-200 flex items-center space-x-2"
               >
                 <Download className="w-4 h-4" />
                 <span>Export</span>
               </button>
-              <button 
+              <button
                 onClick={() => setShowNewAppModal(true)}
                 className="px-4 py-2 bg-gradient-to-r from-orange-500 to-red-500 text-white rounded-xl font-medium hover:from-orange-600 hover:to-red-600 transition-all duration-200 flex items-center space-x-2"
               >
@@ -455,10 +470,10 @@ const LoanManagement = () => {
               <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-6 shadow-lg border border-white/50">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm text-orange-600 font-medium">
+                    <p className="text-sm text-gray-700 font-medium">
                       Total Applications
                     </p>
-                    <p className="text-2xl font-bold text-orange-800">
+                    <p className="text-2xl font-bold text-black">
                       {loanApplications.length}
                     </p>
                   </div>
@@ -470,10 +485,10 @@ const LoanManagement = () => {
               <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-6 shadow-lg border border-white/50">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm text-yellow-600 font-medium">
+                    <p className="text-sm text-gray-700 font-medium">
                       Pending Review
                     </p>
-                    <p className="text-2xl font-bold text-yellow-800">
+                    <p className="text-2xl font-bold text-black">
                       {getPendingReviewCount()}
                     </p>
                   </div>
@@ -485,10 +500,10 @@ const LoanManagement = () => {
               <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-6 shadow-lg border border-white/50">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm text-green-600 font-medium">
+                    <p className="text-sm text-gray-700 font-medium">
                       Approved
                     </p>
-                    <p className="text-2xl font-bold text-green-800">
+                    <p className="text-2xl font-bold text-black">
                       {getApprovedCount()}
                     </p>
                   </div>
@@ -500,8 +515,10 @@ const LoanManagement = () => {
               <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-6 shadow-lg border border-white/50">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm text-red-600 font-medium">Rejected</p>
-                    <p className="text-2xl font-bold text-red-800">
+                    <p className="text-sm text-gray-700 font-medium">
+                      Rejected
+                    </p>
+                    <p className="text-2xl font-bold text-black">
                       {getRejectedCount()}
                     </p>
                   </div>
@@ -519,8 +536,8 @@ const LoanManagement = () => {
               <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
                 <div className="flex items-center space-x-4">
                   <div className="flex items-center space-x-2">
-                    <Filter className="w-4 h-4 text-orange-600" />
-                    <span className="text-sm font-medium text-orange-700">
+                    <Filter className="w-4 h-4 text-black" />
+                    <span className="text-sm font-medium text-black">
                       Filter by:
                     </span>
                   </div>
@@ -536,7 +553,7 @@ const LoanManagement = () => {
                     ))}
                   </select>
                 </div>
-                <div className="text-sm text-orange-600">
+                <div className="text-sm text-gray-700">
                   Showing {filteredApplications.length} of{" "}
                   {loanApplications.length} applications
                 </div>
@@ -546,7 +563,7 @@ const LoanManagement = () => {
 
           {/* Applications Table */}
           {!loading && (
-            <div className="bg-white/70 backdrop-blur-sm rounded-2xl shadow-lg border border-white/50 overflow-hidden">
+            <div className="bg-white backdrop-blur-sm rounded-2xl shadow-lg border border-white/50 overflow-hidden">
               <div className="overflow-x-auto">
                 <table className="w-full">
                   <thead className="bg-gradient-to-r from-orange-100/50 to-red-100/50">
@@ -594,10 +611,10 @@ const LoanManagement = () => {
                                 </span>
                               </div>
                               <div>
-                                <div className="text-sm font-medium text-orange-800">
+                                <div className="text-sm font-medium text-black">
                                   {application.id}
                                 </div>
-                                <div className="text-xs text-orange-600">
+                                <div className="text-xs text-gray-700">
                                   {application.appliedDate}
                                 </div>
                               </div>
@@ -605,26 +622,26 @@ const LoanManagement = () => {
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap">
                             <div>
-                              <div className="text-sm font-medium text-orange-800">
+                              <div className="text-sm font-medium text-black">
                                 {application.applicant}
                               </div>
-                              <div className="text-xs text-orange-600">
+                              <div className="text-xs text-gray-700">
                                 {application.email}
                               </div>
-                              <div className="text-xs text-orange-500">
+                              <div className="text-xs text-gray-700">
                                 {application.phone}
                               </div>
                             </div>
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap">
                             <div>
-                              <div className="text-sm font-medium text-orange-800">
+                              <div className="text-sm font-medium text-black">
                                 {application.loanType}
                               </div>
-                              <div className="text-sm text-orange-600 font-semibold">
+                              <div className="text-sm text-black font-semibold">
                                 {application.amount}
                               </div>
-                              <div className="text-xs text-orange-500">
+                              <div className="text-xs text-gray-700">
                                 Credit: {application.creditScore}
                               </div>
                             </div>
@@ -735,7 +752,7 @@ const LoanManagement = () => {
           <div className="bg-white rounded-2xl shadow-xl w-full max-w-md overflow-hidden">
             <div className="p-6 border-b border-orange-200/50 relative">
               <h3 className="text-xl font-bold text-orange-800">Export Data</h3>
-              <button 
+              <button
                 onClick={() => setShowExportModal(false)}
                 className="absolute top-4 right-4 text-orange-500 hover:text-orange-700"
               >
@@ -748,14 +765,14 @@ const LoanManagement = () => {
                   Select Format
                 </label>
                 <div className="grid grid-cols-2 gap-3">
-                  {['csv', 'excel', 'pdf', 'json'].map((format) => (
+                  {["csv", "excel", "pdf", "json"].map((format) => (
                     <button
                       key={format}
                       onClick={() => setExportFormat(format)}
                       className={`p-3 rounded-xl border transition-all duration-200 ${
                         exportFormat === format
-                          ? 'border-orange-500 bg-orange-100/50 text-orange-700'
-                          : 'border-orange-200/50 hover:border-orange-300 text-orange-600'
+                          ? "border-orange-500 bg-orange-100/50 text-orange-700"
+                          : "border-orange-200/50 hover:border-orange-300 text-orange-600"
                       }`}
                     >
                       {format.toUpperCase()}
@@ -768,12 +785,12 @@ const LoanManagement = () => {
                   Date Range
                 </label>
                 <div className="grid grid-cols-2 gap-3">
-                  <input 
-                    type="date" 
+                  <input
+                    type="date"
                     className="p-2 rounded-xl border border-orange-200/50 focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500/50"
                   />
-                  <input 
-                    type="date" 
+                  <input
+                    type="date"
                     className="p-2 rounded-xl border border-orange-200/50 focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500/50"
                   />
                 </div>
@@ -802,8 +819,10 @@ const LoanManagement = () => {
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
           <div className="bg-white rounded-2xl shadow-xl w-full max-w-md overflow-hidden">
             <div className="p-6 border-b border-orange-200/50 relative">
-              <h3 className="text-xl font-bold text-orange-800">New Loan Application</h3>
-              <button 
+              <h3 className="text-xl font-bold text-orange-800">
+                New Loan Application
+              </h3>
+              <button
                 onClick={() => setShowNewAppModal(false)}
                 className="absolute top-4 right-4 text-orange-500 hover:text-orange-700"
               >
@@ -818,7 +837,9 @@ const LoanManagement = () => {
                 <input
                   type="text"
                   value={newAppData.applicant}
-                  onChange={(e) => setNewAppData({...newAppData, applicant: e.target.value})}
+                  onChange={(e) =>
+                    setNewAppData({ ...newAppData, applicant: e.target.value })
+                  }
                   className="w-full p-2 rounded-xl border border-orange-200/50 focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500/50"
                   placeholder="Enter applicant name"
                 />
@@ -829,7 +850,9 @@ const LoanManagement = () => {
                 </label>
                 <select
                   value={newAppData.loanType}
-                  onChange={(e) => setNewAppData({...newAppData, loanType: e.target.value})}
+                  onChange={(e) =>
+                    setNewAppData({ ...newAppData, loanType: e.target.value })
+                  }
                   className="w-full p-2 rounded-xl border border-orange-200/50 focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500/50"
                 >
                   <option value="">Select loan type</option>
@@ -846,7 +869,9 @@ const LoanManagement = () => {
                 <input
                   type="number"
                   value={newAppData.amount}
-                  onChange={(e) => setNewAppData({...newAppData, amount: e.target.value})}
+                  onChange={(e) =>
+                    setNewAppData({ ...newAppData, amount: e.target.value })
+                  }
                   className="w-full p-2 rounded-xl border border-orange-200/50 focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500/50"
                   placeholder="Enter loan amount"
                 />

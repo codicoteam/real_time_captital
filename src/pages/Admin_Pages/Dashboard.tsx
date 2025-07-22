@@ -64,14 +64,13 @@ interface Payment {
   createdAt: string;
 }
 
-
 interface Notification {
   id: number;
   title: string;
   message: string;
   time: string;
   read: boolean;
-  type: 'loan' | 'payment' | 'system';
+  type: "loan" | "payment" | "system";
 }
 
 const Dashboard = () => {
@@ -90,7 +89,7 @@ const Dashboard = () => {
       message: "John Doe has submitted a new loan application for ₨50,000",
       time: "10 minutes ago",
       read: false,
-      type: 'loan'
+      type: "loan",
     },
     {
       id: 2,
@@ -98,7 +97,7 @@ const Dashboard = () => {
       message: "Payment of ₨12,500 received from Jane Smith",
       time: "2 hours ago",
       read: false,
-      type: 'payment'
+      type: "payment",
     },
     {
       id: 3,
@@ -106,7 +105,7 @@ const Dashboard = () => {
       message: "Scheduled maintenance this weekend",
       time: "1 day ago",
       read: true,
-      type: 'system'
+      type: "system",
     },
     {
       id: 4,
@@ -114,7 +113,7 @@ const Dashboard = () => {
       message: "Loan application #L-10045 has been approved",
       time: "3 days ago",
       read: true,
-      type: 'loan'
+      type: "loan",
     },
     {
       id: 5,
@@ -122,7 +121,7 @@ const Dashboard = () => {
       message: "Michael Brown has registered as a new borrower",
       time: "1 week ago",
       read: true,
-      type: 'system'
+      type: "system",
     },
   ]);
 
@@ -130,14 +129,17 @@ const Dashboard = () => {
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       const target = event.target as HTMLElement;
-      if (!target.closest('.notifications-popup') && !target.closest('.notification-bell')) {
+      if (
+        !target.closest(".notifications-popup") &&
+        !target.closest(".notification-bell")
+      ) {
         setNotificationsOpen(false);
       }
     };
 
-    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
 
@@ -195,12 +197,14 @@ const Dashboard = () => {
 
     const searchLower = searchTerm.toLowerCase();
 
-    const filteredLoans = loans.filter(loan => {
-      const borrowerName = loan.borrowerInfo 
-        ? `${loan.borrowerInfo.firstName || ''} ${loan.borrowerInfo.surname || ''}`.toLowerCase()
-        : '';
-      const loanType = (loan.productType || loan.loanType || '').toLowerCase();
-      const amount = loan.amount?.toString().toLowerCase() || '';
+    const filteredLoans = loans.filter((loan) => {
+      const borrowerName = loan.borrowerInfo
+        ? `${loan.borrowerInfo.firstName || ""} ${
+            loan.borrowerInfo.surname || ""
+          }`.toLowerCase()
+        : "";
+      const loanType = (loan.productType || loan.loanType || "").toLowerCase();
+      const amount = loan.amount?.toString().toLowerCase() || "";
       const status = loan.status.toLowerCase();
 
       return (
@@ -211,11 +215,11 @@ const Dashboard = () => {
       );
     });
 
-    const filteredUsers = users.filter(user => {
+    const filteredUsers = users.filter((user) => {
       const fullName = `${user.firstName} ${user.lastName}`.toLowerCase();
-      const email = user.email?.toLowerCase() || '';
-      const phone = user.phoneNumber?.toLowerCase() || '';
-      const address = user.address?.toLowerCase() || '';
+      const email = user.email?.toLowerCase() || "";
+      const phone = user.phoneNumber?.toLowerCase() || "";
+      const address = user.address?.toLowerCase() || "";
 
       return (
         fullName.includes(searchLower) ||
@@ -225,14 +229,11 @@ const Dashboard = () => {
       );
     });
 
-    const filteredPayments = payments.filter(payment => {
-      const amount = payment.amount?.toString().toLowerCase() || '';
+    const filteredPayments = payments.filter((payment) => {
+      const amount = payment.amount?.toString().toLowerCase() || "";
       const date = payment.createdAt.toLowerCase();
 
-      return (
-        amount.includes(searchLower) ||
-        date.includes(searchLower)
-      );
+      return amount.includes(searchLower) || date.includes(searchLower);
     });
 
     return {
@@ -242,21 +243,31 @@ const Dashboard = () => {
     };
   };
 
-  const { loans: searchedLoans, users: searchedUsers, payments: searchedPayments } = searchAllData();
+  const {
+    loans: searchedLoans,
+    users: searchedUsers,
+    payments: searchedPayments,
+  } = searchAllData();
 
   // Toggle notification read status
   const toggleNotificationRead = (id: number) => {
-    setNotifications(notifications.map(notification => 
-      notification.id === id ? {...notification, read: !notification.read} : notification
-    ));
+    setNotifications(
+      notifications.map((notification) =>
+        notification.id === id
+          ? { ...notification, read: !notification.read }
+          : notification
+      )
+    );
   };
 
   // Mark all notifications as read
   const markAllAsRead = () => {
-    setNotifications(notifications.map(notification => ({
-      ...notification,
-      read: true
-    })));
+    setNotifications(
+      notifications.map((notification) => ({
+        ...notification,
+        read: true,
+      }))
+    );
   };
 
   // Calculate metrics from backend data
@@ -268,9 +279,10 @@ const Dashboard = () => {
       if (!payment || payment.amount === null || payment.amount === undefined) {
         return sum;
       }
-      const amount = typeof payment.amount === "number"
-        ? payment.amount
-        : parseFloat(payment.amount.toString());
+      const amount =
+        typeof payment.amount === "number"
+          ? payment.amount
+          : parseFloat(payment.amount.toString());
       return sum + (isNaN(amount) ? 0 : amount);
     }, 0);
 
@@ -312,7 +324,7 @@ const Dashboard = () => {
       unit: "",
       trend: metrics.loanTrend,
       color: "from-orange-400 to-red-500",
-      bgColor: "bg-orange-50",
+      bgColor: "bg-white",
       icon: DollarSign,
     },
     {
@@ -321,7 +333,7 @@ const Dashboard = () => {
       unit: "",
       trend: "+8%",
       color: "from-red-500 to-orange-600",
-      bgColor: "bg-red-50",
+      bgColor: "bg-white",
       icon: Users,
     },
     {
@@ -330,7 +342,7 @@ const Dashboard = () => {
       unit: "",
       trend: "+12%",
       color: "from-yellow-500 to-orange-500",
-      bgColor: "bg-yellow-50",
+      bgColor: "bg-white",
       icon: TrendingUp,
     },
   ];
@@ -479,7 +491,7 @@ const Dashboard = () => {
   }
 
   return (
-    <div className="flex h-screen bg-gradient-to-br from-orange-50 via-red-50 to-yellow-50">
+    <div className="flex h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50">
       {/* Sidebar Component */}
       <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
 
@@ -498,9 +510,9 @@ const Dashboard = () => {
               </button>
               <div className="flex items-center space-x-3">
                 <div className="flex items-center space-x-2 text-sm">
-                  <span className="text-orange-500">Dashboard</span>
-                  <span className="text-orange-300">›</span>
-                  <span className="text-orange-700 font-medium">
+                  <span className="text-gray-500">Dashboard</span>
+                  <span className="text-gray-300">›</span>
+                  <span className="text-black font-medium">
                     Loan Management
                   </span>
                 </div>
@@ -521,10 +533,9 @@ const Dashboard = () => {
               </div>
 
               {/* Notifications */}
-              
-            
+
               <div className="relative">
-                <button 
+                <button
                   onClick={(e) => {
                     e.stopPropagation();
                     setNotificationsOpen(!notificationsOpen);
@@ -534,7 +545,7 @@ const Dashboard = () => {
                   <Bell className="w-5 h-5 text-orange-600 group-hover:text-orange-700" />
                   <div className="absolute -top-1 -right-1 w-4 h-4 bg-gradient-to-r from-red-500 to-orange-500 rounded-full flex items-center justify-center">
                     <span className="text-xs text-white font-medium">
-                      {notifications.filter(n => !n.read).length}
+                      {notifications.filter((n) => !n.read).length}
                     </span>
                   </div>
                 </button>
@@ -543,9 +554,11 @@ const Dashboard = () => {
                 {notificationsOpen && (
                   <div className="notifications-popup fixed right-6 top-20 w-96 bg-white rounded-xl shadow-2xl border border-orange-200/50 z-[9999] overflow-hidden transform transition-all duration-300 ease-in-out">
                     <div className="p-5 bg-gradient-to-r from-orange-50 to-red-50 border-b border-orange-200/50 flex justify-between items-center">
-                      <h3 className="font-bold text-lg text-orange-800">Notifications</h3>
+                      <h3 className="font-bold text-lg text-black">
+                        Notifications
+                      </h3>
                       <div className="flex items-center space-x-3">
-                        <button 
+                        <button
                           onClick={(e) => {
                             e.stopPropagation();
                             markAllAsRead();
@@ -554,49 +567,73 @@ const Dashboard = () => {
                         >
                           Mark all as read
                         </button>
-                        <button 
+                        <button
                           onClick={(e) => {
                             e.stopPropagation();
                             setNotificationsOpen(false);
                           }}
                           className="text-orange-500 hover:text-orange-700"
                         >
-                          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                            <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="h-5 w-5"
+                            viewBox="0 0 20 20"
+                            fill="currentColor"
+                          >
+                            <path
+                              fillRule="evenodd"
+                              d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                              clipRule="evenodd"
+                            />
                           </svg>
                         </button>
                       </div>
                     </div>
                     <div className="max-h-[70vh] overflow-y-auto">
                       {notifications.length > 0 ? (
-                        notifications.map(notification => (
-                          <div 
+                        notifications.map((notification) => (
+                          <div
                             key={notification.id}
-                            className={`p-5 border-b border-orange-100/50 hover:bg-orange-50/50 cursor-pointer transition-colors ${!notification.read ? 'bg-orange-50' : ''}`}
+                            className={`p-5 border-b border-orange-100/50 hover:bg-orange-50/50 cursor-pointer transition-colors ${
+                              !notification.read ? "bg-orange-50" : ""
+                            }`}
                             onClick={(e) => {
                               e.stopPropagation();
                               toggleNotificationRead(notification.id);
                             }}
                           >
                             <div className="flex items-start space-x-4">
-                              <div className={`mt-1 flex-shrink-0 w-3 h-3 rounded-full ${
-                                notification.read ? 'bg-orange-200' : 'bg-orange-500'
-                              }`}></div>
+                              <div
+                                className={`mt-1 flex-shrink-0 w-3 h-3 rounded-full ${
+                                  notification.read
+                                    ? "bg-orange-200"
+                                    : "bg-orange-500"
+                                }`}
+                              ></div>
                               <div className="flex-1">
                                 <div className="flex justify-between items-start">
-                                  <h4 className="font-semibold text-lg text-orange-800">{notification.title}</h4>
-                                  <span className="text-xs text-orange-400">{notification.time}</span>
+                                  <h4 className="font-semibold text-lg text-black">
+                                    {notification.title}
+                                  </h4>
+                                  <span className="text-xs text-gray-400">
+                                    {notification.time}
+                                  </span>
                                 </div>
-                                <p className="text-base text-orange-600 mt-2">{notification.message}</p>
+                                <p className="text-base text-gray-600 mt-2">
+                                  {notification.message}
+                                </p>
                                 <div className="mt-3 flex items-center">
-                                  <span className={`inline-block px-2 py-1 text-xs font-medium rounded-full ${
-                                    notification.type === 'loan' 
-                                      ? 'bg-purple-100 text-purple-800' 
-                                      : notification.type === 'payment' 
-                                        ? 'bg-green-100 text-green-800' 
-                                        : 'bg-blue-100 text-blue-800'
-                                  }`}>
-                                    {notification.type.charAt(0).toUpperCase() + notification.type.slice(1)}
+                                  <span
+                                    className={`inline-block px-2 py-1 text-xs font-medium rounded-full ${
+                                      notification.type === "loan"
+                                        ? "bg-purple-100 text-purple-800"
+                                        : notification.type === "payment"
+                                        ? "bg-green-100 text-green-800"
+                                        : "bg-blue-100 text-blue-800"
+                                    }`}
+                                  >
+                                    {notification.type.charAt(0).toUpperCase() +
+                                      notification.type.slice(1)}
                                   </span>
                                 </div>
                               </div>
@@ -606,14 +643,16 @@ const Dashboard = () => {
                       ) : (
                         <div className="p-8 text-center">
                           <Bell className="w-12 h-12 mx-auto text-orange-300 mb-4" />
-                          <p className="text-lg text-orange-500 font-medium">No notifications to display</p>
-                          <p className="text-sm text-orange-400 mt-1">You're all caught up!</p>
+                          <p className="text-lg text-gray-500 font-medium">
+                            No notifications to display
+                          </p>
+                          <p className="text-sm text-gray-400 mt-1">
+                            You're all caught up!
+                          </p>
                         </div>
                       )}
                     </div>
-                    <div className="p-4 bg-gradient-to-r from-orange-50 to-red-50 border-t border-orange-200/50 text-center">
-                      
-                    </div>
+                    <div className="p-4 bg-gradient-to-r from-orange-50 to-red-50 border-t border-orange-200/50 text-center"></div>
                   </div>
                 )}
               </div>
@@ -621,10 +660,10 @@ const Dashboard = () => {
               {/* User Profile */}
               <div className="flex items-center space-x-3 pl-4 border-l border-orange-200/50">
                 <div className="text-right hidden sm:block">
-                  <div className="text-sm font-semibold text-orange-700">
+                  <div className="text-sm font-semibold text-black">
                     Sarah Johnson
                   </div>
-                  <div className="text-xs text-orange-500">Loan Manager</div>
+                  <div className="text-xs text-gray-500">Loan Manager</div>
                 </div>
                 <div className="relative">
                   <div className="w-10 h-10 bg-gradient-to-br from-orange-500 to-red-500 rounded-xl flex items-center justify-center shadow-lg shadow-orange-500/25">
@@ -637,7 +676,7 @@ const Dashboard = () => {
             </div>
           </div>
         </header>
-
+        
         {/* Dashboard Content */}
         <main className="flex-1 overflow-y-auto p-6 space-y-8">
           {/* Search Results Summary */}
@@ -645,9 +684,10 @@ const Dashboard = () => {
             <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-4 shadow-lg border border-orange-200/50">
               <div className="flex items-center justify-between">
                 <h3 className="text-sm font-medium text-orange-600">
-                  Search results for: <span className="font-semibold">"{searchTerm}"</span>
+                  Search results for:{" "}
+                  <span className="font-semibold">"{searchTerm}"</span>
                 </h3>
-                <button 
+                <button
                   onClick={() => setSearchTerm("")}
                   className="text-xs text-orange-500 hover:text-orange-700"
                 >
@@ -712,58 +752,37 @@ const Dashboard = () => {
           </div>
 
           {/* Loan Metrics */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {loanMetrics.map((metric, index) => {
-              const IconComponent = metric.icon;
-              return (
-                <div
-                  key={index}
-                  className="group relative bg-white/70 backdrop-blur-sm rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 border border-white/50 hover:transform hover:scale-105"
-                >
-                  <div className="absolute inset-0 bg-gradient-to-br from-white/50 to-transparent rounded-2xl"></div>
-
-                  <div className="relative">
-                    <div className="flex items-center justify-between mb-4">
-                      <div
-                        className={`p-3 rounded-2xl ${metric.bgColor} group-hover:scale-110 transition-transform duration-300`}
-                      >
-                        <IconComponent className="w-6 h-6 text-orange-700" />
-                      </div>
-                      <div
-                        className={`px-3 py-1 rounded-full text-xs font-semibold text-white bg-gradient-to-r ${metric.color} shadow-lg`}
-                      >
-                        {metric.trend}
-                      </div>
-                    </div>
-
-                    <div className="space-y-2">
-                      <h3 className="text-sm font-medium text-orange-600">
-                        {metric.label}
-                      </h3>
-                      <div className="flex items-baseline space-x-2">
-                        <span className="text-3xl font-bold text-orange-800">
-                          {metric.value}
-                        </span>
-                        <span className="text-sm text-orange-500">
-                          {metric.unit}
-                        </span>
-                      </div>
-                    </div>
-
-                    {/* Mini chart */}
-                    <div className="mt-4 h-12 flex items-end justify-center space-x-1">
-                      {[...Array(12)].map((_, i) => (
-                        <div
-                          key={i}
-                          className={`w-1.5 rounded-full bg-gradient-to-t ${metric.color} opacity-60 group-hover:opacity-100 transition-opacity duration-300`}
-                          style={{ height: `${Math.random() * 70 + 30}%` }}
-                        ></div>
-                      ))}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {loanMetrics.map((metric, index) => (
+              <div
+                key={index}
+                className={`relative ${metric.bgColor} rounded-xl p-6 shadow-sm border border-gray-200/50 hover:shadow-md transition-all duration-200 group`}
+              >
+                <div className="flex items-center justify-between mb-4">
+                  <div
+                    className={`p-3 rounded-xl bg-gradient-to-r ${metric.color} shadow-lg shadow-orange-500/25`}
+                  >
+                    <metric.icon className="w-6 h-6 text-white" />
+                  </div>
+                  <div className="text-right">
+                    <div className="text-xs font-medium text-green-600 bg-green-100 px-2 py-1 rounded-full">
+                      {metric.trend}
                     </div>
                   </div>
                 </div>
-              );
-            })}
+                <div>
+                  <h3 className="text-sm font-medium text-gray-600 mb-1">
+                    {metric.label}
+                  </h3>
+                  <div className="text-2xl font-bold text-gray-900">
+                    {metric.value}
+                    <span className="text-sm font-normal text-gray-500 ml-1">
+                      {metric.unit}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            ))}
           </div>
 
           {/* Charts Section */}
@@ -772,16 +791,16 @@ const Dashboard = () => {
             <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-8 shadow-lg border border-white/50">
               <div className="flex items-center justify-between mb-8">
                 <div>
-                  <h3 className="text-xl font-bold text-orange-800 mb-1">
+                  <h3 className="text-xl font-bold text-black mb-1">
                     System Users
                   </h3>
-                  <p className="text-sm text-orange-500">
+                  <p className="text-sm text-gray-800">
                     {searchedUsers.length} registered users
                   </p>
                 </div>
                 <div className="flex items-center space-x-3">
                   <div className="px-4 py-2 bg-orange-100 rounded-xl">
-                    <span className="text-sm font-medium text-orange-700">
+                    <span className="text-sm font-medium text-black">
                       All Users
                     </span>
                   </div>
@@ -806,14 +825,14 @@ const Dashboard = () => {
                       </div>
                       <div className="flex-1">
                         <div className="flex items-center space-x-2 mb-1">
-                          <h4 className="font-semibold text-orange-800">
+                          <h4 className="font-semibold text-black">
                             {user.firstName} {user.lastName}
                           </h4>
                           <div className="px-2 py-1 bg-green-100 text-green-600 text-xs rounded-full font-medium">
                             Active
                           </div>
                         </div>
-                        <div className="flex items-center space-x-4 text-sm text-orange-600">
+                        <div className="flex items-center space-x-4 text-sm text-gray-600">
                           {user.email && (
                             <div className="flex items-center space-x-1">
                               <Mail className="w-3 h-3" />
@@ -830,7 +849,7 @@ const Dashboard = () => {
                           )}
                         </div>
                         {user.address && (
-                          <div className="flex items-center space-x-1 text-xs text-orange-500 mt-1">
+                          <div className="flex items-center space-x-1 text-xs text-gray-500 mt-1">
                             <MapPin className="w-3 h-3" />
                             <span className="truncate max-w-48">
                               {user.address}
@@ -840,10 +859,10 @@ const Dashboard = () => {
                       </div>
                     </div>
                     <div className="text-right">
-                      <div className="text-xs text-orange-500 mb-1">
+                      <div className="text-xs text-gray-500 mb-1">
                         {getUserJoinTime(user.createdAt)}
                       </div>
-                      <button className="text-xs text-orange-600 hover:text-orange-700 font-medium group-hover:underline transition-colors duration-200">
+                      <button className="text-xs text-gray-600 hover:text-gray-700 font-medium group-hover:underline transition-colors duration-200">
                         View Profile
                       </button>
                     </div>
@@ -855,11 +874,13 @@ const Dashboard = () => {
                     <div className="w-16 h-16 bg-orange-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
                       <User className="w-8 h-8 text-orange-400" />
                     </div>
-                    <h4 className="text-lg font-semibold text-orange-800 mb-2">
+                    <h4 className="text-lg font-semibold text-black mb-2">
                       No Users Found
                     </h4>
-                    <p className="text-orange-500 text-sm">
-                      {searchTerm ? "No users match your search" : "Users will appear here once they register"}
+                    <p className="text-gray-500 text-sm">
+                      {searchTerm
+                        ? "No users match your search"
+                        : "Users will appear here once they register"}
                     </p>
                   </div>
                 )}
@@ -869,10 +890,10 @@ const Dashboard = () => {
             {/* Risk Assessment */}
             <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-8 shadow-lg border border-white/50">
               <div className="mb-8">
-                <h3 className="text-xl font-bold text-orange-800 mb-1">
+                <h3 className="text-xl font-bold text-black mb-1">
                   Risk Assessment
                 </h3>
-                <p className="text-sm text-orange-500">
+                <p className="text-sm text-gray-500">
                   Portfolio risk distribution
                 </p>
               </div>
@@ -881,10 +902,10 @@ const Dashboard = () => {
               <div className="space-y-6">
                 <div className="space-y-4">
                   <div className="flex justify-between items-center">
-                    <span className="text-sm font-medium text-orange-600">
+                    <span className="text-sm font-medium text-black">
                       Low Risk
                     </span>
-                    <span className="text-sm font-bold text-orange-800">
+                    <span className="text-sm font-bold text-black">
                       {riskAssessment.low}%
                     </span>
                   </div>
@@ -898,10 +919,10 @@ const Dashboard = () => {
 
                 <div className="space-y-4">
                   <div className="flex justify-between items-center">
-                    <span className="text-sm font-medium text-orange-600">
+                    <span className="text-sm font-medium text-black">
                       Medium Risk
                     </span>
-                    <span className="text-sm font-bold text-orange-800">
+                    <span className="text-sm font-bold text-black">
                       {riskAssessment.medium}%
                     </span>
                   </div>
@@ -915,10 +936,10 @@ const Dashboard = () => {
 
                 <div className="space-y-4">
                   <div className="flex justify-between items-center">
-                    <span className="text-sm font-medium text-orange-600">
+                    <span className="text-sm font-medium text-black">
                       High Risk
                     </span>
-                    <span className="text-sm font-bold text-orange-800">
+                    <span className="text-sm font-bold text-black">
                       {riskAssessment.high}%
                     </span>
                   </div>
@@ -933,16 +954,16 @@ const Dashboard = () => {
 
               {/* Risk Score */}
               <div className="mt-8 text-center p-6 bg-gradient-to-br from-orange-100 to-red-100 rounded-2xl">
-                <div className="text-3xl font-bold text-orange-800 mb-2">
+                <div className="text-3xl font-bold text-black mb-2">
                   {(
                     (riskAssessment.medium * 0.5 + riskAssessment.high * 1) /
                     10
                   ).toFixed(1)}
                 </div>
-                <div className="text-sm text-orange-600 font-medium">
+                <div className="text-sm text-black font-medium">
                   Overall Risk Score
                 </div>
-                <div className="text-xs text-orange-500 mt-1">
+                <div className="text-xs text-gray-500 mt-1">
                   Out of 10 (Lower is better)
                 </div>
               </div>
@@ -1070,7 +1091,9 @@ const Dashboard = () => {
                     No Pending Loans
                   </h4>
                   <p className="text-orange-500 text-sm">
-                    {searchTerm ? "No pending loans match your search" : "All loan applications have been processed"}
+                    {searchTerm
+                      ? "No pending loans match your search"
+                      : "All loan applications have been processed"}
                   </p>
                 </div>
               )}

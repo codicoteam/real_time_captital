@@ -92,7 +92,7 @@ const LoanTracking = () => {
       message: "Loan #L-10025 is overdue by 15 days",
       date: "10 mins ago",
       read: false,
-      type: "alert"
+      type: "alert",
     },
     {
       id: 2,
@@ -100,7 +100,7 @@ const LoanTracking = () => {
       message: "John Smith has applied for a personal loan",
       date: "2 hours ago",
       read: false,
-      type: "info"
+      type: "info",
     },
     {
       id: 3,
@@ -108,8 +108,8 @@ const LoanTracking = () => {
       message: "Payment of ₨25,000 received for Loan #L-10018",
       date: "1 day ago",
       read: true,
-      type: "success"
-    }
+      type: "success",
+    },
   ];
 
   useEffect(() => {
@@ -134,19 +134,27 @@ const LoanTracking = () => {
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       const target = event.target as HTMLElement;
-      
-      if (showNotifications && !target.closest('.notifications-container') && !target.closest('.notifications-button')) {
+
+      if (
+        showNotifications &&
+        !target.closest(".notifications-container") &&
+        !target.closest(".notifications-button")
+      ) {
         setShowNotifications(false);
       }
-      
-      if (showExportOptions && !target.closest('.export-container') && !target.closest('.export-button')) {
+
+      if (
+        showExportOptions &&
+        !target.closest(".export-container") &&
+        !target.closest(".export-button")
+      ) {
         setShowExportOptions(false);
       }
     };
 
-    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [showNotifications, showExportOptions]);
 
@@ -310,10 +318,10 @@ const LoanTracking = () => {
   };
 
   return (
-    <div className="flex h-screen bg-gradient-to-br from-orange-50 via-red-50 to-yellow-50 relative">
+    <div className="flex h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50">
       {/* Sidebar Component */}
       <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
-      
+
       {/* Main Content */}
       <div className="flex-1 flex flex-col overflow-hidden lg:ml-0">
         {/* Header */}
@@ -329,11 +337,9 @@ const LoanTracking = () => {
               </button>
               <div className="flex items-center space-x-3">
                 <div className="flex items-center space-x-2 text-sm">
-                  <span className="text-orange-500">Dashboard</span>
+                  <span className="text-gray-700">Dashboard</span>
                   <span className="text-orange-300">›</span>
-                  <span className="text-orange-700 font-medium">
-                    Loan Tracking
-                  </span>
+                  <span className="text-black font-medium">Loan Tracking</span>
                 </div>
               </div>
             </div>
@@ -353,7 +359,7 @@ const LoanTracking = () => {
 
               {/* Notifications */}
               <div className="relative">
-                <button 
+                <button
                   onClick={() => setShowNotifications(!showNotifications)}
                   className="notifications-button relative p-2 rounded-xl bg-orange-100/50 hover:bg-orange-200/50 transition-all duration-200 group"
                 >
@@ -369,8 +375,10 @@ const LoanTracking = () => {
                 {showNotifications && (
                   <div className="notifications-container absolute right-0 mt-2 w-80 bg-white rounded-xl shadow-lg border border-orange-200/50 z-[100]">
                     <div className="p-4 border-b border-orange-200/50 flex justify-between items-center">
-                      <h3 className="font-semibold text-orange-800">Notifications</h3>
-                      <button 
+                      <h3 className="font-semibold text-black">
+                        Notifications
+                      </h3>
+                      <button
                         onClick={() => setShowNotifications(false)}
                         className="p-1 rounded-full hover:bg-orange-100"
                       >
@@ -379,34 +387,38 @@ const LoanTracking = () => {
                     </div>
                     <div className="max-h-96 overflow-y-auto">
                       {notifications.map((notification) => (
-                        <div 
+                        <div
                           key={notification.id}
                           className={`p-4 border-b border-orange-200/30 hover:bg-orange-50/50 cursor-pointer transition-colors ${
                             !notification.read ? "bg-blue-50/50" : ""
                           }`}
                         >
                           <div className="flex items-start space-x-3">
-                            <div className={`mt-1 flex-shrink-0 ${
-                              notification.type === 'alert' ? 'text-red-500' : 
-                              notification.type === 'info' ? 'text-blue-500' : 
-                              'text-green-500'
-                            }`}>
-                              {notification.type === 'alert' ? (
+                            <div
+                              className={`mt-1 flex-shrink-0 ${
+                                notification.type === "alert"
+                                  ? "text-red-500"
+                                  : notification.type === "info"
+                                  ? "text-blue-500"
+                                  : "text-green-500"
+                              }`}
+                            >
+                              {notification.type === "alert" ? (
                                 <AlertTriangle className="w-5 h-5" />
-                              ) : notification.type === 'info' ? (
+                              ) : notification.type === "info" ? (
                                 <Bell className="w-5 h-5" />
                               ) : (
                                 <CheckCircle className="w-5 h-5" />
                               )}
                             </div>
                             <div className="flex-1">
-                              <h4 className="text-sm font-semibold text-orange-800">
+                              <h4 className="text-sm font-semibold text-black">
                                 {notification.title}
                               </h4>
-                              <p className="text-sm text-orange-600 mt-1">
+                              <p className="text-sm text-gray-700 mt-1">
                                 {notification.message}
                               </p>
-                              <div className="text-xs text-orange-400 mt-2">
+                              <div className="text-xs text-gray-700 mt-2">
                                 {notification.date}
                               </div>
                             </div>
@@ -429,10 +441,10 @@ const LoanTracking = () => {
               {/* User Profile */}
               <div className="flex items-center space-x-3 pl-4 border-l border-orange-200/50">
                 <div className="text-right hidden sm:block">
-                  <div className="text-sm font-semibold text-orange-700">
+                  <div className="text-sm font-semibold text-black">
                     Sarah Johnson
                   </div>
-                  <div className="text-xs text-orange-500">Loan Manager</div>
+                  <div className="text-xs text-gray-700">Loan Manager</div>
                 </div>
                 <div className="relative">
                   <div className="w-10 h-10 bg-gradient-to-br from-orange-500 to-red-500 rounded-xl flex items-center justify-center shadow-lg shadow-orange-500/25">
@@ -456,10 +468,10 @@ const LoanTracking = () => {
                   <DollarSign className="w-6 h-6 text-blue-600" />
                 </div>
                 <div>
-                  <div className="text-2xl font-bold text-orange-800">
+                  <div className="text-2xl font-bold text-black">
                     {summaryStats.totalLoans}
                   </div>
-                  <div className="text-sm text-orange-600">Total Loans</div>
+                  <div className="text-sm text-gray-700">Total Loans</div>
                 </div>
               </div>
             </div>
@@ -470,10 +482,10 @@ const LoanTracking = () => {
                   <CheckCircle className="w-6 h-6 text-green-600" />
                 </div>
                 <div>
-                  <div className="text-2xl font-bold text-orange-800">
+                  <div className="text-2xl font-bold text-black">
                     {summaryStats.activeLoans}
                   </div>
-                  <div className="text-sm text-orange-600">Active Loans</div>
+                  <div className="text-sm text-gray-700">Active Loans</div>
                 </div>
               </div>
             </div>
@@ -484,10 +496,10 @@ const LoanTracking = () => {
                   <AlertTriangle className="w-6 h-6 text-red-600" />
                 </div>
                 <div>
-                  <div className="text-2xl font-bold text-orange-800">
+                  <div className="text-2xl font-bold text-black">
                     {summaryStats.overdueLoans}
                   </div>
-                  <div className="text-sm text-orange-600">Overdue Loans</div>
+                  <div className="text-sm text-gray-700">Overdue Loans</div>
                 </div>
               </div>
             </div>
@@ -501,10 +513,10 @@ const LoanTracking = () => {
                   <DollarSign className="w-6 h-6 text-blue-600" />
                 </div>
                 <div>
-                  <div className="text-2xl font-bold text-orange-800">
+                  <div className="text-2xl font-bold text-black">
                     {(summaryStats.totalDisbursed / 1000000).toFixed(1)}
                   </div>
-                  <div className="text-sm text-orange-600">Total Disbursed</div>
+                  <div className="text-sm text-gray-700">Total Disbursed</div>
                 </div>
               </div>
             </div>
@@ -518,10 +530,10 @@ const LoanTracking = () => {
                   <DollarSign className="w-6 h-6 text-blue-600" />
                 </div>
                 <div>
-                  <div className="text-2xl font-bold text-orange-800">
+                  <div className="text-2xl font-bold text-black">
                     {(summaryStats.totalOutstanding / 1000000).toFixed(1)}
                   </div>
-                  <div className="text-sm text-orange-600">Outstanding</div>
+                  <div className="text-sm text-gray-700">Outstanding</div>
                 </div>
               </div>
             </div>
@@ -536,7 +548,7 @@ const LoanTracking = () => {
                   className={`px-4 py-2 rounded-xl text-sm font-medium transition-all duration-200 ${
                     activeFilter === "all"
                       ? "bg-gradient-to-r from-orange-500 to-red-500 text-white shadow-lg"
-                      : "bg-orange-100 text-orange-700 hover:bg-orange-200"
+                      : "bg-orange-100 text-gray-700 hover:bg-orange-200"
                   }`}
                 >
                   All Loans
@@ -546,7 +558,7 @@ const LoanTracking = () => {
                   className={`px-4 py-2 rounded-xl text-sm font-medium transition-all duration-200 ${
                     activeFilter === "active"
                       ? "bg-gradient-to-r from-orange-500 to-red-500 text-white shadow-lg"
-                      : "bg-orange-100 text-orange-700 hover:bg-orange-200"
+                      : "bg-orange-100 text-gray-700 hover:bg-orange-200"
                   }`}
                 >
                   Active
@@ -556,7 +568,7 @@ const LoanTracking = () => {
                   className={`px-4 py-2 rounded-xl text-sm font-medium transition-all duration-200 ${
                     activeFilter === "overdue"
                       ? "bg-gradient-to-r from-orange-500 to-red-500 text-white shadow-lg"
-                      : "bg-orange-100 text-orange-700 hover:bg-orange-200"
+                      : "bg-orange-100 text-gray-700 hover:bg-orange-200"
                   }`}
                 >
                   Overdue
@@ -566,7 +578,7 @@ const LoanTracking = () => {
                   className={`px-4 py-2 rounded-xl text-sm font-medium transition-all duration-200 ${
                     activeFilter === "pending"
                       ? "bg-gradient-to-r from-orange-500 to-red-500 text-white shadow-lg"
-                      : "bg-orange-100 text-orange-700 hover:bg-orange-200"
+                      : "bg-orange-100 text-gray-700 hover:bg-orange-200"
                   }`}
                 >
                   Pending
@@ -576,7 +588,7 @@ const LoanTracking = () => {
                   className={`px-4 py-2 rounded-xl text-sm font-medium transition-all duration-200 ${
                     activeFilter === "closed"
                       ? "bg-gradient-to-r from-orange-500 to-red-500 text-white shadow-lg"
-                      : "bg-orange-100 text-orange-700 hover:bg-orange-200"
+                      : "bg-orange-100 text-gray-700 hover:bg-orange-200"
                   }`}
                 >
                   Closed
@@ -600,7 +612,7 @@ const LoanTracking = () => {
                     };
                     fetchLoans();
                   }}
-                  className="flex items-center space-x-2 px-4 py-2 bg-orange-100 hover:bg-orange-200 rounded-xl text-sm font-medium text-orange-700 transition-all duration-200"
+                  className="flex items-center space-x-2 px-4 py-2 bg-orange-100 hover:bg-orange-200 rounded-xl text-sm font-medium text-gray-700 transition-all duration-200"
                 >
                   <RefreshCw
                     className={`w-4 h-4 ${loading ? "animate-spin" : ""}`}
@@ -608,7 +620,7 @@ const LoanTracking = () => {
                   <span>Refresh</span>
                 </button>
                 <div className="relative">
-                  <button 
+                  <button
                     onClick={() => setShowExportOptions(!showExportOptions)}
                     className="export-button flex items-center space-x-2 px-4 py-2 bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 rounded-xl text-sm font-medium text-white transition-all duration-200"
                   >
@@ -622,19 +634,19 @@ const LoanTracking = () => {
                       <div className="py-1">
                         <button
                           onClick={() => handleExport("CSV")}
-                          className="block w-full text-left px-4 py-2 text-sm text-orange-700 hover:bg-orange-50"
+                          className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-orange-50"
                         >
                           Export as CSV
                         </button>
                         <button
                           onClick={() => handleExport("Excel")}
-                          className="block w-full text-left px-4 py-2 text-sm text-orange-700 hover:bg-orange-50"
+                          className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-orange-50"
                         >
                           Export as Excel
                         </button>
                         <button
                           onClick={() => handleExport("PDF")}
-                          className="block w-full text-left px-4 py-2 text-sm text-orange-700 hover:bg-orange-50"
+                          className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-orange-50"
                         >
                           Export as PDF
                         </button>
@@ -646,13 +658,13 @@ const LoanTracking = () => {
             </div>
           </div>
 
-          {/* Loans Table */}
+         {/* Loans Table */}
           <div className="bg-white/70 backdrop-blur-sm rounded-2xl shadow-lg border border-white/50 overflow-hidden">
             <div className="px-6 py-4 border-b border-orange-200/50">
-              <h3 className="text-xl font-bold text-orange-800">
+              <h3 className="text-xl font-bold text-black">
                 Loan Tracking
               </h3>
-              <p className="text-sm text-orange-600 mt-1">
+              <p className="text-sm text-gray-700 mt-1">
                 {filteredLoans.length} loans found
               </p>
             </div>
@@ -661,34 +673,34 @@ const LoanTracking = () => {
               <table className="w-full">
                 <thead className="bg-orange-50/50">
                   <tr>
-                    <th className="text-left py-4 px-6 text-sm font-semibold text-orange-700">
+                    <th className="text-left py-4 px-6 text-sm font-semibold text-gray-700">
                       Loan ID
                     </th>
-                    <th className="text-left py-4 px-6 text-sm font-semibold text-orange-700">
+                    <th className="text-left py-4 px-6 text-sm font-semibold text-gray-700">
                       Borrower
                     </th>
-                    <th className="text-left py-4 px-6 text-sm font-semibold text-orange-700">
+                    <th className="text-left py-4 px-6 text-sm font-semibold text-gray-700">
                       Type
                     </th>
-                    <th className="text-left py-4 px-6 text-sm font-semibold text-orange-700">
+                    <th className="text-left py-4 px-6 text-sm font-semibold text-gray-700">
                       Amount
                     </th>
-                    <th className="text-left py-4 px-6 text-sm font-semibold text-orange-700">
+                    <th className="text-left py-4 px-6 text-sm font-semibold text-gray-700">
                       Outstanding
                     </th>
-                    <th className="text-left py-4 px-6 text-sm font-semibold text-orange-700">
+                    <th className="text-left py-4 px-6 text-sm font-semibold text-gray-700">
                       Status
                     </th>
-                    <th className="text-left py-4 px-6 text-sm font-semibold text-orange-700">
+                    <th className="text-left py-4 px-6 text-sm font-semibold text-gray-700">
                       Progress
                     </th>
-                    <th className="text-left py-4 px-6 text-sm font-semibold text-orange-700">
+                    <th className="text-left py-4 px-6 text-sm font-semibold text-gray-700">
                       Next Payment
                     </th>
-                    <th className="text-left py-4 px-6 text-sm font-semibold text-orange-700">
+                    <th className="text-left py-4 px-6 text-sm font-semibold text-gray-700">
                       Risk
                     </th>
-                    <th className="text-left py-4 px-6 text-sm font-semibold text-orange-700">
+                    <th className="text-left py-4 px-6 text-sm font-semibold text-gray-700">
                       Actions
                     </th>
                   </tr>
@@ -700,27 +712,27 @@ const LoanTracking = () => {
                       className="hover:bg-orange-50/30 transition-colors duration-200"
                     >
                       <td className="py-4 px-6">
-                        <div className="font-medium text-orange-800">
+                        <div className="font-medium text-black">
                           {loan.id}
                         </div>
                       </td>
                       <td className="py-4 px-6">
-                        <div className="font-medium text-orange-800">
+                        <div className="font-medium text-black">
                           {loan.borrower}
                         </div>
                       </td>
                       <td className="py-4 px-6">
-                        <div className="text-sm text-orange-600">
+                        <div className="text-sm text-gray-700">
                           {loan.type}
                         </div>
                       </td>
                       <td className="py-4 px-6">
-                        <div className="font-medium text-orange-800">
+                        <div className="font-medium text-black">
                           ₨{loan.amount.toLocaleString()}
                         </div>
                       </td>
                       <td className="py-4 px-6">
-                        <div className="font-medium text-orange-800">
+                        <div className="font-medium text-black">
                           ₨{loan.outstandingBalance.toLocaleString()}
                         </div>
                       </td>
@@ -730,10 +742,10 @@ const LoanTracking = () => {
                       <td className="py-4 px-6">
                         <div className="space-y-1">
                           <div className="flex justify-between text-xs">
-                            <span className="text-orange-600">
+                            <span className="text-gray-700">
                               {loan.completedPayments}/{loan.totalPayments}
                             </span>
-                            <span className="text-orange-600">
+                            <span className="text-gray-700">
                               {Math.round(
                                 (loan.completedPayments / loan.totalPayments) *
                                   100
@@ -758,10 +770,10 @@ const LoanTracking = () => {
                       <td className="py-4 px-6">
                         {loan.nextPaymentDate ? (
                           <div className="space-y-1">
-                            <div className="text-sm font-medium text-orange-800">
+                            <div className="text-sm font-medium text-black">
                               ₨{loan.nextPaymentAmount.toLocaleString()}
                             </div>
-                            <div className="text-xs text-orange-600">
+                            <div className="text-xs text-gray-700">
                               {loan.nextPaymentDate}
                             </div>
                           </div>
@@ -818,7 +830,7 @@ const LoanTracking = () => {
           <div className="bg-white rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
             <div className="p-6 border-b border-orange-200/50">
               <div className="flex items-center justify-between">
-                <h3 className="text-xl font-bold text-orange-800">
+                <h3 className="text-xl font-bold text-black">
                   Loan Details - {selectedLoan.id}
                 </h3>
                 <button
@@ -833,39 +845,39 @@ const LoanTracking = () => {
             <div className="p-6 space-y-6">
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="text-sm font-medium text-orange-600">
+                  <label className="text-sm font-medium text-gray-700">
                     Borrower
                   </label>
-                  <div className="text-lg font-semibold text-orange-800">
+                  <div className="text-lg font-semibold text-black">
                     {selectedLoan.borrower}
                   </div>
                 </div>
                 <div>
-                  <label className="text-sm font-medium text-orange-600">
+                  <label className="text-sm font-medium text-gray-700">
                     Loan Type
                   </label>
-                  <div className="text-lg font-semibold text-orange-800">
+                  <div className="text-lg font-semibold text-black">
                     {selectedLoan.type}
                   </div>
                 </div>
                 <div>
-                  <label className="text-sm font-medium text-orange-600">
+                  <label className="text-sm font-medium text-gray-700">
                     Loan Amount
                   </label>
-                  <div className="text-lg font-semibold text-orange-800">
+                  <div className="text-lg font-semibold text-black">
                     ₨{selectedLoan.amount.toLocaleString()}
                   </div>
                 </div>
                 <div>
-                  <label className="text-sm font-medium text-orange-600">
+                  <label className="text-sm font-medium text-gray-700">
                     Interest Rate
                   </label>
-                  <div className="text-lg font-semibold text-orange-800">
+                  <div className="text-lg font-semibold text-black">
                     {selectedLoan.interestRate}%
                   </div>
                 </div>
                 <div>
-                  <label className="text-sm font-medium text-orange-600">
+                  <label className="text-sm font-medium text-gray-700">
                     Outstanding Balance
                   </label>
                   <div className="text-lg font-semibold text-red-600">
@@ -873,25 +885,25 @@ const LoanTracking = () => {
                   </div>
                 </div>
                 <div>
-                  <label className="text-sm font-medium text-orange-600">
+                  <label className="text-sm font-medium text-gray-700">
                     Tenure
                   </label>
-                  <div className="text-lg font-semibold text-orange-800">
+                  <div className="text-lg font-semibold text-black">
                     {selectedLoan.tenure} months
                   </div>
                 </div>
               </div>
 
               <div className="border-t border-orange-200/50 pt-6">
-                <h4 className="text-lg font-semibold text-orange-800 mb-4">
+                <h4 className="text-lg font-semibold text-black mb-4">
                   Payment Status
                 </h4>
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">
-                    <span className="text-sm font-medium text-orange-600">
+                    <span className="text-sm font-medium text-gray-700">
                       Payment Progress
                     </span>
-                    <span className="text-sm font-semibold text-orange-800">
+                    <span className="text-sm font-semibold text-black">
                       {selectedLoan.completedPayments} of{" "}
                       {selectedLoan.totalPayments} payments
                     </span>
@@ -908,7 +920,7 @@ const LoanTracking = () => {
                       }}
                     ></div>
                   </div>
-                  <div className="text-center text-sm text-orange-600">
+                  <div className="text-center text-sm text-gray-700">
                     {Math.round(
                       (selectedLoan.completedPayments /
                         selectedLoan.totalPayments) *
@@ -920,39 +932,39 @@ const LoanTracking = () => {
               </div>
 
               <div className="border-t border-orange-200/50 pt-6">
-                <h4 className="text-lg font-semibold text-orange-800 mb-4">
+                <h4 className="text-lg font-semibold text-black mb-4">
                   Important Dates
                 </h4>
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="text-sm font-medium text-orange-600">
+                    <label className="text-sm font-medium text-gray-700">
                       Disbursed Date
                     </label>
-                    <div className="text-base font-semibold text-orange-800">
+                    <div className="text-base font-semibold text-black">
                       {selectedLoan.disbursedDate || "Not disbursed"}
                     </div>
                   </div>
                   <div>
-                    <label className="text-sm font-medium text-orange-600">
+                    <label className="text-sm font-medium text-gray-700">
                       Due Date
                     </label>
-                    <div className="text-base font-semibold text-orange-800">
+                    <div className="text-base font-semibold text-black">
                       {selectedLoan.dueDate}
                     </div>
                   </div>
                   <div>
-                    <label className="text-sm font-medium text-orange-600">
+                    <label className="text-sm font-medium text-gray-700">
                       Next Payment Date
                     </label>
-                    <div className="text-base font-semibold text-orange-800">
+                    <div className="text-base font-semibold text-black">
                       {selectedLoan.nextPaymentDate || "N/A"}
                     </div>
                   </div>
                   <div>
-                    <label className="text-sm font-medium text-orange-600">
+                    <label className="text-sm font-medium text-gray-700">
                       Next Payment Amount
                     </label>
-                    <div className="text-base font-semibold text-orange-800">
+                    <div className="text-base font-semibold text-black">
                       ₨{selectedLoan.nextPaymentAmount.toLocaleString()}
                     </div>
                   </div>
@@ -962,7 +974,7 @@ const LoanTracking = () => {
               <div className="border-t border-orange-200/50 pt-6">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-3">
-                    <div className="text-sm font-medium text-orange-600">
+                    <div className="text-sm font-medium text-gray-700">
                       Current Status:
                     </div>
                     {getStatusBadge(
@@ -971,7 +983,7 @@ const LoanTracking = () => {
                     )}
                   </div>
                   <div className="flex items-center space-x-3">
-                    <div className="text-sm font-medium text-orange-600">
+                    <div className="text-sm font-medium text-gray-700">
                       Risk Level:
                     </div>
                     {getRiskBadge(selectedLoan.riskLevel)}
