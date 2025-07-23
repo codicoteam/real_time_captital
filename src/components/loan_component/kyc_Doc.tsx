@@ -51,9 +51,13 @@ interface KycDocumentsProps {
   KycService?: any;
 }
 
+interface NotificationMessage {
+  type: "success" | "error";
+  text: string;
+}
+
 const KycDocuments: React.FC<KycDocumentsProps> = ({
   documents,
-
   onView,
 }) => {
   const [kycData, setKycData] = useState<KycDocument | null>(null);
@@ -65,6 +69,7 @@ const KycDocuments: React.FC<KycDocumentsProps> = ({
   const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
   const [showUploadModal, setShowUploadModal] = useState(false);
   const [selectedDocType, setSelectedDocType] = useState<string | null>(null);
+  const [submitMessage, setSubmitMessage] = useState<NotificationMessage | null>(null);
 
   // Add debug state
   const [, setDebugInfo] = useState<{
@@ -110,6 +115,17 @@ const KycDocuments: React.FC<KycDocumentsProps> = ({
       required: false,
     },
   ];
+
+  // Function to show notification popup
+  const showNotification = (type: "success" | "error", message: string) => {
+    setSubmitMessage({ type, text: message });
+    
+    // Auto-dismiss notification
+    const dismissTime = type === "success" ? 5000 : 7000;
+    setTimeout(() => {
+      setSubmitMessage(null);
+    }, dismissTime);
+  };
 
   // Function to upload document to Supabase
   const uploadDocumentToSupabase = async (file: File, documentType: string) => {
@@ -468,6 +484,8 @@ const KycDocuments: React.FC<KycDocumentsProps> = ({
     setError(null);
     setSuccess(null);
 
+    const documentLabel = documentTypes.find((d) => d.key === selectedDocType)?.label;
+
     try {
       console.log("Starting file upload for:", selectedDocType);
 
@@ -521,16 +539,16 @@ const KycDocuments: React.FC<KycDocumentsProps> = ({
       await fetchKycDocuments();
       setShowUploadModal(false);
       setSelectedDocType(null);
-      setSuccess(
-        `${
-          documentTypes.find((d) => d.key === selectedDocType)?.label
-        } uploaded successfully`
-      );
 
-      setTimeout(() => setSuccess(null), 3000);
+      // Show success notification
+      showNotification("success", `${documentLabel} has been uploaded successfully! Your document is now under review.`);
+
     } catch (err: any) {
       console.error("Error in file upload:", err);
       setError(err.message || "Failed to upload document");
+      
+      // Show error notification
+      showNotification("error", `Failed to upload ${documentLabel}. ${err.message || "Please try again or contact support if the problem persists."}`);
     } finally {
       setUploading(null);
     }
@@ -603,246 +621,332 @@ const KycDocuments: React.FC<KycDocumentsProps> = ({
 
   const progress = Math.round((completedDocs / documentTypes.length) * 100);
 
+  // Notification styles
+  const notificationStyles = (
+    <style>{`
+      @keyframes shrink {
+        from { width: 100%; }
+        to { width: 0%; }
+      }
+      
+      .animate-in {
+        animation: slideInFromTop 0.5s ease-out;
+      }
+      
+      @keyframes slideInFromTop {
+        from {
+          opacity: 0;
+          transform: translateY(-50px) scale(0.9);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0) scale(1);
+        }
+      }
+    `}</style>
+  );
+
   return (
-    <div className="bg-white/70 backdrop-blur-sm rounded-lg shadow-lg p-6 border border-gray-200">
-      {/* Header */}
-      <div className="flex items-center justify-between mb-6">
-        <div>
-          <h2 className="text-2xl font-bold text-gray-800">KYC Documents</h2>
-          <p className="text-gray-600">
-            Complete your Know Your Customer verification
-          </p>
-        </div>
-        <div className="flex items-center space-x-2">
-          <button
-            onClick={fetchKycDocuments}
-            disabled={loading}
-            className="p-2 text-gray-600 hover:text-gray-800 disabled:opacity-50"
-          >
-            <RefreshCw className={`w-5 h-5 ${loading ? "animate-spin" : ""}`} />
-          </button>
-          {kycData && (
-            <button
-              onClick={deleteKycDocument}
-              disabled={deleting !== null}
-              className="p-2 text-red-600 hover:text-red-800 disabled:opacity-50"
-            >
-              <Trash2 className="w-5 h-5" />
-            </button>
-          )}
-        </div>
-      </div>
-
-      {/* Progress Bar */}
-      <div className="mb-6">
-        <div className="flex items-center justify-between mb-2">
-          <span className="text-sm font-medium text-gray-700">
-            Progress: {completedDocs}/{documentTypes.length} documents
-          </span>
-          <span className="text-sm font-medium text-gray-700">{progress}%</span>
-        </div>
-        <div className="w-full bg-gray-200 rounded-full h-2">
-          <div
-            className="bg-blue-600 h-2 rounded-full transition-all duration-300"
-            style={{ width: `${progress}%` }}
-          />
-        </div>
-      </div>
-
-      {/* Messages */}
-      {error && (
-        <div className="mb-4 p-4 bg-red-50 border border-red-200 rounded-md">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center">
-              <AlertCircle className="w-5 h-5 text-red-600 mr-2" />
-              <span className="text-red-800">{error}</span>
-            </div>
-            <button
-              onClick={clearMessages}
-              className="text-red-600 hover:text-red-800"
-            >
-              <X className="w-4 h-4" />
-            </button>
+    <>
+      {notificationStyles}
+      <div className="bg-white/70 backdrop-blur-sm rounded-lg shadow-lg p-6 border border-gray-200">
+        {/* Header */}
+        <div className="flex items-center justify-between mb-6">
+          <div>
+            <h2 className="text-2xl font-bold text-gray-800">KYC Documents</h2>
+            <p className="text-gray-600">
+              Complete your Know Your Customer verification
+            </p>
           </div>
-        </div>
-      )}
-
-      {success && (
-        <div className="mb-4 p-4 bg-green-50 border border-green-200 rounded-md">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center">
-              <CheckCircle className="w-5 h-5 text-green-600 mr-2" />
-              <span className="text-green-800">{success}</span>
-            </div>
+          <div className="flex items-center space-x-2">
             <button
-              onClick={clearMessages}
-              className="text-green-600 hover:text-green-800"
+              onClick={fetchKycDocuments}
+              disabled={loading}
+              className="p-2 text-gray-600 hover:text-gray-800 disabled:opacity-50"
             >
-              <X className="w-4 h-4" />
+              <RefreshCw className={`w-5 h-5 ${loading ? "animate-spin" : ""}`} />
             </button>
-          </div>
-        </div>
-      )}
-
-      {/* Loading state */}
-      {loading && (
-        <div className="mb-4 p-4 bg-blue-50 border border-blue-200 rounded-md">
-          <div className="flex items-center">
-            <RefreshCw className="w-5 h-5 text-blue-600 mr-2 animate-spin" />
-            <span className="text-blue-800">Loading KYC documents...</span>
-          </div>
-        </div>
-      )}
-
-      {/* Document List */}
-      <div className="space-y-4">
-        {documentTypes.map((docType) => {
-          const status = getDocumentStatus(docType);
-          const docValue = kycData?.[docType.key];
-
-          return (
-            <div
-              key={docType.key}
-              className={`p-4 rounded-lg border-2 transition-all duration-200 ${
-                status.bgColor
-              } ${
-                status.status === "approved"
-                  ? "border-green-300"
-                  : status.status === "pending"
-                  ? "border-orange-300"
-                  : "border-red-300"
-              }`}
-            >
-              <div className="flex items-center justify-between">
-                <div className="flex items-center space-x-3">
-                  <div className={`p-2 rounded-full ${status.bgColor}`}>
-                    <docType.icon className={`w-5 h-5 ${status.color}`} />
-                  </div>
-                  <div>
-                    <h3 className="font-semibold text-gray-800">
-                      {docType.label}
-                      {docType.required && (
-                        <span className="text-red-500 ml-1">*</span>
-                      )}
-                    </h3>
-                    <p className="text-sm text-gray-600">
-                      {docType.description}
-                    </p>
-                  </div>
-                </div>
-
-                <div className="flex items-center space-x-2">
-                  <div
-                    className={`flex items-center space-x-1 ${status.color}`}
-                  >
-                    {getStatusIcon(status.status)}
-                    <span className="text-sm font-medium capitalize">
-                      {status.status}
-                    </span>
-                  </div>
-
-                  {docValue && (
-                    <button
-                      onClick={() => handleViewDocument(docValue)}
-                      className="p-2 text-blue-600 hover:text-blue-800"
-                      title="View document"
-                    >
-                      <Eye className="w-4 h-4" />
-                    </button>
-                  )}
-
-                  <button
-                    onClick={() => {
-                      setSelectedDocType(docType.key);
-                      setShowUploadModal(true);
-                    }}
-                    disabled={uploading === docType.key}
-                    className="p-2 text-gray-600 hover:text-gray-800 disabled:opacity-50"
-                    title={docValue ? "Replace document" : "Upload document"}
-                  >
-                    {uploading === docType.key ? (
-                      <RefreshCw className="w-4 h-4 animate-spin" />
-                    ) : (
-                      <Upload className="w-4 h-4" />
-                    )}
-                  </button>
-                </div>
-              </div>
-            </div>
-          );
-        })}
-      </div>
-
-      {/* Upload Modal */}
-      {showUploadModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg p-6 w-full max-w-md mx-4">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-semibold">
-                Upload{" "}
-                {documentTypes.find((d) => d.key === selectedDocType)?.label}
-              </h3>
+            {kycData && (
               <button
-                onClick={() => {
-                  setShowUploadModal(false);
-                  setSelectedDocType(null);
-                }}
-                className="text-gray-500 hover:text-gray-700"
+                onClick={deleteKycDocument}
+                disabled={deleting !== null}
+                className="p-2 text-red-600 hover:text-red-800 disabled:opacity-50"
               >
-                <X className="w-5 h-5" />
+                <Trash2 className="w-5 h-5" />
               </button>
-            </div>
-
-            <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center">
-              <input
-                type="file"
-                accept="image/*,.pdf"
-                onChange={(e) => {
-                  const file = e.target.files?.[0];
-                  if (file) {
-                    handleFileUpload(file);
-                  }
-                }}
-                className="hidden"
-                id="file-upload"
-              />
-              <label
-                htmlFor="file-upload"
-                className="cursor-pointer flex flex-col items-center space-y-2"
-              >
-                <Upload className="w-8 h-8 text-gray-400" />
-                <span className="text-sm text-gray-600">
-                  Click to upload or drag and drop
-                </span>
-                <span className="text-xs text-gray-500">
-                  PNG, JPG, PDF up to 10MB
-                </span>
-              </label>
-            </div>
-
-            {uploading && (
-              <div className="mt-4 p-3 bg-blue-50 border border-blue-200 rounded-md">
-                <div className="flex items-center">
-                  <RefreshCw className="w-4 h-4 text-blue-600 mr-2 animate-spin" />
-                  <span className="text-blue-800 text-sm">
-                    Uploading document...
-                  </span>
-                </div>
-              </div>
             )}
           </div>
         </div>
-      )}
 
-      {/* Footer Info */}
-      {lastUpdated && (
-        <div className="mt-6 pt-4 border-t border-gray-200">
-          <p className="text-xs text-gray-500">
-            Last updated: {lastUpdated.toLocaleString()}
-          </p>
+        {/* Progress Bar */}
+        <div className="mb-6">
+          <div className="flex items-center justify-between mb-2">
+            <span className="text-sm font-medium text-gray-700">
+              Progress: {completedDocs}/{documentTypes.length} documents
+            </span>
+            <span className="text-sm font-medium text-gray-700">{progress}%</span>
+          </div>
+          <div className="w-full bg-gray-200 rounded-full h-2">
+            <div
+              className="bg-blue-600 h-2 rounded-full transition-all duration-300"
+              style={{ width: `${progress}%` }}
+            />
+          </div>
         </div>
-      )}
-    </div>
+
+        {/* Messages */}
+        {error && (
+          <div className="mb-4 p-4 bg-red-50 border border-red-200 rounded-md">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center">
+                <AlertCircle className="w-5 h-5 text-red-600 mr-2" />
+                <span className="text-red-800">{error}</span>
+              </div>
+              <button
+                onClick={clearMessages}
+                className="text-red-600 hover:text-red-800"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+          </div>
+        )}
+
+        {success && (
+          <div className="mb-4 p-4 bg-green-50 border border-green-200 rounded-md">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center">
+                <CheckCircle className="w-5 h-5 text-green-600 mr-2" />
+                <span className="text-green-800">{success}</span>
+              </div>
+              <button
+                onClick={clearMessages}
+                className="text-green-600 hover:text-green-800"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* Loading state */}
+        {loading && (
+          <div className="mb-4 p-4 bg-blue-50 border border-blue-200 rounded-md">
+            <div className="flex items-center">
+              <RefreshCw className="w-5 h-5 text-blue-600 mr-2 animate-spin" />
+              <span className="text-blue-800">Loading KYC documents...</span>
+            </div>
+          </div>
+        )}
+
+        {/* Document List */}
+        <div className="space-y-4">
+          {documentTypes.map((docType) => {
+            const status = getDocumentStatus(docType);
+            const docValue = kycData?.[docType.key];
+
+            return (
+              <div
+                key={docType.key}
+                className={`p-4 rounded-lg border-2 transition-all duration-200 ${
+                  status.bgColor
+                } ${
+                  status.status === "approved"
+                    ? "border-green-300"
+                    : status.status === "pending"
+                    ? "border-orange-300"
+                    : "border-red-300"
+                }`}
+              >
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center space-x-3">
+                    <div className={`p-2 rounded-full ${status.bgColor}`}>
+                      <docType.icon className={`w-5 h-5 ${status.color}`} />
+                    </div>
+                    <div>
+                      <h3 className="font-semibold text-gray-800">
+                        {docType.label}
+                        {docType.required && (
+                          <span className="text-red-500 ml-1">*</span>
+                        )}
+                      </h3>
+                      <p className="text-sm text-gray-600">
+                        {docType.description}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center space-x-2">
+                    <div
+                      className={`flex items-center space-x-1 ${status.color}`}
+                    >
+                      {getStatusIcon(status.status)}
+                      <span className="text-sm font-medium capitalize">
+                        {status.status}
+                      </span>
+                    </div>
+
+                    {docValue && (
+                      <button
+                        onClick={() => handleViewDocument(docValue)}
+                        className="p-2 text-blue-600 hover:text-blue-800"
+                        title="View document"
+                      >
+                        <Eye className="w-4 h-4" />
+                      </button>
+                    )}
+
+                    <button
+                      onClick={() => {
+                        setSelectedDocType(docType.key);
+                        setShowUploadModal(true);
+                      }}
+                      disabled={uploading === docType.key}
+                      className="p-2 text-gray-600 hover:text-gray-800 disabled:opacity-50"
+                      title={docValue ? "Replace document" : "Upload document"}
+                    >
+                      {uploading === docType.key ? (
+                        <RefreshCw className="w-4 h-4 animate-spin" />
+                      ) : (
+                        <Upload className="w-4 h-4" />
+                      )}
+                    </button>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+
+        {/* Upload Modal */}
+        {showUploadModal && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+            <div className="bg-white rounded-lg p-6 w-full max-w-md mx-4">
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-lg font-semibold">
+                  Upload{" "}
+                  {documentTypes.find((d) => d.key === selectedDocType)?.label}
+                </h3>
+                <button
+                  onClick={() => {
+                    setShowUploadModal(false);
+                    setSelectedDocType(null);
+                  }}
+                  className="text-gray-500 hover:text-gray-700"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+
+              <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center">
+                <input
+                  type="file"
+                  accept="image/*,.pdf"
+                  onChange={(e) => {
+                    const file = e.target.files?.[0];
+                    if (file) {
+                      handleFileUpload(file);
+                    }
+                  }}
+                  className="hidden"
+                  id="file-upload"
+                />
+                <label
+                  htmlFor="file-upload"
+                  className="cursor-pointer flex flex-col items-center space-y-2"
+                >
+                  <Upload className="w-8 h-8 text-gray-400" />
+                  <span className="text-sm text-gray-600">
+                    Click to upload or drag and drop
+                  </span>
+                  <span className="text-xs text-gray-500">
+                    PNG, JPG, PDF up to 10MB
+                  </span>
+                </label>
+              </div>
+
+              {uploading && (
+                <div className="mt-4 p-3 bg-blue-50 border border-blue-200 rounded-md">
+                  <div className="flex items-center">
+                    <RefreshCw className="w-4 h-4 text-blue-600 mr-2 animate-spin" />
+                    <span className="text-blue-800 text-sm">
+                      Uploading document...
+                    </span>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* Footer Info */}
+        {lastUpdated && (
+          <div className="mt-6 pt-4 border-t border-gray-200">
+            <p className="text-xs text-gray-500">
+              Last updated: {lastUpdated.toLocaleString()}
+            </p>
+          </div>
+        )}
+        {/* Notification Popup */}
+        {submitMessage && (
+          <div className="fixed top-4 right-4 z-50 animate-in">
+            <div 
+              className={`
+                max-w-md p-4 rounded-lg shadow-lg border-l-4 backdrop-blur-sm
+                ${submitMessage.type === 'success' 
+                  ? 'bg-green-50/95 border-green-500 text-green-800' 
+                  : 'bg-red-50/95 border-red-500 text-red-800'
+                }
+              `}
+            >
+              <div className="flex items-start">
+                <div className="flex-shrink-0">
+                  {submitMessage.type === 'success' ? (
+                    <CheckCircle className="w-5 h-5 text-green-600" />
+                  ) : (
+                    <AlertCircle className="w-5 h-5 text-red-600" />
+                  )}
+                </div>
+                <div className="ml-3 flex-1">
+                  <p className="text-sm font-medium">
+                    {submitMessage.type === 'success' ? 'Success!' : 'Error!'}
+                  </p>
+                  <p className="text-sm mt-1 pr-8">
+                    {submitMessage.text}
+                  </p>
+                  {/* Progress bar for auto-dismiss */}
+                  <div className="mt-2 w-full bg-gray-200 rounded-full h-1">
+                    <div 
+                      className={`
+                        h-1 rounded-full animate-shrink
+                        ${submitMessage.type === 'success' ? 'bg-green-500' : 'bg-red-500'}
+                      `}
+                      style={{
+                        animationDuration: submitMessage.type === 'success' ? '5s' : '7s',
+                        animationTimingFunction: 'linear'
+                      }}
+                    />
+                  </div>
+                </div>
+                <button
+                  onClick={() => setSubmitMessage(null)}
+                  className={`
+                    ml-2 flex-shrink-0 p-1 rounded-md hover:bg-opacity-20
+                    ${submitMessage.type === 'success' 
+                      ? 'text-green-600 hover:bg-green-600' 
+                      : 'text-red-600 hover:bg-red-600'
+                    }
+                  `}
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+      </div>
+    </>
   );
 };
 

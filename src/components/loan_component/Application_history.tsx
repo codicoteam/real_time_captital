@@ -21,7 +21,7 @@ import {
   PlayCircle,
   StopCircle,
   Download,
-  
+  Trash2,
 } from "lucide-react";
 import LoanService from "../../services/user_Services/loan_Service"; // Adjust the import path
 
@@ -67,6 +67,10 @@ const ApplicationHistory: React.FC<ApplicationHistoryProps> = ({
   const [selectedApplication, setSelectedApplication] =
     useState<HistoryApplication | null>(null);
   const [showDetailsModal, setShowDetailsModal] = useState<boolean>(false);
+  const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
+  const [applicationToDelete, setApplicationToDelete] =
+    useState<HistoryApplication | null>(null);
+  const [deleteLoading, setDeleteLoading] = useState<boolean>(false);
 
   // Function to map backend data to our interface
   const mapBackendDataToHistory = (
@@ -304,6 +308,13 @@ const ApplicationHistory: React.FC<ApplicationHistoryProps> = ({
     return Math.min(Math.max((elapsed / totalDuration) * 100, 0), 100);
   };
 
+  // Check if a loan can be deleted (only pending and rejected loans typically)
+  const canDeleteLoan = (application: HistoryApplication): boolean => {
+    return (
+      application.status === "pending" || application.status === "rejected"
+    );
+  };
+
   // Retry function for error state
   const handleRetry = () => {
     fetchApplicationHistory();
@@ -319,6 +330,132 @@ const ApplicationHistory: React.FC<ApplicationHistoryProps> = ({
   const closeDetailsModal = () => {
     setShowDetailsModal(false);
     setSelectedApplication(null);
+  };
+
+  // Handle delete loan
+  const handleDeleteLoan = (application: HistoryApplication) => {
+    setApplicationToDelete(application);
+    setShowDeleteModal(true);
+  };
+
+  // Confirm delete loan
+  const confirmDeleteLoan = async () => {
+    if (!applicationToDelete) return;
+
+    try {
+      setDeleteLoading(true);
+
+      // Call the delete service
+      await LoanService.deleteLoan(applicationToDelete.id);
+
+      // Remove the deleted loan from the state
+      setHistoryData((prevData) =>
+        prevData.filter((loan) => loan.id !== applicationToDelete.id)
+      );
+
+      // Close the modal
+      setShowDeleteModal(false);
+      setApplicationToDelete(null);
+
+      // You could also show a success message here
+      console.log("Loan deleted successfully");
+    } catch (err: any) {
+      console.error("Failed to delete loan:", err);
+      setError(err.message || "Failed to delete loan");
+    } finally {
+      setDeleteLoading(false);
+    }
+  };
+
+  // Cancel delete
+  const cancelDelete = () => {
+    setShowDeleteModal(false);
+    setApplicationToDelete(null);
+  };
+
+  // Delete Confirmation Modal Component
+  const DeleteConfirmationModal = () => {
+    if (!applicationToDelete) return null;
+
+    return (
+      <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+        <div className="bg-white rounded-3xl max-w-md w-full shadow-2xl">
+          <div className="p-8">
+            {/* Header */}
+            <div className="text-center mb-6">
+              <div className="bg-gradient-to-r from-red-500 to-pink-600 p-4 rounded-2xl mx-auto w-fit mb-4">
+                <Trash2 className="w-8 h-8 text-white" />
+              </div>
+              <h2 className="text-2xl font-bold text-slate-800 mb-2">
+                Delete Application
+              </h2>
+              <p className="text-slate-600">
+                Are you sure you want to delete this loan application? This
+                action cannot be undone.
+              </p>
+            </div>
+
+            {/* Application Details */}
+            <div className="bg-gradient-to-r from-red-50 to-pink-50 p-4 rounded-2xl border border-red-100 mb-6">
+              <div className="flex items-center mb-2">
+                {getProductIcon(applicationToDelete.productType)}
+                <span className="ml-2 font-semibold text-slate-800">
+                  {formatProductType(applicationToDelete.productType)}
+                </span>
+              </div>
+              <div className="text-sm text-slate-600">
+                <p>
+                  Amount:{" "}
+                  <span className="font-semibold">
+                    ${applicationToDelete.amount.toLocaleString()}
+                  </span>
+                </p>
+                <p>
+                  Status:{" "}
+                  <span className="font-semibold">
+                    {formatStatus(applicationToDelete.status)}
+                  </span>
+                </p>
+                <p>
+                  Applied:{" "}
+                  <span className="font-semibold">
+                    {formatDate(applicationToDelete.appliedDate)}
+                  </span>
+                </p>
+              </div>
+            </div>
+
+            {/* Action Buttons */}
+            <div className="flex space-x-4">
+              <button
+                onClick={cancelDelete}
+                disabled={deleteLoading}
+                className="flex-1 px-6 py-3 bg-gradient-to-r from-gray-500 to-slate-600 text-white rounded-2xl hover:from-gray-600 hover:to-slate-700 transition-all duration-200 shadow-lg hover:shadow-xl font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={confirmDeleteLoan}
+                disabled={deleteLoading}
+                className="flex-1 px-6 py-3 bg-gradient-to-r from-red-600 to-pink-600 text-white rounded-2xl hover:from-red-700 hover:to-pink-700 transition-all duration-200 shadow-lg hover:shadow-xl font-semibold disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
+              >
+                {deleteLoading ? (
+                  <>
+                    <Loader2 className="w-4 h-4 animate-spin mr-2" />
+                    Deleting...
+                  </>
+                ) : (
+                  <>
+                    <Trash2 className="w-4 h-4 mr-2" />
+                    Delete
+                  </>
+                )}
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
   };
 
   // Details Modal Component
@@ -664,60 +801,58 @@ const ApplicationHistory: React.FC<ApplicationHistoryProps> = ({
               </div>
             )}
 
-            {/* Documents */}
+            {/* Documents Section */}
             {selectedApplication.documents &&
               selectedApplication.documents.length > 0 && (
-                <div className="mt-8 bg-gradient-to-br from-violet-50 to-purple-50 p-6 rounded-2xl border border-violet-100">
-                  <h3 className="text-lg font-semibold text-violet-800 mb-6 flex items-center">
+                <div className="mt-8 bg-gradient-to-br from-indigo-50 to-purple-50 p-6 rounded-2xl border border-indigo-100">
+                  <h3 className="text-lg font-semibold text-indigo-800 mb-6 flex items-center">
                     <FileText className="w-5 h-5 mr-2" />
-                    Documents ({selectedApplication.documents.length})
+                    Submitted Documents
                   </h3>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {selectedApplication.documents.map((doc, index) => (
                       <div
                         key={index}
-                        className="flex items-center p-3 bg-white rounded-xl border border-violet-200"
+                        className="flex items-center p-3 bg-white rounded-xl border border-indigo-200"
                       >
-                        <div className="bg-violet-100 p-2 rounded-lg mr-3">
-                          <Download className="w-4 h-4 text-violet-600" />
+                        <div className="bg-indigo-100 p-2 rounded-lg mr-3">
+                          <FileText className="w-4 h-4 text-indigo-600" />
                         </div>
-                        <span className="text-violet-800 font-medium text-sm">
+                        <span className="text-indigo-800 font-medium flex-1">
                           {doc}
                         </span>
+                        <button className="p-1 hover:bg-indigo-100 rounded-lg transition-colors">
+                          <Download className="w-4 h-4 text-indigo-600" />
+                        </button>
                       </div>
                     ))}
                   </div>
                 </div>
               )}
 
-            {/* Loan Officer */}
+            {/* Loan Officer Information */}
             {selectedApplication.loanOfficer && (
               <div className="mt-8 bg-gradient-to-br from-teal-50 to-cyan-50 p-6 rounded-2xl border border-teal-100">
                 <h3 className="text-lg font-semibold text-teal-800 mb-4 flex items-center">
                   <User className="w-5 h-5 mr-2" />
                   Loan Officer
                 </h3>
-                <div className="flex items-center p-4 bg-white rounded-xl border border-teal-200">
-                  <div className="bg-teal-100 p-3 rounded-full mr-4">
-                    <User className="w-6 h-6 text-teal-600" />
+                <div className="flex items-center p-3 bg-white rounded-xl border border-teal-200">
+                  <div className="bg-teal-100 p-2 rounded-lg mr-3">
+                    <User className="w-4 h-4 text-teal-600" />
                   </div>
-                  <div>
-                    <p className="text-teal-800 font-semibold text-lg">
-                      {selectedApplication.loanOfficer}
-                    </p>
-                    <p className="text-teal-600 text-sm">
-                      Assigned Loan Officer
-                    </p>
-                  </div>
+                  <span className="text-teal-800 font-medium">
+                    {selectedApplication.loanOfficer}
+                  </span>
                 </div>
               </div>
             )}
 
-            {/* Close Button */}
-            <div className="flex justify-center mt-8 pt-6 border-t border-gray-200">
+            {/* Action Buttons */}
+            <div className="mt-8 flex justify-center">
               <button
                 onClick={closeDetailsModal}
-                className="px-8 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-2xl hover:from-blue-700 hover:to-indigo-700 transition-all duration-200 shadow-lg hover:shadow-xl font-semibold"
+                className="px-8 py-3 bg-gradient-to-r from-slate-600 to-gray-700 text-white rounded-2xl hover:from-slate-700 hover:to-gray-800 transition-all duration-200 shadow-lg hover:shadow-xl font-semibold"
               >
                 Close Details
               </button>
@@ -728,209 +863,223 @@ const ApplicationHistory: React.FC<ApplicationHistoryProps> = ({
     );
   };
 
+  // Loading state
+  if (loading) {
+    return (
+      <div className="bg-white rounded-3xl shadow-xl p-8">
+        <div className="flex flex-col items-center justify-center py-16">
+          <div className="relative">
+            <div className="w-16 h-16 border-4 border-blue-200 rounded-full"></div>
+            <div className="w-16 h-16 border-4 border-blue-600 border-t-transparent rounded-full animate-spin absolute top-0 left-0"></div>
+          </div>
+          <p className="text-slate-600 mt-4 text-lg">
+            Loading application history...
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  // Error state
+  if (error && historyData.length === 0) {
+    return (
+      <div className="bg-white rounded-3xl shadow-xl p-8">
+        <div className="flex flex-col items-center justify-center py-16">
+          <div className="bg-gradient-to-r from-red-500 to-pink-600 p-4 rounded-2xl mb-4">
+            <AlertCircle className="w-8 h-8 text-white" />
+          </div>
+          <h3 className="text-xl font-semibold text-slate-800 mb-2">
+            Failed to Load History
+          </h3>
+          <p className="text-slate-600 text-center mb-6 max-w-md">{error}</p>
+          <button
+            onClick={handleRetry}
+            className="px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-2xl hover:from-blue-700 hover:to-indigo-700 transition-all duration-200 shadow-lg hover:shadow-xl font-semibold"
+          >
+            Try Again
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  // Empty state
+  if (historyData.length === 0) {
+    return (
+      <div className="bg-white rounded-3xl shadow-xl p-8">
+        <div className="flex flex-col items-center justify-center py-16">
+          <div className="bg-gradient-to-r from-slate-400 to-gray-500 p-4 rounded-2xl mb-4">
+            <FileText className="w-8 h-8 text-white" />
+          </div>
+          <h3 className="text-xl font-semibold text-slate-800 mb-2">
+            No Applications Found
+          </h3>
+          <p className="text-slate-600 text-center max-w-md">
+            {userId
+              ? "This user hasn't submitted any loan applications yet."
+              : "No loan applications have been submitted yet."}
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  // Main render
   return (
-    <>
-      <div className="bg-gradient-to-br from-white/80 to-blue-50/80 backdrop-blur-lg rounded-3xl p-8 shadow-xl border border-white/60">
-        <div className="mb-8">
-          <div className="flex items-center justify-between">
-            <div>
-              <h3 className="text-2xl font-bold text-slate-800 mb-2 flex items-center">
-                <div className="bg-gradient-to-r from-blue-500 to-indigo-600 p-3 rounded-2xl mr-4 shadow-lg">
-                  <Clock className="w-6 h-6 text-white" />
-                </div>
-                Application History
-              </h3>
-              <p className="text-slate-600 ml-16">
-                Your complete loan application journey
-              </p>
-            </div>
-            <div className="text-right">
-              <p className="text-sm text-slate-500">Total Applications</p>
-              <p className="text-2xl font-bold text-slate-800">
-                {historyData.length}
-              </p>
-            </div>
+    <div className="bg-white rounded-3xl shadow-xl overflow-hidden">
+      {/* Header */}
+      <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-8 shadow-lg border border-white/50 px-8 py-6">
+        <div className="flex items-center justify-between">
+          <div>
+            <h2 className="text-2xl font-bold text-black mb-1">
+              Application History
+            </h2>
+            <p className="text-gray-700">
+              {historyData.length}{" "}
+              {historyData.length === 1 ? "application" : "applications"} found
+            </p>
+          </div>
+          <div className="bg-white/10 p-3 rounded-2xl">
+            <Clock className="w-6 h-6 text-white" />
           </div>
         </div>
+      </div>
 
-        {loading ? (
-          <div className="flex flex-col items-center justify-center py-16">
-            <div className="bg-gradient-to-r from-blue-500 to-indigo-600 p-4 rounded-2xl mb-4">
-              <Loader2 className="w-8 h-8 animate-spin text-white" />
-            </div>
-            <p className="text-slate-600 font-medium">
-              Loading your application history...
-            </p>
-          </div>
-        ) : error ? (
-          <div className="flex flex-col items-center justify-center py-16">
-            <div className="bg-gradient-to-r from-red-500 to-pink-600 p-4 rounded-2xl mb-4">
-              <AlertCircle className="w-12 h-12 text-white" />
-            </div>
-            <p className="text-red-600 mb-6 text-center font-medium">{error}</p>
-            <button
-              onClick={handleRetry}
-              className="px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-2xl hover:from-blue-700 hover:to-indigo-700 transition-all duration-200 shadow-lg hover:shadow-xl font-semibold"
-            >
-              Try Again
-            </button>
-          </div>
-        ) : historyData.length === 0 ? (
-          <div className="flex flex-col items-center justify-center py-16">
-            <div className="bg-gradient-to-r from-gray-500 to-slate-600 p-4 rounded-2xl mb-4">
-              <FileText className="w-12 h-12 text-white" />
-            </div>
-            <p className="text-slate-600 text-lg font-medium mb-2">
-              No applications found
-            </p>
-            <p className="text-slate-500 text-center">
-              You haven't submitted any loan applications yet.
-            </p>
-          </div>
-        ) : (
-          <div className="space-y-6">
-            {historyData.map((application) => {
-              const progress = calculateProgress(application);
+      {/* Applications List */}
+      <div className="p-8">
+        <div className="space-y-6">
+          {historyData.map((application) => {
+            const progress = calculateProgress(application);
 
-              return (
-                <div
-                  key={application.id}
-                  className="bg-white/70 backdrop-blur-sm rounded-2xl p-6 border border-white/60 shadow-lg hover:shadow-xl transition-all duration-300 hover:bg-white/80"
-                >
-                  <div className="flex items-start justify-between mb-4">
-                    <div className="flex items-start space-x-4">
+            return (
+              <div
+                key={application.id}
+                className="group bg-gradient-to-r from-slate-50 to-gray-50 rounded-2xl p-6 border border-slate-200 hover:border-slate-300 hover:shadow-lg transition-all duration-200"
+              >
+                <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between">
+                  {/* Left Side - Main Info */}
+                  <div className="flex-1">
+                    <div className="flex items-start mb-4">
+                      {/* Product Icon */}
                       <div
                         className={`bg-gradient-to-r ${getProductGradient(
                           application.productType
-                        )} p-3 rounded-2xl shadow-lg`}
+                        )} p-3 rounded-xl mr-4 flex-shrink-0`}
                       >
                         {getProductIcon(application.productType)}
                       </div>
-                      <div>
-                        <h4 className="text-lg font-semibold text-slate-800 mb-1">
-                          {formatProductType(application.productType)}
-                        </h4>
-                        <p className="text-slate-600 text-sm mb-2">
-                          Applied on {formatDate(application.appliedDate)}
-                        </p>
-                        <div className="flex items-center space-x-4">
-                          <div className="flex items-center text-slate-700">
+
+                      {/* Application Details */}
+                      <div className="flex-1">
+                        <div className="flex items-center flex-wrap gap-3 mb-2">
+                          <h3 className="text-lg font-semibold text-slate-800">
+                            {formatProductType(application.productType)}
+                          </h3>
+                          <span
+                            className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium ${getStatusStyles(
+                              application.status
+                            )}`}
+                          >
+                            {getStatusIcon(application.status)}
+                            <span className="ml-1">
+                              {formatStatus(application.status)}
+                            </span>
+                          </span>
+                        </div>
+
+                        <div className="flex flex-wrap items-center gap-6 text-sm text-slate-600">
+                          <div className="flex items-center">
                             <DollarSign className="w-4 h-4 mr-1" />
-                            <span className="font-semibold">
+                            <span className="font-semibold text-slate-800">
                               ${application.amount.toLocaleString()}
                             </span>
                           </div>
-                          {application.term && (
-                            <div className="flex items-center text-slate-600">
-                              <Calendar className="w-4 h-4 mr-1" />
-                              <span className="text-sm">
-                                {application.term} months
-                              </span>
+                          <div className="flex items-center">
+                            <Calendar className="w-4 h-4 mr-1" />
+                            <span>
+                              Applied {formatDate(application.appliedDate)}
+                            </span>
+                          </div>
+                          {application.interestRate && (
+                            <div className="flex items-center">
+                              <TrendingUp className="w-4 h-4 mr-1" />
+                              <span>{application.interestRate}% APR</span>
                             </div>
                           )}
                         </div>
-                      </div>
-                    </div>
 
-                    <div className="flex items-center space-x-3">
-                      <span
-                        className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${getStatusStyles(
-                          application.status
-                        )}`}
-                      >
-                        {getStatusIcon(application.status)}
-                        <span className="ml-2">
-                          {formatStatus(application.status)}
-                        </span>
-                      </span>
-                      <button
-                        onClick={() => handleViewDetails(application)}
-                        className="p-2 bg-gradient-to-r from-orange-500 to-orange-300 text-white rounded-xl hover:from-blue-600 hover:to-indigo-700 transition-all duration-200 shadow-lg hover:shadow-xl"
-                        title="View Details"
-                      >
-                        <Eye className="w-4 h-4" />
-                      </button>
+                        {/* Progress Bar for Active Loans */}
+                        {application.status === "active" &&
+                          application.startDate &&
+                          application.endDate && (
+                            <div className="mt-4">
+                              <div className="flex items-center justify-between mb-2">
+                                <span className="text-sm font-medium text-blue-700">
+                                  Loan Progress
+                                </span>
+                                <span className="text-sm font-bold text-blue-600">
+                                  {Math.round(progress)}%
+                                </span>
+                              </div>
+                              <div className="w-full bg-blue-200 rounded-full h-2">
+                                <div
+                                  className="bg-gradient-to-r from-blue-500 to-indigo-500 h-2 rounded-full transition-all duration-300"
+                                  style={{ width: `${progress}%` }}
+                                ></div>
+                              </div>
+                            </div>
+                          )}
+
+                        {/* Outstanding Balance */}
+                        {application.balance !== undefined &&
+                          application.balance > 0 && (
+                            <div className="mt-3 p-3 bg-gradient-to-r from-red-50 to-pink-50 rounded-xl border border-red-100">
+                              <div className="flex items-center">
+                                <AlertTriangle className="w-4 h-4 text-red-600 mr-2" />
+                                <span className="text-sm text-red-700">
+                                  Outstanding Balance:{" "}
+                                  <span className="font-bold">
+                                    ${application.balance.toLocaleString()}
+                                  </span>
+                                </span>
+                              </div>
+                            </div>
+                          )}
+                      </div>
                     </div>
                   </div>
 
-                  {/* Progress bar for active loans */}
-                  {application.status === "active" &&
-                    application.startDate &&
-                    application.endDate && (
-                      <div className="mt-4 p-4 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl border border-blue-100">
-                        <div className="flex items-center justify-between mb-2">
-                          <span className="text-sm font-medium text-blue-700">
-                            Loan Progress
-                          </span>
-                          <span className="text-sm font-bold text-blue-800">
-                            {Math.round(progress)}%
-                          </span>
-                        </div>
-                        <div className="w-full bg-blue-200 rounded-full h-2">
-                          <div
-                            className="bg-gradient-to-r from-blue-500 to-indigo-500 h-2 rounded-full transition-all duration-300"
-                            style={{ width: `${progress}%` }}
-                          ></div>
-                        </div>
-                        <div className="flex justify-between text-xs text-blue-600 mt-1">
-                          <span>
-                            Started: {formatDate(application.startDate)}
-                          </span>
-                          <span>Ends: {formatDate(application.endDate)}</span>
-                        </div>
-                      </div>
-                    )}
+                  {/* Right Side - Actions */}
+                  <div className="flex items-center space-x-3 mt-4 lg:mt-0 lg:ml-6">
+                    <button
+                      onClick={() => handleViewDetails(application)}
+                      className="flex items-center px-4 py-2 bg-gradient-to-r from-red-500 to-orange-500 text-white rounded-xl hover:from-orange-300 hover:to-orange-5000 transition-all duration-200 shadow-md hover:shadow-lg text-sm font-medium"
+                    >
+                      <Eye className="w-4 h-4 mr-2" />
+                      View Details
+                    </button>
 
-                  {/* Outstanding balance for active loans */}
-                  {application.balance !== undefined &&
-                    application.balance > 0 && (
-                      <div className="mt-4 p-4 bg-gradient-to-r from-red-50 to-pink-50 rounded-xl border border-red-100">
-                        <div className="flex items-center justify-between">
-                          <div className="flex items-center">
-                            <DollarSign className="w-5 h-5 text-red-600 mr-2" />
-                            <span className="text-sm font-medium text-red-700">
-                              Outstanding Balance
-                            </span>
-                          </div>
-                          <span className="text-lg font-bold text-red-800">
-                            ${application.balance.toLocaleString()}
-                          </span>
-                        </div>
-                      </div>
+                    {canDeleteLoan(application) && (
+                      <button
+                        onClick={() => handleDeleteLoan(application)}
+                        className="flex items-center px-4 py-2 bg-gradient-to-r from-red-500 to-pink-500 text-white rounded-xl hover:from-red-600 hover:to-pink-600 transition-all duration-200 shadow-md hover:shadow-lg text-sm font-medium"
+                      >
+                        <Trash2 className="w-4 h-4 mr-2" />
+                        Delete
+                      </button>
                     )}
-
-                  {/* Additional info row */}
-                  <div className="mt-4 flex items-center justify-between text-sm text-slate-500">
-                    <div className="flex items-center space-x-4">
-                      {application.interestRate && (
-                        <div className="flex items-center">
-                          <TrendingUp className="w-4 h-4 mr-1" />
-                          <span>{application.interestRate}% APR</span>
-                        </div>
-                      )}
-                      {application.monthlyPayment && (
-                        <div className="flex items-center">
-                          <CreditCard className="w-4 h-4 mr-1" />
-                          <span>
-                            ${application.monthlyPayment.toLocaleString()}/month
-                          </span>
-                        </div>
-                      )}
-                    </div>
-                    <div className="text-xs text-slate-400">
-                      ID: {application.id.slice(-8)}
-                    </div>
                   </div>
                 </div>
-              );
-            })}
-          </div>
-        )}
+              </div>
+            );
+          })}
+        </div>
       </div>
 
-      {/* Details Modal */}
+      {/* Modals */}
       {showDetailsModal && <DetailsModal />}
-    </>
+      {showDeleteModal && <DeleteConfirmationModal />}
+    </div>
   );
 };
 

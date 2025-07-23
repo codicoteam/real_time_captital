@@ -111,6 +111,29 @@ const ApplyNewLoan: React.FC = () => {
     type: "success" | "error";
     text: string;
   } | null>(null);
+  const notificationStyles = (
+    <style>{`
+      @keyframes shrink {
+        from { width: 100%; }
+        to { width: 0%; }
+      }
+      
+      .animate-in {
+        animation: slideInFromTop 0.5s ease-out;
+      }
+      
+      @keyframes slideInFromTop {
+        from {
+          opacity: 0;
+          transform: translateY(-50px) scale(0.9);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0) scale(1);
+        }
+      }
+    `}</style>
+  );
 
   const [formData, setFormData] = useState<FormData>({
     productType: "",
@@ -389,6 +412,11 @@ const ApplyNewLoan: React.FC = () => {
         type: "success",
         text: "Loan application submitted successfully!",
       });
+
+      // Auto-hide success message after 5 seconds
+      setTimeout(() => {
+        setSubmitMessage(null);
+      }, 5000);
       console.log("Application submitted:", response);
     } catch (error) {
       setSubmitMessage({
@@ -398,6 +426,11 @@ const ApplyNewLoan: React.FC = () => {
             ? error
             : "Failed to submit loan application. Please try again.",
       });
+
+      // Auto-hide error message after 7 seconds
+      setTimeout(() => {
+        setSubmitMessage(null);
+      }, 7000);
       console.error("Submission error:", error);
     } finally {
       setIsSubmitting(false);
@@ -405,6 +438,7 @@ const ApplyNewLoan: React.FC = () => {
   };
   return (
     <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-8 shadow-lg border border-white/50">
+      {notificationStyles}
       <div className="mb-8">
         <h3 className="text-xl font-bold text-black mb-2 flex items-center">
           <Plus className="w-6 h-6 mr-2 text-orange-500" />
@@ -1206,6 +1240,76 @@ const ApplyNewLoan: React.FC = () => {
         </div>
 
         {/* Submit Button */}
+        {/* Centered Notification Popup */}
+        {submitMessage && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center pointer-events-none">
+            <div className="pointer-events-auto">
+              <div
+                className={`transform transition-all duration-500 ease-in-out animate-in zoom-in-95 slide-in-from-top-4 ${
+                  submitMessage
+                    ? "opacity-100 scale-100 translate-y-0"
+                    : "opacity-0 scale-95 translate-y-4"
+                }`}
+              >
+                <div
+                  className={`mx-4 p-8 rounded-2xl shadow-2xl border-2 min-w-96 max-w-md relative ${
+                    submitMessage.type === "success"
+                      ? "bg-gradient-to-br from-green-50 to-emerald-100 text-green-800 border-green-300"
+                      : "bg-gradient-to-br from-red-50 to-pink-100 text-red-800 border-red-300"
+                  }`}
+                >
+                  <div className="flex items-center space-x-4 mb-4">
+                    {submitMessage.type === "success" ? (
+                      <div className="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center animate-bounce shadow-lg">
+                        <span className="text-white text-2xl font-bold">✓</span>
+                      </div>
+                    ) : (
+                      <div className="w-12 h-12 bg-red-500 rounded-full flex items-center justify-center animate-pulse shadow-lg">
+                        <span className="text-white text-2xl font-bold">✗</span>
+                      </div>
+                    )}
+                    <div className="flex-1">
+                      <h4 className="font-bold text-xl mb-1">
+                        {submitMessage.type === "success"
+                          ? "Application Submitted!"
+                          : "Submission Failed!"}
+                      </h4>
+                      <p className="text-sm leading-relaxed">
+                        {submitMessage.text}
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Progress bar for auto-dismiss */}
+                  <div className="w-full bg-gray-200 rounded-full h-1 mt-4">
+                    <div
+                      className={`h-1 rounded-full ${
+                        submitMessage.type === "success"
+                          ? "bg-green-500"
+                          : "bg-red-500"
+                      } animate-pulse`}
+                      style={{
+                        animation: `shrink ${
+                          submitMessage.type === "success" ? "5s" : "7s"
+                        } linear forwards`,
+                      }}
+                    ></div>
+                  </div>
+
+                  {/* Close button */}
+                  <button
+                    onClick={() => setSubmitMessage(null)}
+                    className="absolute top-3 right-3 w-6 h-6 bg-gray-200 hover:bg-gray-300 rounded-full flex items-center justify-center text-gray-600 hover:text-gray-800 transition-colors"
+                  >
+                    ×
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Submit Button */}
         <div className="flex justify-center pt-6">
           <button
             type="submit"
@@ -1221,17 +1325,6 @@ const ApplyNewLoan: React.FC = () => {
               {isSubmitting ? "Submitting..." : "Submit Loan Application"}
             </span>
           </button>
-          {submitMessage && (
-            <div
-              className={`mb-4 p-4 rounded-xl ${
-                submitMessage.type === "success"
-                  ? "bg-green-100 text-green-700 border border-green-200"
-                  : "bg-red-100 text-red-700 border border-red-200"
-              }`}
-            >
-              {submitMessage.text}
-            </div>
-          )}
         </div>
       </form>
     </div>
