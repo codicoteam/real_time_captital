@@ -7,10 +7,12 @@ import {
   FileText,
   CreditCard,
   RefreshCw,
-  User,
-  Calendar,
   DollarSign,
+  TrendingUp,
+  Eye,
 } from "lucide-react";
+
+// Import your existing LoanService
 import LoanService from "../../services/user_Services/loan_Service";
 
 // Updated type definitions based on your loan model
@@ -43,6 +45,7 @@ interface StatusConfig {
   icon: React.ComponentType<{ className?: string }>;
   text: string;
   description: string;
+  gradient: string;
 }
 
 interface ApplicationStatusProps {
@@ -58,6 +61,7 @@ const ApplicationStatus: React.FC<ApplicationStatusProps> = ({
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
+  const [selectedLoan, setSelectedLoan] = useState<string | null>(null);
 
   // Fetch applications from API
   const fetchApplications = async () => {
@@ -84,8 +88,13 @@ const ApplicationStatus: React.FC<ApplicationStatusProps> = ({
       } else {
         setApplicationsData([]);
       }
-    } catch (err: any) {
-      setError(err.message || "Failed to fetch loan applications");
+    } catch (err) {
+      // Fix for TypeScript error: properly handle unknown error type
+      const errorMessage =
+        err instanceof Error
+          ? err.message
+          : "Failed to fetch loan applications";
+      setError(errorMessage);
       console.error("Error fetching applications:", err);
       setApplicationsData([]);
     } finally {
@@ -113,6 +122,7 @@ const ApplicationStatus: React.FC<ApplicationStatusProps> = ({
           text: "Approved",
           description:
             "Your loan has been approved and is ready for disbursement",
+          gradient: "from-green-500 to-green-600",
         };
       case "active":
         return {
@@ -121,6 +131,7 @@ const ApplicationStatus: React.FC<ApplicationStatusProps> = ({
           icon: CheckCircle,
           text: "Active",
           description: "Your loan is currently active and running",
+          gradient: "from-blue-500 to-blue-600",
         };
       case "pending":
         return {
@@ -129,6 +140,7 @@ const ApplicationStatus: React.FC<ApplicationStatusProps> = ({
           icon: Clock,
           text: "Pending Review",
           description: "Your application is being reviewed by our team",
+          gradient: "from-orange-500 to-orange-600",
         };
       case "rejected":
         return {
@@ -137,6 +149,7 @@ const ApplicationStatus: React.FC<ApplicationStatusProps> = ({
           icon: XCircle,
           text: "Rejected",
           description: "Unfortunately, your loan application was not approved",
+          gradient: "from-red-500 to-red-600",
         };
       case "closed":
         return {
@@ -145,6 +158,7 @@ const ApplicationStatus: React.FC<ApplicationStatusProps> = ({
           icon: FileText,
           text: "Closed",
           description: "This loan has been completed or closed",
+          gradient: "from-gray-500 to-gray-600",
         };
       default:
         return {
@@ -153,6 +167,7 @@ const ApplicationStatus: React.FC<ApplicationStatusProps> = ({
           icon: Clock,
           text: status,
           description: "Status information",
+          gradient: "from-gray-500 to-gray-600",
         };
     }
   };
@@ -211,20 +226,59 @@ const ApplicationStatus: React.FC<ApplicationStatusProps> = ({
     });
   };
 
+  const getStatsCards = () => {
+    const totalAmount = applicationsData.reduce(
+      (sum, loan) => sum + loan.amount,
+      0
+    );
+    const activeLoans = applicationsData.filter(
+      (loan) => loan.status === "active"
+    ).length;
+    const pendingLoans = applicationsData.filter(
+      (loan) => loan.status === "pending"
+    ).length;
+
+    return [
+      {
+        title: "Total Applied",
+        value: formatCurrency(totalAmount),
+        icon: DollarSign,
+        color: "text-blue-600",
+        bgColor: "bg-blue-50",
+      },
+      {
+        title: "Active Loans",
+        value: activeLoans.toString(),
+        icon: TrendingUp,
+        color: "text-green-600",
+        bgColor: "bg-green-50",
+      },
+      {
+        title: "Pending Review",
+        value: pendingLoans.toString(),
+        icon: Clock,
+        color: "text-orange-600",
+        bgColor: "bg-orange-50",
+      },
+    ];
+  };
+
   return (
-    <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-8 shadow-lg border border-white/50">
-      <div className="mb-8">
-        <div className="flex items-center justify-between">
+    <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-6 shadow-lg border border-white/50">
+      <div className="mb-6">
+        <div className="flex items-center justify-between mb-4">
           <div>
             <h3 className="text-xl font-bold text-black mb-2 flex items-center">
-              <FileText className="w-6 h-6 mr-2 text-blue-600" />
+              <div className="w-8 h-8 bg-blue-100 rounded-xl flex items-center justify-center mr-3">
+                <FileText className="w-5 h-5 text-blue-600" />
+              </div>
               Loan Applications Status
             </h3>
-            <p className="text-sm text-gray-600">
+            <p className="text-gray-600 ml-11 text-sm">
               Track your current loan applications and active loans
             </p>
             {lastUpdated && (
-              <p className="text-xs text-gray-600 mt-1">
+              <p className="text-xs text-gray-500 ml-11 mt-1">
                 Last updated: {lastUpdated.toLocaleTimeString()}
               </p>
             )}
@@ -233,7 +287,7 @@ const ApplicationStatus: React.FC<ApplicationStatusProps> = ({
             <button
               onClick={fetchApplications}
               disabled={loading}
-              className="flex items-center px-4 py-2 bg-blue-100 hover:bg-blue-200 text-blue-700 rounded-lg transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="flex items-center px-4 py-2 bg-blue-100 hover:bg-blue-200 text-blue-700 rounded-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed font-medium shadow-sm hover:shadow-md text-sm"
             >
               <RefreshCw
                 className={`w-4 h-4 mr-2 ${loading ? "animate-spin" : ""}`}
@@ -243,145 +297,219 @@ const ApplicationStatus: React.FC<ApplicationStatusProps> = ({
           )}
         </div>
 
+        {/* Stats Cards - Reduced size */}
+        {applicationsData.length > 0 && (
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-4">
+            {getStatsCards().map((stat, index) => {
+              const StatIcon = stat.icon;
+              return (
+                <div
+                  key={index}
+                  className="bg-white rounded-lg p-3 border border-gray-200 shadow-sm"
+                >
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-xs text-gray-600 font-medium">
+                        {stat.title}
+                      </p>
+                      <p className="text-lg font-bold text-black mt-1">
+                        {stat.value}
+                      </p>
+                    </div>
+                    <div
+                      className={`w-8 h-8 ${stat.bgColor} rounded-lg flex items-center justify-center`}
+                    >
+                      <StatIcon className={`w-4 h-4 ${stat.color}`} />
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        )}
+
         {error && (
-          <div className="mt-4 p-4 bg-red-50 border border-red-200 text-red-700 rounded-lg text-sm">
+          <div className="mt-4 p-3 bg-red-50 border border-red-200 text-red-700 rounded-lg">
             <div className="flex items-center">
-              <AlertCircle className="w-4 h-4 mr-2 flex-shrink-0" />
-              <span>{error}</span>
+              <AlertCircle className="w-5 h-5 mr-2 flex-shrink-0" />
+              <span className="font-medium text-sm">{error}</span>
             </div>
           </div>
         )}
       </div>
 
       {loading ? (
-        <div className="flex items-center justify-center py-12">
-          <RefreshCw className="w-6 h-6 animate-spin text-blue-600 mr-3" />
-          <span className="text-blue-600">
+        <div className="flex flex-col items-center justify-center py-12">
+          <div className="relative">
+            <div className="w-12 h-12 border-4 border-blue-200 rounded-full animate-spin border-t-blue-600"></div>
+          </div>
+          <span className="text-blue-600 font-medium mt-3 text-sm">
             Loading your loan applications...
           </span>
         </div>
       ) : applicationsData.length === 0 ? (
         <div className="text-center py-12">
-          <FileText className="w-16 h-16 text-blue-300 mx-auto mb-4" />
-          <p className="text-black text-lg mb-2 font-medium">
+          <div className="w-16 h-16 bg-blue-100 rounded-2xl flex items-center justify-center mx-auto mb-3">
+            <FileText className="w-8 h-8 text-blue-600" />
+          </div>
+          <h4 className="text-black text-lg mb-2 font-bold">
             No loan applications found
-          </p>
-          <p className="text-gray-600 text-sm">
+          </h4>
+          <p className="text-gray-600 max-w-md mx-auto leading-relaxed text-sm">
             You don't have any loan applications yet. Apply for a loan to get
-            started.
+            started and track your progress here.
           </p>
         </div>
       ) : (
-        <div className="space-y-4">
+        <div className="space-y-3">
           {applicationsData.map((loan) => {
             const statusConfig = getStatusConfig(loan.status);
             const StatusIcon = statusConfig.icon;
             const progress = calculateProgress(loan);
+            const isExpanded = selectedLoan === loan._id;
 
             return (
               <div
                 key={loan._id}
-                className={`p-4 border rounded-lg hover:shadow-md transition-all duration-300 ${statusConfig.bgColor}`}
+                className={`relative overflow-hidden border rounded-lg hover:shadow-md transition-all duration-300 ${
+                  statusConfig.bgColor
+                } ${isExpanded ? "shadow-md" : "shadow-sm"}`}
               >
-                {/* Header */}
-                <div className="flex items-center justify-between mb-3">
-                  <div className="flex items-center space-x-3">
-                    <div className="p-2 bg-gray-50 rounded-lg">
-                      <CreditCard className="w-5 h-5 text-blue-600" />
+                {/* Main Content - Much smaller padding */}
+                <div className="p-3">
+                  {/* Header - Compact */}
+                  <div className="flex items-center justify-between mb-2">
+                    <div className="flex items-center space-x-2 flex-1 min-w-0">
+                      <div className="w-8 h-8 bg-gray-50 rounded-lg flex items-center justify-center flex-shrink-0">
+                        <CreditCard className="w-4 h-4 text-blue-600" />
+                      </div>
+                      <div className="min-w-0 flex-1">
+                        <div className="flex items-center justify-between">
+                          <h4 className="font-semibold text-black text-sm truncate">
+                            {getProductTypeDisplay(loan.productType)}
+                          </h4>
+                          <div className="flex items-center space-x-2 ml-2">
+                            <div
+                              className={`px-2 py-1 rounded text-xs font-medium flex items-center ${statusConfig.color} bg-gray-50`}
+                            >
+                              <StatusIcon className="w-3 h-3 mr-1" />
+                              {statusConfig.text}
+                            </div>
+                            <button
+                              onClick={() =>
+                                setSelectedLoan(isExpanded ? null : loan._id)
+                              }
+                              className="p-1 hover:bg-gray-100 rounded transition-colors"
+                            >
+                              <Eye className="w-3 h-3 text-gray-500" />
+                            </button>
+                          </div>
+                        </div>
+                        <div className="flex items-center justify-between mt-1">
+                          <p className="text-black font-bold text-base">
+                            {formatCurrency(loan.amount)}
+                          </p>
+                          {loan.balance !== undefined &&
+                            loan.status === "active" && (
+                              <p className="text-xs text-gray-600">
+                                Balance: {formatCurrency(loan.balance)}
+                              </p>
+                            )}
+                        </div>
+                      </div>
                     </div>
-                    <div>
-                      <h4 className="font-bold text-black text-base">
-                        {getProductTypeDisplay(loan.productType)}
-                      </h4>
-                      <p className="text-black font-semibold text-sm">
-                        {formatCurrency(loan.amount)}
-                      </p>
-                      {loan.borrowerInfo?.firstName && (
-                        <p className="text-gray-600 text-xs flex items-center mt-1">
-                          <User className="w-3 h-3 mr-1" />
-                          {loan.borrowerInfo.firstName}{" "}
-                          {loan.borrowerInfo.surname}
-                        </p>
-                      )}
-                    </div>
                   </div>
 
-                  <div
-                    className={`px-3 py-1 rounded-full text-xs font-bold flex items-center ${statusConfig.color} bg-gray-50`}
-                  >
-                    <StatusIcon className="w-3 h-3 mr-1" />
-                    {statusConfig.text}
-                  </div>
-                </div>
-
-                {/* Status Description */}
-                <div className="mb-3 p-2 bg-gray-50 rounded-md">
-                  <p className="text-xs text-gray-600">
-                    {statusConfig.description}
-                  </p>
-                </div>
-
-                {/* Progress Bar */}
-                <div className="mb-3">
-                  <div className="flex justify-between text-xs mb-1">
-                    <span className="text-gray-600 font-medium">
-                      Application Progress
-                    </span>
-                    <span className="text-black font-bold">{progress}%</span>
-                  </div>
-                  <div className="w-full bg-gray-200 rounded-full h-2">
-                    <div
-                      className="h-full bg-gradient-to-r from-orange-500 to-purple-400 rounded-full transition-all duration-1000"
-                      style={{ width: `${progress}%` }}
-                    ></div>
-                  </div>
-                </div>
-
-                {/* Loan Details */}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 mb-3">
-                  {loan.interestRate && (
-                    <div className="flex items-center text-xs">
-                      <DollarSign className="w-3 h-3 mr-1 text-gray-600" />
-                      <span className="text-gray-600">Interest Rate: </span>
-                      <span className="font-semibold text-black ml-1">
-                        {loan.interestRate}%
+                  {/* Progress Bar - Compact */}
+                  <div className="mb-2">
+                    <div className="flex justify-between items-center mb-1">
+                      <span className="text-xs text-gray-600">Progress</span>
+                      <span className="text-black font-semibold text-xs">
+                        {progress}%
                       </span>
                     </div>
-                  )}
-
-                  {loan.term && (
-                    <div className="flex items-center text-xs">
-                      <Calendar className="w-3 h-3 mr-1 text-gray-600" />
-                      <span className="text-gray-600">Term: </span>
-                      <span className="font-semibold text-black ml-1">
-                        {loan.term} months
-                      </span>
+                    <div className="w-full bg-gray-200 rounded-full h-1.5 overflow-hidden">
+                      <div
+                        className="h-full bg-gradient-to-r from-orange-500 to-red-800 rounded-full transition-all duration-1000"
+                        style={{ width: `${progress}%` }}
+                      />
                     </div>
-                  )}
+                  </div>
 
-                  {loan.balance !== undefined && loan.status === "active" && (
-                    <div className="flex items-center text-xs">
-                      <CreditCard className="w-3 h-3 mr-1 text-gray-600" />
-                      <span className="text-gray-600">Balance: </span>
-                      <span className="font-semibold text-black ml-1">
-                        {formatCurrency(loan.balance)}
-                      </span>
+                  {/* Quick Details - Compact grid */}
+                  <div className="grid grid-cols-3 gap-2 text-xs">
+                    <div className="bg-gray-50 rounded p-1.5 text-center">
+                      <div className="text-gray-600 text-xs">Applied</div>
+                      <div className="font-semibold text-black text-xs">
+                        {formatDate(loan.applicationDate)}
+                      </div>
                     </div>
-                  )}
-                </div>
 
-                {/* Footer */}
-                <div className="flex justify-end items-center text-xs text-gray-600 pt-3 border-t border-gray-200">
-                  <div className="flex items-center space-x-3">
-                    <span>Applied: {formatDate(loan.applicationDate)}</span>
-                    {loan.approvalDate && (
-                      <span>Approved: {formatDate(loan.approvalDate)}</span>
+                    {loan.interestRate && (
+                      <div className="bg-gray-50 rounded p-1.5 text-center">
+                        <div className="text-gray-600 text-xs">Rate</div>
+                        <div className="font-semibold text-black text-xs">
+                          {loan.interestRate}%
+                        </div>
+                      </div>
                     )}
-                    {loan.startDate && (
-                      <span>Started: {formatDate(loan.startDate)}</span>
+
+                    {loan.term && (
+                      <div className="bg-gray-50 rounded p-1.5 text-center">
+                        <div className="text-gray-600 text-xs">Term</div>
+                        <div className="font-semibold text-black text-xs">
+                          {loan.term}m
+                        </div>
+                      </div>
                     )}
                   </div>
+
+                  {/* Expanded Details */}
+                  {isExpanded && (
+                    <div className="mt-3 pt-3 border-t border-gray-200">
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                        <div>
+                          <h5 className="font-semibold text-black mb-1 text-xs">
+                            Contact Info
+                          </h5>
+                          <div className="space-y-1 text-xs">
+                            <p className="text-gray-600">
+                              {loan.borrowerInfo.email}
+                            </p>
+                            <p className="text-gray-600">
+                              {loan.borrowerInfo.phone}
+                            </p>
+                          </div>
+                        </div>
+                        <div>
+                          <h5 className="font-semibold text-black mb-1 text-xs">
+                            Timeline
+                          </h5>
+                          <div className="space-y-1 text-xs">
+                            {loan.approvalDate && (
+                              <p className="text-gray-600">
+                                Approved: {formatDate(loan.approvalDate)}
+                              </p>
+                            )}
+                            {loan.startDate && (
+                              <p className="text-gray-600">
+                                Started: {formatDate(loan.startDate)}
+                              </p>
+                            )}
+                            <p className="text-gray-600">
+                              Updated: {formatDate(loan.updatedAt)}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  )}
                 </div>
+
+                {/* Status indicator bar */}
+                <div
+                  className={`h-0.5 bg-gradient-to-r ${statusConfig.gradient}`}
+                ></div>
               </div>
             );
           })}
