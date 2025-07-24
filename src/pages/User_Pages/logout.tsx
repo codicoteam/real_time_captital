@@ -22,7 +22,7 @@ const Logout = () => {
   };
 
   return (
-    <div className="flex h-screen bg-gradient-to-br from-orange-50 via-red-50 to-yellow-50">
+    <div className="flex h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50">
       {/* Sidebar */}
       <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
 
@@ -78,10 +78,10 @@ const Logout = () => {
                 <div className="w-16 h-16 bg-gradient-to-br from-orange-500 to-red-500 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg shadow-orange-500/25">
                   <FiLogOut className="w-8 h-8 text-white" />
                 </div>
-                <h2 className="text-2xl font-bold text-orange-700 mb-2">
+                <h2 className="text-2xl font-bold text-black mb-2">
                   Ready to Leave?
                 </h2>
-                <p className="text-orange-600/80 text-sm">
+                <p className="text-gray-600 text-sm">
                   Click the button below to securely log out of your account
                 </p>
               </div>
@@ -99,7 +99,7 @@ const Logout = () => {
 
             {/* Additional Info */}
             <div className="mt-6 text-center">
-              <p className="text-orange-500/70 text-sm">
+              <p className="text-gray-500 text-sm">
                 You will be redirected to the login page after logout
               </p>
             </div>
@@ -121,10 +121,10 @@ const Logout = () => {
                   <FiLogOut className="w-8 h-8 text-white" />
                 </div>
 
-                <h2 className="text-2xl font-bold text-orange-700 mb-2">
+                <h2 className="text-2xl font-bold text-black mb-2">
                   Confirm Logout
                 </h2>
-                <p className="text-orange-600/80 mb-8 text-sm">
+                <p className="text-gray-600 mb-8 text-sm">
                   Are you sure you want to logout? You will need to sign in
                   again to access your account.
                 </p>

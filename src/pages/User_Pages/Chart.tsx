@@ -184,7 +184,7 @@ const Interface = () => {
             notifications: admin.notifications || [],
             auditTrail: admin.auditTrail || [],
             isOnline: Math.random() > 0.5,
-            lastMessage: "Available to chat",
+            lastMessage: " ",
             timestamp: serverTimestamp(),
           }));
 
@@ -588,7 +588,7 @@ const Interface = () => {
     };
   }, []);
 
-  return (
+return (
     <div className="flex h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-sky-50">
       <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
 
@@ -609,7 +609,7 @@ const Interface = () => {
                     {getInitials(adminDetails)}
                   </div>
                   <div>
-                    <p className="text-sm font-medium text-gray-700">
+                    <p className="text-sm font-medium text-black">
                       {adminDetails.email}
                     </p>
                   </div>
@@ -638,7 +638,7 @@ const Interface = () => {
               {loadingContacts ? (
                 <div className="flex flex-col items-center justify-center h-full">
                   <Loader2 className="w-8 h-8 text-blue-500 animate-spin" />
-                  <p className="mt-2 text-sm text-gray-500">
+                  <p className="mt-2 text-sm text-gray-700">
                     Loading contacts...
                   </p>
                 </div>
@@ -690,7 +690,7 @@ const Interface = () => {
                       </div>
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center justify-between">
-                          <h3 className="font-medium text-blue-800 truncate">
+                          <h3 className="font-medium text-black truncate">
                             {getFullName(contact)}
                             {contact.role === "superadmin" && (
                               <span className="ml-1 text-xs bg-purple-100 text-purple-800 px-1.5 py-0.5 rounded">
@@ -698,7 +698,7 @@ const Interface = () => {
                               </span>
                             )}
                           </h3>
-                          <span className="text-xs text-blue-500 flex-shrink-0">
+                          <span className="text-xs text-gray-700 flex-shrink-0">
                             {contact.timestamp?.toDate
                               ? contact.timestamp
                                   .toDate()
@@ -709,17 +709,17 @@ const Interface = () => {
                               : ""}
                           </span>
                         </div>
-                        <p className="text-sm text-blue-600 truncate mt-1">
+                        <p className="text-sm text-gray-700 truncate mt-1">
                           {contact.email}
                         </p>
-                        <p className="text-xs text-gray-500 mt-1">
+                        <p className="text-xs text-gray-700 mt-1">
                           {contact.lastMessage}
                         </p>
                         {contact.notifications &&
                           contact.notifications.length > 0 && (
                             <div className="flex items-center mt-1">
                               <span className="inline-block w-2 h-2 bg-red-500 rounded-full mr-1"></span>
-                              <span className="text-xs text-gray-500">
+                              <span className="text-xs text-gray-700">
                                 {contact.notifications.length} unread
                                 notification(s)
                               </span>
@@ -735,7 +735,7 @@ const Interface = () => {
 
           <div className="flex-1 flex flex-col">
             {currentContact && (
-              <div className="bg-gradient-to-r from-blue-500 to-indigo-500 text-white p-4 border-b border-blue-600">
+              <div className="bg-gradient-to-r from-gray-500 to-gray-600 text-white p-4 border-b border-gray-600">
                 <div className="flex items-center gap-3">
                   <div className="relative">
                     <div className="w-10 h-10 rounded-xl overflow-hidden bg-white flex items-center justify-center shadow-lg">
@@ -830,7 +830,7 @@ const Interface = () => {
                         className={`px-4 py-3 rounded-2xl ${
                           msg.senderId === currentUser.id
                             ? "bg-gradient-to-r from-blue-500 to-indigo-500 text-white rounded-br-sm shadow-lg shadow-blue-500/25"
-                            : "bg-white text-blue-800 rounded-bl-sm shadow-sm"
+                            : "bg-white text-black rounded-bl-sm shadow-sm"
                         } ${msg.isTyping ? "animate-pulse" : ""}`}
                       >
                         {msg.isTyping ? (
@@ -918,8 +918,8 @@ const Interface = () => {
                       <p
                         className={`text-xs px-2 ${
                           msg.senderId === currentUser.id
-                            ? "text-right text-blue-500"
-                            : "text-blue-500"
+                            ? "text-right text-gray-700"
+                            : "text-gray-700"
                         }`}
                       >
                         {msg.timestamp?.toDate
@@ -955,18 +955,18 @@ const Interface = () => {
                         }}
                       />
                     </div>
-                    <div className="bg-white text-blue-800 px-4 py-3 rounded-2xl rounded-bl-sm shadow-sm animate-pulse">
+                    <div className="bg-white text-black px-4 py-3 rounded-2xl rounded-bl-sm shadow-sm animate-pulse">
                       <div className="flex items-center gap-1">
                         <div
-                          className="w-2 h-2 bg-blue-400 rounded-full animate-bounce"
+                          className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"
                           style={{ animationDelay: "0ms" }}
                         />
                         <div
-                          className="w-2 h-2 bg-blue-400 rounded-full animate-bounce"
+                          className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"
                           style={{ animationDelay: "150ms" }}
                         />
                         <div
-                          className="w-2 h-2 bg-blue-400 rounded-full animate-bounce"
+                          className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"
                           style={{ animationDelay: "300ms" }}
                         />
                       </div>
@@ -996,10 +996,10 @@ const Interface = () => {
                         </div>
                       )}
                       <div className="flex-1 min-w-0">
-                        <p className="text-xs font-medium text-blue-800 truncate">
+                        <p className="text-xs font-medium text-black truncate">
                           {file.name}
                         </p>
-                        <p className="text-xs text-blue-500">
+                        <p className="text-xs text-gray-700">
                           {Math.round(file.size / 1024)} KB
                         </p>
                       </div>
@@ -1040,7 +1040,7 @@ const Interface = () => {
                           height="30"
                           className="w-[120px] h-[30px]"
                         ></canvas>
-                        <span className="text-xs text-blue-600">
+                        <span className="text-xs text-gray-700">
                           {isPlaying
                             ? formatTime(currentTime)
                             : formatTime(recordingTime)}
@@ -1062,7 +1062,7 @@ const Interface = () => {
             {showFilePicker && (
               <div className="absolute bottom-16 left-4 bg-white rounded-xl shadow-xl border border-blue-200/50 overflow-hidden z-10 w-64">
                 <div className="p-2">
-                  <div className="px-3 py-2 text-sm font-medium text-blue-800 border-b border-blue-200/50">
+                  <div className="px-3 py-2 text-sm font-medium text-black border-b border-blue-200/50">
                     Send files
                   </div>
                   <div className="grid grid-cols-2 gap-2 p-2">
@@ -1073,7 +1073,7 @@ const Interface = () => {
                       <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center mb-2">
                         <Image className="w-6 h-6 text-blue-500" />
                       </div>
-                      <span className="text-xs text-blue-800">Photos</span>
+                      <span className="text-xs text-black">Photos</span>
                     </button>
                     <button
                       onClick={() => handleFileUpload("document")}
@@ -1082,7 +1082,7 @@ const Interface = () => {
                       <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center mb-2">
                         <FileText className="w-6 h-6 text-blue-500" />
                       </div>
-                      <span className="text-xs text-blue-800">Documents</span>
+                      <span className="text-xs text-black">Documents</span>
                     </button>
                   </div>
                 </div>
@@ -1137,7 +1137,7 @@ const Interface = () => {
                           }}
                         ></div>
                       </div>
-                      <span className="text-xs text-blue-600">
+                      <span className="text-xs text-gray-700">
                         {formatTime(recordingTime)}
                       </span>
                     </div>
@@ -1156,7 +1156,7 @@ const Interface = () => {
                       onChange={(e) => setMessage(e.target.value)}
                       onKeyPress={handleKeyPress}
                       placeholder="Type something..."
-                      className="w-full px-4 py-3 pr-20 bg-blue-100/50 border border-blue-200/50 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500/50 text-blue-800 placeholder:text-blue-500/70 transition-all duration-200"
+                      className="w-full px-4 py-3 pr-20 bg-blue-100/50 border border-blue-200/50 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500/50 text-black placeholder:text-blue-500/70 transition-all duration-200"
                     />
                     <div className="absolute right-3 top-1/2 transform -translate-y-1/2 flex items-center gap-2">
                       <button

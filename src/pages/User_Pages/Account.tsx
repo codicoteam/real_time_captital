@@ -244,7 +244,7 @@ const Account = () => {
     { id: "notifications", label: "Notifications", icon: Bell },
   ];
 
-  // Updated Input Component with proper password handling
+  // Updated Input Component with proper password handling and black borders
   const InputField: React.FC<InputFieldProps> = ({
     label,
     type = "text",
@@ -261,7 +261,7 @@ const Account = () => {
 
     return (
       <div>
-        <label className="block text-sm font-medium text-blue-700 mb-2">
+        <label className="block text-sm font-medium text-black mb-2">
           {label}
         </label>
         <div className="relative">
@@ -273,8 +273,8 @@ const Account = () => {
             className={`w-full px-4 py-3 ${
               isPassword ? "pr-12" : ""
             } rounded-xl border ${
-              error ? "border-red-300" : "border-blue-200/50"
-            } bg-white/50 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500/50 transition-all duration-200 ${
+              error ? "border-red-500" : "border-black"
+            } bg-white/50 focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 transition-all duration-200 ${
               disabled ? "bg-gray-50 cursor-not-allowed" : ""
             }`}
           />
@@ -282,7 +282,7 @@ const Account = () => {
             <button
               type="button"
               onClick={onToggle}
-              className="absolute right-3 top-1/2 transform -translate-y-1/2 text-blue-500 hover:text-blue-700 transition-colors duration-200"
+              className="absolute right-3 top-1/2 transform -translate-y-1/2 text-orange-700 hover:text-red-600 transition-colors duration-200"
             >
               {showToggle ? (
                 <EyeOff className="w-5 h-5" />
@@ -303,12 +303,11 @@ const Account = () => {
     description,
     checked,
     onChange,
-    color = "blue",
   }) => (
     <div className="flex items-center justify-between">
       <div>
-        <div className={`font-medium text-${color}-700`}>{label}</div>
-        <div className={`text-sm text-${color}-600`}>{description}</div>
+        <div className="font-medium text-black">{label}</div>
+        <div className="text-sm text-gray-700">{description}</div>
       </div>
       <label className="relative inline-flex items-center cursor-pointer">
         <input
@@ -317,9 +316,7 @@ const Account = () => {
           onChange={onChange}
           className="sr-only peer"
         />
-        <div
-          className={`w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-${color}-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-${color}-600`}
-        ></div>
+        <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-orange-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-gradient-to-r peer-checked:from-orange-700 peer-checked:to-red-600"></div>
       </label>
     </div>
   );
@@ -335,8 +332,8 @@ const Account = () => {
   const notificationSections = [
     {
       title: "Communication Preferences",
-      color: "blue",
-      gradient: "from-blue-50 to-purple-50",
+      color: "orange",
+      gradient: "from-orange-50 to-red-50",
       items: [
         {
           key: "emailNotifications",
@@ -357,8 +354,8 @@ const Account = () => {
     },
     {
       title: "Loan & Payment Notifications",
-      color: "green",
-      gradient: "from-green-50 to-emerald-50",
+      color: "orange",
+      gradient: "from-orange-50 to-red-50",
       items: [
         {
           key: "paymentReminders",
@@ -379,8 +376,8 @@ const Account = () => {
     },
     {
       title: "Marketing & Security",
-      color: "purple",
-      gradient: "from-purple-50 to-pink-50",
+      color: "orange",
+      gradient: "from-orange-50 to-red-50",
       items: [
         {
           key: "promotionalEmails",
@@ -400,8 +397,10 @@ const Account = () => {
     return (
       <div className="flex h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 items-center justify-center">
         <div className="flex items-center space-x-2">
-          <Loader className="w-6 h-6 animate-spin text-blue-600" />
-          <span className="text-blue-600 font-medium">Loading profile...</span>
+          <Loader className="w-6 h-6 animate-spin text-orange-700" />
+          <span className="text-orange-700 font-medium">
+            Loading profile...
+          </span>
         </div>
       </div>
     );
@@ -413,44 +412,42 @@ const Account = () => {
 
       <div className="flex-1 flex flex-col overflow-hidden lg:ml-0">
         {/* Header */}
-        <header className="bg-white/80 backdrop-blur-xl shadow-sm border-b border-blue-200/50 px-6 py-4 relative">
-          <div className="absolute inset-0 bg-gradient-to-r from-blue-500/5 to-purple-500/5"></div>
+        <header className="bg-white/80 backdrop-blur-xl shadow-sm border-b border-gray-200 px-6 py-4 relative">
+          <div className="absolute inset-0 bg-gradient-to-r from-orange-500/5 to-red-500/5"></div>
           <div className="relative flex items-center justify-between">
             <div className="flex items-center">
               <button
                 onClick={() => setSidebarOpen(true)}
-                className="lg:hidden mr-4 p-2 rounded-xl bg-blue-100/50 hover:bg-blue-200/50 transition-all duration-200"
+                className="lg:hidden mr-4 p-2 rounded-xl bg-gradient-to-r from-orange-700 to-red-600 text-white hover:from-orange-800 hover:to-red-700 transition-all duration-200"
               >
-                <Menu className="w-5 h-5 text-blue-600" />
+                <Menu className="w-5 h-5" />
               </button>
               <div className="flex items-center space-x-2 text-sm">
-                <span className="text-blue-500">Account</span>
-                <span className="text-blue-300">›</span>
-                <span className="text-blue-700 font-medium">
-                  Profile Settings
-                </span>
+                <span className="text-gray-700">Account</span>
+                <span className="text-gray-500">›</span>
+                <span className="text-black font-medium">Profile Settings</span>
               </div>
             </div>
 
             <div className="flex items-center space-x-4">
               <div className="relative hidden md:block">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-blue-400" />
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-700" />
                 <input
                   type="text"
                   placeholder="Search settings..."
-                  className="pl-10 pr-4 py-2 w-64 bg-blue-100/50 border border-blue-200/50 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500/50 transition-all duration-200"
+                  className="pl-10 pr-4 py-2 w-64 bg-white border border-black rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 transition-all duration-200"
                 />
-              </div>             
+              </div>
               <NotificationBell userId={""} />
-              <div className="flex items-center space-x-3 pl-4 border-l border-blue-200/50">
+              <div className="flex items-center space-x-3 pl-4 border-l border-gray-300">
                 <div className="text-right hidden sm:block">
-                  <div className="text-sm font-semibold text-blue-700">
+                  <div className="text-sm font-semibold text-black">
                     {userName}
                   </div>
-                  <div className="text-xs text-blue-500">Account Settings</div>
+                  <div className="text-xs text-gray-700">Account Settings</div>
                 </div>
                 <div className="relative">
-                  <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-500 rounded-xl flex items-center justify-center shadow-lg shadow-blue-500/25">
+                  <div className="w-10 h-10 bg-gradient-to-br from-orange-700 to-red-600 rounded-xl flex items-center justify-center shadow-lg shadow-orange-500/25">
                     <span className="text-white font-semibold text-sm">
                       {profileData.firstName?.[0]?.toUpperCase() || "U"}
                       {profileData.lastName?.[0]?.toUpperCase() || "U"}
@@ -458,7 +455,7 @@ const Account = () => {
                   </div>
                   <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-400 border-2 border-white rounded-full shadow-sm"></div>
                 </div>
-                <ChevronDown className="w-4 h-4 text-blue-400" />
+                <ChevronDown className="w-4 h-4 text-gray-700" />
               </div>
             </div>
           </div>
@@ -472,21 +469,21 @@ const Account = () => {
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-6">
                   <div className="relative">
-                    <div className="w-24 h-24 bg-gradient-to-br from-blue-500 to-purple-500 rounded-2xl flex items-center justify-center shadow-lg shadow-blue-500/25">
+                    <div className="w-24 h-24 bg-gradient-to-br from-orange-700 to-red-600 rounded-2xl flex items-center justify-center shadow-lg shadow-orange-500/25">
                       <span className="text-white font-bold text-2xl">
                         {userName}
                       </span>
                     </div>
-                    <button className="absolute -bottom-2 -right-2 p-2 bg-white rounded-xl shadow-lg border border-blue-200/50 hover:bg-blue-50 transition-all duration-200">
-                      <Camera className="w-4 h-4 text-blue-600" />
+                    <button className="absolute -bottom-2 -right-2 p-2 bg-white rounded-xl shadow-lg border border-black hover:bg-gray-50 transition-all duration-200">
+                      <Camera className="w-4 h-4 text-orange-700" />
                     </button>
                   </div>
                   <div>
-                    <h1 className="text-3xl font-bold text-blue-800">
+                    <h1 className="text-3xl font-bold text-black">
                       {userName}
                     </h1>
-                    <p className="text-blue-600 mt-1">{profileData.email}</p>
-                    <p className="text-sm text-blue-500 mt-2">
+                    <p className="text-gray-700 mt-1">{profileData.email}</p>
+                    <p className="text-sm text-gray-700 mt-2">
                       Member since registration
                     </p>
                   </div>
@@ -504,7 +501,7 @@ const Account = () => {
 
             {/* Tab Navigation */}
             <div className="bg-white/70 backdrop-blur-sm rounded-2xl shadow-lg border border-white/50">
-              <div className="flex border-b border-blue-200/50">
+              <div className="flex border-b border-gray-200">
                 {tabs.map((tab) => {
                   const IconComponent = tab.icon;
                   return (
@@ -513,11 +510,15 @@ const Account = () => {
                       onClick={() => setActiveTab(tab.id)}
                       className={`flex-1 flex items-center justify-center space-x-3 py-4 px-6 text-sm font-medium transition-all duration-200 ${
                         activeTab === tab.id
-                          ? "text-blue-700 border-b-2 border-blue-500 bg-blue-50/50"
-                          : "text-blue-500 hover:text-blue-700 hover:bg-blue-50/30"
+                          ? "text-black border-b-2 border-orange-700 bg-orange-50/50"
+                          : "text-gray-700 hover:text-black hover:bg-orange-50/30"
                       }`}
                     >
-                      <IconComponent className="w-5 h-5" />
+                      <IconComponent
+                        className={`w-5 h-5 ${
+                          activeTab === tab.id ? "text-orange-700" : ""
+                        }`}
+                      />
                       <span>{tab.label}</span>
                     </button>
                   );
@@ -531,10 +532,10 @@ const Account = () => {
                   <div className="space-y-8">
                     <div className="flex items-center justify-between">
                       <div>
-                        <h2 className="text-2xl font-bold text-blue-800">
+                        <h2 className="text-2xl font-bold text-black">
                           Profile Information
                         </h2>
-                        <p className="text-blue-600 mt-1">
+                        <p className="text-gray-700 mt-1">
                           Manage your personal information and account details
                         </p>
                       </div>
@@ -543,7 +544,7 @@ const Account = () => {
                           isEditing ? handleProfileSave() : setIsEditing(true)
                         }
                         disabled={saving}
-                        className="flex items-center space-x-2 px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-500 text-white rounded-xl font-medium hover:from-blue-600 hover:to-purple-600 transition-all duration-200 disabled:opacity-50"
+                        className="flex items-center space-x-2 px-6 py-3 bg-gradient-to-r from-orange-700 to-red-600 text-white rounded-xl font-medium hover:from-orange-800 hover:to-red-700 transition-all duration-200 disabled:opacity-50"
                       >
                         {saving ? (
                           <Loader className="w-4 h-4 animate-spin" />
@@ -584,7 +585,7 @@ const Account = () => {
                       ))}
 
                       <div className="md:col-span-2">
-                        <label className="block text-sm font-medium text-blue-700 mb-2">
+                        <label className="block text-sm font-medium text-black mb-2">
                           Address
                         </label>
                         <textarea
@@ -598,7 +599,7 @@ const Account = () => {
                           }
                           disabled={!isEditing || saving}
                           rows={3}
-                          className={`w-full px-4 py-3 rounded-xl border border-blue-200/50 bg-white/50 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500/50 transition-all duration-200 ${
+                          className={`w-full px-4 py-3 rounded-xl border border-black bg-white/50 focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 transition-all duration-200 ${
                             !isEditing || saving
                               ? "bg-gray-50 cursor-not-allowed"
                               : ""
@@ -624,7 +625,7 @@ const Account = () => {
                         <button
                           onClick={handleProfileSave}
                           disabled={saving}
-                          className="px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-500 text-white rounded-xl font-medium hover:from-blue-600 hover:to-purple-600 transition-all duration-200 disabled:opacity-50"
+                          className="px-6 py-3 bg-gradient-to-r from-orange-700 to-red-600 text-white rounded-xl font-medium hover:from-orange-800 hover:to-red-700 transition-all duration-200 disabled:opacity-50"
                         >
                           {saving ? "Saving..." : "Save Changes"}
                         </button>
@@ -637,16 +638,16 @@ const Account = () => {
                 {activeTab === "security" && (
                   <div className="space-y-8">
                     <div>
-                      <h2 className="text-2xl font-bold text-blue-800">
+                      <h2 className="text-2xl font-bold text-black">
                         Security Settings
                       </h2>
-                      <p className="text-blue-600 mt-1">
+                      <p className="text-gray-700 mt-1">
                         Manage your account security and password
                       </p>
                     </div>
 
-                    <div className="bg-gradient-to-br from-blue-50 to-purple-50 rounded-2xl p-6">
-                      <h3 className="text-lg font-semibold text-blue-800 mb-4">
+                    <div className="bg-gradient-to-br from-orange-50 to-red-50 rounded-2xl p-6">
+                      <h3 className="text-lg font-semibold text-black mb-4">
                         Change Password
                       </h3>
                       <div className="space-y-4">
@@ -705,7 +706,7 @@ const Account = () => {
                         <button
                           onClick={handlePasswordSave}
                           disabled={saving}
-                          className="flex items-center space-x-2 px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-500 text-white rounded-xl font-medium hover:from-blue-600 hover:to-purple-600 transition-all duration-200 disabled:opacity-50"
+                          className="flex items-center space-x-2 px-6 py-3 bg-gradient-to-r from-orange-700 to-red-600 text-white rounded-xl font-medium hover:from-orange-800 hover:to-red-700 transition-all duration-200 disabled:opacity-50"
                         >
                           {saving && (
                             <Loader className="w-4 h-4 animate-spin" />
@@ -718,7 +719,7 @@ const Account = () => {
                     </div>
 
                     <div className="bg-gradient-to-br from-green-50 to-emerald-50 rounded-2xl p-6">
-                      <h3 className="text-lg font-semibold text-green-800 mb-4">
+                      <h3 className="text-lg font-semibold text-black mb-4">
                         Account Security Status
                       </h3>
                       <div className="space-y-3">
@@ -746,9 +747,7 @@ const Account = () => {
                             <item.icon
                               className={`w-5 h-5 text-${item.color}-500`}
                             />
-                            <span className={`text-${item.color}-700`}>
-                              {item.text}
-                            </span>
+                            <span className="text-gray-700">{item.text}</span>
                           </div>
                         ))}
                       </div>
@@ -760,10 +759,10 @@ const Account = () => {
                 {activeTab === "notifications" && (
                   <div className="space-y-8">
                     <div>
-                      <h2 className="text-2xl font-bold text-blue-800">
+                      <h2 className="text-2xl font-bold text-black">
                         Notification Preferences
                       </h2>
-                      <p className="text-blue-600 mt-1">
+                      <p className="text-gray-700 mt-1">
                         Choose how you want to receive notifications
                       </p>
                     </div>
@@ -774,9 +773,7 @@ const Account = () => {
                           key={section.title}
                           className={`bg-gradient-to-br ${section.gradient} rounded-2xl p-6`}
                         >
-                          <h3
-                            className={`text-lg font-semibold text-${section.color}-800 mb-4`}
-                          >
+                          <h3 className="text-lg font-semibold text-black mb-4">
                             {section.title}
                           </h3>
                           <div className="space-y-4">
@@ -807,53 +804,18 @@ const Account = () => {
                       ))}
                     </div>
 
-                    <div className="bg-gradient-to-br from-amber-50 to-orange-50 rounded-2xl p-6">
-                      <h3 className="text-lg font-semibold text-amber-800 mb-4">
-                        Notification Delivery
-                      </h3>
-                      <p className="text-amber-700 text-sm mb-4">
-                        Configure when and how you receive notifications
-                      </p>
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div className="bg-white/50 rounded-xl p-4">
-                          <h4 className="font-medium text-amber-800 mb-2">
-                            Email Frequency
-                          </h4>
-                          <select className="w-full px-3 py-2 rounded-lg border border-amber-200 bg-white focus:outline-none focus:ring-2 focus:ring-amber-500/20">
-                            <option>Immediate</option>
-                            <option>Daily digest</option>
-                            <option>Weekly summary</option>
-                          </select>
-                        </div>
-                        <div className="bg-white/50 rounded-xl p-4">
-                          <h4 className="font-medium text-amber-800 mb-2">
-                            Quiet Hours
-                          </h4>
-                          <div className="flex space-x-2">
-                            <input
-                              type="time"
-                              className="flex-1 px-3 py-2 rounded-lg border border-amber-200 bg-white focus:outline-none focus:ring-2 focus:ring-amber-500/20"
-                              defaultValue="22:00"
-                            />
-                            <span className="self-center text-amber-600">
-                              to
-                            </span>
-                            <input
-                              type="time"
-                              className="flex-1 px-3 py-2 rounded-lg border border-amber-200 bg-white focus:outline-none focus:ring-2 focus:ring-amber-500/20"
-                              defaultValue="08:00"
-                            />
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-
+                    {/* Save Notification Settings Button */}
                     <div className="flex justify-end">
                       <button
-                        onClick={() =>
-                          console.log("Notification preferences saved")
-                        }
-                        className="flex items-center space-x-2 px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-500 text-white rounded-xl font-medium hover:from-blue-600 hover:to-purple-600 transition-all duration-200"
+                        onClick={() => {
+                          // Handle notification settings save
+                          console.log(
+                            "Notification settings saved:",
+                            notifications
+                          );
+                          // You can add API call here to save notification preferences
+                        }}
+                        className="flex items-center space-x-2 px-6 py-3 bg-gradient-to-r from-orange-700 to-red-600 text-white rounded-xl font-medium hover:from-orange-800 hover:to-red-700 transition-all duration-200"
                       >
                         <Save className="w-4 h-4" />
                         <span>Save Preferences</span>

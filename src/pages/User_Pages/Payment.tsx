@@ -632,7 +632,7 @@ const Payment = () => {
                   <div className="space-y-3">
                     {loansLoading ? (
                       <div className="text-center py-8">
-                        <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-orange-600 mx-auto mb-2"></div>
+                        <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-black mx-auto mb-2"></div>
                         <p className="text-gray-700 text-sm">
                           Loading loans...
                         </p>
@@ -656,8 +656,8 @@ const Payment = () => {
                           onClick={() => setSelectedLoan(index)}
                           className={`p-4 rounded-xl cursor-pointer transition-all duration-200 border-2 ${
                             selectedLoan === index
-                              ? "border-orange-600 bg-white shadow-lg"
-                              : "border-orange-200/50 bg-white/50 hover:border-gray-300 hover:shadow-md"
+                              ? "border-black bg-white shadow-lg"
+                              : "border-gray-300 bg-white/50 hover:border-gray-300 hover:shadow-md"
                           }`}
                         >
                           <div className="flex justify-between items-start mb-2">
@@ -720,7 +720,7 @@ const Payment = () => {
                           Due on {formatDate(currentLoan.nextPaymentDate)}
                         </div>
                       </div>
-                      <div className="p-4 bg-white rounded-xl border border-orange-200">
+                      <div className="p-4 bg-white rounded-xl border border-gray-300">
                         <div className="flex items-center space-x-3 mb-2">
                           <DollarSign className="w-5 h-5 text-orange-700" />
                           <span className="text-sm font-medium text-black">
@@ -746,7 +746,7 @@ const Payment = () => {
                             onClick={() =>
                               setPaymentAmount(currentLoan.dueAmount.toString())
                             }
-                            className="p-3 border-2 border-orange-200 rounded-xl text-center hover:border-orange-400 hover:bg-white transition-all duration-200"
+                            className="p-3 border-2 border-gray-300 rounded-xl text-center hover:border-black hover:bg-white transition-all duration-200"
                           >
                             <div className="text-sm font-medium text-black">
                               Pay EMI Amount
@@ -757,7 +757,7 @@ const Payment = () => {
                           </button>
                           <button
                             onClick={() => setPaymentAmount("")}
-                            className="p-3 border-2 border-orange-200 rounded-xl text-center hover:border-orange-400 hover:bg-white transition-all duration-200"
+                            className="p-3 border-2 border-gray-300 rounded-xl text-center hover:border-black hover:bg-white transition-all duration-200"
                           >
                             <div className="text-sm font-medium text-black">
                               Custom Amount
@@ -774,7 +774,7 @@ const Payment = () => {
                             value={paymentAmount}
                             onChange={(e) => setPaymentAmount(e.target.value)}
                             placeholder="Enter payment amount"
-                            className="w-full pl-12 pr-4 py-4 bg-white border border-orange-200 rounded-xl text-lg font-semibold focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all duration-200"
+                            className="w-full pl-12 pr-4 py-4 bg-white border border-gray-300 rounded-xl text-lg font-semibold focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all duration-200"
                           />
                         </div>
                       </div>
@@ -792,8 +792,8 @@ const Payment = () => {
                                 onClick={() => setPaymentMethod(method.id)}
                                 className={`p-4 rounded-xl border-2 transition-all duration-200 ${
                                   paymentMethod === method.id
-                                    ? "border-orange-500 bg-white shadow-lg"
-                                    : "border-orange-200 hover:border-orange-300 hover:bg-orange-50/50"
+                                    ? "border-gray-500 bg-white shadow-lg"
+                                    : "border-gray-300 hover:border-gray-300 hover:bg-orange-50/50"
                                 }`}
                               >
                                 <IconComponent className="w-6 h-6 text-orange-700 mx-auto mb-2" />
@@ -816,7 +816,7 @@ const Payment = () => {
                           value={paymentReference}
                           onChange={(e) => setPaymentReference(e.target.value)}
                           placeholder="Enter payment reference number"
-                          className="w-full px-4 py-3 bg-white border border-orange-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-yellow-500/20 focus:border-orange-500 transition-all duration-200"
+                          className="w-full px-4 py-3 bg-white border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-yellow-500/20 focus:border-orange-500 transition-all duration-200"
                           required
                         />
                         <p className="text-xs text-gray-700 mt-1">
@@ -834,7 +834,7 @@ const Payment = () => {
                           onChange={(e) => setNotes(e.target.value)}
                           placeholder="Add any additional notes about this payment"
                           rows={3}
-                          className="w-full px-4 py-3 bg-white border border-orange-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-yellow-500/20 focus:border-orange-500 transition-all duration-200 resize-none"
+                          className="w-full px-4 py-3 bg-white border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-yellow-500/20 focus:border-orange-500 transition-all duration-200 resize-none"
                         />
                       </div>
 

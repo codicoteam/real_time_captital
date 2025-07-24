@@ -417,14 +417,16 @@ const UserDashboard = () => {
                       {loan.status}
                     </span>
                   </div>
-                  <div className="text-base font-bold text-black">
+                  <div className="text-base font-bold text-black mb-2">
                     {loan.borrowerInfo?.firstName} {loan.borrowerInfo?.surname}
                   </div>
-                  <div className="text-sm text-gray-600">
-                    {loan.productType}
-                  </div>
-                  <div className="text-sm font-semibold text-black mt-2">
-                    {formatCurrency(loan.balance)} remaining
+                  <div className="flex items-center justify-between">
+                    <div className="text-sm text-gray-600">
+                      {loan.productType}
+                    </div>
+                    <div className="text-sm font-semibold text-black">
+                      {formatCurrency(loan.balance)} remaining
+                    </div>
                   </div>
                 </div>
               ))}
