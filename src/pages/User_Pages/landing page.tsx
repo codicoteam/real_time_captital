@@ -1,34 +1,35 @@
 import React from "react";
 import {
-  Menu,
-  X,
   DollarSign,
   Shield,
   Users,
   ArrowRight,
   Star,
   Sparkles,
-  TrendingUp,
-  Award,
   Zap,
   Target,
   Globe,
-  Clock,
   CheckCircle,
-  LogIn,
   Link,
-  Sun,
-  Moon,
 } from "lucide-react";
+import Footer from "../../components/Footer";
 
-// Add this import at the top with other imports
 import { useNavigate } from "react-router-dom";
+import Navbar from "../../components/navbar";
 
 const LandingPage = () => {
-  const [isMenuOpen, setIsMenuOpen] = React.useState(false);
+  // const [isMenuOpen, setIsMenuOpen] = React.useState(false);
+  const [currentSlide, setCurrentSlide] = React.useState(0);
   const [mousePosition, setMousePosition] = React.useState({ x: 0, y: 0 });
   const [isDarkMode, setIsDarkMode] = React.useState(true);
   const navigate = useNavigate();
+
+  React.useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % 3);
+    }, 8000); // Change slide every  seconds
+    return () => clearInterval(interval);
+  }, []);
 
   React.useEffect(() => {
     const handleMouseMove = (e: { clientX: any; clientY: any }) => {
@@ -46,12 +47,12 @@ const LandingPage = () => {
     setIsMenuOpen(false);
   };
 
-  const toggleTheme = () => {
-    setIsDarkMode(!isDarkMode);
-  };
+  // const toggleTheme = () => {
+  //   setIsDarkMode(!isDarkMode);
+  // };
 
-    const handleClick = () => {
-    navigate('/adminlogin');
+  const handleClick = () => {
+    navigate("/adminlogin");
   };
   // Theme-aware classes
   const themeClasses = {
@@ -107,507 +108,521 @@ const LandingPage = () => {
       </div>
 
       {/* Navigation */}
-      <nav
-        className={`relative z-50 ${themeClasses.navBg} backdrop-blur-xl border-b ${themeClasses.border} fixed w-full top-0 transition-all duration-300`}
-      >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <div className="flex items-center">
-              <div
-                className="flex-shrink-0 flex items-center cursor-pointer"
-                onClick={() => scrollToSection("hero")}
-              >
-                <div
-                  className={`relative w-10 h-10 bg-gradient-to-br from-red-500 to-yellow-500 rounded-xl flex items-center justify-center shadow-lg ${themeClasses.glowEffect}`}
-                >
-                  <div className="w-5 h-5 border-2 border-white rounded-sm transform rotate-45"></div>
-                  <div className="absolute -inset-1 bg-gradient-to-br from-red-500 to-yellow-500 rounded-xl blur opacity-30 animate-pulse"></div>
-                </div>
-                <span
-                  className={`ml-3 text-2xl font-bold ${
-                    isDarkMode
-                      ? "bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent"
-                      : "text-gray-900"
-                  }`}
-                >
-                  Pocket
-                </span>
-              </div>
-            </div>
-
-            <div className="hidden md:block">
-              <div className="ml-10 flex items-baseline space-x-8">
-                {[
-                  { name: "About", id: "about" },
-                  { name: "Features", id: "features" },
-                  { name: "How It Works", id: "how-it-works" },
-                  { name: "Stats", id: "stats" },
-                ].map((item) => (
-                  <button
-                    key={item.name}
-                    onClick={() => scrollToSection(item.id)}
-                    className={`${themeClasses.textSecondary} hover:${themeClasses.text} px-3 py-2 text-sm font-medium transition-all duration-300 relative group`}
-                  >
-                    {item.name}
-                    <div className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-red-500 to-yellow-500 group-hover:w-full transition-all duration-300"></div>
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            <div className="hidden md:flex items-center space-x-4">
-              {/* Theme Toggle Button */}
-              <button
-                onClick={toggleTheme}
-                className={`p-2 rounded-xl ${themeClasses.textSecondary} hover:${themeClasses.text} ${themeClasses.hoverBg} transition-all duration-300`}
-                title={
-                  isDarkMode ? "Switch to light mode" : "Switch to dark mode"
-                }
-              >
-                {isDarkMode ? (
-                  <Sun className="w-5 h-5" />
-                ) : (
-                  <Moon className="w-5 h-5" />
-                )}
-              </button>
-
-              <button
-                onClick={() => navigate("/userlogin")}
-                className={`${themeClasses.textSecondary} hover:${themeClasses.text} px-4 py-2 text-sm font-medium transition-all duration-300 flex items-center`}
-              >
-                <LogIn className="w-4 h-4 mr-2" />
-                Login
-              </button>
-
-              <button
-                onClick={() => navigate("/usersignup")}
-                className={`relative bg-gradient-to-r from-red-500 to-yellow-500 hover:from-red-600 hover:to-yellow-600 text-white px-6 py-2.5 rounded-xl text-sm font-semibold transition-all transform hover:scale-105 shadow-lg ${themeClasses.glowEffect} overflow-hidden group`}
-              >
-                <span className="relative z-10">Get Started</span>
-                <div className="absolute inset-0 bg-gradient-to-r from-yellow-500 to-red-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-              </button>
-            </div>
-
-            <div className="md:hidden flex items-center space-x-2">
-              {/* Mobile Theme Toggle */}
-              <button
-                onClick={toggleTheme}
-                className={`p-2 rounded-xl ${themeClasses.textSecondary} hover:${themeClasses.text} transition-colors`}
-              >
-                {isDarkMode ? (
-                  <Sun className="w-5 h-5" />
-                ) : (
-                  <Moon className="w-5 h-5" />
-                )}
-              </button>
-
-              <button
-                onClick={() => setIsMenuOpen(!isMenuOpen)}
-                className={`${themeClasses.textSecondary} hover:${themeClasses.text} transition-colors`}
-              >
-                {isMenuOpen ? (
-                  <X className="h-6 w-6" />
-                ) : (
-                  <Menu className="h-6 w-6" />
-                )}
-              </button>
-            </div>
-          </div>
-        </div>
-
-        {/* Mobile menu */}
-        {isMenuOpen && (
-          <div
-            className={`md:hidden ${themeClasses.cardBg} backdrop-blur-xl border-t ${themeClasses.border}`}
-          >
-            <div className="px-2 pt-2 pb-3 space-y-1">
-              {[
-                { name: "About", id: "about" },
-                { name: "Features", id: "features" },
-                { name: "How It Works", id: "how-it-works" },
-                { name: "Stats", id: "stats" },
-              ].map((item) => (
-                <button
-                  key={item.name}
-                  onClick={() => scrollToSection(item.id)}
-                  className={`block w-full text-left px-3 py-2 ${themeClasses.textSecondary} hover:${themeClasses.text} transition-colors`}
-                >
-                  {item.name}
-                </button>
-              ))}
-              <div
-                className={`flex flex-col space-y-2 pt-4 border-t ${themeClasses.border} mt-4`}
-              >
-                <button
-                  onClick={() => navigate("/userlogin")}
-                  className={`${themeClasses.textSecondary} hover:${themeClasses.text} px-4 py-2 text-sm font-medium transition-all duration-300 flex items-center`}
-                >
-                  <LogIn className="w-4 h-4 mr-2" />
-                  Login
-                </button>
-                <button
-                  onClick={() => navigate("/usersignup")}
-                  className="w-full bg-gradient-to-r from-red-500 to-yellow-500 text-white px-4 py-2 rounded-xl font-medium"
-                >
-                  Get Started
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
-      </nav>
+      <Navbar
+        isDarkMode={isDarkMode}
+        setIsDarkMode={setIsDarkMode}
+        // scrollToSection={scrollToSection}
+      />
 
       {/* Hero Section */}
-      <section id="hero" className="relative py-32 mt-16 overflow-hidden">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid lg:grid-cols-2 gap-16 items-center">
-            <div className="text-left relative z-10">
-              <div
-                className={`inline-flex items-center px-4 py-2 bg-gradient-to-r ${
-                  isDarkMode
-                    ? "from-red-500/20 to-yellow-500/20 border-red-500/30"
-                    : "from-red-500/10 to-yellow-500/10 border-red-500/20"
-                } rounded-full border backdrop-blur-sm mb-8`}
-              >
-                <Sparkles className="w-4 h-4 text-yellow-400 mr-2" />
-                <span
-      onClick={handleClick}
-      className="text-sm font-semibold text-yellow-400 tracking-wide uppercase cursor-pointer"
-    >
-      POCKET FINANCE
-    </span>
-              </div>
+      {/* Hero Section */}
+      <section id="hero" className="relative h-screen mt- overflow-hidden">
+        {/* Background Image */}
+        <div className="absolute inset-0">
+          {/* Slide 1 Background */}
+          <div
+            className={`w-full h-full transition-opacity duration-1000 ${
+              currentSlide === 0 ? "opacity-100" : "opacity-0"
+            } absolute inset-0`}
+          >
+            <div
+              className={`w-full h-full bg-gradient-to-r ${
+                isDarkMode
+                  ? "from-gray-900/80 via-gray-800/60 to-gray-900/80"
+                  : "from-gray-100/80 via-white/60 to-gray-100/80"
+              }`}
+            >
+              <img
+                src="https://www.shutterstock.com/image-photo/medical-coding-bill-billing-codes-600nw-2494681123.jpg"
+                alt="Loan Management Background"
+                className="w-full h-full object-cover"
+              />
+            </div>
+            <div
+              className={`absolute inset-0 ${
+                isDarkMode
+                  ? "bg-gradient-to-r from-black/70 via-black/50 to-black/70"
+                  : "bg-gradient-to-r from-white/70 via-white/50 to-white/70"
+              }`}
+            ></div>
+          </div>
 
-              <h1 className="text-6xl lg:text-7xl font-bold leading-tight mb-8">
-                <span className={themeClasses.text}>The smartest way to</span>
-                <br />
-                <span className="bg-gradient-to-r from-red-400 via-yellow-400 to-red-400 bg-clip-text text-transparent animate-pulse">
-                  manage loans
-                </span>
-              </h1>
+          {/* Slide 2 Background */}
+          <div
+            className={`w-full h-full transition-opacity duration-1000 ${
+              currentSlide === 1 ? "opacity-100" : "opacity-0"
+            } absolute inset-0`}
+          >
+            <div
+              className={`w-full h-full bg-gradient-to-r ${
+                isDarkMode
+                  ? "from-gray-900/80 via-gray-800/60 to-gray-900/80"
+                  : "from-gray-100/80 via-white/60 to-gray-100/80"
+              }`}
+            >
+              <img
+                src="https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=1920&h=1080&fit=crop"
+                alt="Fast Approval Background"
+                className="w-full h-full object-cover"
+              />
+            </div>
+            <div
+              className={`absolute inset-0 ${
+                isDarkMode
+                  ? "bg-gradient-to-r from-black/70 via-black/50 to-black/70"
+                  : "bg-gradient-to-r from-white/70 via-white/50 to-white/70"
+              }`}
+            ></div>
+          </div>
 
-              <p
-                className={`text-xl ${themeClasses.textSecondary} mb-10 leading-relaxed max-w-lg`}
-              >
-                Experience next-generation loan management with AI-powered
-                approvals, real-time tracking, and unmatched security. Your
-                financial future starts here.
-              </p>
+          {/* Slide 3 Background */}
+          <div
+            className={`w-full h-full transition-opacity duration-1000 ${
+              currentSlide === 2 ? "opacity-100" : "opacity-0"
+            } absolute inset-0`}
+          >
+            <div
+              className={`w-full h-full bg-gradient-to-r ${
+                isDarkMode
+                  ? "from-gray-900/80 via-gray-800/60 to-gray-900/80"
+                  : "from-gray-100/80 via-white/60 to-gray-100/80"
+              }`}
+            >
+              <img
+                src="https://media.istockphoto.com/id/1497005728/photo/smiling-businessman-talking-on-a-mobile-phone-while-working-on-his-laptop.jpg?s=612x612&w=0&k=20&c=ibhoJ_PmND3ny24BgixaSiMqn2qJ4LNcgqaDmeBnuQY="
+                alt="Happy Customers Background"
+                className="w-full h-full object-cover"
+              />
+            </div>
+            <div
+              className={`absolute inset-0 ${
+                isDarkMode
+                  ? "bg-gradient-to-r from-black/70 via-black/50 to-black/70"
+                  : "bg-gradient-to-r from-white/70 via-white/50 to-white/70"
+              }`}
+            ></div>
+          </div>
+        </div>
 
-              <div className="flex flex-col sm:flex-row gap-6">
-                <button
-                  onClick={() => navigate("/userlogin")}
-                  className={`relative bg-gradient-to-r from-red-500 to-yellow-500 hover:from-red-600 hover:to-yellow-600 text-white px-10 py-4 rounded-2xl text-lg font-bold transition-all transform hover:scale-110 shadow-2xl ${themeClasses.glowEffect} overflow-hidden group`}
-                >
-                  <span className="relative z-10 flex items-center">
-                    Login
-                    <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
-                  </span>
-                  <div className="absolute inset-0 bg-gradient-to-r from-yellow-500 to-red-500 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                </button>
-
-                <button
-                  onClick={() => scrollToSection("about")}
-                  className={`border-2 ${
+        {/* Slides Container */}
+        <div className="relative z-10 h-full flex items-center">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+            {/* Slide 1 */}
+            <div
+              className={`text-center transition-all duration-1000 ${
+                currentSlide === 0
+                  ? "opacity-100 transform translate-x-0"
+                  : "opacity-0 transform translate-x-full absolute inset-0 flex items-center justify-center"
+              }`}
+            >
+              <div className="max-w-4xl">
+                <div
+                  className={`inline-flex items-center px-4 py-2 bg-gradient-to-r ${
                     isDarkMode
-                      ? "border-white/20 hover:border-white/40 text-white hover:bg-white/10"
-                      : "border-gray-300 hover:border-gray-500 text-gray-900 hover:bg-gray-100/50"
-                  } px-10 py-4 rounded-2xl text-lg font-semibold transition-all backdrop-blur-sm`}
+                      ? "from-red-500/20 to-yellow-500/20 border-red-500/30"
+                      : "from-red-500/10 to-yellow-500/10 border-red-500/20"
+                  } rounded-full border backdrop-blur-sm mb-8`}
                 >
-                  Learn More
-                </button>
+                  <Sparkles className="w-4 h-4 text-yellow-400 mr-2" />
+                  <span
+                    onClick={handleClick}
+                    className="text-sm font-semibold text-yellow-400 tracking-wide uppercase cursor-pointer"
+                  >
+                    Clear Finance
+                  </span>
+                </div>
+
+                <h1 className="text-6xl lg:text-7xl font-bold leading-tight mb-8">
+                  <span className={themeClasses.text}>The smartest way to</span>
+                  <br />
+                  <span className="bg-gradient-to-r from-red-400 via-yellow-400 to-red-400 bg-clip-text text-transparent animate-pulse">
+                    manage loans
+                  </span>
+                </h1>
+
+                <p
+                  className={`text-xl ${themeClasses.textSecondary} mb-10 leading-relaxed max-w-3xl mx-auto`}
+                >
+                  Experience next-generation loan management with AI-powered
+                  approvals, real-time tracking, and unmatched security. Your
+                  financial future starts here.
+                </p>
+
+                <div className="flex flex-col sm:flex-row gap-6 justify-center">
+                  <button
+                    onClick={() => navigate("/userlogin")}
+                    className={`relative bg-gradient-to-r from-red-500 to-yellow-500 hover:from-red-600 hover:to-yellow-600 text-white px-10 py-4 rounded-2xl text-lg font-bold transition-all transform hover:scale-110 shadow-2xl ${themeClasses.glowEffect} overflow-hidden group`}
+                  >
+                    <span className="relative z-10 flex items-center justify-center">
+                      Login
+                      <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                    </span>
+                    <div className="absolute inset-0 bg-gradient-to-r from-yellow-500 to-red-500 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                  </button>
+
+                  <button
+                    onClick={() => scrollToSection("about")}
+                    className={`border-2 ${
+                      isDarkMode
+                        ? "border-white/20 hover:border-white/40 text-white hover:bg-white/10"
+                        : "border-gray-300 hover:border-gray-500 text-gray-900 hover:bg-gray-100/50"
+                    } px-10 py-4 rounded-2xl text-lg font-semibold transition-all backdrop-blur-sm`}
+                  >
+                    Learn More
+                  </button>
+                </div>
               </div>
             </div>
 
-            <div className="relative">
-              <div className="relative z-10">
+            {/* Slide 2 */}
+            <div
+              className={`text-center transition-all duration-1000 ${
+                currentSlide === 1
+                  ? "opacity-100 transform translate-x-0"
+                  : "opacity-0 transform translate-x-full absolute inset-0 flex items-center justify-center"
+              }`}
+            >
+              <div className="max-w-4xl">
                 <div
-                  className={`${themeClasses.cardBgAlt} backdrop-blur-xl rounded-3xl shadow-2xl p-8 border ${themeClasses.border} transform hover:scale-105 transition-all duration-700 hover:shadow-red-500/25`}
+                  className={`inline-flex items-center px-4 py-2 bg-gradient-to-r ${
+                    isDarkMode
+                      ? "from-red-500/20 to-yellow-500/20 border-red-500/30"
+                      : "from-red-500/10 to-yellow-500/10 border-red-500/20"
+                  } rounded-full border backdrop-blur-sm mb-8`}
                 >
-                  <div
-                    className={`w-full h-72 bg-gradient-to-br ${
-                      isDarkMode
-                        ? "from-red-500/20 to-yellow-500/20"
-                        : "from-red-500/10 to-yellow-500/10"
-                    } rounded-2xl mb-8 flex items-center justify-center relative overflow-hidden`}
-                  >
-                    <div
-                      className={`absolute inset-0 bg-gradient-to-br ${
-                        isDarkMode
-                          ? "from-red-500/10 to-yellow-500/10"
-                          : "from-red-500/5 to-yellow-500/5"
-                      } animate-pulse`}
-                    ></div>
-                    <div className="text-center relative z-10">
-                      <div
-                        className={`w-20 h-20 bg-gradient-to-br from-red-500 to-yellow-500 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg ${themeClasses.glowEffect}`}
-                      >
-                        <DollarSign className="w-10 h-10 text-white" />
-                      </div>
-                      <div
-                        className={`text-4xl font-bold ${themeClasses.text} mb-2`}
-                      >
-                        $50,000
-                      </div>
-                      <div className={`text-sm ${themeClasses.textMuted}`}>
-                        Available Credit
-                      </div>
-                    </div>
-                  </div>
+                  <Sparkles className="w-4 h-4 text-yellow-400 mr-2" />
+                  <span className="text-sm font-semibold text-yellow-400 tracking-wide uppercase">
+                    Secure & Fast
+                  </span>
+                </div>
 
-                  <div className="space-y-4">
-                    {[
-                      {
-                        label: "Interest Rate",
-                        value: "4.5% APR",
-                        color: "text-green-400",
-                      },
-                      {
-                        label: "Term",
-                        value: "24 months",
-                        color: themeClasses.text,
-                      },
-                      {
-                        label: "Status",
-                        value: "Approved",
-                        color: "text-green-400",
-                        badge: true,
-                      },
-                    ].map((item, index) => (
-                      <div
-                        key={index}
-                        className={`flex justify-between items-center p-3 ${
-                          isDarkMode ? "bg-white/5" : "bg-gray-100/50"
-                        } rounded-xl backdrop-blur-sm`}
-                      >
-                        <span className={`text-sm ${themeClasses.textMuted}`}>
-                          {item.label}
-                        </span>
-                        {item.badge ? (
-                          <span className="bg-green-500/20 text-green-400 px-3 py-1 rounded-full text-xs font-medium border border-green-500/30">
-                            {item.value}
-                          </span>
-                        ) : (
-                          <span className={`font-semibold ${item.color}`}>
-                            {item.value}
-                          </span>
-                        )}
-                      </div>
-                    ))}
-                  </div>
+                <h1 className="text-6xl lg:text-7xl font-bold leading-tight mb-8">
+                  <span className={themeClasses.text}>Get approved in</span>
+                  <br />
+                  <span className="bg-gradient-to-r from-red-400 via-yellow-400 to-red-400 bg-clip-text text-transparent animate-pulse">
+                    minutes not days
+                  </span>
+                </h1>
+
+                <p
+                  className={`text-xl ${themeClasses.textSecondary} mb-10 leading-relaxed max-w-3xl mx-auto`}
+                >
+                  Our advanced AI technology processes your application
+                  instantly. No more waiting weeks for loan approval. Get the
+                  funds you need when you need them most.
+                </p>
+
+                <div className="flex flex-col sm:flex-row gap-6 justify-center">
+                  <button
+                    onClick={() => navigate("/usersignup")}
+                    className={`relative bg-gradient-to-r from-red-500 to-yellow-500 hover:from-red-600 hover:to-yellow-600 text-white px-10 py-4 rounded-2xl text-lg font-bold transition-all transform hover:scale-110 shadow-2xl ${themeClasses.glowEffect} overflow-hidden group`}
+                  >
+                    <span className="relative z-10 flex items-center justify-center">
+                      Apply Now
+                      <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                    </span>
+                    <div className="absolute inset-0 bg-gradient-to-r from-yellow-500 to-red-500 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                  </button>
+
+                  <button
+                    onClick={() => scrollToSection("features")}
+                    className={`border-2 ${
+                      isDarkMode
+                        ? "border-white/20 hover:border-white/40 text-white hover:bg-white/10"
+                        : "border-gray-300 hover:border-gray-500 text-gray-900 hover:bg-gray-100/50"
+                    } px-10 py-4 rounded-2xl text-lg font-semibold transition-all backdrop-blur-sm`}
+                  >
+                    View Services
+                  </button>
                 </div>
               </div>
+            </div>
 
-              {/* Floating elements */}
-              <div className="absolute -top-8 -right-8 w-24 h-24 bg-gradient-to-br from-red-400 to-yellow-400 rounded-full opacity-30 animate-bounce"></div>
-              <div className="absolute -bottom-8 -left-8 w-40 h-40 bg-gradient-to-br from-yellow-400 to-red-400 rounded-full opacity-20 animate-pulse"></div>
-              <div className="absolute top-1/2 -right-16 w-16 h-16 bg-gradient-to-br from-red-500 to-yellow-500 rounded-full opacity-40 animate-ping"></div>
+            {/* Slide 3 */}
+            <div
+              className={`text-center transition-all duration-1000 ${
+                currentSlide === 2
+                  ? "opacity-100 transform translate-x-0"
+                  : "opacity-0 transform translate-x-full absolute inset-0 flex items-center justify-center"
+              }`}
+            >
+              <div className="max-w-4xl">
+                <div
+                  className={`inline-flex items-center px-4 py-2 bg-gradient-to-r ${
+                    isDarkMode
+                      ? "from-red-500/20 to-yellow-500/20 border-red-500/30"
+                      : "from-red-500/10 to-yellow-500/10 border-red-500/20"
+                  } rounded-full border backdrop-blur-sm mb-8`}
+                >
+                  <Sparkles className="w-4 h-4 text-yellow-400 mr-2" />
+                  <span className="text-sm font-semibold text-yellow-400 tracking-wide uppercase">
+                    Trusted by Thousands
+                  </span>
+                </div>
+
+                <h1 className="text-6xl lg:text-7xl font-bold leading-tight mb-8">
+                  <span className={themeClasses.text}>Join</span>
+                  <br />
+                  <span className="bg-gradient-to-r from-red-400 via-yellow-400 to-red-400 bg-clip-text text-transparent animate-pulse">
+                    200+ happy customers
+                  </span>
+                </h1>
+
+                <p
+                  className={`text-xl ${themeClasses.textSecondary} mb-10 leading-relaxed max-w-3xl mx-auto`}
+                >
+                  Thousands of satisfied customers have already transformed
+                  their financial lives with Clear Finance. From business
+                  expansion to personal goals, we make it possible.
+                </p>
+
+                <div className="flex flex-col sm:flex-row gap-6 justify-center">
+                  <button
+                    onClick={() => scrollToSection("testimonials")}
+                    className={`relative bg-gradient-to-r from-red-500 to-yellow-500 hover:from-red-600 hover:to-yellow-600 text-white px-10 py-4 rounded-2xl text-lg font-bold transition-all transform hover:scale-110 shadow-2xl ${themeClasses.glowEffect} overflow-hidden group`}
+                  >
+                    <span className="relative z-10 flex items-center justify-center">
+                      Read Reviews
+                      <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                    </span>
+                    <div className="absolute inset-0 bg-gradient-to-r from-yellow-500 to-red-500 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                  </button>
+
+                  <button
+                    onClick={() => navigate("/userlogin")}
+                    className={`border-2 ${
+                      isDarkMode
+                        ? "border-white/20 hover:border-white/40 text-white hover:bg-white/10"
+                        : "border-gray-300 hover:border-gray-500 text-gray-900 hover:bg-gray-100/50"
+                    } px-10 py-4 rounded-2xl text-lg font-semibold transition-all backdrop-blur-sm`}
+                  >
+                    Get Started
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
         </div>
-      </section>
 
-      {/* About Section */}
-      <section id="about" className="py-32 relative">
+        {/* Slide Indicators */}
+        <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex space-x-3 z-20">
+          {[0, 1, 2].map((slide) => (
+            <button
+              key={slide}
+              onClick={() => setCurrentSlide(slide)}
+              className={`w-3 h-3 rounded-full transition-all duration-300 ${
+                currentSlide === slide
+                  ? "bg-gradient-to-r from-red-400 to-yellow-400 w-8"
+                  : isDarkMode
+                  ? "bg-white/30 hover:bg-white/50"
+                  : "bg-gray-400/50 hover:bg-gray-600/70"
+              }`}
+            />
+          ))}
+        </div>
+
+        {/* Navigation Arrows */}
+        <button
+          onClick={() => setCurrentSlide((prev) => (prev - 1 + 3) % 3)}
+          className={`absolute left-8 top-1/2 transform -translate-y-1/2 w-12 h-12 rounded-full ${
+            isDarkMode
+              ? "bg-black/30 hover:bg-black/50 text-white"
+              : "bg-white/30 hover:bg-white/50 text-gray-900"
+          } backdrop-blur-sm border ${themeClasses.border} hover:${
+            themeClasses.borderHover
+          } transition-all duration-300 flex items-center justify-center z-20 group`}
+        >
+          <ArrowRight className="w-5 h-5 rotate-180 group-hover:scale-110 transition-transform" />
+        </button>
+
+        <button
+          onClick={() => setCurrentSlide((prev) => (prev + 1) % 3)}
+          className={`absolute right-8 top-1/2 transform -translate-y-1/2 w-12 h-12 rounded-full ${
+            isDarkMode
+              ? "bg-black/30 hover:bg-black/50 text-white"
+              : "bg-white/30 hover:bg-white/50 text-gray-900"
+          } backdrop-blur-sm border ${themeClasses.border} hover:${
+            themeClasses.borderHover
+          } transition-all duration-300 flex items-center justify-center z-20 group`}
+        >
+          <ArrowRight className="w-5 h-5 group-hover:scale-110 transition-transform" />
+        </button>
+      </section>
+      {/* About Section - Updated */}
+      <section id="about" className="py-10 relative">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-20">
+          <div className="text-center mb-16">
             <h2 className={`text-5xl font-bold ${themeClasses.text} mb-6`}>
               About
               <span className="bg-gradient-to-r from-red-400 to-yellow-400 bg-clip-text text-transparent">
                 {" "}
-                Pocket
+                Clear Finance
               </span>
             </h2>
             <p
-              className={`text-xl ${themeClasses.textMuted} max-w-3xl mx-auto mb-16`}
+              className={`text-xl ${themeClasses.textMuted} max-w-2xl mx-auto`}
             >
-              We're revolutionizing the financial landscape with cutting-edge
+              We're revolutionizing financial services with cutting-edge
               technology, making loans accessible, transparent, and
-              lightning-fast for everyone.
+              lightning-fast.
             </p>
           </div>
 
-          <div className="grid lg:grid-cols-2 gap-16 items-center mb-20">
-            <div className="space-y-8">
-              <div
-                className={`${themeClasses.cardBg} backdrop-blur-xl rounded-3xl p-8 border ${themeClasses.border}`}
-              >
-                <div className="flex items-center mb-6">
-                  <div className="w-12 h-12 bg-gradient-to-br from-red-500 to-yellow-500 rounded-xl flex items-center justify-center mr-4">
-                    <Target className="w-6 h-6 text-white" />
-                  </div>
-                  <h3 className={`text-2xl font-bold ${themeClasses.text}`}>
-                    Our Mission
-                  </h3>
-                </div>
-                <p className={`${themeClasses.textSecondary} leading-relaxed`}>
-                  To democratize access to financial services through innovative
-                  technology, ensuring everyone has the opportunity to achieve
-                  their financial goals with transparency, speed, and security
-                  at the core of everything we do.
-                </p>
+          <div className="grid lg:grid-cols-3 gap-8">
+            <div
+              className={`${themeClasses.cardBg} backdrop-blur-xl rounded-2xl p-6 border ${themeClasses.border} text-center`}
+            >
+              <div className="w-12 h-12 bg-gradient-to-br from-red-500 to-yellow-500 rounded-xl flex items-center justify-center mx-auto mb-4">
+                <Target className="w-6 h-6 text-white" />
               </div>
-
-              <div
-                className={`${themeClasses.cardBg} backdrop-blur-xl rounded-3xl p-8 border ${themeClasses.border}`}
-              >
-                <div className="flex items-center mb-6">
-                  <div className="w-12 h-12 bg-gradient-to-br from-yellow-500 to-red-500 rounded-xl flex items-center justify-center mr-4">
-                    <Globe className="w-6 h-6 text-white" />
-                  </div>
-                  <h3 className={`text-2xl font-bold ${themeClasses.text}`}>
-                    Our Vision
-                  </h3>
-                </div>
-                <p className={`${themeClasses.textSecondary} leading-relaxed`}>
-                  To become the global leader in AI-powered financial solutions,
-                  creating a world where financial services are instant,
-                  intelligent, and inclusive for all individuals and businesses
-                  worldwide.
-                </p>
-              </div>
+              <h3 className={`text-xl font-bold ${themeClasses.text} mb-3`}>
+                Our Mission
+              </h3>
+              <p className={`${themeClasses.textSecondary} text-sm`}>
+                Democratizing financial services through innovative technology
+                for everyone.
+              </p>
             </div>
 
-            <div className="relative">
-              <div
-                className={`${themeClasses.cardBgAlt} backdrop-blur-xl rounded-3xl p-8 border ${themeClasses.border}`}
-              >
-                <h3
-                  className={`text-3xl font-bold ${themeClasses.text} mb-8 text-center`}
-                >
-                  Why Choose Pocket?
-                </h3>
-                <div className="space-y-6">
-                  {[
-                    {
-                      icon: <Clock className="w-5 h-5" />,
-                      title: "Instant Decisions",
-                      description: "AI-powered approvals in under 60 seconds",
-                    },
-                    {
-                      icon: <Shield className="w-5 h-5" />,
-                      title: "Bank-Level Security",
-                      description:
-                        "256-bit encryption and multi-layer security",
-                    },
-                    {
-                      icon: <TrendingUp className="w-5 h-5" />,
-                      title: "Competitive Rates",
-                      description:
-                        "Dynamic pricing based on real-time market data",
-                    },
-                    {
-                      icon: <CheckCircle className="w-5 h-5" />,
-                      title: "Transparent Process",
-                      description:
-                        "No hidden fees, clear terms, honest communication",
-                    },
-                  ].map((item, index) => (
-                    <div
-                      key={index}
-                      className={`flex items-start space-x-4 p-4 ${
-                        isDarkMode ? "bg-white/5" : "bg-gray-100/50"
-                      } rounded-xl backdrop-blur-sm`}
-                    >
-                      <div className="w-10 h-10 bg-gradient-to-br from-red-500 to-yellow-500 rounded-lg flex items-center justify-center text-white flex-shrink-0">
-                        {item.icon}
-                      </div>
-                      <div>
-                        <h4
-                          className={`font-semibold ${themeClasses.text} mb-1`}
-                        >
-                          {item.title}
-                        </h4>
-                        <p className={`${themeClasses.textMuted} text-sm`}>
-                          {item.description}
-                        </p>
-                      </div>
-                    </div>
-                  ))}
-                </div>
+            <div
+              className={`${themeClasses.cardBg} backdrop-blur-xl rounded-2xl p-6 border ${themeClasses.border} text-center`}
+            >
+              <div className="w-12 h-12 bg-gradient-to-br from-yellow-500 to-red-500 rounded-xl flex items-center justify-center mx-auto mb-4">
+                <Globe className="w-6 h-6 text-white" />
               </div>
+              <h3 className={`text-xl font-bold ${themeClasses.text} mb-3`}>
+                Our Vision
+              </h3>
+              <p className={`${themeClasses.textSecondary} text-sm`}>
+                Becoming the global leader in AI-powered financial solutions
+                worldwide.
+              </p>
+            </div>
+
+            <div
+              className={`${themeClasses.cardBg} backdrop-blur-xl rounded-2xl p-6 border ${themeClasses.border} text-center`}
+            >
+              <div className="w-12 h-12 bg-gradient-to-br from-green-500 to-emerald-500 rounded-xl flex items-center justify-center mx-auto mb-4">
+                <CheckCircle className="w-6 h-6 text-white" />
+              </div>
+              <h3 className={`text-xl font-bold ${themeClasses.text} mb-3`}>
+                Our Promise
+              </h3>
+              <p className={`${themeClasses.textSecondary} text-sm`}>
+                Instant decisions, transparent process, and bank-level security
+                always.
+              </p>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Features Section */}
-      <section id="features" className="py-32 relative">
+      {/* Services Section */}
+      <section id="features" className="py-10 relative">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-20">
             <h2 className={`text-5xl font-bold ${themeClasses.text} mb-6`}>
-              Powerful
+              Our
               <span className="bg-gradient-to-r from-red-400 to-yellow-400 bg-clip-text text-transparent">
                 {" "}
-                Features
+                Services
               </span>
             </h2>
             <p
               className={`text-xl ${themeClasses.textMuted} max-w-3xl mx-auto`}
             >
-              Experience the future of financial technology with our
-              revolutionary platform
+              Unlock your potential with our flexible financing solutions. Get
+              the funding you need to grow your business, invest in your future,
+              or achieve your financial goals.
             </p>
           </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {[
               {
-                icon: <Zap className="w-8 h-8" />,
-                title: "Lightning Fast",
-                description: "AI-powered instant approvals in under 60 seconds",
-                color: "from-yellow-500 to-orange-500",
+                image:
+                  "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=400&h=300&fit=crop",
+                title: "Business Loans",
+                description:
+                  "What is a Business Loan? Available to registered businesses, these loans help expand operations, purchase equipment, or manage cash flow.",
+                color: "from-blue-500 to-indigo-500",
               },
               {
-                icon: <TrendingUp className="w-8 h-8" />,
-                title: "Best Rates",
+                image:
+                  "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=300&fit=crop",
+                title: "Civil Servants/SSB Loans",
                 description:
-                  "Dynamic rates that adapt to market conditions in real-time",
+                  "What is a Civil Servant/SSB Loan? These are specialized loans for government employees with competitive rates and flexible terms.",
                 color: "from-green-500 to-emerald-500",
               },
               {
-                icon: <Award className="w-8 h-8" />,
-                title: "Award Winning",
+                image:
+                  "https://images.unsplash.com/photo-1494790108755-2616c58ebc9d?w=400&h=300&fit=crop",
+                title: "Salary Based Loans",
                 description:
-                  "Recognized as the #1 fintech platform by industry leaders",
+                  "Quick loans based on your monthly salary with instant approval and competitive interest rates for salaried employees.",
                 color: "from-purple-500 to-pink-500",
               },
               {
-                icon: <Users className="w-8 h-8" />,
-                title: "24/7 Support",
-                description: "Expert support team available around the clock",
-                color: "from-pink-500 to-rose-500",
+                image:
+                  "https://images.unsplash.com/photo-1449824913935-59a10b8d2000?w=400&h=300&fit=crop",
+                title: "Asset Finance",
+                description:
+                  "What is Asset Finance? Loans financing against your valuable assets including vehicles, property, and equipment as collateral.",
+                color: "from-orange-500 to-red-500",
               },
               {
-                icon: <DollarSign className="w-8 h-8" />,
-                title: "No Hidden Fees",
+                image:
+                  "https://images.unsplash.com/photo-1544427920-c49ccfb85579?w=400&h=300&fit=crop",
+                title: "Collateral Loans",
                 description:
-                  "Transparent pricing with no surprise charges ever",
+                  "Secure loans backed by your valuable assets. Lower interest rates with flexible repayment terms using property or vehicles as security.",
+                color: "from-teal-500 to-cyan-500",
+              },
+              {
+                image:
+                  "https://images.unsplash.com/photo-1582213782179-e0d53f98f2ca?w=400&h=300&fit=crop",
+                title: "Pensioner Loans",
+                description:
+                  "What is a Pensioner Loan? These are loans specifically designed for retirees with pension-backed security and favorable terms.",
                 color: "from-indigo-500 to-purple-500",
               },
-            ].map((feature, index) => (
+            ].map((service, index) => (
               <div
                 key={index}
-                className="group hover:transform hover:scale-110 transition-all duration-500 cursor-pointer"
+                className="group hover:transform hover:scale-105 transition-all duration-500 cursor-pointer"
               >
                 <div
-                  className={`${themeClasses.cardBg} backdrop-blur-xl rounded-2xl p-8 border ${themeClasses.border} hover:${themeClasses.borderHover} transition-all duration-500 hover:shadow-2xl hover:shadow-red-500/10`}
+                  className={`${themeClasses.cardBg} backdrop-blur-xl rounded-2xl overflow-hidden border ${themeClasses.border} hover:${themeClasses.borderHover} transition-all duration-500 hover:shadow-2xl hover:shadow-red-500/10`}
                 >
-                  <div
-                    className={`w-16 h-16 bg-gradient-to-br ${feature.color} rounded-2xl flex items-center justify-center mx-auto mb-6 text-white group-hover:shadow-lg transition-all duration-500 group-hover:scale-110`}
-                  >
-                    {feature.icon}
+                  {/* Image */}
+                  <div className="relative h-48 overflow-hidden">
+                    <img
+                      src={service.image}
+                      alt={service.title}
+                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                    />
+                    <div
+                      className={`absolute inset-0 bg-gradient-to-br ${service.color} opacity-20 group-hover:opacity-30 transition-opacity duration-500`}
+                    ></div>
                   </div>
-                  <h3
-                    className={`text-xl font-bold ${themeClasses.text} mb-4 text-center`}
-                  >
-                    {feature.title}
-                  </h3>
-                  <p
-                    className={`${themeClasses.textMuted} leading-relaxed text-center`}
-                  >
-                    {feature.description}
-                  </p>
+
+                  {/* Content */}
+                  <div className="p-6">
+                    <div className="flex items-center mb-4">
+                      <div
+                        className={`w-3 h-3 bg-gradient-to-br ${service.color} rounded-full mr-3`}
+                      ></div>
+                      <h3 className={`text-xl font-bold ${themeClasses.text}`}>
+                        {service.title}
+                      </h3>
+                    </div>
+                    <p
+                      className={`${themeClasses.textMuted} leading-relaxed text-sm`}
+                    >
+                      {service.description}
+                    </p>
+                  </div>
                 </div>
               </div>
             ))}
@@ -640,12 +655,12 @@ const LandingPage = () => {
           <div className="grid md:grid-cols-4 gap-8 text-center">
             {[
               {
-                number: "500K+",
+                number: "200+",
                 label: "Happy Customers",
                 icon: <Users className="w-6 h-6" />,
               },
               {
-                number: "$10B+",
+                number: "$500+",
                 label: "Loans Processed",
                 icon: <DollarSign className="w-6 h-6" />,
               },
@@ -680,6 +695,93 @@ const LandingPage = () => {
                     {stat.label}
                   </div>
                 </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Testimonials Section - New */}
+      <section id="testimonials" className="py-10 relative">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-20">
+            <h2 className={`text-5xl font-bold ${themeClasses.text} mb-6`}>
+              What Our
+              <span className="bg-gradient-to-r from-red-400 to-yellow-400 bg-clip-text text-transparent">
+                {" "}
+                Customers Say
+              </span>
+            </h2>
+            <p className={`text-xl ${themeClasses.textMuted}`}>
+              Real stories from real people who transformed their lives with
+              Clear Finance
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-8">
+            {[
+              {
+                name: "Sarah Johnson",
+                role: "Small Business Owner",
+                image:
+                  "https://images.unsplash.com/photo-1494790108755-2616c58ebc9d?w=150&h=150&fit=crop&crop=face",
+                quote:
+                  "Clear Finance Finance helped me expand my bakery business. The approval was instant and the process was incredibly smooth.",
+                rating: 5,
+              },
+              {
+                name: "Michael Chen",
+                role: "Civil Servant",
+                image:
+                  "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face",
+                quote:
+                  "As a government employee, I found their civil servant loan perfect for my needs. Competitive rates and flexible terms.",
+                rating: 5,
+              },
+              {
+                name: "Grace Mutindi",
+                role: "Marketing Manager",
+                image:
+                  "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop&crop=face",
+                quote:
+                  "The salary-based loan was exactly what I needed. Fast approval and the customer service team was exceptional.",
+                rating: 5,
+              },
+            ].map((testimonial, index) => (
+              <div
+                key={index}
+                className={`${themeClasses.cardBg} backdrop-blur-xl rounded-2xl p-8 border ${themeClasses.border} hover:${themeClasses.borderHover} transition-all duration-500 hover:transform hover:scale-105`}
+              >
+                <div className="flex items-center mb-6">
+                  <img
+                    src={testimonial.image}
+                    alt={testimonial.name}
+                    className="w-16 h-16 rounded-full object-cover mr-4"
+                  />
+                  <div>
+                    <h4 className={`text-lg font-bold ${themeClasses.text}`}>
+                      {testimonial.name}
+                    </h4>
+                    <p className={`${themeClasses.textMuted} text-sm`}>
+                      {testimonial.role}
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex mb-4">
+                  {[...Array(testimonial.rating)].map((_, i) => (
+                    <Star
+                      key={i}
+                      className="w-5 h-5 text-yellow-400 fill-current"
+                    />
+                  ))}
+                </div>
+
+                <p
+                  className={`${themeClasses.textSecondary} leading-relaxed italic`}
+                >
+                  "{testimonial.quote}"
+                </p>
               </div>
             ))}
           </div>
@@ -800,7 +902,7 @@ const LandingPage = () => {
             className={`text-2xl ${themeClasses.textSecondary} mb-12 leading-relaxed`}
           >
             Join hundreds of thousands of satisfied customers who've already
-            experienced the Pocket difference.
+            experienced the Clear Finance difference.
           </p>
           <div className="flex flex-col sm:flex-row gap-6 justify-center">
             <button
@@ -828,147 +930,13 @@ const LandingPage = () => {
       </section>
 
       {/* Footer */}
-      <footer
-        className={`${themeClasses.cardBg} backdrop-blur-xl border-t ${themeClasses.border} py-16`}
-      >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid md:grid-cols-4 gap-12">
-            <div className="col-span-2">
-              <div className="flex items-center mb-6">
-                <div
-                  className={`relative w-12 h-12 bg-gradient-to-br from-red-500 to-yellow-500 rounded-xl flex items-center justify-center shadow-lg ${themeClasses.glowEffect}`}
-                >
-                  <div className="w-6 h-6 border-2 border-white rounded-sm transform rotate-45"></div>
-                  <div className="absolute -inset-1 bg-gradient-to-br from-red-500 to-yellow-500 rounded-xl blur opacity-30 animate-pulse"></div>
-                </div>
-                <span
-                  className={`ml-3 text-3xl font-bold ${
-                    isDarkMode
-                      ? "bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent"
-                      : "text-gray-900"
-                  }`}
-                >
-                  Pocket
-                </span>
-              </div>
-              <p
-                className={`${themeClasses.textSecondary} mb-6 max-w-md leading-relaxed`}
-              >
-                Revolutionizing financial services through innovative
-                technology, making loans accessible, transparent, and
-                lightning-fast for everyone.
-              </p>
-              <div className="flex space-x-4">
-                {[
-                  { icon: <Star className="w-5 h-5" />, label: "4.9 Rating" },
-                  {
-                    icon: <Shield className="w-5 h-5" />,
-                    label: "Bank-Level Security",
-                  },
-                  {
-                    icon: <Clock className="w-5 h-5" />,
-                    label: "24/7 Support",
-                  },
-                ].map((item, index) => (
-                  <div
-                    key={index}
-                    className={`flex items-center space-x-2 ${themeClasses.textMuted} text-sm`}
-                  >
-                    <div className="text-yellow-400">{item.icon}</div>
-                    <span>{item.label}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
 
-            <div>
-              <h3 className={`text-lg font-semibold ${themeClasses.text} mb-6`}>
-                Quick Links
-              </h3>
-              <ul className="space-y-4">
-                {[
-                  { name: "About Us", action: () => scrollToSection("about") },
-                  {
-                    name: "Features",
-                    action: () => scrollToSection("features"),
-                  },
-                  {
-                    name: "How It Works",
-                    action: () => scrollToSection("how-it-works"),
-                  },
-                  {
-                    name: "Statistics",
-                    action: () => scrollToSection("stats"),
-                  },
-                ].map((link, index) => (
-                  <li key={index}>
-                    <button
-                      onClick={link.action}
-                      className={`${themeClasses.textSecondary} hover:${themeClasses.text} hover:text-yellow-400 transition-colors`}
-                    >
-                      {link.name}
-                    </button>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            <div>
-              <h3 className={`text-lg font-semibold ${themeClasses.text} mb-6`}>
-                Get Started
-              </h3>
-              <ul className="space-y-4">
-                <li>
-                  <button
-                    onClick={() => navigate("/userlogin")}
-                    className={`${themeClasses.textSecondary} hover:${themeClasses.text} hover:text-yellow-400 transition-colors`}
-                  >
-                    Login
-                  </button>
-                </li>
-                <li>
-                  <button
-                    onClick={() => navigate("/usersignup")}
-                    className={`${themeClasses.textSecondary} hover:${themeClasses.text} hover:text-yellow-400 transition-colors`}
-                  >
-                    Sign Up
-                  </button>
-                </li>
-                <li>
-                  <span
-                    className={`${themeClasses.textSecondary} hover:${themeClasses.text} hover:text-yellow-400 transition-colors cursor-pointer`}
-                  >
-                    Contact Support
-                  </span>
-                </li>
-              </ul>
-            </div>
-          </div>
-
-          <div
-            className={`border-t ${themeClasses.border} mt-12 pt-8 flex flex-col md:flex-row justify-between items-center`}
-          >
-            <p className={`${themeClasses.textMuted} text-sm`}>
-              © 2025 Pocket Finance. All rights reserved.
-            </p>
-            <div
-              className={`flex space-x-6 ${themeClasses.textMuted} text-sm mt-4 md:mt-0`}
-            >
-              <span className="hover:text-yellow-400 transition-colors cursor-pointer">
-                Privacy Policy
-              </span>
-              <span className="hover:text-yellow-400 transition-colors cursor-pointer">
-                Terms of Service
-              </span>
-              <span className="hover:text-yellow-400 transition-colors cursor-pointer">
-                Cookie Policy
-              </span>
-            </div>
-          </div>
-        </div>
-      </footer>
+      <Footer isDarkMode={isDarkMode} themeClasses={themeClasses} />
     </div>
   );
 };
 
 export default LandingPage;
+function setIsMenuOpen(_arg0: boolean) {
+  throw new Error("Function not implemented.");
+}

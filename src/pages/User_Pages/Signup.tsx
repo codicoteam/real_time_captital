@@ -37,7 +37,7 @@ const UserSignup = () => {
     password: "",
     confirmPassword: "",
     address: "",
-    profilePicture: "",
+    profilePicture: "null",
     role: "customer",
     createdByAgent: null,
   });

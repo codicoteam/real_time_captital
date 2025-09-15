@@ -26,6 +26,10 @@ import Landingpage from "./pages/User_Pages/landing page";
 import PaymentManagement from "./pages/Admin_Pages/payment_management";
 import Chart from "./pages/User_Pages/Chart";
 import CustomerPage from "./pages/User_Pages/Customer";
+import ServicesPage from "./pages/User_Pages/Services_Page";
+import AboutPage from "./pages/User_Pages/About_page";
+import PricingPage from "./pages/User_Pages/Pricing_Page";
+import Contact from "./pages/User_Pages/Contact_Page";
 
 import NotificationsPage from "./pages/User_Pages/Notifications";
 import Logout from "./pages/User_Pages/logout";
@@ -58,6 +62,10 @@ function App() {
 
         {/* User Routes */}
         <Route path="/" element={<Landingpage />} />
+        <Route path="/services" element={<ServicesPage />} />
+        <Route path="/about" element={<AboutPage />} />
+        <Route path="/contact" element={<Contact />} />
+        <Route path="/pricing" element={<PricingPage />} />
         <Route path="/userlogin" element={<Userlogin />} />
         <Route path="/usersignup" element={<UserSignup />} />
         <Route path="/userdashboard" element={<UserDashboard />} />
