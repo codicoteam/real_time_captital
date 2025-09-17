@@ -12,7 +12,7 @@ const Userlogin = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [, setMousePosition] = useState({ x: 0, y: 0 });
   const [isHovered, setIsHovered] = useState(false);
-  const navigate = useNavigate(); // Add this inside your component
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
@@ -43,9 +43,30 @@ const Userlogin = () => {
 
     try {
       const response = await loginUser(formData);
-      console.log("Login success:", response);
-      navigate("/userdashboard"); // Change to your actual page
-    } catch (error) {
+
+      // Safely handle API response
+      if (!response) {
+        throw new Error("No response from server");
+      }
+
+      // Extract token and user safely
+      const token = response?.token;
+      const user = response?.user || {};
+
+      if (token) {
+        localStorage.setItem("userToken", token);
+      }
+
+      console.log("Login success:", { token, user });
+
+      // If user info exists, log it safely
+      if (user?.name) {
+        console.log("Welcome:", user.name);
+      }
+
+      navigate("/userdashboard");
+    } catch (error: any) {
+      console.error("Login failed:", error?.message || error);
       alert("Login failed. Please check your credentials.");
     } finally {
       setIsLoading(false);
@@ -213,7 +234,6 @@ const Userlogin = () => {
                       d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
                     />
                   </svg>
-                  {/* <span>Continue with Google</span> */}
                 </button>
 
                 <div className="text-center text-sm text-gray-400 mt-4">
@@ -229,7 +249,7 @@ const Userlogin = () => {
             </div>
           </div>
 
-          {/* Right Side - Enhanced Illustration */}
+          {/* Right Side - Illustration */}
           <div className="lg:w-1/2 bg-gradient-to-br from-orange-900/50 via-red-900/50 to-amber-900/50 p-4 sm:p-6 lg:p-12 flex items-center justify-center relative overflow-hidden order-1 lg:order-2 min-h-[300px] lg:min-h-0">
             {/* Animated Background Pattern */}
             <div className="absolute inset-0 opacity-20">
@@ -240,13 +260,11 @@ const Userlogin = () => {
             </div>
 
             <div className="text-center relative z-10">
-              {/* Enhanced 3D Character Illustration */}
+              {/* Character Illustration */}
               <div className="mb-6 sm:mb-8 relative group">
                 <div className="w-48 h-48 sm:w-56 sm:h-56 lg:w-64 lg:h-64 mx-auto bg-gradient-to-br from-orange-500 via-red-500 to-amber-500 rounded-3xl flex items-center justify-center relative overflow-hidden shadow-2xl group-hover:scale-105 transition-transform duration-500">
-                  {/* Animated gradient overlay */}
                   <div className="absolute inset-0 bg-gradient-to-tr from-white/20 to-transparent animate-pulse"></div>
 
-                  {/* Character */}
                   <div className="relative animate-float">
                     <User
                       size={80}
@@ -258,7 +276,6 @@ const Userlogin = () => {
                     />
                   </div>
 
-                  {/* Enhanced Floating Elements */}
                   <div className="absolute top-4 right-4 w-6 h-6 sm:w-8 sm:h-8 bg-gradient-to-br from-yellow-400 to-orange-400 rounded-full opacity-80 animate-bounce delay-200"></div>
                   <div className="absolute bottom-4 left-4 w-4 h-4 sm:w-6 sm:h-6 bg-gradient-to-br from-orange-400 to-red-400 rounded-full opacity-80 animate-bounce delay-500"></div>
                   <div className="absolute top-1/2 left-4 w-3 h-3 sm:w-4 sm:h-4 bg-gradient-to-br from-red-400 to-amber-400 rounded-full opacity-80 animate-bounce delay-700"></div>
@@ -275,7 +292,6 @@ const Userlogin = () => {
                 with our cutting-edge platform
               </p>
 
-              {/* Enhanced Pagination Dots */}
               <div className="flex justify-center space-x-2">
                 <div className="w-2 h-2 bg-white rounded-full animate-pulse"></div>
                 <div className="w-8 h-2 bg-gradient-to-r from-orange-400 to-red-400 rounded-full"></div>

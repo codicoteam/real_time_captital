@@ -1,7 +1,7 @@
 // notificationService.ts
 import axios from "axios";
 
-const BASE_URL = "https://loan-backend-qnj0.onrender.com/api/v1/adminnotification_route";
+const BASE_URL = "https://loan-backend-codico.onrender.com/api/v1/adminnotification_route";
 
 /**
  * Service for handling notification-related API requests

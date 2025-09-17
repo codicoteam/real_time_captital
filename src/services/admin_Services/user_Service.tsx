@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const BASE_URL = "https://loan-backend-qnj0.onrender.com/api/v1/user_route"; // Change this to your actual user endpoint
+const BASE_URL = "https://loan-backend-codico.onrender.com/api/v1/user_route"; // Change this to your actual user endpoint
 
 /**
  * Service for handling admin-side user-related API requests

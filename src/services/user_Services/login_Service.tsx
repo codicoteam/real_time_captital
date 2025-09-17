@@ -1,24 +1,36 @@
 import axios from "axios";
 
-const BASE_URL = "https://loan-backend-qnj0.onrender.com/api/v1/user_route"; // Base URL only
+const BASE_URL = "https://loan-backend-codico.onrender.com/api/v1/user_route";
 
 interface LoginData {
   email: string;
   password: string;
 }
 
-const loginUser = async (userData: LoginData) => {
+interface LoginResponse {
+  token: string;
+  user?: {
+    _id?: string;
+    name?: string;
+    email?: string;
+    [key: string]: any;
+  };
+}
+
+const loginUser = async (userData: LoginData): Promise<LoginResponse> => {
   try {
-    const response = await axios.post(`${BASE_URL}/login`, userData);
+    const response = await axios.post<LoginResponse>(`${BASE_URL}/login`, userData);
 
-    // Log the token for debugging
-    console.log("User token:", response.data.token);
+    const { token, user } = response.data;
 
-    if (response.data.token) {
-      localStorage.setItem("userToken", response.data.token);
-      localStorage.setItem("userName", response.data.user.name);
-      localStorage.setItem("userEmail", response.data.user.email);
-      localStorage.setItem("userId", response.data.user._id);
+    if (token) {
+      localStorage.setItem("userToken", token);
+
+      if (user) {
+        if (user.name) localStorage.setItem("userName", user.name);
+        if (user.email) localStorage.setItem("userEmail", user.email);
+        if (user._id) localStorage.setItem("userId", user._id);
+      }
 
       console.log("User token stored successfully!");
     } else {
@@ -27,10 +39,7 @@ const loginUser = async (userData: LoginData) => {
 
     return response.data;
   } catch (error: any) {
-    console.error(
-      "Error logging in user:",
-      error.response?.data || error.message
-    );
+    console.error("Error logging in user:", error.response?.data || error.message);
     throw error;
   }
 };

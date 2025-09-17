@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const BASE_URL = "https://loan-backend-qnj0.onrender.com/api/v1/user_route";
+const BASE_URL = "https://loan-backend-codico.onrender.com/api/v1/user_route";
 
 interface RegisterData {
   firstName: string;

@@ -4,7 +4,7 @@ const AdminService = {
   getAllAdmins: async (token: string) => {
     try {
       const response = await axios.get(
-        'https://loan-backend-qnj0.onrender.com/api/v1/admin_route/getall',
+        'https://loan-backend-codico.onrender.com/api/v1/admin_route/getall',
         {
           headers: {
             'Authorization': `Bearer ${token}`,
