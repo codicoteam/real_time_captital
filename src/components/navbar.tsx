@@ -79,7 +79,7 @@ const Navbar: React.FC<NavbarProps> = ({ isDarkMode, setIsDarkMode }) => {
                     : "text-gray-900"
                 }`}
               >
-                Clear Finance
+                Real time Capital
               </span>
             </div>
           </div>

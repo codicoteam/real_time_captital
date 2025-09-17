@@ -117,7 +117,7 @@ const Userlogin = () => {
                   <Sparkles className="w-4 h-4 sm:w-5 sm:h-5 text-white animate-pulse" />
                 </div>
                 <span className="text-xl sm:text-2xl font-bold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
-                  Clear Finance.
+                  Real time capital.
                 </span>
               </div>
 

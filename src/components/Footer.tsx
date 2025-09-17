@@ -41,7 +41,7 @@ const Footer: React.FC<FooterProps> = ({ isDarkMode, themeClasses }) => {
                     : "text-gray-900"
                 }`}
               >
-                Clear Finance
+                Real time capital
               </span>
             </div>
             <p

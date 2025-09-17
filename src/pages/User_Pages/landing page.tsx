@@ -15,9 +15,8 @@ import Footer from "../../components/Footer";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../../components/navbar";
 
-import bg from "../../assets/bg2.png";
-import bg4 from "../../assets/bg4.jpg";
-import bg3 from "../../assets/bg3.jpg";
+
+import Loan from "../../assets/loan.png";
 
 const LandingPage = () => {
   const [currentSlide, setCurrentSlide] = React.useState(0);
@@ -227,7 +226,7 @@ const LandingPage = () => {
                     onClick={handleClick}
                     className="text-sm font-semibold text-emerald-400 tracking-wide uppercase cursor-pointer"
                   >
-                    Clear Finance
+                    Real time capital
                   </span>
                 </div>
 
@@ -463,7 +462,7 @@ const LandingPage = () => {
               About
               <span className="bg-gradient-to-r from-green-400 to-emerald-400 bg-clip-text text-transparent">
                 {" "}
-                Clear Finance
+                Real time capital
               </span>
             </h2>
             <p
@@ -721,7 +720,7 @@ const LandingPage = () => {
             </h2>
             <p className={`text-xl ${themeClasses.textMuted}`}>
               Real stories from real people who transformed their lives with
-              Clear Finance
+              Real time capital
             </p>
           </div>
 
