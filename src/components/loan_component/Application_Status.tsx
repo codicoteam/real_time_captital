@@ -10,10 +10,13 @@ import {
   DollarSign,
   TrendingUp,
   Eye,
+  PenTool, // Add this new import
+  Upload, // Add this new import
+  X, // Add this new import
 } from "lucide-react";
 
-// Import your existing LoanService
 import LoanService from "../../services/user_Services/loan_Service";
+import SignatureCanvas from "react-signature-canvas";
 
 // Updated type definitions based on your loan model
 interface LoanApplication {
@@ -62,6 +65,21 @@ const ApplicationStatus: React.FC<ApplicationStatusProps> = ({
   const [error, setError] = useState<string | null>(null);
   const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
   const [selectedLoan, setSelectedLoan] = useState<string | null>(null);
+  //signature
+  const [showSignatureModal, setShowSignatureModal] = useState<string | null>(
+    null
+  );
+  const [signatureRef, setSignatureRef] = useState<SignatureCanvas | null>(
+    null
+  );
+  const [signatureMode, setSignatureMode] = useState<"draw" | "upload">("draw");
+  const [uploadedSignature, setUploadedSignature] = useState<string | null>(
+    null
+  );
+  const [savedSignatures, setSavedSignatures] = useState<{
+    [key: string]: string;
+  }>({});
+  const [acceptedTerms, setAcceptedTerms] = useState(false);
 
   // Fetch applications from API
   const fetchApplications = async () => {
@@ -263,6 +281,72 @@ const ApplicationStatus: React.FC<ApplicationStatusProps> = ({
     ];
   };
 
+  //signature handlers
+  const handleSaveSignature = async (loanId: string) => {
+    try {
+      if (!acceptedTerms) {
+        alert(
+          "Please accept the terms and conditions before saving your signature."
+        );
+        return;
+      }
+
+      let signatureData = "";
+
+      if (signatureMode === "draw" && signatureRef) {
+        if (signatureRef.isEmpty()) {
+          alert("Please provide a signature before saving.");
+          return;
+        }
+        signatureData = signatureRef.toDataURL();
+      } else if (signatureMode === "upload" && uploadedSignature) {
+        signatureData = uploadedSignature;
+      } else {
+        alert("Please provide a signature before saving.");
+        return;
+      }
+
+      // Save signature locally (you can replace this with your API call)
+      setSavedSignatures((prev) => ({
+        ...prev,
+        [loanId]: signatureData,
+      }));
+
+      console.log("Saving signature for loan:", loanId, signatureData);
+
+      // Close modal and reset states
+      setShowSignatureModal(null);
+      setUploadedSignature(null);
+      setAcceptedTerms(false);
+      alert("Signature saved successfully!");
+
+      // You can add your API call here to save the signature
+      // await LoanService.saveSignature(loanId, signatureData);
+    } catch (error) {
+      console.error("Error saving signature:", error);
+      alert("Failed to save signature. Please try again.");
+    }
+  };
+
+  const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        setUploadedSignature(e.target?.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const clearSignature = () => {
+    if (signatureMode === "draw" && signatureRef) {
+      signatureRef.clear();
+    } else if (signatureMode === "upload") {
+      setUploadedSignature(null);
+    }
+  };
+
   return (
     <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-6 shadow-lg border border-white/50">
       <div className="mb-6">
@@ -395,6 +479,15 @@ const ApplicationStatus: React.FC<ApplicationStatusProps> = ({
                               <StatusIcon className="w-3 h-3 mr-1" />
                               {statusConfig.text}
                             </div>
+                            {loan.status === "approved" && (
+                              <button
+                                onClick={() => setShowSignatureModal(loan._id)}
+                                className="p-1 hover:bg-green-100 rounded transition-colors"
+                                title="Sign Document"
+                              >
+                                <PenTool className="w-3 h-3 text-green-600" />
+                              </button>
+                            )}
                             <button
                               onClick={() =>
                                 setSelectedLoan(isExpanded ? null : loan._id)
@@ -513,6 +606,211 @@ const ApplicationStatus: React.FC<ApplicationStatusProps> = ({
               </div>
             );
           })}
+        </div>
+      )}
+
+      {/* Signature Modal */}
+      {/* Signature Modal */}
+      {showSignatureModal && (
+        <div className="fixed inset-0 z-50 overflow-y-auto">
+          <div className="flex min-h-screen items-center justify-center p-4">
+            {/* Backdrop */}
+            <div
+              className="fixed inset-0 bg-black/30 backdrop-blur-sm transition-opacity"
+              onClick={() => {
+                setShowSignatureModal(null);
+                setUploadedSignature(null);
+                setAcceptedTerms(false);
+              }}
+            ></div>
+
+            {/* Modal */}
+            <div className="relative bg-white rounded-2xl shadow-2xl p-6 max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-lg font-bold text-black">
+                  Sign Loan Agreement
+                </h3>
+                <button
+                  onClick={() => {
+                    setShowSignatureModal(null);
+                    setUploadedSignature(null);
+                    setAcceptedTerms(false);
+                  }}
+                  className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+                >
+                  <X className="w-5 h-5 text-gray-500" />
+                </button>
+              </div>
+
+              {/* Show existing signature if available */}
+              {savedSignatures[showSignatureModal] && (
+                <div className="mb-4 p-4 bg-green-50 border border-green-200 rounded-lg">
+                  <p className="text-sm text-green-700 font-medium mb-2">
+                    ✓ Signature already saved
+                  </p>
+                  <img
+                    src={savedSignatures[showSignatureModal]}
+                    alt="Saved signature"
+                    className="max-w-full h-20 object-contain border border-green-300 rounded bg-white p-2"
+                  />
+                  <p className="text-xs text-green-600 mt-1">
+                    You can update your signature by signing below.
+                  </p>
+                </div>
+              )}
+
+              {/* Signature Mode Toggle */}
+              <div className="flex mb-4 bg-gray-100 rounded-lg p-1">
+                <button
+                  onClick={() => {
+                    setSignatureMode("draw");
+                    setUploadedSignature(null);
+                  }}
+                  className={`flex-1 py-2 px-4 rounded-md text-sm font-medium transition-all ${
+                    signatureMode === "draw"
+                      ? "bg-white text-blue-600 shadow-sm"
+                      : "text-gray-600 hover:text-gray-800"
+                  }`}
+                >
+                  <PenTool className="w-4 h-4 inline mr-2" />
+                  Draw Signature
+                </button>
+                <button
+                  onClick={() => {
+                    setSignatureMode("upload");
+                    if (signatureRef) signatureRef.clear();
+                  }}
+                  className={`flex-1 py-2 px-4 rounded-md text-sm font-medium transition-all ${
+                    signatureMode === "upload"
+                      ? "bg-white text-blue-600 shadow-sm"
+                      : "text-gray-600 hover:text-gray-800"
+                  }`}
+                >
+                  <Upload className="w-4 h-4 inline mr-2" />
+                  Upload Image
+                </button>
+              </div>
+
+              {/* Signature Area */}
+              <div className="border-2 border-dashed border-gray-300 rounded-lg p-4 mb-4 bg-gray-50">
+                {signatureMode === "draw" ? (
+                  <div>
+                    <p className="text-sm text-gray-600 mb-3">
+                      Please sign in the box below:
+                    </p>
+                    <div className="border-2 border-gray-300 rounded-lg bg-white overflow-hidden">
+                      <SignatureCanvas
+                        ref={(ref) => setSignatureRef(ref)}
+                        canvasProps={{
+                          width: 500,
+                          height: 200,
+                          className: "signature-canvas w-full h-48",
+                          style: { width: "100%", height: "200px" },
+                        }}
+                        backgroundColor="rgb(255,255,255)"
+                      />
+                    </div>
+                  </div>
+                ) : (
+                  <div>
+                    <p className="text-sm text-gray-600 mb-3">
+                      Upload an image of your signature:
+                    </p>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={handleImageUpload}
+                      className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+                    />
+                    {uploadedSignature && (
+                      <div className="mt-3">
+                        <img
+                          src={uploadedSignature}
+                          alt="Uploaded signature"
+                          className="max-w-full h-32 object-contain border-2 border-gray-300 rounded-lg bg-white p-2"
+                        />
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
+
+              {/* Terms and Conditions */}
+              <div className="mb-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+                <h4 className="font-semibold text-blue-900 mb-2">
+                  Terms and Conditions
+                </h4>
+                <div className="text-sm text-blue-800 space-y-2 max-h-32 overflow-y-auto">
+                  <p>
+                    • By signing this document, you agree to the loan terms and
+                    conditions as outlined in your loan agreement.
+                  </p>
+                  <p>
+                    • You acknowledge that you have read and understood all
+                    terms, interest rates, and repayment schedules.
+                  </p>
+                  <p>
+                    • This electronic signature is legally binding and
+                    equivalent to a handwritten signature.
+                  </p>
+                  <p>
+                    • You consent to electronic delivery of loan documents and
+                    communications.
+                  </p>
+                  <p>
+                    • Late payments may incur additional fees as specified in
+                    your loan agreement.
+                  </p>
+                </div>
+
+                <label className="flex items-start space-x-3 mt-3 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={acceptedTerms}
+                    onChange={(e) => setAcceptedTerms(e.target.checked)}
+                    className="mt-0.5 w-4 h-4 text-blue-600 border-blue-300 rounded focus:ring-blue-500"
+                  />
+                  <span className="text-sm text-blue-900">
+                    I have read, understood, and agree to the terms and
+                    conditions outlined above.
+                  </span>
+                </label>
+              </div>
+
+              {/* Action Buttons */}
+              <div className="flex justify-between items-center">
+                <button
+                  onClick={clearSignature}
+                  className="px-4 py-2 text-gray-600 hover:text-gray-800 transition-colors text-sm"
+                >
+                  Clear
+                </button>
+                <div className="space-x-3">
+                  <button
+                    onClick={() => {
+                      setShowSignatureModal(null);
+                      setUploadedSignature(null);
+                      setAcceptedTerms(false);
+                    }}
+                    className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors text-sm"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    onClick={() => handleSaveSignature(showSignatureModal)}
+                    disabled={!acceptedTerms}
+                    className={`px-4 py-2 rounded-lg transition-colors text-sm ${
+                      acceptedTerms
+                        ? "bg-green-600 text-white hover:bg-green-700"
+                        : "bg-gray-300 text-gray-500 cursor-not-allowed"
+                    }`}
+                  >
+                    Save Signature
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       )}
     </div>
