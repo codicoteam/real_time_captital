@@ -14,7 +14,10 @@ import {
 import Footer from "../../components/Footer";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../../components/navbar";
-import Loan from "../../assets/loan.png"; // Import your logo
+
+import bg from "../../assets/bg2.png";
+import bg4 from "../../assets/bg4.jpg";
+import bg3 from "../../assets/bg3.jpg";
 
 const LandingPage = () => {
   const [currentSlide, setCurrentSlide] = React.useState(0);
@@ -125,7 +128,7 @@ const LandingPage = () => {
               }`}
             >
               <img
-                src="https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=1920&h=1080&fit=crop"
+                src="https://www.shutterstock.com/image-photo/medical-coding-bill-billing-codes-600nw-2494681123.jpg"
                 alt="Loan Management Background"
                 className="w-full h-full object-cover"
               />
@@ -153,7 +156,7 @@ const LandingPage = () => {
               }`}
             >
               <img
-                src="https://images.unsplash.com/photo-1581092918056-0c4c3acd3789?w=1920&h=1080&fit=crop"
+                src="https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=1920&h=1080&fit=crop"
                 alt="Fast Approval Background"
                 className="w-full h-full object-cover"
               />
@@ -181,7 +184,7 @@ const LandingPage = () => {
               }`}
             >
               <img
-                src="https://images.unsplash.com/photo-1573164713714-d95e436ab8d6?w=1920&h=1080&fit=crop"
+                src="https://media.istockphoto.com/id/1497005728/photo/smiling-businessman-talking-on-a-mobile-phone-while-working-on-his-laptop.jpg?s=612x612&w=0&k=20&c=ibhoJ_PmND3ny24BgixaSiMqn2qJ4LNcgqaDmeBnuQY="
                 alt="Happy Customers Background"
                 className="w-full h-full object-cover"
               />
