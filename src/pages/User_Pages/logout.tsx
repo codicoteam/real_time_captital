@@ -29,41 +29,41 @@ const Logout = () => {
       {/* Main Content */}
       <div className="flex-1 flex flex-col overflow-hidden lg:ml-0">
         {/* Header */}
-        <header className="bg-white/80 backdrop-blur-xl shadow-sm border-b border-orange-200/50 px-6 py-4 relative">
-          <div className="absolute inset-0 bg-gradient-to-r from-orange-500/5 to-red-500/5" />
+        <header className="bg-white/80 backdrop-blur-xl shadow-sm border-b border-green-200/50 px-6 py-4 relative">
+          <div className="absolute inset-0 bg-gradient-to-r from-green-500/5 to-green-500/5" />
           <div className="relative flex items-center justify-between">
             <div className="flex items-center">
               <button
                 onClick={() => setSidebarOpen(true)}
-                className="lg:hidden mr-4 p-2 rounded-xl bg-orange-100/50 hover:bg-orange-200/50 transition-all duration-200"
+                className="lg:hidden mr-4 p-2 rounded-xl bg-green-100/50 hover:bg-green-200/50 transition-all duration-200"
               >
-                <Menu className="w-5 h-5 text-orange-600" />
+                <Menu className="w-5 h-5 text-green-600" />
               </button>
               <div className="flex items-center space-x-3">
-                <FiLogOut className="w-6 h-6 text-orange-600" />
+                <FiLogOut className="w-6 h-6 text-green-600" />
                 <div className="flex items-center space-x-2 text-sm">
-                  <span className="text-orange-500">Dashboard</span>
-                  <span className="text-orange-300">›</span>
-                  <span className="text-orange-700 font-medium">Logout</span>
+                  <span className="text-green-500">Dashboard</span>
+                  <span className="text-green-300">›</span>
+                  <span className="text-green-700 font-medium">Logout</span>
                 </div>
               </div>
             </div>
 
             <div className="flex items-center space-x-4">
-              <div className="flex items-center space-x-3 pl-4 border-l border-orange-200/50">
+              <div className="flex items-center space-x-3 pl-4 border-l border-green-200/50">
                 <div className="text-right hidden sm:block">
-                  <div className="text-sm font-semibold text-orange-700">
+                  <div className="text-sm font-semibold text-green-700">
                     John Doe
                   </div>
-                  <div className="text-xs text-orange-500">User</div>
+                  <div className="text-xs text-green-500">User</div>
                 </div>
                 <div className="relative">
-                  <div className="w-10 h-10 bg-gradient-to-br from-orange-500 to-red-500 rounded-xl flex items-center justify-center shadow-lg shadow-orange-500/25">
+                  <div className="w-10 h-10 bg-gradient-to-br from-green-500 to-green-600 rounded-xl flex items-center justify-center shadow-lg shadow-green-500/25">
                     <span className="text-white font-semibold text-sm">JD</span>
                   </div>
                   <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-400 border-2 border-white rounded-full shadow-sm" />
                 </div>
-                <ChevronDown className="w-4 h-4 text-orange-400" />
+                <ChevronDown className="w-4 h-4 text-green-400" />
               </div>
             </div>
           </div>
@@ -73,9 +73,9 @@ const Logout = () => {
         <main className="flex-1 overflow-y-auto p-6 flex items-center justify-center">
           <div className="max-w-md w-full">
             {/* Logout Card */}
-            <div className="bg-white/90 backdrop-blur-sm rounded-2xl shadow-xl border border-orange-200/50 p-8 text-center transform hover:scale-105 transition-all duration-300">
+            <div className="bg-white/90 backdrop-blur-sm rounded-2xl shadow-xl border border-green-200/50 p-8 text-center transform hover:scale-105 transition-all duration-300">
               <div className="mb-6">
-                <div className="w-16 h-16 bg-gradient-to-br from-orange-500 to-red-500 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg shadow-orange-500/25">
+                <div className="w-16 h-16 bg-gradient-to-br from-green-500 to-green-600 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg shadow-green-500/25">
                   <FiLogOut className="w-8 h-8 text-white" />
                 </div>
                 <h2 className="text-2xl font-bold text-black mb-2">
@@ -88,7 +88,7 @@ const Logout = () => {
 
               <button
                 onClick={() => setShowModal(true)}
-                className="w-full bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white font-semibold py-3 px-6 rounded-xl shadow-lg shadow-orange-500/25 hover:shadow-orange-500/40 transform hover:scale-105 transition-all duration-200 focus:outline-none focus:ring-4 focus:ring-orange-500/20"
+                className="w-full bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-semibold py-3 px-6 rounded-xl shadow-lg shadow-green-500/25 hover:shadow-green-500/40 transform hover:scale-105 transition-all duration-200 focus:outline-none focus:ring-4 focus:ring-green-500/20"
               >
                 <div className="flex items-center justify-center space-x-2">
                   <FiLogOut className="w-5 h-5" />
@@ -114,10 +114,10 @@ const Logout = () => {
           >
             <div
               onClick={(e) => e.stopPropagation()}
-              className="bg-white/95 backdrop-blur-sm p-8 rounded-2xl shadow-2xl border border-orange-200/50 relative max-w-md w-full mx-4 transform animate-pulse"
+              className="bg-white/95 backdrop-blur-sm p-8 rounded-2xl shadow-2xl border border-green-200/50 relative max-w-md w-full mx-4 transform animate-pulse"
             >
               <div className="flex flex-col items-center text-center">
-                <div className="w-16 h-16 bg-gradient-to-br from-red-500 to-orange-500 rounded-2xl flex items-center justify-center mb-4 shadow-lg shadow-red-500/25">
+                <div className="w-16 h-16 bg-gradient-to-br from-green-500 to-green-600 rounded-2xl flex items-center justify-center mb-4 shadow-lg shadow-green-500/25">
                   <FiLogOut className="w-8 h-8 text-white" />
                 </div>
 
@@ -132,7 +132,7 @@ const Logout = () => {
                 <div className="flex gap-4 w-full">
                   <button
                     onClick={handleConfirm}
-                    className="flex-1 bg-gradient-to-r from-red-500 to-orange-500 hover:from-red-600 hover:to-orange-600 text-white font-semibold py-3 px-6 rounded-xl shadow-lg shadow-red-500/25 hover:shadow-red-500/40 transform hover:scale-105 transition-all duration-200 focus:outline-none focus:ring-4 focus:ring-red-500/20"
+                    className="flex-1 bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-semibold py-3 px-6 rounded-xl shadow-lg shadow-green-500/25 hover:shadow-green-500/40 transform hover:scale-105 transition-all duration-200 focus:outline-none focus:ring-4 focus:ring-green-500/20"
                   >
                     Yes, Logout
                   </button>

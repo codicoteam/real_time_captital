@@ -253,27 +253,27 @@ const PaymentManagement = () => {
   };
 
   return (
-    <div className="flex h-screen bg-gradient-to-br from-orange-50 via-red-50 to-yellow-50">
+    <div className="flex h-screen bg-gradient-to-br from-green-50 via-green-50 to-green-50">
       {/* Sidebar Component */}
       <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
       {/* Main Content */}
       <div className="flex-1 flex flex-col overflow-hidden lg:ml-0">
         {/* Header */}
-        <header className="bg-white/80 backdrop-blur-xl shadow-sm border-b border-orange-200/50 px-6 py-4 relative">
-          <div className="absolute inset-0 bg-gradient-to-r from-orange-500/5 to-red-500/5"></div>
+        <header className="bg-white/80 backdrop-blur-xl shadow-sm border-b border-green-200/50 px-6 py-4 relative">
+          <div className="absolute inset-0 bg-gradient-to-r from-green-500/5 to-green-500/5"></div>
           <div className="relative flex items-center justify-between">
             <div className="flex items-center">
               <button
                 onClick={() => setSidebarOpen(true)}
-                className="lg:hidden mr-4 p-2 rounded-xl bg-orange-100/50 hover:bg-orange-200/50 transition-all duration-200"
+                className="lg:hidden mr-4 p-2 rounded-xl bg-green-100/50 hover:bg-green-200/50 transition-all duration-200"
               >
-                <Menu className="w-5 h-5 text-orange-600" />
+                <Menu className="w-5 h-5 text-green-600" />
               </button>
               <div className="flex items-center space-x-3">
                 <div className="flex items-center space-x-2 text-sm">
-                  <span className="text-orange-500">Dashboard</span>
-                  <span className="text-orange-300">›</span>
-                  <span className="text-orange-700 font-medium">
+                  <span className="text-green-500">Dashboard</span>
+                  <span className="text-green-300">›</span>
+                  <span className="text-black font-medium">
                     Payment Management
                   </span>
                 </div>
@@ -283,39 +283,39 @@ const PaymentManagement = () => {
             <div className="flex items-center space-x-4">
               {/* Search */}
               <div className="relative hidden md:block">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-orange-400" />
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-green-400" />
                 <input
                   type="text"
                   placeholder="Search payments..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="pl-10 pr-4 py-2 w-64 bg-orange-100/50 border border-orange-200/50 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500/50 transition-all duration-200"
+                  className="pl-10 pr-4 py-2 w-64 bg-green-100/50 border border-green-200/50 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-green-500/20 focus:border-green-500/50 transition-all duration-200"
                 />
               </div>
 
               {/* Notifications */}
-              <button className="relative p-2 rounded-xl bg-orange-100/50 hover:bg-orange-200/50 transition-all duration-200 group">
-                <Bell className="w-5 h-5 text-orange-600 group-hover:text-orange-700" />
-                <div className="absolute -top-1 -right-1 w-4 h-4 bg-gradient-to-r from-red-500 to-orange-500 rounded-full flex items-center justify-center">
+              <button className="relative p-2 rounded-xl bg-green-100/50 hover:bg-green-200/50 transition-all duration-200 group">
+                <Bell className="w-5 h-5 text-green-600 group-hover:text-green-700" />
+                <div className="absolute -top-1 -right-1 w-4 h-4 bg-gradient-to-r from-green-500 to-green-500 rounded-full flex items-center justify-center">
                   <span className="text-xs text-white font-medium">3</span>
                 </div>
               </button>
 
               {/* User Profile */}
-              <div className="flex items-center space-x-3 pl-4 border-l border-orange-200/50">
+              <div className="flex items-center space-x-3 pl-4 border-l border-green-200/50">
                 <div className="text-right hidden sm:block">
-                  <div className="text-sm font-semibold text-orange-700">
+                  <div className="text-sm font-semibold text-black">
                     Admin
                   </div>
-                  <div className="text-xs text-orange-500">Payment Manager</div>
+                  <div className="text-xs text-green-500">Payment Manager</div>
                 </div>
                 <div className="relative">
-                  <div className="w-10 h-10 bg-gradient-to-br from-orange-500 to-red-500 rounded-xl flex items-center justify-center shadow-lg shadow-orange-500/25">
+                  <div className="w-10 h-10 bg-gradient-to-br from-green-500 to-green-600 rounded-xl flex items-center justify-center shadow-lg shadow-green-500/25">
                     <span className="text-white font-semibold text-sm">SJ</span>
                   </div>
                   <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-400 border-2 border-white rounded-full shadow-sm"></div>
                 </div>
-                <ChevronDown className="w-4 h-4 text-orange-400" />
+                <ChevronDown className="w-4 h-4 text-green-400" />
               </div>
             </div>
           </div>
@@ -326,20 +326,20 @@ const PaymentManagement = () => {
           {/* Page Header */}
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-3xl font-bold text-orange-800 mb-2">
+              <h1 className="text-3xl font-bold text-black mb-2">
                 Payment Management
               </h1>
-              <p className="text-orange-600">
+              <p className="text-black">
                 Monitor and manage loan payments, confirm transactions, and
                 handle payment records
               </p>
             </div>
             <div className="flex items-center space-x-3">
-              <button className="px-4 py-2 bg-orange-100/60 text-orange-700 rounded-xl font-medium hover:bg-orange-200/60 transition-all duration-200 flex items-center space-x-2">
+              <button className="px-4 py-2 bg-green-100/60 text-green-700 rounded-xl font-medium hover:bg-green-200/60 transition-all duration-200 flex items-center space-x-2">
                 <Download className="w-4 h-4" />
                 <span>Export</span>
               </button>
-              <button className="px-4 py-2 bg-gradient-to-r from-orange-500 to-red-500 text-white rounded-xl font-medium hover:from-orange-600 hover:to-red-600 transition-all duration-200 flex items-center space-x-2">
+              <button className="px-4 py-2 bg-gradient-to-r from-green-500 to-green-600 text-white rounded-xl font-medium hover:from-green-600 hover:to-green-700 transition-all duration-200 flex items-center space-x-2">
                 <Plus className="w-4 h-4" />
                 <span>Record Payment</span>
               </button>
@@ -359,8 +359,8 @@ const PaymentManagement = () => {
           {/* Loading State */}
           {loading && (
             <div className="flex items-center justify-center h-64">
-              <div className="text-orange-600 flex items-center space-x-2">
-                <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-orange-600"></div>
+              <div className="text-green-600 flex items-center space-x-2">
+                <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-green-600"></div>
                 <span>Loading payments...</span>
               </div>
             </div>
@@ -372,15 +372,15 @@ const PaymentManagement = () => {
               <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-6 shadow-lg border border-white/50">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm text-orange-600 font-medium">
+                    <p className="text-sm text-green-600 font-medium">
                       Total Payments
                     </p>
-                    <p className="text-2xl font-bold text-orange-800">
+                    <p className="text-2xl font-bold text-green-800">
                       {payments.length}
                     </p>
                   </div>
-                  <div className="p-3 bg-orange-100 rounded-xl">
-                    <DollarSign className="w-6 h-6 text-orange-600" />
+                  <div className="p-3 bg-green-100 rounded-xl">
+                    <DollarSign className="w-6 h-6 text-green-600" />
                   </div>
                 </div>
               </div>
@@ -436,15 +436,15 @@ const PaymentManagement = () => {
               <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
                 <div className="flex items-center space-x-4">
                   <div className="flex items-center space-x-2">
-                    <Filter className="w-4 h-4 text-orange-600" />
-                    <span className="text-sm font-medium text-orange-700">
+                    <Filter className="w-4 h-4 text-green-600" />
+                    <span className="text-sm font-medium text-green-700">
                       Filter by:
                     </span>
                   </div>
                   <select
                     value={selectedFilter}
                     onChange={(e) => setSelectedFilter(e.target.value)}
-                    className="px-3 py-2 bg-orange-100/50 border border-orange-200/50 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500/50"
+                    className="px-3 py-2 bg-green-100/50 border border-green-200/50 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-green-500/20 focus:border-green-500/50"
                   >
                     {filterOptions.map((option) => (
                       <option key={option.value} value={option.value}>
@@ -453,7 +453,7 @@ const PaymentManagement = () => {
                     ))}
                   </select>
                 </div>
-                <div className="text-sm text-orange-600">
+                <div className="text-sm text-green-600">
                   Showing {filteredPayments.length} of {payments.length}{" "}
                   payments
                 </div>
@@ -466,34 +466,34 @@ const PaymentManagement = () => {
             <div className="bg-white/70 backdrop-blur-sm rounded-2xl shadow-lg border border-white/50 overflow-hidden">
               <div className="overflow-x-auto">
                 <table className="w-full">
-                  <thead className="bg-gradient-to-r from-orange-100/50 to-red-100/50">
+                  <thead className="bg-gradient-to-r from-green-100/50 to-green-100/50">
                     <tr>
-                      <th className="px-6 py-4 text-left text-xs font-medium text-orange-700 uppercase tracking-wider">
+                      <th className="px-6 py-4 text-left text-xs font-medium text-green-700 uppercase tracking-wider">
                         Payment
                       </th>
-                      <th className="px-6 py-4 text-left text-xs font-medium text-orange-700 uppercase tracking-wider">
+                      <th className="px-6 py-4 text-left text-xs font-medium text-green-700 uppercase tracking-wider">
                         Borrower
                       </th>
-                      <th className="px-6 py-4 text-left text-xs font-medium text-orange-700 uppercase tracking-wider">
+                      <th className="px-6 py-4 text-left text-xs font-medium text-green-700 uppercase tracking-wider">
                         Amount & Method
                       </th>
-                      <th className="px-6 py-4 text-left text-xs font-medium text-orange-700 uppercase tracking-wider">
+                      <th className="px-6 py-4 text-left text-xs font-medium text-green-700 uppercase tracking-wider">
                         Installment Info
                       </th>
-                      <th className="px-6 py-4 text-left text-xs font-medium text-orange-700 uppercase tracking-wider">
+                      <th className="px-6 py-4 text-left text-xs font-medium text-green-700 uppercase tracking-wider">
                         Status
                       </th>
-                      <th className="px-6 py-4 text-left text-xs font-medium text-orange-700 uppercase tracking-wider">
+                      <th className="px-6 py-4 text-left text-xs font-medium text-green-700 uppercase tracking-wider">
                         Actions
                       </th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-orange-200/30">
+                  <tbody className="divide-y divide-green-200/30">
                     {filteredPayments.length === 0 ? (
                       <tr>
                         <td
                           colSpan={6}
-                          className="px-6 py-8 text-center text-orange-600"
+                          className="px-6 py-8 text-center text-green-600"
                         >
                           {error
                             ? "Unable to load payments"
@@ -504,20 +504,20 @@ const PaymentManagement = () => {
                       filteredPayments.map((payment) => (
                         <tr
                           key={payment.id}
-                          className="hover:bg-orange-50/30 transition-colors duration-200"
+                          className="hover:bg-green-50/30 transition-colors duration-200"
                         >
                           <td className="px-6 py-4 whitespace-nowrap">
                             <div className="flex items-center">
-                              <div className="w-10 h-10 bg-gradient-to-br from-orange-400 to-red-500 rounded-xl flex items-center justify-center mr-3">
+                              <div className="w-10 h-10 bg-gradient-to-br from-green-400 to-green-600 rounded-xl flex items-center justify-center mr-3">
                                 <span className="text-white font-bold text-sm">
                                   {payment.id.slice(-2)}
                                 </span>
                               </div>
                               <div>
-                                <div className="text-sm font-medium text-orange-800">
+                                <div className="text-sm font-medium text-black">
                                   {payment.paymentReference}
                                 </div>
-                                <div className="text-xs text-orange-600">
+                                <div className="text-xs text-green-600">
                                   {payment.paymentDate}
                                 </div>
                               </div>
@@ -525,20 +525,20 @@ const PaymentManagement = () => {
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap">
                             <div>
-                              <div className="text-sm font-medium text-orange-800">
+                              <div className="text-sm font-medium text-black">
                                 {payment.borrowerName}
                               </div>
-                              <div className="text-xs text-orange-600">
+                              <div className="text-xs text-green-600">
                                 {payment.borrowerEmail}
                               </div>
-                              <div className="text-xs text-orange-500">
+                              <div className="text-xs text-green-500">
                                 Loan: {payment.loanType}
                               </div>
                             </div>
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap">
                             <div>
-                              <div className="text-sm font-medium text-orange-800">
+                              <div className="text-sm font-medium text-black">
                                 {payment.amountPaid}
                               </div>
                               <div
@@ -553,10 +553,10 @@ const PaymentManagement = () => {
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap">
                             <div>
-                              <div className="text-sm text-orange-700">
+                              <div className="text-sm text-black">
                                 Due: {payment.forInstallmentDate}
                               </div>
-                              <div className="text-xs text-orange-500">
+                              <div className="text-xs text-green-500">
                                 Loan Amount: {payment.loanAmount}
                               </div>
                             </div>
@@ -598,7 +598,7 @@ const PaymentManagement = () => {
                                 </>
                               )}
                               <div className="relative">
-                                <button className="p-2 text-orange-600 hover:text-orange-700 hover:bg-orange-100 rounded-lg transition-colors duration-200">
+                                <button className="p-2 text-green-600 hover:text-green-700 hover:bg-green-100 rounded-lg transition-colors duration-200">
                                   <MoreVertical className="w-4 h-4" />
                                 </button>
                               </div>
@@ -617,18 +617,18 @@ const PaymentManagement = () => {
           {!loading && filteredPayments.length > 0 && (
             <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-4 shadow-lg border border-white/50">
               <div className="flex items-center justify-between">
-                <div className="text-sm text-orange-600">
+                <div className="text-sm text-green-600">
                   Showing 1 to {filteredPayments.length} of{" "}
                   {filteredPayments.length} results
                 </div>
                 <div className="flex items-center space-x-2">
-                  <button className="px-3 py-2 text-sm font-medium text-orange-600 bg-orange-100/50 border border-orange-200/50 rounded-lg hover:bg-orange-200/50 transition-colors duration-200">
+                  <button className="px-3 py-2 text-sm font-medium text-green-600 bg-green-100/50 border border-green-200/50 rounded-lg hover:bg-green-200/50 transition-colors duration-200">
                     Previous
                   </button>
-                  <button className="px-3 py-2 text-sm font-medium text-white bg-gradient-to-r from-orange-500 to-red-500 rounded-lg">
+                  <button className="px-3 py-2 text-sm font-medium text-white bg-gradient-to-r from-green-500 to-green-600 rounded-lg">
                     1
                   </button>
-                  <button className="px-3 py-2 text-sm font-medium text-orange-600 bg-orange-100/50 border border-orange-200/50 rounded-lg hover:bg-orange-200/50 transition-colors duration-200">
+                  <button className="px-3 py-2 text-sm font-medium text-green-600 bg-green-100/50 border border-green-200/50 rounded-lg hover:bg-green-200/50 transition-colors duration-200">
                     Next
                   </button>
                 </div>

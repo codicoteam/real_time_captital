@@ -300,15 +300,15 @@ const LoanManagement = () => {
       {/* Main Content */}
       <div className="flex-1 flex flex-col overflow-hidden lg:ml-0 relative">
         {/* Header */}
-        <header className="bg-white/80 backdrop-blur-xl shadow-sm border-b border-orange-200/50 px-6 py-4 relative z-30">
-          <div className="absolute inset-0 bg-gradient-to-r from-orange-500/5 to-red-500/5"></div>
+        <header className="bg-white/80 backdrop-blur-xl shadow-sm border-b border-green-200/50 px-6 py-4 relative z-30">
+          <div className="absolute inset-0 bg-gradient-to-r from-green-500/5 to-teal-500/5"></div>
           <div className="relative flex items-center justify-between">
             <div className="flex items-center">
               <button
                 onClick={() => setSidebarOpen(true)}
-                className="lg:hidden mr-4 p-2 rounded-xl bg-orange-100/50 hover:bg-orange-200/50 transition-all duration-200"
+                className="lg:hidden mr-4 p-2 rounded-xl bg-green-100/50 hover:bg-green-200/50 transition-all duration-200"
               >
-                <Menu className="w-5 h-5 text-orange-600" />
+                <Menu className="w-5 h-5 text-green-600" />
               </button>
               <div className="flex items-center space-x-3">
                 <div className="flex items-center space-x-2 text-sm">
@@ -324,13 +324,13 @@ const LoanManagement = () => {
             <div className="flex items-center space-x-4">
               {/* Search */}
               <div className="relative hidden md:block">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-orange-400" />
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-green-400" />
                 <input
                   type="text"
                   placeholder="Search applications..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="pl-10 pr-4 py-2 w-64 bg-orange-100/50 border border-orange-200/50 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500/50 transition-all duration-200"
+                  className="pl-10 pr-4 py-2 w-64 bg-green-100/50 border border-green-200/50 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-green-500/20 focus:border-green-500/50 transition-all duration-200"
                 />
               </div>
 
@@ -338,10 +338,10 @@ const LoanManagement = () => {
               <div className="relative">
                 <button
                   onClick={() => setShowNotifications(!showNotifications)}
-                  className="relative p-2 rounded-xl bg-orange-100/50 hover:bg-orange-200/50 transition-all duration-200 group"
+                  className="relative p-2 rounded-xl bg-green-100/50 hover:bg-green-200/50 transition-all duration-200 group"
                 >
-                  <Bell className="w-5 h-5 text-orange-600 group-hover:text-orange-700" />
-                  <div className="absolute -top-1 -right-1 w-4 h-4 bg-gradient-to-r from-red-500 to-orange-500 rounded-full flex items-center justify-center">
+                  <Bell className="w-5 h-5 text-green-600 group-hover:text-green-700" />
+                  <div className="absolute -top-1 -right-1 w-4 h-4 bg-gradient-to-r from-green-500 to-teal-500 rounded-full flex items-center justify-center">
                     <span className="text-xs text-white font-medium">
                       {notifications.filter((n) => !n.read).length}
                     </span>
@@ -350,42 +350,42 @@ const LoanManagement = () => {
 
                 {/* Notifications dropdown */}
                 {showNotifications && (
-                  <div className="absolute right-0 mt-2 w-80 bg-white rounded-xl shadow-lg border border-orange-200/50 z-50">
-                    <div className="p-4 border-b border-orange-200/50 flex justify-between items-center">
-                      <h3 className="font-medium text-orange-800">
+                  <div className="absolute right-0 mt-2 w-80 bg-white rounded-xl shadow-lg border border-green-200/50 z-50">
+                    <div className="p-4 border-b border-green-200/50 flex justify-between items-center">
+                      <h3 className="font-medium text-green-800">
                         Notifications
                       </h3>
                       <button
                         onClick={() => setShowNotifications(false)}
-                        className="text-orange-500 hover:text-orange-700"
+                        className="text-green-500 hover:text-green-700"
                       >
                         <X className="w-5 h-5" />
                       </button>
                     </div>
-                    <div className="divide-y divide-orange-200/30 max-h-96 overflow-y-auto">
+                    <div className="divide-y divide-green-200/30 max-h-96 overflow-y-auto">
                       {notifications.map((notification) => (
                         <div
                           key={notification.id}
-                          className={`p-4 hover:bg-orange-50/50 cursor-pointer ${
-                            !notification.read ? "bg-orange-50" : ""
+                          className={`p-4 hover:bg-green-50/50 cursor-pointer ${
+                            !notification.read ? "bg-green-50" : ""
                           }`}
                         >
                           <div className="flex justify-between">
-                            <p className="font-medium text-orange-800">
+                            <p className="font-medium text-green-800">
                               {notification.title}
                             </p>
                             {!notification.read && (
-                              <span className="h-2 w-2 bg-orange-500 rounded-full"></span>
+                              <span className="h-2 w-2 bg-green-500 rounded-full"></span>
                             )}
                           </div>
-                          <p className="text-xs text-orange-500 mt-1">
+                          <p className="text-xs text-green-500 mt-1">
                             {notification.time}
                           </p>
                         </div>
                       ))}
                     </div>
-                    <div className="p-3 text-center bg-orange-50/50">
-                      <button className="text-sm text-orange-600 hover:text-orange-800 font-medium">
+                    <div className="p-3 text-center bg-green-50/50">
+                      <button className="text-sm text-green-600 hover:text-green-800 font-medium">
                         Mark all as read
                       </button>
                     </div>
@@ -394,20 +394,20 @@ const LoanManagement = () => {
               </div>
 
               {/* User Profile */}
-              <div className="flex items-center space-x-3 pl-4 border-l border-orange-200/50">
+              <div className="flex items-center space-x-3 pl-4 border-l border-green-200/50">
                 <div className="text-right hidden sm:block">
-                  <div className="text-sm font-semibold text-orange-700">
+                  <div className="text-sm font-semibold text-green-700">
                     {userName}
                   </div>
-                  <div className="text-xs text-orange-500">Loan Manager</div>
+                  <div className="text-xs text-green-500">Loan Manager</div>
                 </div>
                 <div className="relative">
-                  <div className="w-10 h-10 bg-gradient-to-br from-orange-500 to-red-500 rounded-xl flex items-center justify-center shadow-lg shadow-orange-500/25">
+                  <div className="w-10 h-10 bg-gradient-to-br from-green-500 to-teal-500 rounded-xl flex items-center justify-center shadow-lg shadow-green-500/25">
                     <span className="text-white font-semibold text-sm">SJ</span>
                   </div>
                   <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-400 border-2 border-white rounded-full shadow-sm"></div>
                 </div>
-                <ChevronDown className="w-4 h-4 text-orange-400" />
+                <ChevronDown className="w-4 h-4 text-green-400" />
               </div>
             </div>
           </div>
@@ -418,10 +418,10 @@ const LoanManagement = () => {
           {/* Page Header */}
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-3xl font-bold text-orange-800 mb-2">
+              <h1 className="text-3xl font-bold text-green-800 mb-2">
                 Loan Management
               </h1>
-              <p className="text-orange-600">
+              <p className="text-green-600">
                 Manage loan applications, approve or reject requests, and handle
                 documentation
               </p>
@@ -429,14 +429,14 @@ const LoanManagement = () => {
             <div className="flex items-center space-x-3">
               <button
                 onClick={() => setShowExportModal(true)}
-                className="px-4 py-2 bg-orange-100/60 text-orange-700 rounded-xl font-medium hover:bg-orange-200/60 transition-all duration-200 flex items-center space-x-2"
+                className="px-4 py-2 bg-green-100/60 text-green-700 rounded-xl font-medium hover:bg-green-200/60 transition-all duration-200 flex items-center space-x-2"
               >
                 <Download className="w-4 h-4" />
                 <span>Export</span>
               </button>
               <button
                 onClick={() => setShowNewAppModal(true)}
-                className="px-4 py-2 bg-gradient-to-r from-orange-500 to-red-500 text-white rounded-xl font-medium hover:from-orange-600 hover:to-red-600 transition-all duration-200 flex items-center space-x-2"
+                className="px-4 py-2 bg-gradient-to-r from-green-500 to-teal-500 text-white rounded-xl font-medium hover:from-green-600 hover:to-teal-600 transition-all duration-200 flex items-center space-x-2"
               >
                 <Plus className="w-4 h-4" />
                 <span>New Application</span>
@@ -457,8 +457,8 @@ const LoanManagement = () => {
           {/* Loading State */}
           {loading && (
             <div className="flex items-center justify-center h-64">
-              <div className="text-orange-600 flex items-center space-x-2">
-                <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-orange-600"></div>
+              <div className="text-green-600 flex items-center space-x-2">
+                <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-green-600"></div>
                 <span>Loading loan applications...</span>
               </div>
             </div>
@@ -477,8 +477,8 @@ const LoanManagement = () => {
                       {loanApplications.length}
                     </p>
                   </div>
-                  <div className="p-3 bg-orange-100 rounded-xl">
-                    <FileText className="w-6 h-6 text-orange-600" />
+                  <div className="p-3 bg-green-100 rounded-xl">
+                    <FileText className="w-6 h-6 text-green-600" />
                   </div>
                 </div>
               </div>
@@ -544,7 +544,7 @@ const LoanManagement = () => {
                   <select
                     value={selectedFilter}
                     onChange={(e) => setSelectedFilter(e.target.value)}
-                    className="px-3 py-2 bg-orange-100/50 border border-orange-200/50 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500/50"
+                    className="px-3 py-2 bg-green-100/50 border border-green-200/50 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-green-500/20 focus:border-green-500/50"
                   >
                     {filterOptions.map((option) => (
                       <option key={option.value} value={option.value}>
@@ -566,31 +566,31 @@ const LoanManagement = () => {
             <div className="bg-white backdrop-blur-sm rounded-2xl shadow-lg border border-white/50 overflow-hidden">
               <div className="overflow-x-auto">
                 <table className="w-full">
-                  <thead className="bg-gradient-to-r from-orange-100/50 to-red-100/50">
+                  <thead className="bg-gradient-to-r from-green-100/50 to-teal-100/50">
                     <tr>
-                      <th className="px-6 py-4 text-left text-xs font-medium text-orange-700 uppercase tracking-wider">
+                      <th className="px-6 py-4 text-left text-xs font-medium text-green-700 uppercase tracking-wider">
                         Application
                       </th>
-                      <th className="px-6 py-4 text-left text-xs font-medium text-orange-700 uppercase tracking-wider">
+                      <th className="px-6 py-4 text-left text-xs font-medium text-green-700 uppercase tracking-wider">
                         Applicant
                       </th>
-                      <th className="px-6 py-4 text-left text-xs font-medium text-orange-700 uppercase tracking-wider">
+                      <th className="px-6 py-4 text-left text-xs font-medium text-green-700 uppercase tracking-wider">
                         Loan Details
                       </th>
-                      <th className="px-6 py-4 text-left text-xs font-medium text-orange-700 uppercase tracking-wider">
+                      <th className="px-6 py-4 text-left text-xs font-medium text-green-700 uppercase tracking-wider">
                         Status
                       </th>
-                      <th className="px-6 py-4 text-left text-xs font-medium text-orange-700 uppercase tracking-wider">
+                      <th className="px-6 py-4 text-left text-xs font-medium text-green-700 uppercase tracking-wider">
                         Actions
                       </th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-orange-200/30">
+                  <tbody className="divide-y divide-green-200/30">
                     {filteredApplications.length === 0 ? (
                       <tr>
                         <td
                           colSpan={6}
-                          className="px-6 py-8 text-center text-orange-600"
+                          className="px-6 py-8 text-center text-green-600"
                         >
                           {error
                             ? "Unable to load applications"
@@ -601,11 +601,11 @@ const LoanManagement = () => {
                       filteredApplications.map((application) => (
                         <tr
                           key={application.id}
-                          className="hover:bg-orange-50/30 transition-colors duration-200"
+                          className="hover:bg-green-50/30 transition-colors duration-200"
                         >
                           <td className="px-6 py-4 whitespace-nowrap">
                             <div className="flex items-center">
-                              <div className="w-10 h-10 bg-gradient-to-br from-orange-400 to-red-500 rounded-xl flex items-center justify-center mr-3">
+                              <div className="w-10 h-10 bg-gradient-to-br from-green-400 to-teal-500 rounded-xl flex items-center justify-center mr-3">
                                 <span className="text-white font-bold text-sm">
                                   {application.id.slice(-2)}
                                 </span>
@@ -690,7 +690,7 @@ const LoanManagement = () => {
                                 </>
                               )}
                               <div className="relative">
-                                <button className="p-2 text-orange-600 hover:text-orange-700 hover:bg-orange-100 rounded-lg transition-colors duration-200">
+                                <button className="p-2 text-green-600 hover:text-green-700 hover:bg-green-100 rounded-lg transition-colors duration-200">
                                   <MoreVertical className="w-4 h-4" />
                                 </button>
                               </div>
@@ -709,18 +709,18 @@ const LoanManagement = () => {
           {!loading && filteredApplications.length > 0 && (
             <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-4 shadow-lg border border-white/50">
               <div className="flex items-center justify-between">
-                <div className="text-sm text-orange-600">
+                <div className="text-sm text-green-600">
                   Showing 1 to {filteredApplications.length} of{" "}
                   {filteredApplications.length} results
                 </div>
                 <div className="flex items-center space-x-2">
-                  <button className="px-3 py-2 text-sm font-medium text-orange-600 bg-orange-100/50 border border-orange-200/50 rounded-lg hover:bg-orange-200/50 transition-colors duration-200">
+                  <button className="px-3 py-2 text-sm font-medium text-green-600 bg-green-100/50 border border-green-200/50 rounded-lg hover:bg-green-200/50 transition-colors duration-200">
                     Previous
                   </button>
-                  <button className="px-3 py-2 text-sm font-medium text-white bg-gradient-to-r from-orange-500 to-red-500 rounded-lg">
+                  <button className="px-3 py-2 text-sm font-medium text-white bg-gradient-to-r from-green-500 to-teal-500 rounded-lg">
                     1
                   </button>
-                  <button className="px-3 py-2 text-sm font-medium text-orange-600 bg-orange-100/50 border border-orange-200/50 rounded-lg hover:bg-orange-200/50 transition-colors duration-200">
+                  <button className="px-3 py-2 text-sm font-medium text-green-600 bg-green-100/50 border border-green-200/50 rounded-lg hover:bg-green-200/50 transition-colors duration-200">
                     Next
                   </button>
                 </div>
@@ -750,18 +750,18 @@ const LoanManagement = () => {
       {showExportModal && (
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
           <div className="bg-white rounded-2xl shadow-xl w-full max-w-md overflow-hidden">
-            <div className="p-6 border-b border-orange-200/50 relative">
-              <h3 className="text-xl font-bold text-orange-800">Export Data</h3>
+            <div className="p-6 border-b border-green-200/50 relative">
+              <h3 className="text-xl font-bold text-green-800">Export Data</h3>
               <button
                 onClick={() => setShowExportModal(false)}
-                className="absolute top-4 right-4 text-orange-500 hover:text-orange-700"
+                className="absolute top-4 right-4 text-green-500 hover:text-green-700"
               >
                 <X className="w-6 h-6" />
               </button>
             </div>
             <div className="p-6 space-y-4">
               <div>
-                <label className="block text-sm font-medium text-orange-700 mb-2">
+                <label className="block text-sm font-medium text-green-700 mb-2">
                   Select Format
                 </label>
                 <div className="grid grid-cols-2 gap-3">
@@ -771,8 +771,8 @@ const LoanManagement = () => {
                       onClick={() => setExportFormat(format)}
                       className={`p-3 rounded-xl border transition-all duration-200 ${
                         exportFormat === format
-                          ? "border-orange-500 bg-orange-100/50 text-orange-700"
-                          : "border-orange-200/50 hover:border-orange-300 text-orange-600"
+                          ? "border-green-500 bg-green-100/50 text-green-700"
+                          : "border-green-200/50 hover:border-green-300 text-green-600"
                       }`}
                     >
                       {format.toUpperCase()}
@@ -781,31 +781,31 @@ const LoanManagement = () => {
                 </div>
               </div>
               <div>
-                <label className="block text-sm font-medium text-orange-700 mb-2">
+                <label className="block text-sm font-medium text-green-700 mb-2">
                   Date Range
                 </label>
                 <div className="grid grid-cols-2 gap-3">
                   <input
                     type="date"
-                    className="p-2 rounded-xl border border-orange-200/50 focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500/50"
+                    className="p-2 rounded-xl border border-green-200/50 focus:outline-none focus:ring-2 focus:ring-green-500/20 focus:border-green-500/50"
                   />
                   <input
                     type="date"
-                    className="p-2 rounded-xl border border-orange-200/50 focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500/50"
+                    className="p-2 rounded-xl border border-green-200/50 focus:outline-none focus:ring-2 focus:ring-green-500/20 focus:border-green-500/50"
                   />
                 </div>
               </div>
             </div>
-            <div className="p-4 bg-orange-50/50 flex justify-end space-x-3">
+            <div className="p-4 bg-green-50/50 flex justify-end space-x-3">
               <button
                 onClick={() => setShowExportModal(false)}
-                className="px-4 py-2 text-orange-600 hover:text-orange-800 font-medium"
+                className="px-4 py-2 text-green-600 hover:text-green-800 font-medium"
               >
                 Cancel
               </button>
               <button
                 onClick={handleExport}
-                className="px-4 py-2 bg-gradient-to-r from-orange-500 to-red-500 text-white rounded-xl font-medium hover:from-orange-600 hover:to-red-600 transition-all duration-200"
+                className="px-4 py-2 bg-gradient-to-r from-green-500 to-teal-500 text-white rounded-xl font-medium hover:from-green-600 hover:to-teal-600 transition-all duration-200"
               >
                 Export Data
               </button>
@@ -818,20 +818,20 @@ const LoanManagement = () => {
       {showNewAppModal && (
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
           <div className="bg-white rounded-2xl shadow-xl w-full max-w-md overflow-hidden">
-            <div className="p-6 border-b border-orange-200/50 relative">
-              <h3 className="text-xl font-bold text-orange-800">
+            <div className="p-6 border-b border-green-200/50 relative">
+              <h3 className="text-xl font-bold text-green-800">
                 New Loan Application
               </h3>
               <button
                 onClick={() => setShowNewAppModal(false)}
-                className="absolute top-4 right-4 text-orange-500 hover:text-orange-700"
+                className="absolute top-4 right-4 text-green-500 hover:text-green-700"
               >
                 <X className="w-6 h-6" />
               </button>
             </div>
             <div className="p-6 space-y-4">
               <div>
-                <label className="block text-sm font-medium text-orange-700 mb-2">
+                <label className="block text-sm font-medium text-green-700 mb-2">
                   Applicant Name
                 </label>
                 <input
@@ -840,12 +840,12 @@ const LoanManagement = () => {
                   onChange={(e) =>
                     setNewAppData({ ...newAppData, applicant: e.target.value })
                   }
-                  className="w-full p-2 rounded-xl border border-orange-200/50 focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500/50"
+                  className="w-full p-2 rounded-xl border border-green-200/50 focus:outline-none focus:ring-2 focus:ring-green-500/20 focus:border-green-500/50"
                   placeholder="Enter applicant name"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-orange-700 mb-2">
+                <label className="block text-sm font-medium text-green-700 mb-2">
                   Loan Type
                 </label>
                 <select
@@ -853,7 +853,7 @@ const LoanManagement = () => {
                   onChange={(e) =>
                     setNewAppData({ ...newAppData, loanType: e.target.value })
                   }
-                  className="w-full p-2 rounded-xl border border-orange-200/50 focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500/50"
+                  className="w-full p-2 rounded-xl border border-green-200/50 focus:outline-none focus:ring-2 focus:ring-green-500/20 focus:border-green-500/50"
                 >
                   <option value="">Select loan type</option>
                   <option value="Personal Loan">Personal Loan</option>
@@ -863,7 +863,7 @@ const LoanManagement = () => {
                 </select>
               </div>
               <div>
-                <label className="block text-sm font-medium text-orange-700 mb-2">
+                <label className="block text-sm font-medium text-green-700 mb-2">
                   Amount (₨)
                 </label>
                 <input
@@ -872,21 +872,21 @@ const LoanManagement = () => {
                   onChange={(e) =>
                     setNewAppData({ ...newAppData, amount: e.target.value })
                   }
-                  className="w-full p-2 rounded-xl border border-orange-200/50 focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500/50"
+                  className="w-full p-2 rounded-xl border border-green-200/50 focus:outline-none focus:ring-2 focus:ring-green-500/20 focus:border-green-500/50"
                   placeholder="Enter loan amount"
                 />
               </div>
             </div>
-            <div className="p-4 bg-orange-50/50 flex justify-end space-x-3">
+            <div className="p-4 bg-green-50/50 flex justify-end space-x-3">
               <button
                 onClick={() => setShowNewAppModal(false)}
-                className="px-4 py-2 text-orange-600 hover:text-orange-800 font-medium"
+                className="px-4 py-2 text-green-600 hover:text-green-800 font-medium"
               >
                 Cancel
               </button>
               <button
                 onClick={handleCreateNewApp}
-                className="px-4 py-2 bg-gradient-to-r from-orange-500 to-red-500 text-white rounded-xl font-medium hover:from-orange-600 hover:to-red-600 transition-all duration-200"
+                className="px-4 py-2 bg-gradient-to-r from-green-500 to-teal-500 text-white rounded-xl font-medium hover:from-green-600 hover:to-teal-600 transition-all duration-200"
               >
                 Create Application
               </button>

@@ -78,29 +78,34 @@ const NotificationBell: React.FC<NotificationBellProps> = ({ userId }) => {
 
   return (
     <div className="relative" ref={dropdownRef}>
-      <button onClick={() => setOpen(!open)} className="relative p-2">
-        <Bell className="w-6 h-6" />
+      <button 
+        onClick={() => setOpen(!open)} 
+        className="relative p-2 rounded-full hover:bg-green-50 transition-colors"
+      >
+        <Bell className="w-6 h-6 text-green-600" />
         {notifications.some((n) => !n.read) && (
-          <span className="absolute top-0 right-0 w-2 h-2 bg-red-500 rounded-full"></span>
+          <span className="absolute top-0 right-0 w-2 h-2 bg-green-500 rounded-full"></span>
         )}
       </button>
 
       {open && (
-        <div className="absolute right-0 mt-2 w-80 bg-white shadow-lg rounded-lg z-50 max-h-96 overflow-auto">
-          <div className="p-4 font-bold border-b">Notifications</div>
+        <div className="absolute right-0 mt-2 w-80 bg-white shadow-lg rounded-lg z-50 max-h-96 overflow-auto border border-green-100">
+          <div className="p-4 font-bold border-b border-green-200 bg-green-50 text-green-800 rounded-t-lg">
+            Notifications
+          </div>
           {notifications.length === 0 ? (
-            <div className="p-4 text-sm text-gray-500">No delivered notifications</div>
+            <div className="p-4 text-sm text-green-600 bg-green-25">No delivered notifications</div>
           ) : (
             notifications.map((notif) => (
               <div
                 key={notif.id}
-                className={`p-4 border-b ${
-                  notif.read ? 'bg-white' : 'bg-gray-100'
+                className={`p-4 border-b border-green-100 ${
+                  notif.read ? 'bg-white' : 'bg-green-50'
                 } transition-colors`}
               >
-                <div className="font-semibold">{notif.title}</div>
-                <div className="text-sm text-gray-600">{notif.description}</div>
-                <div className="text-xs text-gray-400">
+                <div className="font-semibold text-green-900">{notif.title}</div>
+                <div className="text-sm text-green-700">{notif.description}</div>
+                <div className="text-xs text-green-500 mt-1">
                   {new Date(
                     notif.timestamp instanceof Timestamp
                       ? notif.timestamp.toDate()

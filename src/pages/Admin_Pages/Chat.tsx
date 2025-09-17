@@ -350,7 +350,7 @@ const ChatInterface = () => {
           const draw = () => {
             animationRef.current = requestAnimationFrame(draw);
             if (analyserRef.current && dataArrayRef.current && ctx) {
-              analyserRef.current.getByteFrequencyData(dataArrayRef.current);
+              
               ctx.clearRect(0, 0, canvas.width, canvas.height);
               
               const barWidth = 3;
@@ -359,7 +359,7 @@ const ChatInterface = () => {
               
               for (let i = 0; i < analyserRef.current.frequencyBinCount; i++) {
                 const barHeight = dataArrayRef.current[i] / 2;
-                ctx.fillStyle = '#ef4444';
+                ctx.fillStyle = '#10b981';
                 ctx.fillRect(x, canvas.height - barHeight, barWidth, barHeight);
                 x += barWidth + gap;
               }
@@ -470,28 +470,28 @@ const ChatInterface = () => {
   }, []);
 
   return (
-    <div className="flex h-screen bg-gradient-to-br from-orange-50 via-red-50 to-yellow-50">
+    <div className="flex h-screen bg-gradient-to-br from-green-50 via-emerald-50 to-lime-50">
       {/* Sidebar Component - Always visible */}
       <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
 
       {/* Main Content */}
       <div className="flex-1 flex flex-col overflow-hidden lg:ml-0">
         {/* Header - Simplified version */}
-        <header className="bg-white/80 backdrop-blur-xl shadow-sm border-b border-orange-200/50 px-6 py-4 relative">
-          <div className="absolute inset-0 bg-gradient-to-r from-orange-500/5 to-red-500/5"></div>
+        <header className="bg-white/80 backdrop-blur-xl shadow-sm border-b border-green-200/50 px-6 py-4 relative">
+          <div className="absolute inset-0 bg-gradient-to-r from-green-500/5 to-emerald-500/5"></div>
           <div className="relative flex items-center justify-between">
             <div className="flex items-center">
               <button
                 onClick={() => setSidebarOpen(true)}
-                className="lg:hidden mr-4 p-2 rounded-xl bg-orange-100/50 hover:bg-orange-200/50 transition-all duration-200"
+                className="lg:hidden mr-4 p-2 rounded-xl bg-green-100/50 hover:bg-green-200/50 transition-all duration-200"
               >
-                <Menu className="w-5 h-5 text-orange-600" />
+                <Menu className="w-5 h-5 text-green-600" />
               </button>
               <div className="flex items-center">
-                <div className="w-8 h-8 bg-gradient-to-br from-orange-400 to-red-500 rounded-xl flex items-center justify-center text-white font-semibold shadow-lg shadow-orange-500/25">
+                <div className="w-8 h-8 bg-gradient-to-br from-green-400 to-emerald-500 rounded-xl flex items-center justify-center text-white font-semibold shadow-lg shadow-green-500/25">
                   {getInitials(currentUser.name)}
                 </div>
-                <span className="ml-2 font-medium text-orange-800">{currentUser.name}</span>
+                <span className="ml-2 font-medium text-green-800">{currentUser.name}</span>
               </div>
             </div>
           </div>
@@ -500,17 +500,17 @@ const ChatInterface = () => {
         {/* Chat Content */}
         <div className="flex-1 flex overflow-hidden">
           {/* Contacts Sidebar */}
-          <div className="w-80 bg-white/70 backdrop-blur-sm border-r border-orange-200/50 flex flex-col">
+          <div className="w-80 bg-white/70 backdrop-blur-sm border-r border-green-200/50 flex flex-col">
             {/* Search Bar */}
-            <div className="p-4 border-b border-orange-200/50">
+            <div className="p-4 border-b border-green-200/50">
               <div className="relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-orange-400 w-4 h-4" />
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-green-400 w-4 h-4" />
                 <input
                   type="text"
                   placeholder="Search conversations..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2 bg-orange-100/50 border border-orange-200/50 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500/50 transition-all duration-200"
+                  className="w-full pl-10 pr-4 py-2 bg-green-100/50 border border-green-200/50 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-green-500/20 focus:border-green-500/50 transition-all duration-200"
                 />
               </div>
             </div>
@@ -521,13 +521,13 @@ const ChatInterface = () => {
                 <div
                   key={contact.id}
                   onClick={() => setSelectedContact(contact.id)}
-                  className={`p-4 border-b border-orange-200/30 cursor-pointer hover:bg-orange-50/50 transition-colors ${
-                    selectedContact === contact.id ? 'bg-orange-50/70 border-r-4 border-r-orange-500' : ''
+                  className={`p-4 border-b border-green-200/30 cursor-pointer hover:bg-green-50/50 transition-colors ${
+                    selectedContact === contact.id ? 'bg-green-50/70 border-r-4 border-r-green-500' : ''
                   }`}
                 >
                   <div className="flex items-center gap-3">
                     <div className="relative">
-                      <div className="w-12 h-12 bg-gradient-to-br from-orange-400 to-red-500 rounded-xl flex items-center justify-center text-white font-semibold shadow-lg shadow-orange-500/25">
+                      <div className="w-12 h-12 bg-gradient-to-br from-green-400 to-emerald-500 rounded-xl flex items-center justify-center text-white font-semibold shadow-lg shadow-green-500/25">
                         {contact.avatar || getInitials(contact.name)}
                       </div>
                       {contact.isOnline && (
@@ -536,22 +536,22 @@ const ChatInterface = () => {
                     </div>
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center justify-between">
-                        <h3 className="font-medium text-orange-800 truncate">{contact.name}</h3>
-                        <span className="text-xs text-orange-500 flex-shrink-0">
+                        <h3 className="font-medium text-green-800 truncate">{contact.name}</h3>
+                        <span className="text-xs text-green-500 flex-shrink-0">
                           {contact.lastMessageTime?.toDate ? 
                             contact.lastMessageTime.toDate().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : 
                             ''}
                         </span>
                       </div>
-                      <p className="text-sm text-orange-600 truncate mt-1">{contact.lastMessage || contact.email}</p>
+                      <p className="text-sm text-green-600 truncate mt-1">{contact.lastMessage || contact.email}</p>
                       <div className="flex items-center gap-2 mt-1">
                         {contact.role && (
-                          <span className="text-xs bg-orange-100/50 text-orange-600 px-2 py-0.5 rounded">
+                          <span className="text-xs bg-green-100/50 text-green-600 px-2 py-0.5 rounded">
                             {contact.role}
                           </span>
                         )}
                         {contact.status && (
-                          <span className="text-xs bg-orange-100/50 text-orange-600 px-2 py-0.5 rounded">
+                          <span className="text-xs bg-green-100/50 text-green-600 px-2 py-0.5 rounded">
                             {contact.status}
                           </span>
                         )}
@@ -567,9 +567,9 @@ const ChatInterface = () => {
           <div className="flex-1 flex flex-col">
             {/* Chat Header */}
             {currentContact && (
-              <div className="bg-gradient-to-r from-orange-500 to-red-500 text-white p-4 border-b border-orange-600">
+              <div className="bg-gradient-to-r from-green-500 to-emerald-500 text-white p-4 border-b border-green-600">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 bg-white text-orange-500 rounded-xl flex items-center justify-center font-semibold shadow-lg">
+                  <div className="w-10 h-10 bg-white text-green-500 rounded-xl flex items-center justify-center font-semibold shadow-lg">
                     {currentContact.avatar || getInitials(currentContact.name)}
                   </div>
                   <div className="flex-1">
@@ -612,7 +612,7 @@ const ChatInterface = () => {
             )}
 
             {/* Messages Area */}
-            <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-orange-50/50">
+            <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-green-50/50">
               {(chatSearchQuery ? filteredMessages : messages).map((msg) => (
                 <div
                   key={msg.id}
@@ -620,7 +620,7 @@ const ChatInterface = () => {
                 >
                   <div className="flex items-end gap-2 max-w-[70%]">
                     {msg.senderId !== currentUser.id && (
-                      <div className="w-8 h-8 bg-gradient-to-br from-orange-400 to-red-500 rounded-xl flex items-center justify-center text-white text-xs font-semibold flex-shrink-0 shadow-lg shadow-orange-500/25">
+                      <div className="w-8 h-8 bg-gradient-to-br from-green-400 to-emerald-500 rounded-xl flex items-center justify-center text-white text-xs font-semibold flex-shrink-0 shadow-lg shadow-green-500/25">
                         {currentContact?.avatar || getInitials(msg.senderName)}
                       </div>
                     )}
@@ -628,8 +628,8 @@ const ChatInterface = () => {
                       <div
                         className={`px-4 py-3 rounded-2xl ${
                           msg.senderId === currentUser.id
-                            ? 'bg-gradient-to-r from-orange-500 to-red-500 text-white rounded-br-sm shadow-lg shadow-orange-500/25'
-                            : 'bg-white text-orange-800 rounded-bl-sm shadow-sm'
+                            ? 'bg-gradient-to-r from-green-500 to-emerald-500 text-white rounded-br-sm shadow-lg shadow-green-500/25'
+                            : 'bg-white text-green-800 rounded-bl-sm shadow-sm'
                         } ${msg.isTyping ? 'animate-pulse' : ''}`}
                       >
                         {msg.isTyping ? (
@@ -684,7 +684,7 @@ const ChatInterface = () => {
                           </>
                         )}
                       </div>
-                      <p className={`text-xs px-2 ${msg.senderId === currentUser.id ? 'text-right text-orange-500' : 'text-orange-500'}`}>
+                      <p className={`text-xs px-2 ${msg.senderId === currentUser.id ? 'text-right text-green-500' : 'text-green-500'}`}>
                         {msg.timestamp?.toDate ? 
                           msg.timestamp.toDate().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : 
                           ''}
@@ -697,14 +697,14 @@ const ChatInterface = () => {
               {isTyping && (
                 <div className="flex justify-start">
                   <div className="flex items-end gap-2 max-w-[70%]">
-                    <div className="w-8 h-8 bg-gradient-to-br from-orange-400 to-red-500 rounded-xl flex items-center justify-center text-white text-xs font-semibold shadow-lg shadow-orange-500/25">
+                    <div className="w-8 h-8 bg-gradient-to-br from-green-400 to-emerald-500 rounded-xl flex items-center justify-center text-white text-xs font-semibold shadow-lg shadow-green-500/25">
                       {currentContact?.avatar || getInitials(currentContact?.name || 'C')}
                     </div>
-                    <div className="bg-white text-orange-800 px-4 py-3 rounded-2xl rounded-bl-sm shadow-sm animate-pulse">
+                    <div className="bg-white text-green-800 px-4 py-3 rounded-2xl rounded-bl-sm shadow-sm animate-pulse">
                       <div className="flex items-center gap-1">
-                        <div className="w-2 h-2 bg-orange-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
-                        <div className="w-2 h-2 bg-orange-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
-                        <div className="w-2 h-2 bg-orange-400 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
+                        <div className="w-2 h-2 bg-green-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
+                        <div className="w-2 h-2 bg-green-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
+                        <div className="w-2 h-2 bg-green-400 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
                       </div>
                     </div>
                   </div>
@@ -713,40 +713,40 @@ const ChatInterface = () => {
             </div>
 
             {(selectedFiles.length > 0 || audioBlob) && (
-              <div className="p-4 border-t border-orange-200/50 bg-white/70 backdrop-blur-sm">
+              <div className="p-4 border-t border-green-200/50 bg-white/70 backdrop-blur-sm">
                 <div className="flex flex-wrap gap-2">
                   {selectedFiles.map((file, index) => (
-                    <div key={index} className="flex items-center gap-2 bg-orange-100/50 p-2 rounded-lg border border-orange-200/50">
+                    <div key={index} className="flex items-center gap-2 bg-green-100/50 p-2 rounded-lg border border-green-200/50">
                       {file.type.startsWith('image/') ? (
                         <img src={URL.createObjectURL(file)} alt={file.name} className="w-8 h-8 rounded object-cover" />
                       ) : (
-                        <div className="w-8 h-8 bg-orange-200/50 rounded flex items-center justify-center">
-                          <FileText className="w-4 h-4 text-orange-600" />
+                        <div className="w-8 h-8 bg-green-200/50 rounded flex items-center justify-center">
+                          <FileText className="w-4 h-4 text-green-600" />
                         </div>
                       )}
                       <div className="flex-1 min-w-0">
-                        <p className="text-xs font-medium text-orange-800 truncate">{file.name}</p>
-                        <p className="text-xs text-orange-500">{Math.round(file.size / 1024)} KB</p>
+                        <p className="text-xs font-medium text-green-800 truncate">{file.name}</p>
+                        <p className="text-xs text-green-500">{Math.round(file.size / 1024)} KB</p>
                       </div>
                       <button
-                        className="p-1 hover:bg-orange-200/50 rounded"
+                        className="p-1 hover:bg-green-200/50 rounded"
                         onClick={() => removeFile(index)}
                       >
-                        <X className="w-3 h-3 text-orange-600" />
+                        <X className="w-3 h-3 text-green-600" />
                       </button>
                     </div>
                       ))}
                     
                   {audioBlob && (
-                    <div className="flex items-center gap-2 bg-orange-100/50 p-2 rounded-lg border border-orange-200/50 w-full">
+                    <div className="flex items-center gap-2 bg-green-100/50 p-2 rounded-lg border border-green-200/50 w-full">
                       <button
-                        className={`p-2 rounded-full ${isPlaying ? 'bg-orange-200/70' : 'hover:bg-orange-200/50'}`}
+                        className={`p-2 rounded-full ${isPlaying ? 'bg-green-200/70' : 'hover:bg-green-200/50'}`}
                         onClick={() => isPlaying ? stopAudio() : playAudio(URL.createObjectURL(audioBlob), 'current-recording')}
                       >
                         {isPlaying ? (
-                          <Pause className="w-4 h-4 text-orange-600" />
+                          <Pause className="w-4 h-4 text-green-600" />
                         ) : (
-                          <Play className="w-4 h-4 text-orange-600" />
+                          <Play className="w-4 h-4 text-green-600" />
                         )}
                       </button>
                       <div className="flex-1 flex items-center gap-2">
@@ -756,15 +756,15 @@ const ChatInterface = () => {
                           height="30" 
                           className="w-[120px] h-[30px]"
                         ></canvas>
-                        <span className="text-xs text-orange-600">
+                        <span className="text-xs text-green-600">
                           {isPlaying ? formatTime(currentTime) : formatTime(audioDuration)}
                         </span>
                       </div>
                       <button
-                        className="p-2 hover:bg-orange-200/50 rounded"
+                        className="p-2 hover:bg-green-200/50 rounded"
                         onClick={clearAudioRecording}
                       >
-                        <X className="w-4 h-4 text-orange-600" />
+                        <X className="w-4 h-4 text-green-600" />
                       </button>
                     </div>
                   )}
@@ -774,45 +774,45 @@ const ChatInterface = () => {
 
             {/* File Picker Popup */}
             {showFilePicker && (
-              <div className="absolute bottom-16 left-4 bg-white rounded-xl shadow-xl border border-orange-200/50 overflow-hidden z-10 w-64">
+              <div className="absolute bottom-16 left-4 bg-white rounded-xl shadow-xl border border-green-200/50 overflow-hidden z-10 w-64">
                 <div className="p-2">
-                  <div className="px-3 py-2 text-sm font-medium text-orange-800 border-b border-orange-200/50">
+                  <div className="px-3 py-2 text-sm font-medium text-green-800 border-b border-green-200/50">
                     Send files
                   </div>
                   <div className="grid grid-cols-2 gap-2 p-2">
                     <button 
                       onClick={() => handleFileUpload('image')}
-                      className="flex flex-col items-center p-3 hover:bg-orange-50/50 rounded-lg transition-colors"
+                      className="flex flex-col items-center p-3 hover:bg-green-50/50 rounded-lg transition-colors"
                     >
-                      <div className="w-12 h-12 bg-orange-100 rounded-xl flex items-center justify-center mb-2">
-                        <Image className="w-6 h-6 text-orange-500" />
+                      <div className="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center mb-2">
+                        <Image className="w-6 h-6 text-green-500" />
                       </div>
-                      <span className="text-xs text-orange-800">Photos</span>
+                      <span className="text-xs text-green-800">Photos</span>
                     </button>
                     <button 
                       onClick={() => handleFileUpload('document')}
-                      className="flex flex-col items-center p-3 hover:bg-orange-50/50 rounded-lg transition-colors"
+                      className="flex flex-col items-center p-3 hover:bg-green-50/50 rounded-lg transition-colors"
                     >
-                      <div className="w-12 h-12 bg-orange-100 rounded-xl flex items-center justify-center mb-2">
-                        <FileText className="w-6 h-6 text-orange-500" />
+                      <div className="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center mb-2">
+                        <FileText className="w-6 h-6 text-green-500" />
                       </div>
-                      <span className="text-xs text-orange-800">Documents</span>
+                      <span className="text-xs text-green-800">Documents</span>
                     </button>
                     <button 
-                      className="flex flex-col items-center p-3 hover:bg-orange-50/50 rounded-lg transition-colors"
+                      className="flex flex-col items-center p-3 hover:bg-green-50/50 rounded-lg transition-colors"
                     >
-                      <div className="w-12 h-12 bg-orange-100 rounded-xl flex items-center justify-center mb-2">
-                        <User className="w-6 h-6 text-orange-500" />
+                      <div className="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center mb-2">
+                        <User className="w-6 h-6 text-green-500" />
                       </div>
-                      <span className="text-xs text-orange-800">Contact</span>
+                      <span className="text-xs text-green-800">Contact</span>
                     </button>
                     <button 
-                      className="flex flex-col items-center p-3 hover:bg-orange-50/50 rounded-lg transition-colors"
+                      className="flex flex-col items-center p-3 hover:bg-green-50/50 rounded-lg transition-colors"
                     >
-                      <div className="w-12 h-12 bg-orange-100 rounded-xl flex items-center justify-center mb-2">
-                        <FileAudio className="w-6 h-6 text-orange-500" />
+                      <div className="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center mb-2">
+                        <FileAudio className="w-6 h-6 text-green-500" />
                       </div>
-                      <span className="text-xs text-orange-800">Audio</span>
+                      <span className="text-xs text-green-800">Audio</span>
                     </button>
                   </div>
                 </div>
@@ -820,7 +820,7 @@ const ChatInterface = () => {
             )}
 
             {/* Message Input */}
-            <div className="p-4 border-t border-orange-200/50 bg-white/70 backdrop-blur-sm relative">
+            <div className="p-4 border-t border-green-200/50 bg-white/70 backdrop-blur-sm relative">
               <input
                 type="file"
                 ref={fileInputRef}
@@ -851,22 +851,22 @@ const ChatInterface = () => {
               
               <div className="flex items-center gap-3">
                 <button 
-                  className="p-2 text-orange-600 hover:bg-orange-100/50 rounded-lg transition-colors relative"
+                  className="p-2 text-green-600 hover:bg-green-100/50 rounded-lg transition-colors relative"
                   onClick={() => setShowFilePicker(!showFilePicker)}
                 >
                   <Paperclip className="w-5 h-5" />
                 </button>
                 
                 {isRecording ? (
-                  <div className="flex-1 flex items-center gap-3 bg-orange-100/50 px-4 py-3 rounded-xl">
+                  <div className="flex-1 flex items-center gap-3 bg-green-100/50 px-4 py-3 rounded-xl">
                     <div className="flex-1 flex items-center gap-2">
-                      <div className="w-full h-2 bg-orange-200 rounded-full overflow-hidden">
+                      <div className="w-full h-2 bg-green-200 rounded-full overflow-hidden">
                         <div 
-                          className="h-full bg-gradient-to-r from-orange-500 to-red-500 rounded-full" 
+                          className="h-full bg-gradient-to-r from-green-500 to-emerald-500 rounded-full" 
                           style={{ width: `${Math.min(recordingTime * 2, 100)}%` }}
                         ></div>
                       </div>
-                      <span className="text-xs text-orange-600">{formatTime(recordingTime)}</span>
+                      <span className="text-xs text-green-600">{formatTime(recordingTime)}</span>
                     </div>
                     <button 
                       onClick={stopRecording}
@@ -883,11 +883,11 @@ const ChatInterface = () => {
                       onChange={(e) => setMessage(e.target.value)}
                       onKeyPress={handleKeyPress}
                       placeholder="Type something..."
-                      className="w-full px-4 py-3 pr-20 bg-orange-100/50 border border-orange-200/50 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500/50 text-orange-800 placeholder:text-orange-500/70 transition-all duration-200"
+                      className="w-full px-4 py-3 pr-20 bg-green-100/50 border border-green-200/50 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-500/20 focus:border-green-500/50 text-green-800 placeholder:text-green-500/70 transition-all duration-200"
                     />
                     <div className="absolute right-3 top-1/2 transform -translate-y-1/2 flex items-center gap-2">
                       <button 
-                        className="p-1 text-orange-600 hover:bg-orange-100/50 rounded"
+                        className="p-1 text-green-600 hover:bg-green-100/50 rounded"
                         onClick={() => setShowEmojiPicker(!showEmojiPicker)}
                       >
                         <Smile className="w-4 h-4" />
@@ -899,7 +899,7 @@ const ChatInterface = () => {
                 {isRecording ? (
                   <button 
                     onClick={handleSendMessage} 
-                    className="p-3 bg-gradient-to-r from-orange-500 to-red-500 text-white rounded-xl hover:from-orange-600 hover:to-red-600 transition-all duration-200 shadow-lg shadow-orange-500/25"
+                    className="p-3 bg-gradient-to-r from-green-500 to-emerald-500 text-white rounded-xl hover:from-green-600 hover:to-emerald-600 transition-all duration-200 shadow-lg shadow-green-500/25"
                   >
                     <Send className="w-4 h-4" />
                   </button>
@@ -908,8 +908,8 @@ const ChatInterface = () => {
                     onClick={message.trim() ? handleSendMessage : toggleRecording} 
                     className={`p-3 rounded-xl transition-all duration-200 shadow-lg ${
                       message.trim() 
-                        ? 'bg-gradient-to-r from-orange-500 to-red-500 text-white hover:from-orange-600 hover:to-red-600'
-                        : 'bg-orange-100/50 text-orange-600 hover:bg-orange-200/50'
+                        ? 'bg-gradient-to-r from-green-500 to-emerald-500 text-white hover:from-green-600 hover:to-emerald-600'
+                        : 'bg-green-100/50 text-green-600 hover:bg-green-200/50'
                     }`}
                   >
                     {message.trim() ? (

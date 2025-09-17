@@ -217,7 +217,7 @@ const CollateralManagement: React.FC = () => {
 
     return (
       <div className="grid grid-cols-1 md:grid-cols-5 gap-4 mb-6">
-        <div className="bg-white/90 backdrop-blur-sm p-4 rounded-xl shadow-md border border-orange-100 hover:shadow-lg transition-all duration-300">
+        <div className="bg-white/90 backdrop-blur-sm p-4 rounded-xl shadow-md border border-green-100 hover:shadow-lg transition-all duration-300">
           <div className="flex items-center">
             <div className="p-3 rounded-full bg-gradient-to-br from-blue-500 to-blue-600 shadow-lg">
               <Package className="h-6 w-6 text-white" />
@@ -231,7 +231,7 @@ const CollateralManagement: React.FC = () => {
           </div>
         </div>
 
-        <div className="bg-white/90 backdrop-blur-sm p-4 rounded-xl shadow-md border border-orange-100 hover:shadow-lg transition-all duration-300">
+        <div className="bg-white/90 backdrop-blur-sm p-4 rounded-xl shadow-md border border-green-100 hover:shadow-lg transition-all duration-300">
           <div className="flex items-center">
             <div className="p-3 rounded-full bg-gradient-to-br from-green-500 to-green-600 shadow-lg">
               <CheckCircle className="h-6 w-6 text-white" />
@@ -245,7 +245,7 @@ const CollateralManagement: React.FC = () => {
           </div>
         </div>
 
-        <div className="bg-white/90 backdrop-blur-sm p-4 rounded-xl shadow-md border border-orange-100 hover:shadow-lg transition-all duration-300">
+        <div className="bg-white/90 backdrop-blur-sm p-4 rounded-xl shadow-md border border-green-100 hover:shadow-lg transition-all duration-300">
           <div className="flex items-center">
             <div className="p-3 rounded-full bg-gradient-to-br from-red-500 to-red-600 shadow-lg">
               <AlertCircle className="h-6 w-6 text-white" />
@@ -257,30 +257,30 @@ const CollateralManagement: React.FC = () => {
           </div>
         </div>
 
-        <div className="bg-white/90 backdrop-blur-sm p-4 rounded-xl shadow-md border border-orange-100 hover:shadow-lg transition-all duration-300">
+        <div className="bg-white/90 backdrop-blur-sm p-4 rounded-xl shadow-md border border-green-100 hover:shadow-lg transition-all duration-300">
           <div className="flex items-center">
-            <div className="p-3 rounded-full bg-gradient-to-br from-orange-500 to-orange-600 shadow-lg">
+            <div className="p-3 rounded-full bg-gradient-to-br from-green-500 to-green-600 shadow-lg">
               <span className="text-white font-bold text-lg">Rs</span>
             </div>
             <div className="ml-4">
               <p className="text-sm font-medium text-gray-600">
                 Total Disbursed
               </p>
-              <p className="text-2xl font-bold text-orange-600">
+              <p className="text-2xl font-bold text-green-600">
                 Rs{(stats.totalValue / 1000).toFixed(1)}M
               </p>
             </div>
           </div>
         </div>
 
-        <div className="bg-white/90 backdrop-blur-sm p-4 rounded-xl shadow-md border border-orange-100 hover:shadow-lg transition-all duration-300">
+        <div className="bg-white/90 backdrop-blur-sm p-4 rounded-xl shadow-md border border-green-100 hover:shadow-lg transition-all duration-300">
           <div className="flex items-center">
-            <div className="p-3 rounded-full bg-gradient-to-br from-yellow-500 to-yellow-600 shadow-lg">
+            <div className="p-3 rounded-full bg-gradient-to-br from-black to-gray-800 shadow-lg">
               <span className="text-white font-bold text-lg">Rs</span>
             </div>
             <div className="ml-4">
               <p className="text-sm font-medium text-gray-600">Outstanding</p>
-              <p className="text-2xl font-bold text-yellow-600">
+              <p className="text-2xl font-bold text-black">
                 Rs{((stats.totalValue * 0.8) / 1000).toFixed(1)}M
               </p>
             </div>
@@ -314,25 +314,25 @@ const CollateralManagement: React.FC = () => {
   };
 
   return (
-    <div className="flex h-screen bg-gradient-to-br from-orange-50 via-red-50 to-yellow-50">
+    <div className="flex h-screen bg-gradient-to-br from-green-50 via-gray-50 to-white">
       {/* Sidebar Component */}
       <Sidebar />
 
       {/* Main Content */}
       <div className="flex-1 flex flex-col overflow-hidden">
         {/* Header */}
-        <div className="bg-white/80 backdrop-blur-xl shadow-sm border-b border-orange-200/50 px-6 py-4 relative">
-          <div className="absolute inset-0 bg-gradient-to-r from-orange-500/5 to-red-500/5" />
+        <div className="bg-white/80 backdrop-blur-xl shadow-sm border-b border-green-200/50 px-6 py-4 relative">
+          <div className="absolute inset-0 bg-gradient-to-r from-green-500/5 to-gray-500/5" />
           <div className="relative flex items-center justify-between">
             <div className="flex items-center space-x-4">
-              <div className="w-10 h-10 bg-gradient-to-br from-orange-500 to-red-500 rounded-xl flex items-center justify-center shadow-lg">
+              <div className="w-10 h-10 bg-gradient-to-br from-green-500 to-gray-600 rounded-xl flex items-center justify-center shadow-lg">
                 <Package className="h-6 w-6 text-white" />
               </div>
               <div>
-                <h1 className="text-2xl font-bold text-orange-700">
+                <h1 className="text-2xl font-bold text-green-700">
                   Collateral Management
                 </h1>
-                <p className="text-sm text-orange-600">
+                <p className="text-sm text-green-600">
                   Track and manage loan collaterals
                 </p>
               </div>
@@ -344,7 +344,7 @@ const CollateralManagement: React.FC = () => {
                   setStatusFilter("all");
                   setCollateralFilter("all");
                 }}
-                className="bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 flex items-center shadow-lg hover:shadow-xl transform hover:scale-105"
+                className="bg-gradient-to-r from-green-500 to-gray-600 hover:from-green-600 hover:to-gray-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 flex items-center shadow-lg hover:shadow-xl transform hover:scale-105"
               >
                 <Filter className="h-4 w-4 mr-2" />
                 Refresh
@@ -360,15 +360,15 @@ const CollateralManagement: React.FC = () => {
 
           {/* Filter Tabs */}
           <div className="mb-6">
-            <div className="flex space-x-1 bg-white/90 backdrop-blur-sm p-1 rounded-xl shadow-md border border-orange-100">
+            <div className="flex space-x-1 bg-white/90 backdrop-blur-sm p-1 rounded-xl shadow-md border border-green-100">
               {["all", "deposited", "returned", "seized"].map((status) => (
                 <button
                   key={status}
                   onClick={() => setCollateralFilter(status)}
                   className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
                     collateralFilter === status
-                      ? "bg-gradient-to-r from-orange-500 to-red-500 text-white shadow-lg transform scale-105"
-                      : "text-gray-600 hover:text-orange-600 hover:bg-orange-50"
+                      ? "bg-gradient-to-r from-green-500 to-gray-600 text-white shadow-lg transform scale-105"
+                      : "text-gray-600 hover:text-green-600 hover:bg-green-50"
                   }`}
                 >
                   {status === "all"
@@ -380,14 +380,14 @@ const CollateralManagement: React.FC = () => {
           </div>
 
           {/* Search and Filters */}
-          <div className="bg-white/90 backdrop-blur-sm p-4 rounded-xl shadow-md border border-orange-100 mb-6">
+          <div className="bg-white/90 backdrop-blur-sm p-4 rounded-xl shadow-md border border-green-100 mb-6">
             <div className="flex flex-col md:flex-row gap-4">
               <div className="flex-1 relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-orange-400 h-4 w-4" />
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-green-400 h-4 w-4" />
                 <input
                   type="text"
                   placeholder="Search collaterals..."
-                  className="w-full pl-10 pr-4 py-2 border border-orange-200 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent bg-white/70 backdrop-blur-sm"
+                  className="w-full pl-10 pr-4 py-2 border border-green-200 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent bg-white/70 backdrop-blur-sm"
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                 />
@@ -396,54 +396,54 @@ const CollateralManagement: React.FC = () => {
           </div>
 
           {/* Collaterals Table */}
-          <div className="bg-white/90 backdrop-blur-sm rounded-xl shadow-md border border-orange-100 overflow-hidden">
-            <div className="px-6 py-4 border-b border-orange-200 bg-gradient-to-r from-orange-50 to-red-50">
-              <h2 className="text-lg font-semibold text-orange-700">
+          <div className="bg-white/90 backdrop-blur-sm rounded-xl shadow-md border border-green-100 overflow-hidden">
+            <div className="px-6 py-4 border-b border-green-200 bg-gradient-to-r from-green-50 to-gray-50">
+              <h2 className="text-lg font-semibold text-green-700">
                 Collateral Tracking
               </h2>
-              <p className="text-sm text-orange-600">
+              <p className="text-sm text-green-600">
                 {filteredCollaterals.length} collaterals found
               </p>
             </div>
 
             <div className="overflow-x-auto">
               <table className="w-full">
-                <thead className="bg-gradient-to-r from-orange-100 to-red-100">
+                <thead className="bg-gradient-to-r from-green-100 to-gray-100">
                   <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-orange-700 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-left text-xs font-medium text-green-700 uppercase tracking-wider">
                       Collateral ID
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-orange-700 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-left text-xs font-medium text-green-700 uppercase tracking-wider">
                       Client
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-orange-700 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-left text-xs font-medium text-green-700 uppercase tracking-wider">
                       Type
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-orange-700 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-left text-xs font-medium text-green-700 uppercase tracking-wider">
                       Amount
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-orange-700 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-left text-xs font-medium text-green-700 uppercase tracking-wider">
                       Outstanding
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-orange-700 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-left text-xs font-medium text-green-700 uppercase tracking-wider">
                       Status
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-orange-700 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-left text-xs font-medium text-green-700 uppercase tracking-wider">
                       Next Payment
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-orange-700 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-left text-xs font-medium text-green-700 uppercase tracking-wider">
                       Risk
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-orange-700 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-left text-xs font-medium text-green-700 uppercase tracking-wider">
                       Actions
                     </th>
                   </tr>
                 </thead>
-                <tbody className="bg-white/70 backdrop-blur-sm divide-y divide-orange-100">
+                <tbody className="bg-white/70 backdrop-blur-sm divide-y divide-green-100">
                   {filteredCollaterals.map((collateral) => (
                     <tr
                       key={collateral.id}
-                      className="hover:bg-orange-50/50 transition-colors duration-200"
+                      className="hover:bg-green-50/50 transition-colors duration-200"
                     >
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="text-sm font-medium text-gray-900">
@@ -457,7 +457,7 @@ const CollateralManagement: React.FC = () => {
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div>
-                          <div className="text-sm text-orange-600 font-medium">
+                          <div className="text-sm text-green-600 font-medium">
                             {collateral.itemType}
                           </div>
                           <div className="text-sm text-gray-500">
@@ -507,7 +507,7 @@ const CollateralManagement: React.FC = () => {
                               setSelectedCollateral(collateral);
                               setShowDetails(true);
                             }}
-                            className="text-orange-500 hover:text-orange-700 p-1 rounded-full hover:bg-orange-50 transition-all duration-200"
+                            className="text-green-500 hover:text-green-700 p-1 rounded-full hover:bg-green-50 transition-all duration-200"
                             title="View Details"
                           >
                             <Eye className="w-4 h-4" />
@@ -552,7 +552,7 @@ const CollateralManagement: React.FC = () => {
         {/* Details Modal */}
         {showDetails && selectedCollateral && (
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
-            <div className="bg-white/95 backdrop-blur-sm rounded-2xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto p-8 relative mx-4 border border-orange-200">
+            <div className="bg-white/95 backdrop-blur-sm rounded-2xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto p-8 relative mx-4 border border-green-200">
               <button
                 onClick={() => setShowDetails(false)}
                 className="absolute top-6 right-6 text-gray-400 hover:text-gray-700 p-2 rounded-full hover:bg-gray-100 transition-all duration-200"
@@ -562,18 +562,18 @@ const CollateralManagement: React.FC = () => {
               </button>
 
               <div className="mb-6">
-                <h3 className="text-2xl font-bold text-orange-700 mb-2">
+                <h3 className="text-2xl font-bold text-green-700 mb-2">
                   Collateral Details
                 </h3>
-                <div className="text-orange-600 font-medium">
+                <div className="text-green-600 font-medium">
                   {selectedCollateral.id}
                 </div>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-4">
-                  <div className="bg-gradient-to-r from-orange-50 to-red-50 p-4 rounded-lg border border-orange-200">
-                    <h4 className="font-semibold text-orange-700 mb-2">
+                  <div className="bg-gradient-to-r from-green-50 to-gray-50 p-4 rounded-lg border border-green-200">
+                    <h4 className="font-semibold text-green-700 mb-2">
                       Client Information
                     </h4>
                     <p className="text-gray-700">
@@ -584,8 +584,8 @@ const CollateralManagement: React.FC = () => {
                     </p>
                   </div>
 
-                  <div className="bg-gradient-to-r from-orange-50 to-red-50 p-4 rounded-lg border border-orange-200">
-                    <h4 className="font-semibold text-orange-700 mb-2">
+                  <div className="bg-gradient-to-r from-green-50 to-gray-50 p-4 rounded-lg border border-green-200">
+                    <h4 className="font-semibold text-green-700 mb-2">
                       Item Details
                     </h4>
                     <p className="text-gray-700 font-medium">
@@ -602,8 +602,8 @@ const CollateralManagement: React.FC = () => {
                     </p>
                   </div>
 
-                  <div className="bg-gradient-to-r from-orange-50 to-red-50 p-4 rounded-lg border border-orange-200">
-                    <h4 className="font-semibold text-orange-700 mb-2">
+                  <div className="bg-gradient-to-r from-green-50 to-gray-50 p-4 rounded-lg border border-green-200">
+                    <h4 className="font-semibold text-green-700 mb-2">
                       Values
                     </h4>
                     <div className="space-y-1">
@@ -630,8 +630,8 @@ const CollateralManagement: React.FC = () => {
                 </div>
 
                 <div className="space-y-4">
-                  <div className="bg-gradient-to-r from-orange-50 to-red-50 p-4 rounded-lg border border-orange-200">
-                    <h4 className="font-semibold text-orange-700 mb-2">
+                  <div className="bg-gradient-to-r from-green-50 to-gray-50 p-4 rounded-lg border border-green-200">
+                    <h4 className="font-semibold text-green-700 mb-2">
                       Status Information
                     </h4>
                     <div className="space-y-2">
@@ -654,8 +654,8 @@ const CollateralManagement: React.FC = () => {
                     </div>
                   </div>
 
-                  <div className="bg-gradient-to-r from-orange-50 to-red-50 p-4 rounded-lg border border-orange-200">
-                    <h4 className="font-semibold text-orange-700 mb-2">
+                  <div className="bg-gradient-to-r from-green-50 to-gray-50 p-4 rounded-lg border border-green-200">
+                    <h4 className="font-semibold text-green-700 mb-2">
                       Dates & Location
                     </h4>
                     <div className="space-y-1">
@@ -680,16 +680,16 @@ const CollateralManagement: React.FC = () => {
                     </div>
                   </div>
 
-                  <div className="bg-gradient-to-r from-orange-50 to-red-50 p-4 rounded-lg border border-orange-200">
-                    <h4 className="font-semibold text-orange-700 mb-2">
+                  <div className="bg-gradient-to-r from-green-50 to-gray-50 p-4 rounded-lg border border-green-200">
+                    <h4 className="font-semibold text-green-700 mb-2">
                       Documents
                     </h4>
                     <div className="space-y-1">
                       {selectedCollateral.documents.map((doc, i) => (
                         <div key={i} className="flex items-center space-x-2">
-                          <div className="w-2 h-2 bg-orange-500 rounded-full"></div>
+                          <div className="w-2 h-2 bg-green-500 rounded-full"></div>
                           <span
-                            className="text-orange-600 hover:text-orange-700 cursor-pointer hover:underline text-sm"
+                            className="text-green-600 hover:text-green-700 cursor-pointer hover:underline text-sm"
                             onClick={() => alert(`Open document: ${doc}`)}
                           >
                             {doc}
@@ -702,8 +702,8 @@ const CollateralManagement: React.FC = () => {
               </div>
 
               {selectedCollateral.notes && (
-                <div className="mt-6 bg-gradient-to-r from-orange-50 to-red-50 p-4 rounded-lg border border-orange-200">
-                  <h4 className="font-semibold text-orange-700 mb-2">Notes</h4>
+                <div className="mt-6 bg-gradient-to-r from-green-50 to-gray-50 p-4 rounded-lg border border-green-200">
+                  <h4 className="font-semibold text-green-700 mb-2">Notes</h4>
                   <p className="text-gray-700">{selectedCollateral.notes}</p>
                 </div>
               )}

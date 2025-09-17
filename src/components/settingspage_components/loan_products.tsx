@@ -61,10 +61,10 @@ const LoanProducts = () => {
   return (
     <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-6 shadow-lg border border-white/50">
       <div className="flex items-center justify-between mb-6">
-        <h3 className="text-xl font-bold text-orange-800">Loan Products</h3>
+        <h3 className="text-xl font-bold text-green-800">Loan Products</h3>
         <button
           onClick={() => setShowForm(true)}
-          className="flex items-center space-x-2 px-4 py-2 bg-gradient-to-r from-orange-500 to-red-500 text-white rounded-xl text-sm font-medium hover:from-orange-600 hover:to-red-600 transition-all duration-200"
+          className="flex items-center space-x-2 px-4 py-2 bg-gradient-to-r from-green-500 to-emerald-500 text-white rounded-xl text-sm font-medium hover:from-green-600 hover:to-emerald-600 transition-all duration-200"
         >
           <Plus className="w-4 h-4" />
           <span>Add Product</span>
@@ -72,20 +72,20 @@ const LoanProducts = () => {
       </div>
 
       {showForm && (
-        <div className="mb-6 p-4 bg-orange-50 rounded-xl border border-orange-200">
+        <div className="mb-6 p-4 bg-green-50 rounded-xl border border-green-200">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <input
               type="text"
               placeholder="Product Name"
               value={formData.name}
               onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
-              className="px-3 py-2 bg-white border border-orange-200 rounded-lg"
+              className="px-3 py-2 bg-white border border-green-200 rounded-lg"
               required
             />
             <select
               value={formData.type}
               onChange={(e) => setFormData(prev => ({ ...prev, type: e.target.value }))}
-              className="px-3 py-2 bg-white border border-orange-200 rounded-lg"
+              className="px-3 py-2 bg-white border border-green-200 rounded-lg"
             >
               <option value="Personal">Personal</option>
               <option value="Mortgage">Mortgage</option>
@@ -96,7 +96,7 @@ const LoanProducts = () => {
               placeholder="Interest Rate (%)"
               value={formData.rate}
               onChange={(e) => setFormData(prev => ({ ...prev, rate: e.target.value }))}
-              className="px-3 py-2 bg-white border border-orange-200 rounded-lg"
+              className="px-3 py-2 bg-white border border-green-200 rounded-lg"
               required
             />
             <div className="flex space-x-2">
@@ -105,7 +105,7 @@ const LoanProducts = () => {
                 placeholder="Min Term"
                 value={formData.minTerm}
                 onChange={(e) => setFormData(prev => ({ ...prev, minTerm: e.target.value }))}
-                className="px-3 py-2 bg-white border border-orange-200 rounded-lg flex-1"
+                className="px-3 py-2 bg-white border border-green-200 rounded-lg flex-1"
                 required
               />
               <input
@@ -113,7 +113,7 @@ const LoanProducts = () => {
                 placeholder="Max Term"
                 value={formData.maxTerm}
                 onChange={(e) => setFormData(prev => ({ ...prev, maxTerm: e.target.value }))}
-                className="px-3 py-2 bg-white border border-orange-200 rounded-lg flex-1"
+                className="px-3 py-2 bg-white border border-green-200 rounded-lg flex-1"
                 required
               />
             </div>
@@ -122,7 +122,7 @@ const LoanProducts = () => {
               placeholder="Min Amount"
               value={formData.minAmount}
               onChange={(e) => setFormData(prev => ({ ...prev, minAmount: e.target.value }))}
-              className="px-3 py-2 bg-white border border-orange-200 rounded-lg"
+              className="px-3 py-2 bg-white border border-green-200 rounded-lg"
               required
             />
             <input
@@ -130,7 +130,7 @@ const LoanProducts = () => {
               placeholder="Max Amount"
               value={formData.maxAmount}
               onChange={(e) => setFormData(prev => ({ ...prev, maxAmount: e.target.value }))}
-              className="px-3 py-2 bg-white border border-orange-200 rounded-lg"
+              className="px-3 py-2 bg-white border border-green-200 rounded-lg"
               required
             />
           </div>
@@ -138,7 +138,7 @@ const LoanProducts = () => {
             <button 
               type="button"
               onClick={handleSubmit}
-              className="px-4 py-2 bg-orange-500 text-white rounded-lg">
+              className="px-4 py-2 bg-green-500 text-white rounded-lg">
               {editingId ? 'Update' : 'Create'}
             </button>
             <button
@@ -156,33 +156,33 @@ const LoanProducts = () => {
         {products.map((product) => {
           const IconComponent = product.icon;
           return (
-            <div key={product.id} className="flex items-center justify-between p-4 bg-gradient-to-r from-white/50 to-orange-50/30 rounded-xl border border-orange-200/30">
+            <div key={product.id} className="flex items-center justify-between p-4 bg-gradient-to-r from-white/50 to-green-50/30 rounded-xl border border-green-200/30">
               <div className="flex items-center space-x-4">
-                <div className="p-3 bg-orange-100 rounded-xl">
-                  <IconComponent className="w-5 h-5 text-orange-600" />
+                <div className="p-3 bg-green-100 rounded-xl">
+                  <IconComponent className="w-5 h-5 text-green-600" />
                 </div>
                 <div>
-                  <h4 className="font-semibold text-orange-800">{product.name}</h4>
-                  <p className="text-sm text-orange-600">{product.type}</p>
+                  <h4 className="font-semibold text-green-800">{product.name}</h4>
+                  <p className="text-sm text-green-600">{product.type}</p>
                 </div>
               </div>
               <div className="flex items-center space-x-6">
                 <div className="text-center">
-                  <div className="text-sm font-medium text-orange-800">{product.rate}</div>
-                  <div className="text-xs text-orange-500">Rate</div>
+                  <div className="text-sm font-medium text-green-800">{product.rate}</div>
+                  <div className="text-xs text-green-500">Rate</div>
                 </div>
                 <div className="text-center">
-                  <div className="text-sm font-medium text-orange-800">{product.term}m</div>
-                  <div className="text-xs text-orange-500">Term</div>
+                  <div className="text-sm font-medium text-green-800">{product.term}m</div>
+                  <div className="text-xs text-green-500">Term</div>
                 </div>
                 <div className="text-center">
-                  <div className="text-sm font-medium text-orange-800">{product.amount}</div>
-                  <div className="text-xs text-orange-500">Amount</div>
+                  <div className="text-sm font-medium text-green-800">{product.amount}</div>
+                  <div className="text-xs text-green-500">Amount</div>
                 </div>
                 <div className="flex space-x-2">
                   <button
                     onClick={() => handleEdit(product)}
-                    className="p-2 text-orange-600 hover:bg-orange-100 rounded-lg"
+                    className="p-2 text-green-600 hover:bg-green-100 rounded-lg"
                   >
                     <Edit3 className="w-4 h-4" />
                   </button>

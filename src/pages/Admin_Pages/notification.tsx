@@ -41,29 +41,29 @@ const Sidebar: React.FC<{ isOpen: boolean; onClose: () => void }> = ({ isOpen, o
       <div className={`fixed left-0 top-0 h-full w-64 bg-white shadow-lg transform transition-transform duration-300 z-50 lg:translate-x-0 ${
         isOpen ? 'translate-x-0' : '-translate-x-full'
       }`}>
-        <div className="p-4 border-b border-orange-200">
+        <div className="p-4 border-b border-green-200">
           <div className="flex items-center justify-between">
-            <h2 className="text-lg font-semibold text-orange-700">Dashboard</h2>
+            <h2 className="text-lg font-semibold text-green-700">Dashboard</h2>
             <button
               onClick={onClose}
-              className="lg:hidden p-1 rounded-lg hover:bg-orange-100"
+              className="lg:hidden p-1 rounded-lg hover:bg-green-100"
             >
-              <X className="w-5 h-5 text-orange-600" />
+              <X className="w-5 h-5 text-green-600" />
             </button>
           </div>
         </div>
         
         <nav className="p-4">
           <div className="space-y-2">
-            <a href="#" className="flex items-center px-3 py-2 text-orange-700 bg-orange-100 rounded-lg">
+            <a href="#" className="flex items-center px-3 py-2 text-green-700 bg-green-100 rounded-lg">
               <MessageSquareText className="w-5 h-5 mr-3" />
               Notifications
             </a>
-            <a href="#" className="flex items-center px-3 py-2 text-gray-600 hover:bg-orange-100 rounded-lg">
+            <a href="#" className="flex items-center px-3 py-2 text-gray-600 hover:bg-green-100 rounded-lg">
               <User className="w-5 h-5 mr-3" />
               Users
             </a>
-            <a href="#" className="flex items-center px-3 py-2 text-gray-600 hover:bg-orange-100 rounded-lg">
+            <a href="#" className="flex items-center px-3 py-2 text-gray-600 hover:bg-green-100 rounded-lg">
               <Calendar className="w-5 h-5 mr-3" />
               Calendar
             </a>
@@ -86,12 +86,12 @@ const Adminbell: React.FC<{
     <div className="relative">
       <button
         onClick={() => setShowDropdown(!showDropdown)}
-        className="relative p-2 rounded-xl bg-orange-100/50 hover:bg-orange-200/50 transition-all duration-200"
+        className="relative p-2 rounded-xl bg-green-100/50 hover:bg-green-200/50 transition-all duration-200"
       >
         {unreadCount > 0 ? (
-          <BellRing className="w-5 h-5 text-orange-600" />
+          <BellRing className="w-5 h-5 text-green-600" />
         ) : (
-          <Bell className="w-5 h-5 text-orange-600" />
+          <Bell className="w-5 h-5 text-green-600" />
         )}
         {unreadCount > 0 && (
           <span className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 text-white text-xs rounded-full flex items-center justify-center">
@@ -101,13 +101,13 @@ const Adminbell: React.FC<{
       </button>
 
       {showDropdown && (
-        <div className="absolute right-0 mt-2 w-80 bg-white rounded-xl shadow-lg border border-orange-200 z-50">
-          <div className="p-4 border-b border-orange-200">
+        <div className="absolute right-0 mt-2 w-80 bg-white rounded-xl shadow-lg border border-green-200 z-50">
+          <div className="p-4 border-b border-green-200">
             <div className="flex items-center justify-between">
-              <h3 className="font-semibold text-orange-700">Notifications</h3>
+              <h3 className="font-semibold text-green-700">Notifications</h3>
               <button
                 onClick={onViewAll}
-                className="text-sm text-orange-600 hover:text-orange-700"
+                className="text-sm text-green-600 hover:text-green-700"
               >
                 View All
               </button>
@@ -118,8 +118,8 @@ const Adminbell: React.FC<{
             {notifications.slice(0, 5).map((notification) => (
               <div
                 key={`notification-${notification.id}`}
-                className={`p-3 border-b border-orange-100 hover:bg-orange-50 ${
-                  !notification.read ? 'bg-orange-25' : ''
+                className={`p-3 border-b border-green-100 hover:bg-green-50 ${
+                  !notification.read ? 'bg-green-25' : ''
                 }`}
               >
                 <div className="flex items-start space-x-3">
@@ -139,7 +139,7 @@ const Adminbell: React.FC<{
                     </div>
                   </div>
                   {!notification.read && (
-                    <div className="w-2 h-2 bg-orange-500 rounded-full mt-2"></div>
+                    <div className="w-2 h-2 bg-green-500 rounded-full mt-2"></div>
                   )}
                 </div>
               </div>
@@ -237,29 +237,29 @@ const Notifications: React.FC = () => {
   });
 
   return (
-    <div className="flex h-screen bg-gradient-to-br from-orange-50 via-red-50 to-yellow-50">
+    <div className="flex h-screen bg-gradient-to-br from-green-50 via-green-50 to-green-50">
       {/* Sidebar */}
       <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
 
       {/* Main Section */}
       <div className="flex-1 flex flex-col overflow-hidden lg:ml-0">
         {/* Header */}
-        <header className="bg-white/80 backdrop-blur-xl shadow-sm border-b border-orange-200/50 px-6 py-4 relative">
-          <div className="absolute inset-0 bg-gradient-to-r from-orange-500/5 to-red-500/5" />
+        <header className="bg-white/80 backdrop-blur-xl shadow-sm border-b border-green-200/50 px-6 py-4 relative">
+          <div className="absolute inset-0 bg-gradient-to-r from-green-500/5 to-green-500/5" />
           <div className="relative flex items-center justify-between">
             <div className="flex items-center">
               <button
                 onClick={() => setSidebarOpen(true)}
-                className="lg:hidden mr-4 p-2 rounded-xl bg-orange-100/50 hover:bg-orange-200/50 transition-all duration-200"
+                className="lg:hidden mr-4 p-2 rounded-xl bg-green-100/50 hover:bg-green-200/50 transition-all duration-200"
               >
-                <Menu className="w-5 h-5 text-orange-600" />
+                <Menu className="w-5 h-5 text-green-600" />
               </button>
               <div className="flex items-center space-x-3">
-                <MessageSquareText className="w-6 h-6 text-orange-600" />
+                <MessageSquareText className="w-6 h-6 text-green-600" />
                 <div className="flex items-center space-x-2 text-sm">
-                  <span className="text-orange-500">Dashboard</span>
-                  <span className="text-orange-300">›</span>
-                  <span className="text-orange-700 font-medium">Notifications</span>
+                  <span className="text-green-500">Dashboard</span>
+                  <span className="text-green-300">›</span>
+                  <span className="text-green-700 font-medium">Notifications</span>
                 </div>
               </div>
             </div>
@@ -267,11 +267,11 @@ const Notifications: React.FC = () => {
             <div className="flex items-center space-x-4">
               {/* Search */}
               <div className="relative hidden md:block">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-orange-400" />
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-green-400" />
                 <input
                   type="text"
                   placeholder="Search..."
-                  className="pl-10 pr-4 py-2 w-64 bg-orange-100/50 border border-orange-200/50 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500/50 transition-all duration-200"
+                  className="pl-10 pr-4 py-2 w-64 bg-green-100/50 border border-green-200/50 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-green-500/20 focus:border-green-500/50 transition-all duration-200"
                 />
               </div>
 
@@ -282,18 +282,18 @@ const Notifications: React.FC = () => {
               />
 
               {/* User Info */}
-              <div className="flex items-center space-x-3 pl-4 border-l border-orange-200/50">
+              <div className="flex items-center space-x-3 pl-4 border-l border-green-200/50">
                 <div className="text-right hidden sm:block">
-                  <div className="text-sm font-semibold text-orange-700">Admin User</div>
-                  <div className="text-xs text-orange-500">Administrator</div>
+                  <div className="text-sm font-semibold text-green-700">Admin User</div>
+                  <div className="text-xs text-green-500">Administrator</div>
                 </div>
                 <div className="relative">
-                  <div className="w-10 h-10 bg-gradient-to-br from-orange-500 to-red-500 rounded-xl flex items-center justify-center shadow-lg shadow-orange-500/25">
+                  <div className="w-10 h-10 bg-gradient-to-br from-green-500 to-green-600 rounded-xl flex items-center justify-center shadow-lg shadow-green-500/25">
                     <span className="text-white font-semibold text-sm">AD</span>
                   </div>
                   <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-400 border-2 border-white rounded-full shadow-sm"></div>
                 </div>
-                <ChevronDown className="w-4 h-4 text-orange-400" />
+                <ChevronDown className="w-4 h-4 text-green-400" />
               </div>
             </div>
           </div>
@@ -302,32 +302,32 @@ const Notifications: React.FC = () => {
         {/* Main Content */}
         <main className="flex-1 overflow-y-auto p-6 flex flex-col items-center justify-center">
           <div className="bg-white p-6 rounded-xl shadow-lg w-full max-w-md space-y-4">
-            <h1 className="text-2xl font-bold text-orange-700 text-center mb-4">
+            <h1 className="text-2xl font-bold text-green-700 text-center mb-4">
               Send Notification
             </h1>
 
             <div>
-              <label className="block text-sm font-medium text-orange-700 mb-1">
+              <label className="block text-sm font-medium text-green-700 mb-1">
                 User ID / Token
               </label>
               <input
                 type="text"
                 value={recipient}
                 onChange={(e) => setRecipient(e.target.value)}
-                className="w-full border border-orange-200 rounded px-3 py-2 focus:ring-2 focus:ring-orange-500"
+                className="w-full border border-green-200 rounded px-3 py-2 focus:ring-2 focus:ring-green-500"
                 placeholder="Enter user ID or token"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-orange-700 mb-1">
+              <label className="block text-sm font-medium text-green-700 mb-1">
                 Message
               </label>
               <textarea
                 value={message}
                 onChange={(e) => setMessage(e.target.value)}
                 rows={4}
-                className="w-full border border-orange-200 rounded px-3 py-2 focus:ring-2 focus:ring-orange-500"
+                className="w-full border border-green-200 rounded px-3 py-2 focus:ring-2 focus:ring-green-500"
                 placeholder="Enter your message"
               />
             </div>
@@ -335,7 +335,7 @@ const Notifications: React.FC = () => {
             <button
               onClick={handleSendNotification}
               disabled={loading}
-              className="w-full bg-orange-600 hover:bg-orange-700 disabled:opacity-50 text-white py-2 rounded font-semibold flex items-center justify-center gap-2 transition-colors"
+              className="w-full bg-green-600 hover:bg-green-700 disabled:opacity-50 text-white py-2 rounded font-semibold flex items-center justify-center gap-2 transition-colors"
             >
               {loading ? (
                 <>
@@ -374,24 +374,24 @@ const Notifications: React.FC = () => {
         <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
           <div className="bg-white rounded-xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-hidden">
             {/* Modal Header */}
-            <div className="flex items-center justify-between p-6 border-b border-orange-200">
-              <h2 className="text-2xl font-bold text-orange-700">All Notifications</h2>
+            <div className="flex items-center justify-between p-6 border-b border-green-200">
+              <h2 className="text-2xl font-bold text-green-700">All Notifications</h2>
               <button
                 onClick={() => setShowViewAll(false)}
-                className="p-2 hover:bg-orange-100 rounded-lg transition-colors"
+                className="p-2 hover:bg-green-100 rounded-lg transition-colors"
               >
-                <X className="w-5 h-5 text-orange-600" />
+                <X className="w-5 h-5 text-green-600" />
               </button>
             </div>
 
             {/* Tabs */}
-            <div className="flex border-b border-orange-200">
+            <div className="flex border-b border-green-200">
               <button
                 onClick={() => setActiveTab('all')}
                 className={`flex-1 py-3 px-4 text-sm font-medium transition-colors ${
                   activeTab === 'all'
-                    ? 'text-orange-600 border-b-2 border-orange-600 bg-orange-50'
-                    : 'text-gray-500 hover:text-orange-600'
+                    ? 'text-green-600 border-b-2 border-green-600 bg-green-50'
+                    : 'text-gray-500 hover:text-green-600'
                 }`}
               >
                 All ({notifications.length})
@@ -400,8 +400,8 @@ const Notifications: React.FC = () => {
                 onClick={() => setActiveTab('sent')}
                 className={`flex-1 py-3 px-4 text-sm font-medium transition-colors ${
                   activeTab === 'sent'
-                    ? 'text-orange-600 border-b-2 border-orange-600 bg-orange-50'
-                    : 'text-gray-500 hover:text-orange-600'
+                    ? 'text-green-600 border-b-2 border-green-600 bg-green-50'
+                    : 'text-gray-500 hover:text-green-600'
                 }`}
               >
                 <Send className="w-4 h-4 inline mr-2" />
@@ -411,8 +411,8 @@ const Notifications: React.FC = () => {
                 onClick={() => setActiveTab('received')}
                 className={`flex-1 py-3 px-4 text-sm font-medium transition-colors ${
                   activeTab === 'received'
-                    ? 'text-orange-600 border-b-2 border-orange-600 bg-orange-50'
-                    : 'text-gray-500 hover:text-orange-600'
+                    ? 'text-green-600 border-b-2 border-green-600 bg-green-50'
+                    : 'text-gray-500 hover:text-green-600'
                 }`}
               >
                 <Inbox className="w-4 h-4 inline mr-2" />
@@ -434,7 +434,7 @@ const Notifications: React.FC = () => {
                       key={`full-notification-${notification.id}`}
                       className={`p-4 rounded-lg border transition-all ${
                         notification.type === 'received' && !notification.read
-                          ? 'bg-orange-50 border-orange-200'
+                          ? 'bg-green-50 border-green-200'
                           : 'bg-gray-50 border-gray-200'
                       }`}
                     >
@@ -452,7 +452,7 @@ const Notifications: React.FC = () => {
                               {notification.type === 'sent' ? 'Sent' : 'Received'}
                             </span>
                             {notification.type === 'received' && !notification.read && (
-                              <span className="w-2 h-2 bg-orange-500 rounded-full"></span>
+                              <span className="w-2 h-2 bg-green-500 rounded-full"></span>
                             )}
                           </div>
                           

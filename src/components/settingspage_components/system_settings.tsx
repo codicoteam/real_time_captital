@@ -67,7 +67,7 @@ const SystemSettings = () => {
 
   return (
     <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-6 shadow-lg border border-white/50">
-      <h3 className="text-xl font-bold text-orange-800 mb-6">
+      <h3 className="text-xl font-bold text-black mb-6">
         System Settings
       </h3>
 
@@ -76,13 +76,13 @@ const SystemSettings = () => {
           const IconComponent = field.icon;
           return (
             <div key={field.key} className="space-y-2">
-              <label className="flex items-center space-x-2 text-sm font-medium text-orange-600">
+              <label className="flex items-center space-x-2 text-sm font-medium text-green-600">
                 <IconComponent className="w-4 h-4" />
                 <span>{field.label}</span>
               </label>
               <div className="relative">
                 {field.prefix && (
-                  <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-orange-500">
+                  <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-green-500">
                     {field.prefix}
                   </span>
                 )}
@@ -92,10 +92,10 @@ const SystemSettings = () => {
                   onChange={(e) => handleChange(field.key, e.target.value)}
                   className={`w-full ${field.prefix ? "pl-8" : "pl-3"} ${
                     field.suffix ? "pr-12" : "pr-3"
-                  } py-3 bg-orange-50 border border-orange-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500/50`}
+                  } py-3 bg-green-50 border border-green-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-500/20 focus:border-green-500/50`}
                 />
                 {field.suffix && (
-                  <span className="absolute right-3 top-1/2 transform -translate-y-1/2 text-orange-500">
+                  <span className="absolute right-3 top-1/2 transform -translate-y-1/2 text-green-500">
                     {field.suffix}
                   </span>
                 )}
@@ -106,7 +106,7 @@ const SystemSettings = () => {
       </div>
 
       <div className="mt-6 flex justify-end">
-        <button className="flex items-center space-x-2 px-6 py-3 bg-gradient-to-r from-orange-500 to-red-500 text-white rounded-xl font-medium hover:from-orange-600 hover:to-red-600 transition-all duration-200">
+        <button className="flex items-center space-x-2 px-6 py-3 bg-gradient-to-r from-green-500 to-emerald-500 text-white rounded-xl font-medium hover:from-green-600 hover:to-emerald-600 transition-all duration-200">
           <Save className="w-4 h-4" />
           <span>Save Settings</span>
         </button>

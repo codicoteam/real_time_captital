@@ -117,7 +117,7 @@ const UserDashboard = () => {
               <div className="flex items-center">
                 <button
                   onClick={() => setSidebarOpen(true)}
-                  className="lg:hidden mr-4 p-2 rounded-xl bg-gradient-to-r from-red-500 via-orange-500 to-yellow-500 hover:from-red-600 hover:via-orange-600 hover:to-yellow-600 transition-all duration-200"
+                  className="lg:hidden mr-4 p-2 rounded-xl bg-gradient-to-r from-green-500 via-green-600 to-green-700 hover:from-green-600 hover:via-green-700 hover:to-green-800 transition-all duration-200"
                 >
                   <Menu className="w-5 h-5 text-white" />
                 </button>
@@ -137,14 +137,14 @@ const UserDashboard = () => {
                   <input
                     type="text"
                     placeholder="Search loans..."
-                    className="pl-10 pr-4 py-2 w-64 bg-gray-100/50 border border-gray-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-red-500/20 focus:border-red-500/50 transition-all duration-200"
+                    className="pl-10 pr-4 py-2 w-64 bg-gray-100/50 border border-gray-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-green-500/20 focus:border-green-500/50 transition-all duration-200"
                   />
                 </div>
 
                 {/* Notifications */}
                 <button className="relative p-2 rounded-xl bg-gray-100/50 hover:bg-gray-200/50 transition-all duration-200 group">
                   <Bell className="w-5 h-5 text-gray-600 group-hover:text-black" />
-                  <div className="absolute -top-1 -right-1 w-4 h-4 bg-gradient-to-r from-red-500 to-orange-500 rounded-full flex items-center justify-center">
+                  <div className="absolute -top-1 -right-1 w-4 h-4 bg-gradient-to-r from-green-500 to-green-600 rounded-full flex items-center justify-center">
                     <span className="text-xs text-white font-medium">3</span>
                   </div>
                 </button>
@@ -158,7 +158,7 @@ const UserDashboard = () => {
                     <div className="text-xs text-gray-600">Borrower</div>
                   </div>
                   <div className="relative">
-                    <div className="w-10 h-10 bg-gradient-to-r from-red-500 via-orange-500 to-yellow-500 rounded-xl flex items-center justify-center shadow-lg shadow-red-500/25">
+                    <div className="w-10 h-10 bg-gradient-to-r from-green-500 via-green-600 to-green-700 rounded-xl flex items-center justify-center shadow-lg shadow-green-500/25">
                       <span className="text-white font-semibold text-sm">
                         U
                       </span>
@@ -174,7 +174,7 @@ const UserDashboard = () => {
           {/* No Loans Content */}
           <div className="flex-1 flex items-center justify-center">
             <div className="text-center bg-white/70 backdrop-blur-sm rounded-2xl p-8 shadow-lg border border-white/50">
-              <AlertCircle className="w-12 h-12 text-orange-500 mx-auto mb-4" />
+              <AlertCircle className="w-12 h-12 text-green-500 mx-auto mb-4" />
               <h2 className="text-xl font-bold text-blue-800 mb-2">
                 No Active Loans
               </h2>
@@ -333,7 +333,7 @@ const UserDashboard = () => {
             <div className="flex items-center">
               <button
                 onClick={() => setSidebarOpen(true)}
-                className="lg:hidden mr-4 p-2 rounded-xl bg-gradient-to-r from-red-500 via-orange-500 to-yellow-500 hover:from-red-600 hover:via-orange-600 hover:to-yellow-600 transition-all duration-200"
+                className="lg:hidden mr-4 p-2 rounded-xl bg-gradient-to-r from-green-500 via-green-600 to-green-700 hover:from-green-600 hover:via-green-700 hover:to-green-800 transition-all duration-200"
               >
                 <Menu className="w-5 h-5 text-white" />
               </button>
@@ -353,7 +353,7 @@ const UserDashboard = () => {
                 <input
                   type="text"
                   placeholder="Search loans..."
-                  className="pl-10 pr-4 py-2 w-64 bg-gray-100/50 border border-gray-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-red-500/20 focus:border-red-500/50 transition-all duration-200"
+                  className="pl-10 pr-4 py-2 w-64 bg-gray-100/50 border border-gray-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-green-500/20 focus:border-green-500/50 transition-all duration-200"
                 />
               </div>
 
@@ -369,7 +369,7 @@ const UserDashboard = () => {
                   <div className="text-xs text-gray-600">Borrower</div>
                 </div>
                 <div className="relative">
-                  <div className="w-10 h-10 bg-gradient-to-r from-red-500 via-orange-500 to-yellow-500 rounded-xl flex items-center justify-center shadow-lg shadow-red-500/25">
+                  <div className="w-10 h-10 bg-gradient-to-r from-green-500 via-green-600 to-green-700 rounded-xl flex items-center justify-center shadow-lg shadow-green-500/25">
                     <span className="text-white font-semibold text-sm">
                       {currentLoan?.borrowerInfo?.firstName?.[0]}
                       {currentLoan?.borrowerInfo?.surname?.[0]}
@@ -397,8 +397,8 @@ const UserDashboard = () => {
                   onClick={() => setSelectedLoan(index)}
                   className={`p-3 rounded-xl cursor-pointer transition-all duration-200 border-2 ${
                     selectedLoan === index
-                      ? "border-red-500 bg-red-50 shadow-lg"
-                      : "border-gray-300 bg-white/50 hover:border-red-300 hover:shadow-md"
+                      ? "border-green-500 bg-green-50 shadow-lg"
+                      : "border-gray-300 bg-white/50 hover:border-green-300 hover:shadow-md"
                   }`}
                 >
                   <div className="flex items-center justify-between mb-2">
@@ -475,8 +475,8 @@ const UserDashboard = () => {
 
             <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-4 shadow-lg border border-white/50">
               <div className="flex items-center justify-between mb-3">
-                <div className="p-2 rounded-xl bg-orange-100">
-                  <Percent className="w-5 h-5 text-orange-700" />
+                <div className="p-2 rounded-xl bg-green-100">
+                  <Percent className="w-5 h-5 text-green-700" />
                 </div>
                 <div className="text-xs font-semibold text-gray-600 bg-gray-100 px-2 py-1 rounded-full">
                   Rate
@@ -494,8 +494,8 @@ const UserDashboard = () => {
 
             <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-4 shadow-lg border border-white/50">
               <div className="flex items-center justify-between mb-3">
-                <div className="p-2 rounded-xl bg-yellow-100">
-                  <CreditCard className="w-5 h-5 text-yellow-700" />
+                <div className="p-2 rounded-xl bg-green-100">
+                  <CreditCard className="w-5 h-5 text-green-700" />
                 </div>
                 <div className="text-xs font-semibold text-gray-600 bg-gray-100 px-2 py-1 rounded-full">
                   Monthly
@@ -537,7 +537,7 @@ const UserDashboard = () => {
                 </div>
                 <div className="w-full bg-gray-200 rounded-full h-3">
                   <div
-                    className="h-full bg-gradient-to-r from-red-500 via-orange-500 to-yellow-500 rounded-full transition-all duration-1000 relative"
+                    className="h-full bg-gradient-to-r from-green-500 via-green-600 to-green-700 rounded-full transition-all duration-1000 relative"
                     style={{ width: `${getProgressPercentage(currentLoan)}%` }}
                   >
                     <div className="absolute inset-0 bg-white/20 rounded-full animate-pulse"></div>
@@ -547,13 +547,13 @@ const UserDashboard = () => {
 
               {/* Progress Stats */}
               <div className="grid grid-cols-2 gap-4 mb-4">
-                <div className="text-center p-3 bg-gradient-to-br from-red-50 to-orange-50 rounded-xl">
+                <div className="text-center p-3 bg-gradient-to-br from-green-50 to-green-100 rounded-xl">
                   <div className="text-lg font-bold text-black">
                     {getPaymentsCompleted(currentLoan)}
                   </div>
                   <div className="text-sm text-gray-600">Payments Made</div>
                 </div>
-                <div className="text-center p-3 bg-gradient-to-br from-orange-50 to-yellow-50 rounded-xl">
+                <div className="text-center p-3 bg-gradient-to-br from-green-100 to-green-200 rounded-xl">
                   <div className="text-lg font-bold text-black">
                     {(currentLoan.term || 0) -
                       getPaymentsCompleted(currentLoan)}
@@ -659,7 +659,7 @@ const UserDashboard = () => {
 
                 {/* Action Buttons */}
                 <div className="flex space-x-3 pt-4">
-                  <button className="flex-1 px-4 py-2 bg-gradient-to-r from-red-500 via-orange-500 to-yellow-500 text-white rounded-xl text-sm font-medium hover:from-red-600 hover:via-orange-600 hover:to-yellow-600 transition-all duration-200 flex items-center justify-center space-x-2">
+                  <button className="flex-1 px-4 py-2 bg-gradient-to-r from-green-500 via-green-600 to-green-700 text-white rounded-xl text-sm font-medium hover:from-green-600 hover:via-green-700 hover:to-green-800 transition-all duration-200 flex items-center justify-center space-x-2">
                     <CreditCard className="w-4 h-4" />
                     <span>Make Payment</span>
                   </button>
@@ -684,7 +684,7 @@ const UserDashboard = () => {
                 </p>
               </div>
               <div className="flex items-center space-x-2">
-                <button className="px-3 py-2 bg-gradient-to-r from-red-500 via-orange-500 to-yellow-500 text-white rounded-xl text-sm font-medium hover:from-red-600 hover:via-orange-600 hover:to-yellow-600 transition-all duration-200">
+                <button className="px-3 py-2 bg-gradient-to-r from-green-500 via-green-600 to-green-700 text-white rounded-xl text-sm font-medium hover:from-green-600 hover:via-green-700 hover:to-green-800 transition-all duration-200">
                   View All
                 </button>
               </div>
@@ -771,8 +771,8 @@ const UserDashboard = () => {
                       )}
                       {payment.status === "Due" && (
                         <div className="flex items-center space-x-1">
-                          <Clock className="w-4 h-4 text-orange-600" />
-                          <span className="text-sm font-medium text-orange-600">
+                          <Clock className="w-4 h-4 text-green-600" />
+                          <span className="text-sm font-medium text-green-600">
                             Due
                           </span>
                         </div>
@@ -790,7 +790,7 @@ const UserDashboard = () => {
                           Upcoming
                         </span>
                       )}
-                    </div>
+                </div>
                   </div>
                 </div>
               ))}

@@ -64,10 +64,6 @@ const LoanDetailsModal: React.FC<LoanDetailsModalProps> = ({
   const completedPayments =
     selectedLoan.paymentSchedule?.filter((payment) => payment.status === "paid")
       .length || 0;
-  const overduePayments =
-    selectedLoan.paymentSchedule?.filter(
-      (payment) => payment.status === "overdue"
-    ).length || 0;
 
   // Find next payment
   const nextPayment = selectedLoan.paymentSchedule?.find(

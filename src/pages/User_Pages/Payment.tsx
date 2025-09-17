@@ -469,7 +469,7 @@ const Payment = () => {
           .reduce((sum: number, p: PaymentHistory) => sum + p.amountPaid, 0)
       ),
       icon: DollarSign,
-      color: "blue",
+      color: "emerald",
       arrow: ArrowUpRight,
     },
     {
@@ -479,31 +479,31 @@ const Payment = () => {
           new Date(p.paymentDate).getMonth() === new Date().getMonth()
       ).length,
       icon: Calendar,
-      color: "purple",
+      color: "teal",
       arrow: Info,
     },
   ];
 
   return (
-    <div className="flex h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50">
+    <div className="flex h-screen bg-gradient-to-br from-green-50 via-emerald-50 to-teal-50">
       <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
 
       <div className="flex-1 flex flex-col overflow-hidden lg:ml-0">
         {/* Header */}
-        <header className="bg-white/80 backdrop-blur-xl shadow-sm border-b border-blue-200/50 px-6 py-4 relative">
-          <div className="absolute inset-0 bg-gradient-to-r from-blue-500/5 to-purple-500/5"></div>
+        <header className="bg-white/80 backdrop-blur-xl shadow-sm border-b border-green-200/50 px-6 py-4 relative">
+          <div className="absolute inset-0 bg-gradient-to-r from-green-500/5 to-teal-500/5"></div>
           <div className="relative flex items-center justify-between">
             <div className="flex items-center">
               <button
                 onClick={() => setSidebarOpen(true)}
-                className="lg:hidden mr-4 p-2 rounded-xl bg-blue-100/50 hover:bg-blue-200/50 transition-all duration-200"
+                className="lg:hidden mr-4 p-2 rounded-xl bg-green-100/50 hover:bg-green-200/50 transition-all duration-200"
               >
-                <Menu className="w-5 h-5 text-orange-700" />
+                <Menu className="w-5 h-5 text-green-700" />
               </button>
               <div className="flex items-center space-x-3">
                 <div className="flex items-center space-x-2 text-sm">
                   <span className="text-gray-700">Payments</span>
-                  <span className="text-orange-700">›</span>
+                  <span className="text-green-700">›</span>
                   <span className="text-black font-medium">
                     Payment Management
                   </span>
@@ -512,26 +512,26 @@ const Payment = () => {
             </div>
             <div className="flex items-center space-x-4">
               <div className="relative hidden md:block">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-orange-700" />
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-green-700" />
                 <input
                   type="text"
                   placeholder="Search payments..."
-                  className="pl-10 pr-4 py-2 w-64 bg-blue-100/50 border border-blue-200/50 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500/50 transition-all duration-200"
+                  className="pl-10 pr-4 py-2 w-64 bg-green-100/50 border border-green-200/50 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-green-500/20 focus:border-green-500/50 transition-all duration-200"
                 />
               </div>
               <NotificationBell />
-              <div className="flex items-center space-x-3 pl-4 border-l border-blue-200/50">
+              <div className="flex items-center space-x-3 pl-4 border-l border-green-200/50">
                 <div className="text-right hidden sm:block">
                   <div className="text-sm font-semibold text-black">
                     {userName}
                   </div>
-                  <div className="text-xs text-orange-500">Loan Manager</div>
+                  <div className="text-xs text-green-600">Loan Manager</div>
                 </div>
                 <div className="relative">
-                  <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-500 rounded-xl flex items-center justify-center shadow-lg shadow-blue-500/25"></div>
+                  <div className="w-10 h-10 bg-gradient-to-br from-green-500 to-teal-500 rounded-xl flex items-center justify-center shadow-lg shadow-green-500/25"></div>
                   <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-400 border-2 border-white rounded-full shadow-sm"></div>
                 </div>
-                <ChevronDown className="w-4 h-4 text-blue-400" />
+                <ChevronDown className="w-4 h-4 text-green-500" />
               </div>
             </div>
           </div>
@@ -549,8 +549,8 @@ const Payment = () => {
                     onClick={() => setActiveTab(tab.id)}
                     className={`flex items-center space-x-2 px-6 py-3 rounded-xl font-medium transition-all duration-200 ${
                       activeTab === tab.id
-                        ? "bg-gradient-to-r from-orange-700 to-red-500 text-white shadow-lg"
-                        : "text-black hover:bg-orange-100"
+                        ? "bg-gradient-to-r from-green-600 to-emerald-600 text-white shadow-lg"
+                        : "text-black hover:bg-green-100"
                     }`}
                   >
                     <IconComponent className="w-4 h-4" />
@@ -644,7 +644,7 @@ const Payment = () => {
                       </div>
                     ) : loans.length === 0 ? (
                       <div className="text-center py-8">
-                        <AlertCircle className="w-8 h-8 text-blue-300 mx-auto mb-2" />
+                        <AlertCircle className="w-8 h-8 text-green-300 mx-auto mb-2" />
                         <p className="text-black text-sm">
                           No active loans found
                         </p>
@@ -656,8 +656,8 @@ const Payment = () => {
                           onClick={() => setSelectedLoan(index)}
                           className={`p-4 rounded-xl cursor-pointer transition-all duration-200 border-2 ${
                             selectedLoan === index
-                              ? "border-black bg-white shadow-lg"
-                              : "border-gray-300 bg-white/50 hover:border-gray-300 hover:shadow-md"
+                              ? "border-green-600 bg-white shadow-lg"
+                              : "border-gray-300 bg-white/50 hover:border-green-300 hover:shadow-md"
                           }`}
                         >
                           <div className="flex justify-between items-start mb-2">
@@ -668,7 +668,7 @@ const Payment = () => {
                               className={`text-xs px-2 py-1 rounded-full ${
                                 loan.status === "active"
                                   ? "bg-green-100 text-green-700"
-                                  : "bg-orange-100 text-gray-700"
+                                  : "bg-green-100 text-gray-700"
                               }`}
                             >
                               {loan.status}
@@ -680,7 +680,7 @@ const Payment = () => {
                           <div className="text-sm text-gray-700 mb-2">
                             {loan.loanType}
                           </div>
-                          <div className="text-sm font-semibold text-orange-600">
+                          <div className="text-sm font-semibold text-green-600">
                             Due: {formatCurrency(loan.dueAmount)}
                           </div>
                           <div className="text-xs text-black mt-1">
@@ -706,9 +706,9 @@ const Payment = () => {
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-                      <div className="p-4 bg-gradient-to-br from-red-50 to-orange-50 rounded-xl border border-red-200">
+                      <div className="p-4 bg-gradient-to-br from-green-50 to-emerald-50 rounded-xl border border-green-200">
                         <div className="flex items-center space-x-3 mb-2">
-                          <AlertCircle className="w-5 h-5 text-red-600" />
+                          <AlertCircle className="w-5 h-5 text-green-600" />
                           <span className="text-sm font-medium text-black">
                             Amount Due
                           </span>
@@ -722,7 +722,7 @@ const Payment = () => {
                       </div>
                       <div className="p-4 bg-white rounded-xl border border-gray-300">
                         <div className="flex items-center space-x-3 mb-2">
-                          <DollarSign className="w-5 h-5 text-orange-700" />
+                          <DollarSign className="w-5 h-5 text-green-600" />
                           <span className="text-sm font-medium text-black">
                             Outstanding Balance
                           </span>
@@ -746,7 +746,7 @@ const Payment = () => {
                             onClick={() =>
                               setPaymentAmount(currentLoan.dueAmount.toString())
                             }
-                            className="p-3 border-2 border-gray-300 rounded-xl text-center hover:border-black hover:bg-white transition-all duration-200"
+                            className="p-3 border-2 border-gray-300 rounded-xl text-center hover:border-green-600 hover:bg-white transition-all duration-200"
                           >
                             <div className="text-sm font-medium text-black">
                               Pay EMI Amount
@@ -757,7 +757,7 @@ const Payment = () => {
                           </button>
                           <button
                             onClick={() => setPaymentAmount("")}
-                            className="p-3 border-2 border-gray-300 rounded-xl text-center hover:border-black hover:bg-white transition-all duration-200"
+                            className="p-3 border-2 border-gray-300 rounded-xl text-center hover:border-green-600 hover:bg-white transition-all duration-200"
                           >
                             <div className="text-sm font-medium text-black">
                               Custom Amount
@@ -768,13 +768,13 @@ const Payment = () => {
                           </button>
                         </div>
                         <div className="relative">
-                          <DollarSign className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-orange-700" />
+                          <DollarSign className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-green-600" />
                           <input
                             type="number"
                             value={paymentAmount}
                             onChange={(e) => setPaymentAmount(e.target.value)}
                             placeholder="Enter payment amount"
-                            className="w-full pl-12 pr-4 py-4 bg-white border border-gray-300 rounded-xl text-lg font-semibold focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all duration-200"
+                            className="w-full pl-12 pr-4 py-4 bg-white border border-gray-300 rounded-xl text-lg font-semibold focus:outline-none focus:ring-2 focus:ring-green-500/20 focus:border-green-500 transition-all duration-200"
                           />
                         </div>
                       </div>
@@ -792,11 +792,11 @@ const Payment = () => {
                                 onClick={() => setPaymentMethod(method.id)}
                                 className={`p-4 rounded-xl border-2 transition-all duration-200 ${
                                   paymentMethod === method.id
-                                    ? "border-gray-500 bg-white shadow-lg"
-                                    : "border-gray-300 hover:border-gray-300 hover:bg-orange-50/50"
+                                    ? "border-green-600 bg-white shadow-lg"
+                                    : "border-gray-300 hover:border-green-300 hover:bg-green-50/50"
                                 }`}
                               >
-                                <IconComponent className="w-6 h-6 text-orange-700 mx-auto mb-2" />
+                                <IconComponent className="w-6 h-6 text-green-600 mx-auto mb-2" />
                                 <div className="text-sm font-medium text-gray-700">
                                   {method.label}
                                 </div>
@@ -816,7 +816,7 @@ const Payment = () => {
                           value={paymentReference}
                           onChange={(e) => setPaymentReference(e.target.value)}
                           placeholder="Enter payment reference number"
-                          className="w-full px-4 py-3 bg-white border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-yellow-500/20 focus:border-orange-500 transition-all duration-200"
+                          className="w-full px-4 py-3 bg-white border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-500/20 focus:border-green-500 transition-all duration-200"
                           required
                         />
                         <p className="text-xs text-gray-700 mt-1">
@@ -834,19 +834,19 @@ const Payment = () => {
                           onChange={(e) => setNotes(e.target.value)}
                           placeholder="Add any additional notes about this payment"
                           rows={3}
-                          className="w-full px-4 py-3 bg-white border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-yellow-500/20 focus:border-orange-500 transition-all duration-200 resize-none"
+                          className="w-full px-4 py-3 bg-white border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-500/20 focus:border-green-500 transition-all duration-200 resize-none"
                         />
                       </div>
 
-                      <div className="pt-4 border-t border-orange-200">
+                      <div className="pt-4 border-t border-green-200">
                         <button
                           onClick={handlePayment}
                           disabled={loading}
                           className={`w-full py-4 ${
                             loading
                               ? "bg-gray-400 cursor-not-allowed"
-                              : "bg-gradient-to-r from-orange-500 to-red-500 hover:from-yellow-600 hover:to-orange-600"
-                          } text-white rounded-xl text-lg font-semibold transition-all duration-200 flex items-center justify-center space-x-2 shadow-lg shadow-blue-500/25`}
+                              : "bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700"
+                          } text-white rounded-xl text-lg font-semibold transition-all duration-200 flex items-center justify-center space-x-2 shadow-lg shadow-green-500/25`}
                         >
                           <Shield className="w-5 h-5" />
                           <span>
@@ -868,7 +868,7 @@ const Payment = () => {
                 ) : (
                   <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-8 shadow-lg border border-white/50">
                     <div className="text-center py-12">
-                      <AlertCircle className="w-16 h-16 text-blue-300 mx-auto mb-4" />
+                      <AlertCircle className="w-16 h-16 text-green-300 mx-auto mb-4" />
                       <h3 className="text-lg font-semibold text-black mb-2">
                         No Loan Selected
                       </h3>
@@ -916,7 +916,7 @@ const Payment = () => {
 
               {/* Payment History Table */}
               <div className="bg-white/70 backdrop-blur-sm rounded-2xl shadow-lg border border-white/50">
-                <div className="p-6 border-b border-blue-200">
+                <div className="p-6 border-b border-green-200">
                   <div className="flex items-center justify-between">
                     <h3 className="text-lg font-bold text-black">
                       Payment History
@@ -925,14 +925,14 @@ const Payment = () => {
                       <select
                         value={filterStatus}
                         onChange={(e) => setFilterStatus(e.target.value)}
-                        className="px-4 py-2 bg-white border border-blue-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-orange-500/20"
+                        className="px-4 py-2 bg-white border border-green-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-green-500/20"
                       >
                         <option value="all">All Status</option>
                         <option value="confirmed">Confirmed</option>
                         <option value="pending">Pending</option>
                         <option value="failed">Failed</option>
                       </select>
-                      <button className="flex items-center space-x-2 px-4 py-2 bg-gradient-to-r from-orange-500 to-orange-600 text-white rounded-xl hover:from-orange-600 hover:to-orange-700 transition-all duration-200 shadow-lg">
+                      <button className="flex items-center space-x-2 px-4 py-2 bg-gradient-to-r from-green-600 to-emerald-600 text-white rounded-xl hover:from-green-700 hover:to-emerald-700 transition-all duration-200 shadow-lg">
                         <Download className="w-4 h-4" />
                         <span>Export</span>
                       </button>
@@ -943,7 +943,7 @@ const Payment = () => {
                 <div className="overflow-x-auto">
                   {loading ? (
                     <div className="text-center py-12">
-                      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-orange-600 mx-auto mb-4"></div>
+                      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-green-600 mx-auto mb-4"></div>
                       <p className="text-gray-700">
                         Loading payment history...
                       </p>
@@ -960,7 +960,7 @@ const Payment = () => {
                     </div>
                   ) : (
                     <table className="w-full">
-                      <thead className="bg-blue-50/50">
+                      <thead className="bg-green-50/50">
                         <tr>
                           <th className="text-left px-6 py-4 text-sm font-semibold text-black">
                             Payment ID
@@ -985,13 +985,13 @@ const Payment = () => {
                           </th>
                         </tr>
                       </thead>
-                      <tbody className="divide-y divide-blue-100">
+                      <tbody className="divide-y divide-green-100">
                         {filteredHistory.map((payment) => {
                           const loanInfo = getLoanInfo(payment.loan);
                           return (
                             <tr
                               key={payment._id}
-                              className="hover:bg-blue-50/30 transition-colors duration-150"
+                              className="hover:bg-green-50/30 transition-colors duration-150"
                             >
                               <td className="px-6 py-4">
                                 <div className="text-sm font-medium text-black">
@@ -1020,7 +1020,7 @@ const Payment = () => {
                                       paymentMethods.find(
                                         (m) => m.id === payment.paymentMethod
                                       )!.icon,
-                                      { className: "w-4 h-4 text-orange-600" }
+                                      { className: "w-4 h-4 text-green-600" }
                                     )}
                                   <span className="text-sm text-black">
                                     {payment.paymentMethod}
@@ -1067,14 +1067,14 @@ const Payment = () => {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
               <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-8 shadow-lg border border-white/50">
                 <div className="flex items-center space-x-3 mb-6">
-                  <Settings className="w-6 h-6 text-orange-600" />
+                  <Settings className="w-6 h-6 text-green-600" />
                   <h3 className="text-xl font-bold text-black">
                     Auto Payment Settings
                   </h3>
                 </div>
 
                 <div className="space-y-6">
-                  <div className="flex items-center justify-between p-4 bg-blue-50/50 rounded-xl border border-blue-200">
+                  <div className="flex items-center justify-between p-4 bg-green-50/50 rounded-xl border border-green-200">
                     <div>
                       <div className="font-semibold text-black">
                         Enable Auto Payment
@@ -1090,7 +1090,7 @@ const Payment = () => {
                         onChange={(e) => setAutoPayEnabled(e.target.checked)}
                         className="sr-only peer"
                       />
-                      <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-orange-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-gradient-to-r peer-checked:from-orange-500 peer-checked:to-orange-600"></div>
+                      <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-green-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-gradient-to-r peer-checked:from-green-500 peer-checked:to-green-600"></div>
                     </label>
                   </div>
 
@@ -1103,7 +1103,7 @@ const Payment = () => {
                         <select
                           value={paymentMethod}
                           onChange={(e) => setPaymentMethod(e.target.value)}
-                          className="w-full px-4 py-3 bg-white border border-green-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500/20"
+                          className="w-full px-4 py-3 bg-white border border-green-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-500/20"
                         >
                           {paymentMethods.map((method) => (
                             <option key={method.id} value={method.id}>
@@ -1113,8 +1113,8 @@ const Payment = () => {
                         </select>
                       </div>
 
-                      <div className="flex items-start space-x-3 p-3 bg-yellow-50 rounded-lg border border-yellow-200">
-                        <Info className="w-5 h-5 text-yellow-600 mt-0.5" />
+                      <div className="flex items-start space-x-3 p-3 bg-green-50 rounded-lg border border-green-200">
+                        <Info className="w-5 h-5 text-green-600 mt-0.5" />
                         <div className="text-sm text-gray-700">
                           <strong className="text-black">Important:</strong>{" "}
                           Auto payments will be processed 1 day before the due
@@ -1129,7 +1129,7 @@ const Payment = () => {
 
               <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-8 shadow-lg border border-white/50">
                 <div className="flex items-center space-x-3 mb-6">
-                  <Shield className="w-6 h-6 text-orange-600" />
+                  <Shield className="w-6 h-6 text-green-600" />
                   <h3 className="text-xl font-bold text-black">
                     Security & Benefits
                   </h3>
@@ -1148,8 +1148,8 @@ const Payment = () => {
                     </div>
                   </div>
 
-                  <div className="flex items-start space-x-3 p-4 bg-blue-50/50 rounded-xl">
-                    <Shield className="w-5 h-5 text-blue-600 mt-0.5" />
+                  <div className="flex items-start space-x-3 p-4 bg-green-50/50 rounded-xl">
+                    <Shield className="w-5 h-5 text-green-600 mt-0.5" />
                     <div>
                       <div className="font-semibold text-black">
                         Bank-Grade Security
@@ -1160,8 +1160,8 @@ const Payment = () => {
                     </div>
                   </div>
 
-                  <div className="flex items-start space-x-3 p-4 bg-purple-50/50 rounded-xl">
-                    <Bell className="w-5 h-5 text-purple-600 mt-0.5" />
+                  <div className="flex items-start space-x-3 p-4 bg-green-50/50 rounded-xl">
+                    <Bell className="w-5 h-5 text-green-600 mt-0.5" />
                     <div>
                       <div className="font-semibold text-black">
                         Payment Notifications
@@ -1172,8 +1172,8 @@ const Payment = () => {
                     </div>
                   </div>
 
-                  <div className="flex items-start space-x-3 p-4 bg-orange-50/50 rounded-xl">
-                    <Settings className="w-5 h-5 text-orange-600 mt-0.5" />
+                  <div className="flex items-start space-x-3 p-4 bg-green-50/50 rounded-xl">
+                    <Settings className="w-5 h-5 text-green-600 mt-0.5" />
                     <div>
                       <div className="font-semibold text-black">
                         Full Control
@@ -1186,7 +1186,7 @@ const Payment = () => {
                 </div>
 
                 {autoPayEnabled && (
-                  <div className="mt-6 p-4 bg-gradient-to-r from-orange-500 to-orange-600 rounded-xl text-white shadow-lg">
+                  <div className="mt-6 p-4 bg-gradient-to-r from-green-500 to-green-600 rounded-xl text-white shadow-lg">
                     <div className="flex items-center space-x-2 mb-2">
                       <CheckCircle className="w-5 h-5" />
                       <span className="font-semibold">Auto Payment Active</span>

@@ -10,15 +10,14 @@ import {
   DollarSign,
   TrendingUp,
   Eye,
-  PenTool, // Add this new import
-  Upload, // Add this new import
-  X, // Add this new import
+  PenTool,
+  Upload,
+  X,
 } from "lucide-react";
 
 import LoanService from "../../services/user_Services/loan_Service";
 import SignatureCanvas from "react-signature-canvas";
 
-// Updated type definitions based on your loan model
 interface LoanApplication {
   _id: string;
   user: string;
@@ -65,7 +64,6 @@ const ApplicationStatus: React.FC<ApplicationStatusProps> = ({
   const [error, setError] = useState<string | null>(null);
   const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
   const [selectedLoan, setSelectedLoan] = useState<string | null>(null);
-  //signature
   const [showSignatureModal, setShowSignatureModal] = useState<string | null>(
     null
   );
@@ -81,7 +79,6 @@ const ApplicationStatus: React.FC<ApplicationStatusProps> = ({
   }>({});
   const [acceptedTerms, setAcceptedTerms] = useState(false);
 
-  // Fetch applications from API
   const fetchApplications = async () => {
     setLoading(true);
     setError(null);
@@ -93,11 +90,9 @@ const ApplicationStatus: React.FC<ApplicationStatusProps> = ({
         return;
       }
 
-      // Decode the token to get user ID
       const payload = JSON.parse(atob(token.split(".")[1]));
       const userId = payload.id;
 
-      // Use getLoansByUserId instead of getAllLoans
       const response = await LoanService.getLoansByUserId(userId);
 
       if (response.data) {
@@ -107,7 +102,6 @@ const ApplicationStatus: React.FC<ApplicationStatusProps> = ({
         setApplicationsData([]);
       }
     } catch (err) {
-      // Fix for TypeScript error: properly handle unknown error type
       const errorMessage =
         err instanceof Error
           ? err.message
@@ -120,7 +114,6 @@ const ApplicationStatus: React.FC<ApplicationStatusProps> = ({
     }
   };
 
-  // Fetch data on component mount
   useEffect(() => {
     if (!applications) {
       fetchApplications();
@@ -153,12 +146,12 @@ const ApplicationStatus: React.FC<ApplicationStatusProps> = ({
         };
       case "pending":
         return {
-          color: "text-orange-700",
+          color: "text-green-700",
           bgColor: "bg-white border-gray-200",
           icon: Clock,
           text: "Pending Review",
           description: "Your application is being reviewed by our team",
-          gradient: "from-orange-500 to-orange-600",
+          gradient: "from-green-500 to-green-600",
         };
       case "rejected":
         return {
@@ -210,7 +203,6 @@ const ApplicationStatus: React.FC<ApplicationStatusProps> = ({
       case "closed":
         return 100;
       case "active":
-        // If we have balance and amount, calculate based on repayment
         if (loan.balance !== undefined && loan.amount) {
           const repaidAmount = loan.amount - loan.balance;
           return Math.round((repaidAmount / loan.amount) * 100);
@@ -275,13 +267,12 @@ const ApplicationStatus: React.FC<ApplicationStatusProps> = ({
         title: "Pending Review",
         value: pendingLoans.toString(),
         icon: Clock,
-        color: "text-orange-600",
-        bgColor: "bg-orange-50",
+        color: "text-green-600",
+        bgColor: "bg-green-50",
       },
     ];
   };
 
-  //signature handlers
   const handleSaveSignature = async (loanId: string) => {
     try {
       if (!acceptedTerms) {
@@ -306,7 +297,6 @@ const ApplicationStatus: React.FC<ApplicationStatusProps> = ({
         return;
       }
 
-      // Save signature locally (you can replace this with your API call)
       setSavedSignatures((prev) => ({
         ...prev,
         [loanId]: signatureData,
@@ -314,14 +304,10 @@ const ApplicationStatus: React.FC<ApplicationStatusProps> = ({
 
       console.log("Saving signature for loan:", loanId, signatureData);
 
-      // Close modal and reset states
       setShowSignatureModal(null);
       setUploadedSignature(null);
       setAcceptedTerms(false);
       alert("Signature saved successfully!");
-
-      // You can add your API call here to save the signature
-      // await LoanService.saveSignature(loanId, signatureData);
     } catch (error) {
       console.error("Error saving signature:", error);
       alert("Failed to save signature. Please try again.");
@@ -381,7 +367,6 @@ const ApplicationStatus: React.FC<ApplicationStatusProps> = ({
           )}
         </div>
 
-        {/* Stats Cards - Reduced size */}
         {applicationsData.length > 0 && (
           <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-4">
             {getStatsCards().map((stat, index) => {
@@ -425,9 +410,9 @@ const ApplicationStatus: React.FC<ApplicationStatusProps> = ({
       {loading ? (
         <div className="flex flex-col items-center justify-center py-12">
           <div className="relative">
-            <div className="w-12 h-12 border-4 border-blue-200 rounded-full animate-spin border-t-blue-600"></div>
+            <div className="w-12 h-12 border-4 border-green-200 rounded-full animate-spin border-t-green-600"></div>
           </div>
-          <span className="text-blue-600 font-medium mt-3 text-sm">
+          <span className="text-green-600 font-medium mt-3 text-sm">
             Loading your loan applications...
           </span>
         </div>
@@ -459,9 +444,7 @@ const ApplicationStatus: React.FC<ApplicationStatusProps> = ({
                   statusConfig.bgColor
                 } ${isExpanded ? "shadow-md" : "shadow-sm"}`}
               >
-                {/* Main Content - Much smaller padding */}
                 <div className="p-3">
-                  {/* Header - Compact */}
                   <div className="flex items-center justify-between mb-2">
                     <div className="flex items-center space-x-2 flex-1 min-w-0">
                       <div className="w-8 h-8 bg-gray-50 rounded-lg flex items-center justify-center flex-shrink-0">
@@ -513,7 +496,6 @@ const ApplicationStatus: React.FC<ApplicationStatusProps> = ({
                     </div>
                   </div>
 
-                  {/* Progress Bar - Compact */}
                   <div className="mb-2">
                     <div className="flex justify-between items-center mb-1">
                       <span className="text-xs text-gray-600">Progress</span>
@@ -523,13 +505,12 @@ const ApplicationStatus: React.FC<ApplicationStatusProps> = ({
                     </div>
                     <div className="w-full bg-gray-200 rounded-full h-1.5 overflow-hidden">
                       <div
-                        className="h-full bg-gradient-to-r from-orange-500 to-red-800 rounded-full transition-all duration-1000"
+                        className="h-full bg-gradient-to-r from-green-500 to-green-800 rounded-full transition-all duration-1000"
                         style={{ width: `${progress}%` }}
                       />
                     </div>
                   </div>
 
-                  {/* Quick Details - Compact grid */}
                   <div className="grid grid-cols-3 gap-2 text-xs">
                     <div className="bg-gray-50 rounded p-1.5 text-center">
                       <div className="text-gray-600 text-xs">Applied</div>
@@ -557,7 +538,6 @@ const ApplicationStatus: React.FC<ApplicationStatusProps> = ({
                     )}
                   </div>
 
-                  {/* Expanded Details */}
                   {isExpanded && (
                     <div className="mt-3 pt-3 border-t border-gray-200">
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
@@ -599,7 +579,6 @@ const ApplicationStatus: React.FC<ApplicationStatusProps> = ({
                   )}
                 </div>
 
-                {/* Status indicator bar */}
                 <div
                   className={`h-0.5 bg-gradient-to-r ${statusConfig.gradient}`}
                 ></div>
@@ -609,12 +588,9 @@ const ApplicationStatus: React.FC<ApplicationStatusProps> = ({
         </div>
       )}
 
-      {/* Signature Modal */}
-      {/* Signature Modal */}
       {showSignatureModal && (
         <div className="fixed inset-0 z-50 overflow-y-auto">
           <div className="flex min-h-screen items-center justify-center p-4">
-            {/* Backdrop */}
             <div
               className="fixed inset-0 bg-black/30 backdrop-blur-sm transition-opacity"
               onClick={() => {
@@ -624,7 +600,6 @@ const ApplicationStatus: React.FC<ApplicationStatusProps> = ({
               }}
             ></div>
 
-            {/* Modal */}
             <div className="relative bg-white rounded-2xl shadow-2xl p-6 max-w-2xl w-full max-h-[90vh] overflow-y-auto">
               <div className="flex items-center justify-between mb-4">
                 <h3 className="text-lg font-bold text-black">
@@ -642,7 +617,6 @@ const ApplicationStatus: React.FC<ApplicationStatusProps> = ({
                 </button>
               </div>
 
-              {/* Show existing signature if available */}
               {savedSignatures[showSignatureModal] && (
                 <div className="mb-4 p-4 bg-green-50 border border-green-200 rounded-lg">
                   <p className="text-sm text-green-700 font-medium mb-2">
@@ -659,7 +633,6 @@ const ApplicationStatus: React.FC<ApplicationStatusProps> = ({
                 </div>
               )}
 
-              {/* Signature Mode Toggle */}
               <div className="flex mb-4 bg-gray-100 rounded-lg p-1">
                 <button
                   onClick={() => {
@@ -691,7 +664,6 @@ const ApplicationStatus: React.FC<ApplicationStatusProps> = ({
                 </button>
               </div>
 
-              {/* Signature Area */}
               <div className="border-2 border-dashed border-gray-300 rounded-lg p-4 mb-4 bg-gray-50">
                 {signatureMode === "draw" ? (
                   <div>
@@ -735,7 +707,6 @@ const ApplicationStatus: React.FC<ApplicationStatusProps> = ({
                 )}
               </div>
 
-              {/* Terms and Conditions */}
               <div className="mb-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">
                 <h4 className="font-semibold text-blue-900 mb-2">
                   Terms and Conditions
@@ -777,7 +748,6 @@ const ApplicationStatus: React.FC<ApplicationStatusProps> = ({
                 </label>
               </div>
 
-              {/* Action Buttons */}
               <div className="flex justify-between items-center">
                 <button
                   onClick={clearSignature}

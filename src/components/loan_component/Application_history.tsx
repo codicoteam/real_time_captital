@@ -249,7 +249,7 @@ const ApplicationHistory: React.FC<ApplicationHistoryProps> = ({
       case "vehicle":
         return "from-blue-500 to-cyan-600";
       case "solar":
-        return "from-yellow-500 to-orange-600";
+        return "from-yellow-500 to-green-600";
       case "building_finisher":
         return "from-green-500 to-emerald-600";
       default:
@@ -579,18 +579,18 @@ const ApplicationHistory: React.FC<ApplicationHistoryProps> = ({
               )}
 
               {selectedApplication.monthlyPayment && (
-                <div className="bg-gradient-to-br from-orange-50 to-red-50 p-6 rounded-2xl border border-orange-100">
+                <div className="bg-gradient-to-br from-green-50 to-emerald-50 p-6 rounded-2xl border border-green-100">
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="text-orange-600 text-sm font-medium">
+                      <p className="text-green-600 text-sm font-medium">
                         Monthly Payment
                       </p>
-                      <p className="text-2xl font-bold text-orange-800">
+                      <p className="text-2xl font-bold text-green-800">
                         ${selectedApplication.monthlyPayment.toLocaleString()}
                       </p>
                     </div>
-                    <div className="bg-orange-100 p-3 rounded-xl">
-                      <CreditCard className="w-6 h-6 text-orange-600" />
+                    <div className="bg-green-100 p-3 rounded-xl">
+                      <CreditCard className="w-6 h-6 text-green-600" />
                     </div>
                   </div>
                 </div>
@@ -676,14 +676,14 @@ const ApplicationHistory: React.FC<ApplicationHistoryProps> = ({
 
                   {selectedApplication.endDate && (
                     <div className="flex items-center p-3 bg-white rounded-xl border border-slate-200">
-                      <div className="bg-orange-100 p-2 rounded-lg mr-4">
-                        <StopCircle className="w-4 h-4 text-orange-600" />
+                      <div className="bg-green-100 p-2 rounded-lg mr-4">
+                        <StopCircle className="w-4 h-4 text-green-600" />
                       </div>
                       <div>
                         <p className="text-sm font-medium text-slate-600">
                           End Date
                         </p>
-                        <p className="text-orange-700 font-semibold">
+                        <p className="text-green-700 font-semibold">
                           {formatDate(selectedApplication.endDate)}
                         </p>
                       </div>
@@ -759,18 +759,18 @@ const ApplicationHistory: React.FC<ApplicationHistoryProps> = ({
             {(selectedApplication.purpose ||
               selectedApplication.collateral ||
               selectedApplication.comments) && (
-              <div className="mt-8 bg-gradient-to-br from-amber-50 to-yellow-50 p-6 rounded-2xl border border-amber-100">
-                <h3 className="text-lg font-semibold text-amber-800 mb-6">
+              <div className="mt-8 bg-gradient-to-br from-green-50 to-emerald-50 p-6 rounded-2xl border border-green-100">
+                <h3 className="text-lg font-semibold text-green-800 mb-6">
                   Additional Information
                 </h3>
 
                 <div className="space-y-4">
                   {selectedApplication.purpose && (
                     <div>
-                      <label className="text-sm font-semibold text-amber-700 block mb-2">
+                      <label className="text-sm font-semibold text-green-700 block mb-2">
                         Purpose
                       </label>
-                      <p className="text-amber-800 bg-white p-3 rounded-xl border border-amber-200">
+                      <p className="text-green-800 bg-white p-3 rounded-xl border border-green-200">
                         {selectedApplication.purpose}
                       </p>
                     </div>
@@ -778,10 +778,10 @@ const ApplicationHistory: React.FC<ApplicationHistoryProps> = ({
 
                   {selectedApplication.collateral && (
                     <div>
-                      <label className="text-sm font-semibold text-amber-700 block mb-2">
+                      <label className="text-sm font-semibold text-green-700 block mb-2">
                         Collateral
                       </label>
-                      <p className="text-amber-800 bg-white p-3 rounded-xl border border-amber-200">
+                      <p className="text-green-800 bg-white p-3 rounded-xl border border-green-200">
                         {selectedApplication.collateral}
                       </p>
                     </div>
@@ -789,10 +789,10 @@ const ApplicationHistory: React.FC<ApplicationHistoryProps> = ({
 
                   {selectedApplication.comments && (
                     <div>
-                      <label className="text-sm font-semibold text-amber-700 block mb-2">
+                      <label className="text-sm font-semibold text-green-700 block mb-2">
                         Comments
                       </label>
-                      <p className="text-amber-800 bg-white p-3 rounded-xl border border-amber-200">
+                      <p className="text-green-800 bg-white p-3 rounded-xl border border-green-200">
                         {selectedApplication.comments}
                       </p>
                     </div>
@@ -869,8 +869,8 @@ const ApplicationHistory: React.FC<ApplicationHistoryProps> = ({
       <div className="bg-white rounded-3xl shadow-xl p-8">
         <div className="flex flex-col items-center justify-center py-16">
           <div className="relative">
-            <div className="w-16 h-16 border-4 border-blue-200 rounded-full"></div>
-            <div className="w-16 h-16 border-4 border-blue-600 border-t-transparent rounded-full animate-spin absolute top-0 left-0"></div>
+            <div className="w-16 h-16 border-4 border-green-200 rounded-full"></div>
+            <div className="w-16 h-16 border-4 border-green-600 border-t-transparent rounded-full animate-spin absolute top-0 left-0"></div>
           </div>
           <p className="text-slate-600 mt-4 text-lg">
             Loading application history...
@@ -939,7 +939,7 @@ const ApplicationHistory: React.FC<ApplicationHistoryProps> = ({
               {historyData.length === 1 ? "application" : "applications"} found
             </p>
           </div>
-          <div className="bg-white/10 p-3 rounded-2xl">
+          <div className="bg-gradient-to-r from-green-500 to-emerald-600 p-3 rounded-2xl">
             <Clock className="w-6 h-6 text-white" />
           </div>
         </div>
@@ -1053,7 +1053,7 @@ const ApplicationHistory: React.FC<ApplicationHistoryProps> = ({
                   <div className="flex items-center space-x-3 mt-4 lg:mt-0 lg:ml-6">
                     <button
                       onClick={() => handleViewDetails(application)}
-                      className="flex items-center px-4 py-2 bg-gradient-to-r from-red-500 to-orange-500 text-white rounded-xl hover:from-orange-300 hover:to-orange-5000 transition-all duration-200 shadow-md hover:shadow-lg text-sm font-medium"
+                      className="flex items-center px-4 py-2 bg-gradient-to-r from-green-500 to-emerald-600 text-white rounded-xl hover:from-green-600 hover:to-emerald-700 transition-all duration-200 shadow-md hover:shadow-lg text-sm font-medium"
                     >
                       <Eye className="w-4 h-4 mr-2" />
                       View Details

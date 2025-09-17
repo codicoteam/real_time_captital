@@ -566,7 +566,7 @@ const KycDocuments: React.FC<KycDocumentsProps> = ({
   // Get document status
   const getDocumentStatus = (docType: DocumentType) => {
     if (!kycData)
-      return { status: "missing", color: "text-red-600", bgColor: "bg-red-50" };
+      return { status: "missing", color: "text-green-600", bgColor: "bg-green-50" };
 
     const docValue = kycData[docType.key];
     if (docValue) {
@@ -583,7 +583,7 @@ const KycDocuments: React.FC<KycDocumentsProps> = ({
         bgColor: "bg-orange-50",
       };
     }
-    return { status: "missing", color: "text-red-600", bgColor: "bg-red-50" };
+    return { status: "missing", color: "text-green-600", bgColor: "bg-green-50" };
   };
 
   // Get status icon
@@ -670,7 +670,7 @@ const KycDocuments: React.FC<KycDocumentsProps> = ({
               <button
                 onClick={deleteKycDocument}
                 disabled={deleting !== null}
-                className="p-2 text-red-600 hover:text-red-800 disabled:opacity-50"
+                className="p-2 text-green-600 hover:text-green-800 disabled:opacity-50"
               >
                 <Trash2 className="w-5 h-5" />
               </button>
@@ -688,7 +688,7 @@ const KycDocuments: React.FC<KycDocumentsProps> = ({
           </div>
           <div className="w-full bg-gray-200 rounded-full h-2">
             <div
-              className="bg-blue-600 h-2 rounded-full transition-all duration-300"
+              className="bg-green-600 h-2 rounded-full transition-all duration-300"
               style={{ width: `${progress}%` }}
             />
           </div>
@@ -696,15 +696,15 @@ const KycDocuments: React.FC<KycDocumentsProps> = ({
 
         {/* Messages */}
         {error && (
-          <div className="mb-4 p-4 bg-red-50 border border-red-200 rounded-md">
+          <div className="mb-4 p-4 bg-green-50 border border-green-200 rounded-md">
             <div className="flex items-center justify-between">
               <div className="flex items-center">
-                <AlertCircle className="w-5 h-5 text-red-600 mr-2" />
-                <span className="text-red-800">{error}</span>
+                <AlertCircle className="w-5 h-5 text-green-600 mr-2" />
+                <span className="text-green-800">{error}</span>
               </div>
               <button
                 onClick={clearMessages}
-                className="text-red-600 hover:text-red-800"
+                className="text-green-600 hover:text-green-800"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -731,10 +731,10 @@ const KycDocuments: React.FC<KycDocumentsProps> = ({
 
         {/* Loading state */}
         {loading && (
-          <div className="mb-4 p-4 bg-blue-50 border border-blue-200 rounded-md">
+          <div className="mb-4 p-4 bg-green-50 border border-green-200 rounded-md">
             <div className="flex items-center">
-              <RefreshCw className="w-5 h-5 text-blue-600 mr-2 animate-spin" />
-              <span className="text-blue-800">Loading KYC documents...</span>
+              <RefreshCw className="w-5 h-5 text-green-600 mr-2 animate-spin" />
+              <span className="text-green-800">Loading KYC documents...</span>
             </div>
           </div>
         )}
@@ -755,7 +755,7 @@ const KycDocuments: React.FC<KycDocumentsProps> = ({
                     ? "border-green-300"
                     : status.status === "pending"
                     ? "border-orange-300"
-                    : "border-red-300"
+                    : "border-green-300"
                 }`}
               >
                 <div className="flex items-center justify-between">
@@ -767,7 +767,7 @@ const KycDocuments: React.FC<KycDocumentsProps> = ({
                       <h3 className="font-semibold text-gray-800">
                         {docType.label}
                         {docType.required && (
-                          <span className="text-red-500 ml-1">*</span>
+                          <span className="text-green-500 ml-1">*</span>
                         )}
                       </h3>
                       <p className="text-sm text-gray-600">
@@ -866,10 +866,10 @@ const KycDocuments: React.FC<KycDocumentsProps> = ({
               </div>
 
               {uploading && (
-                <div className="mt-4 p-3 bg-blue-50 border border-blue-200 rounded-md">
+                <div className="mt-4 p-3 bg-green-50 border border-green-200 rounded-md">
                   <div className="flex items-center">
-                    <RefreshCw className="w-4 h-4 text-blue-600 mr-2 animate-spin" />
-                    <span className="text-blue-800 text-sm">
+                    <RefreshCw className="w-4 h-4 text-green-600 mr-2 animate-spin" />
+                    <span className="text-green-800 text-sm">
                       Uploading document...
                     </span>
                   </div>
@@ -895,7 +895,7 @@ const KycDocuments: React.FC<KycDocumentsProps> = ({
                 max-w-md p-4 rounded-lg shadow-lg border-l-4 backdrop-blur-sm
                 ${submitMessage.type === 'success' 
                   ? 'bg-green-50/95 border-green-500 text-green-800' 
-                  : 'bg-red-50/95 border-red-500 text-red-800'
+                  : 'bg-green-50/95 border-green-500 text-green-800'
                 }
               `}
             >
@@ -904,7 +904,7 @@ const KycDocuments: React.FC<KycDocumentsProps> = ({
                   {submitMessage.type === 'success' ? (
                     <CheckCircle className="w-5 h-5 text-green-600" />
                   ) : (
-                    <AlertCircle className="w-5 h-5 text-red-600" />
+                    <AlertCircle className="w-5 h-5 text-green-600" />
                   )}
                 </div>
                 <div className="ml-3 flex-1">
@@ -919,7 +919,7 @@ const KycDocuments: React.FC<KycDocumentsProps> = ({
                     <div 
                       className={`
                         h-1 rounded-full animate-shrink
-                        ${submitMessage.type === 'success' ? 'bg-green-500' : 'bg-red-500'}
+                        ${submitMessage.type === 'success' ? 'bg-green-500' : 'bg-green-500'}
                       `}
                       style={{
                         animationDuration: submitMessage.type === 'success' ? '5s' : '7s',
@@ -934,7 +934,7 @@ const KycDocuments: React.FC<KycDocumentsProps> = ({
                     ml-2 flex-shrink-0 p-1 rounded-md hover:bg-opacity-20
                     ${submitMessage.type === 'success' 
                       ? 'text-green-600 hover:bg-green-600' 
-                      : 'text-red-600 hover:bg-red-600'
+                      : 'text-green-600 hover:bg-green-600'
                     }
                   `}
                 >

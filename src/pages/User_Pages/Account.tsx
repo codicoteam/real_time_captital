@@ -274,7 +274,7 @@ const Account = () => {
               isPassword ? "pr-12" : ""
             } rounded-xl border ${
               error ? "border-red-500" : "border-black"
-            } bg-white/50 focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 transition-all duration-200 ${
+            } bg-white/50 focus:outline-none focus:ring-2 focus:ring-green-500/20 focus:border-green-500 transition-all duration-200 ${
               disabled ? "bg-gray-50 cursor-not-allowed" : ""
             }`}
           />
@@ -282,7 +282,7 @@ const Account = () => {
             <button
               type="button"
               onClick={onToggle}
-              className="absolute right-3 top-1/2 transform -translate-y-1/2 text-orange-700 hover:text-red-600 transition-colors duration-200"
+              className="absolute right-3 top-1/2 transform -translate-y-1/2 text-green-700 hover:text-green-800 transition-colors duration-200"
             >
               {showToggle ? (
                 <EyeOff className="w-5 h-5" />
@@ -316,7 +316,7 @@ const Account = () => {
           onChange={onChange}
           className="sr-only peer"
         />
-        <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-orange-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-gradient-to-r peer-checked:from-orange-700 peer-checked:to-red-600"></div>
+        <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-green-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-gradient-to-r peer-checked:from-green-700 peer-checked:to-green-800"></div>
       </label>
     </div>
   );
@@ -332,8 +332,8 @@ const Account = () => {
   const notificationSections = [
     {
       title: "Communication Preferences",
-      color: "orange",
-      gradient: "from-orange-50 to-red-50",
+      color: "green",
+      gradient: "from-green-50 to-green-50",
       items: [
         {
           key: "emailNotifications",
@@ -354,8 +354,8 @@ const Account = () => {
     },
     {
       title: "Loan & Payment Notifications",
-      color: "orange",
-      gradient: "from-orange-50 to-red-50",
+      color: "green",
+      gradient: "from-green-50 to-green-50",
       items: [
         {
           key: "paymentReminders",
@@ -376,8 +376,8 @@ const Account = () => {
     },
     {
       title: "Marketing & Security",
-      color: "orange",
-      gradient: "from-orange-50 to-red-50",
+      color: "green",
+      gradient: "from-green-50 to-green-50",
       items: [
         {
           key: "promotionalEmails",
@@ -397,8 +397,8 @@ const Account = () => {
     return (
       <div className="flex h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 items-center justify-center">
         <div className="flex items-center space-x-2">
-          <Loader className="w-6 h-6 animate-spin text-orange-700" />
-          <span className="text-orange-700 font-medium">
+          <Loader className="w-6 h-6 animate-spin text-green-700" />
+          <span className="text-green-700 font-medium">
             Loading profile...
           </span>
         </div>
@@ -413,12 +413,12 @@ const Account = () => {
       <div className="flex-1 flex flex-col overflow-hidden lg:ml-0">
         {/* Header */}
         <header className="bg-white/80 backdrop-blur-xl shadow-sm border-b border-gray-200 px-6 py-4 relative">
-          <div className="absolute inset-0 bg-gradient-to-r from-orange-500/5 to-red-500/5"></div>
+          <div className="absolute inset-0 bg-gradient-to-r from-green-500/5 to-green-500/5"></div>
           <div className="relative flex items-center justify-between">
             <div className="flex items-center">
               <button
                 onClick={() => setSidebarOpen(true)}
-                className="lg:hidden mr-4 p-2 rounded-xl bg-gradient-to-r from-orange-700 to-red-600 text-white hover:from-orange-800 hover:to-red-700 transition-all duration-200"
+                className="lg:hidden mr-4 p-2 rounded-xl bg-gradient-to-r from-green-700 to-green-800 text-white hover:from-green-800 hover:to-green-900 transition-all duration-200"
               >
                 <Menu className="w-5 h-5" />
               </button>
@@ -435,7 +435,7 @@ const Account = () => {
                 <input
                   type="text"
                   placeholder="Search settings..."
-                  className="pl-10 pr-4 py-2 w-64 bg-white border border-black rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 transition-all duration-200"
+                  className="pl-10 pr-4 py-2 w-64 bg-white border border-black rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-green-500/20 focus:border-green-500 transition-all duration-200"
                 />
               </div>
               <NotificationBell userId={""} />
@@ -447,7 +447,7 @@ const Account = () => {
                   <div className="text-xs text-gray-700">Account Settings</div>
                 </div>
                 <div className="relative">
-                  <div className="w-10 h-10 bg-gradient-to-br from-orange-700 to-red-600 rounded-xl flex items-center justify-center shadow-lg shadow-orange-500/25">
+                  <div className="w-10 h-10 bg-gradient-to-br from-green-700 to-green-800 rounded-xl flex items-center justify-center shadow-lg shadow-green-500/25">
                     <span className="text-white font-semibold text-sm">
                       {profileData.firstName?.[0]?.toUpperCase() || "U"}
                       {profileData.lastName?.[0]?.toUpperCase() || "U"}
@@ -469,13 +469,13 @@ const Account = () => {
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-6">
                   <div className="relative">
-                    <div className="w-24 h-24 bg-gradient-to-br from-orange-700 to-red-600 rounded-2xl flex items-center justify-center shadow-lg shadow-orange-500/25">
+                    <div className="w-24 h-24 bg-gradient-to-br from-green-700 to-green-800 rounded-2xl flex items-center justify-center shadow-lg shadow-green-500/25">
                       <span className="text-white font-bold text-2xl">
                         {userName}
                       </span>
                     </div>
                     <button className="absolute -bottom-2 -right-2 p-2 bg-white rounded-xl shadow-lg border border-black hover:bg-gray-50 transition-all duration-200">
-                      <Camera className="w-4 h-4 text-orange-700" />
+                      <Camera className="w-4 h-4 text-green-700" />
                     </button>
                   </div>
                   <div>
@@ -510,13 +510,13 @@ const Account = () => {
                       onClick={() => setActiveTab(tab.id)}
                       className={`flex-1 flex items-center justify-center space-x-3 py-4 px-6 text-sm font-medium transition-all duration-200 ${
                         activeTab === tab.id
-                          ? "text-black border-b-2 border-orange-700 bg-orange-50/50"
-                          : "text-gray-700 hover:text-black hover:bg-orange-50/30"
+                          ? "text-black border-b-2 border-green-700 bg-green-50/50"
+                          : "text-gray-700 hover:text-black hover:bg-green-50/30"
                       }`}
                     >
                       <IconComponent
                         className={`w-5 h-5 ${
-                          activeTab === tab.id ? "text-orange-700" : ""
+                          activeTab === tab.id ? "text-green-700" : ""
                         }`}
                       />
                       <span>{tab.label}</span>
@@ -544,7 +544,7 @@ const Account = () => {
                           isEditing ? handleProfileSave() : setIsEditing(true)
                         }
                         disabled={saving}
-                        className="flex items-center space-x-2 px-6 py-3 bg-gradient-to-r from-orange-700 to-red-600 text-white rounded-xl font-medium hover:from-orange-800 hover:to-red-700 transition-all duration-200 disabled:opacity-50"
+                        className="flex items-center space-x-2 px-6 py-3 bg-gradient-to-r from-green-700 to-green-800 text-white rounded-xl font-medium hover:from-green-800 hover:to-green-900 transition-all duration-200 disabled:opacity-50"
                       >
                         {saving ? (
                           <Loader className="w-4 h-4 animate-spin" />
@@ -599,7 +599,7 @@ const Account = () => {
                           }
                           disabled={!isEditing || saving}
                           rows={3}
-                          className={`w-full px-4 py-3 rounded-xl border border-black bg-white/50 focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 transition-all duration-200 ${
+                          className={`w-full px-4 py-3 rounded-xl border border-black bg-white/50 focus:outline-none focus:ring-2 focus:ring-green-500/20 focus:border-green-500 transition-all duration-200 ${
                             !isEditing || saving
                               ? "bg-gray-50 cursor-not-allowed"
                               : ""
@@ -625,7 +625,7 @@ const Account = () => {
                         <button
                           onClick={handleProfileSave}
                           disabled={saving}
-                          className="px-6 py-3 bg-gradient-to-r from-orange-700 to-red-600 text-white rounded-xl font-medium hover:from-orange-800 hover:to-red-700 transition-all duration-200 disabled:opacity-50"
+                          className="px-6 py-3 bg-gradient-to-r from-green-700 to-green-800 text-white rounded-xl font-medium hover:from-green-800 hover:to-green-900 transition-all duration-200 disabled:opacity-50"
                         >
                           {saving ? "Saving..." : "Save Changes"}
                         </button>
@@ -646,7 +646,7 @@ const Account = () => {
                       </p>
                     </div>
 
-                    <div className="bg-gradient-to-br from-orange-50 to-red-50 rounded-2xl p-6">
+                    <div className="bg-gradient-to-br from-green-50 to-green-50 rounded-2xl p-6">
                       <h3 className="text-lg font-semibold text-black mb-4">
                         Change Password
                       </h3>
@@ -706,7 +706,7 @@ const Account = () => {
                         <button
                           onClick={handlePasswordSave}
                           disabled={saving}
-                          className="flex items-center space-x-2 px-6 py-3 bg-gradient-to-r from-orange-700 to-red-600 text-white rounded-xl font-medium hover:from-orange-800 hover:to-red-700 transition-all duration-200 disabled:opacity-50"
+                          className="flex items-center space-x-2 px-6 py-3 bg-gradient-to-r from-green-700 to-green-800 text-white rounded-xl font-medium hover:from-green-800 hover:to-green-900 transition-all duration-200 disabled:opacity-50"
                         >
                           {saving && (
                             <Loader className="w-4 h-4 animate-spin" />
@@ -815,7 +815,7 @@ const Account = () => {
                           );
                           // You can add API call here to save notification preferences
                         }}
-                        className="flex items-center space-x-2 px-6 py-3 bg-gradient-to-r from-orange-700 to-red-600 text-white rounded-xl font-medium hover:from-orange-800 hover:to-red-700 transition-all duration-200"
+                        className="flex items-center space-x-2 px-6 py-3 bg-gradient-to-r from-green-700 to-green-800 text-white rounded-xl font-medium hover:from-green-800 hover:to-green-900 transition-all duration-200"
                       >
                         <Save className="w-4 h-4" />
                         <span>Save Preferences</span>

@@ -422,7 +422,7 @@ const Interface = () => {
           const draw = () => {
             animationRef.current = requestAnimationFrame(draw);
             if (analyserRef.current && dataArrayRef.current && ctx) {
-              analyserRef.current.getByteFrequencyData(dataArrayRef.current);
+              
               ctx.clearRect(0, 0, canvas.width, canvas.height);
 
               const barWidth = 3;
@@ -431,7 +431,7 @@ const Interface = () => {
 
               for (let i = 0; i < analyserRef.current.frequencyBinCount; i++) {
                 const barHeight = dataArrayRef.current[i] / 2;
-                ctx.fillStyle = "#3b82f6";
+                ctx.fillStyle = "#22c55e";
                 ctx.fillRect(x, canvas.height - barHeight, barWidth, barHeight);
                 x += barWidth + gap;
               }
@@ -589,23 +589,23 @@ const Interface = () => {
   }, []);
 
 return (
-    <div className="flex h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-sky-50">
+    <div className="flex h-screen bg-gradient-to-br from-green-50 via-emerald-50 to-teal-50">
       <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
 
       <div className="flex-1 flex flex-col overflow-hidden lg:ml-0">
-        <header className="bg-white/80 backdrop-blur-xl shadow-sm border-b border-blue-200/50 px-6 py-4 relative">
-          <div className="absolute inset-0 bg-gradient-to-r from-blue-500/5 to-indigo-500/5"></div>
+        <header className="bg-white/80 backdrop-blur-xl shadow-sm border-b border-green-200/50 px-6 py-4 relative">
+          <div className="absolute inset-0 bg-gradient-to-r from-green-500/5 to-emerald-500/5"></div>
           <div className="relative flex items-center justify-between">
             <div className="flex items-center">
               <button
                 onClick={() => setSidebarOpen(true)}
-                className="lg:hidden mr-4 p-2 rounded-xl bg-blue-100/50 hover:bg-blue-200/50 transition-all duration-200"
+                className="lg:hidden mr-4 p-2 rounded-xl bg-green-100/50 hover:bg-green-200/50 transition-all duration-200"
               >
-                <Menu className="w-5 h-5 text-blue-600" />
+                <Menu className="w-5 h-5 text-green-600" />
               </button>
               {adminDetails && (
                 <div className="hidden md:flex items-center gap-2">
-                  <div className="w-8 h-8 bg-gradient-to-br from-blue-400 to-indigo-500 rounded-full flex items-center justify-center text-white text-xs font-semibold">
+                  <div className="w-8 h-8 bg-gradient-to-br from-green-400 to-emerald-500 rounded-full flex items-center justify-center text-white text-xs font-semibold">
                     {getInitials(adminDetails)}
                   </div>
                   <div>
@@ -620,16 +620,16 @@ return (
         </header>
 
         <div className="flex-1 flex overflow-hidden">
-          <div className="w-80 bg-white/70 backdrop-blur-sm border-r border-blue-200/50 flex flex-col">
-            <div className="p-4 border-b border-blue-200/50">
+          <div className="w-80 bg-white/70 backdrop-blur-sm border-r border-green-200/50 flex flex-col">
+            <div className="p-4 border-b border-green-200/50">
               <div className="relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-blue-400 w-4 h-4" />
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-green-400 w-4 h-4" />
                 <input
                   type="text"
                   placeholder="Search conversations..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2 bg-blue-100/50 border border-blue-200/50 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500/50 transition-all duration-200"
+                  className="w-full pl-10 pr-4 py-2 bg-green-100/50 border border-green-200/50 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-green-500/20 focus:border-green-500/50 transition-all duration-200"
                 />
               </div>
             </div>
@@ -637,7 +637,7 @@ return (
             <div className="flex-1 overflow-y-auto">
               {loadingContacts ? (
                 <div className="flex flex-col items-center justify-center h-full">
-                  <Loader2 className="w-8 h-8 text-blue-500 animate-spin" />
+                  <Loader2 className="w-8 h-8 text-green-500 animate-spin" />
                   <p className="mt-2 text-sm text-gray-700">
                     Loading contacts...
                   </p>
@@ -650,7 +650,7 @@ return (
                   </div>
                   <button
                     onClick={() => window.location.reload()}
-                    className="mt-4 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
+                    className="mt-4 px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors"
                   >
                     Retry
                   </button>
@@ -660,15 +660,15 @@ return (
                   <div
                     key={contact.id}
                     onClick={() => setSelectedContact(contact.id)}
-                    className={`p-4 border-b border-blue-200/30 cursor-pointer hover:bg-blue-50/50 transition-colors ${
+                    className={`p-4 border-b border-green-200/30 cursor-pointer hover:bg-green-50/50 transition-colors ${
                       selectedContact === contact.id
-                        ? "bg-blue-50/70 border-r-4 border-r-blue-500"
+                        ? "bg-green-50/70 border-r-4 border-r-green-500"
                         : ""
                     }`}
                   >
                     <div className="flex items-center gap-3">
                       <div className="relative">
-                        <div className="w-12 h-12 rounded-xl overflow-hidden shadow-lg shadow-blue-500/25 flex items-center justify-center bg-gradient-to-br from-blue-400 to-indigo-500">
+                        <div className="w-12 h-12 rounded-xl overflow-hidden shadow-lg shadow-green-500/25 flex items-center justify-center bg-gradient-to-br from-green-400 to-emerald-500">
                           <img
                             src={getAvatarUrl(contact)}
                             alt={getFullName(contact)}
@@ -680,7 +680,7 @@ return (
                               )}`;
                               target.className = "w-full h-full object-cover";
                               target.parentElement!.className =
-                                "w-12 h-12 rounded-xl overflow-hidden shadow-lg shadow-blue-500/25 flex items-center justify-center bg-gradient-to-br from-blue-400 to-indigo-500";
+                                "w-12 h-12 rounded-xl overflow-hidden shadow-lg shadow-green-500/25 flex items-center justify-center bg-gradient-to-br from-green-400 to-emerald-500";
                             }}
                           />
                         </div>
@@ -796,7 +796,7 @@ return (
               </div>
             )}
 
-            <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-blue-50/50">
+            <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-green-50/50">
               {(chatSearchQuery ? filteredMessages : messages).map((msg) => (
                 <div
                   key={msg.id}
@@ -808,7 +808,7 @@ return (
                 >
                   <div className="flex items-end gap-2 max-w-[70%]">
                     {msg.senderId !== currentUser.id && currentContact && (
-                      <div className="w-8 h-8 rounded-xl overflow-hidden bg-gradient-to-br from-blue-400 to-indigo-500 flex items-center justify-center text-white text-xs font-semibold flex-shrink-0 shadow-lg shadow-blue-500/25">
+                      <div className="w-8 h-8 rounded-xl overflow-hidden bg-gradient-to-br from-green-400 to-emerald-500 flex items-center justify-center text-white text-xs font-semibold flex-shrink-0 shadow-lg shadow-green-500/25">
                         <img
                           src={getAvatarUrl(currentContact)}
                           alt={getFullName(currentContact)}
@@ -820,7 +820,7 @@ return (
                             )}`;
                             target.className = "w-full h-full object-cover";
                             target.parentElement!.className =
-                              "w-8 h-8 rounded-xl overflow-hidden bg-gradient-to-br from-blue-400 to-indigo-500 flex items-center justify-center text-white text-xs font-semibold flex-shrink-0 shadow-lg shadow-blue-500/25";
+                              "w-8 h-8 rounded-xl overflow-hidden bg-gradient-to-br from-green-400 to-emerald-500 flex items-center justify-center text-white text-xs font-semibold flex-shrink-0 shadow-lg shadow-green-500/25";
                           }}
                         />
                       </div>
@@ -829,7 +829,7 @@ return (
                       <div
                         className={`px-4 py-3 rounded-2xl ${
                           msg.senderId === currentUser.id
-                            ? "bg-gradient-to-r from-blue-500 to-indigo-500 text-white rounded-br-sm shadow-lg shadow-blue-500/25"
+                            ? "bg-gradient-to-r from-green-500 to-emerald-500 text-white rounded-br-sm shadow-lg shadow-green-500/25"
                             : "bg-white text-black rounded-bl-sm shadow-sm"
                         } ${msg.isTyping ? "animate-pulse" : ""}`}
                       >
@@ -939,7 +939,7 @@ return (
               {isTyping && currentContact && (
                 <div className="flex justify-start">
                   <div className="flex items-end gap-2 max-w-[70%]">
-                    <div className="w-8 h-8 rounded-xl overflow-hidden bg-gradient-to-br from-blue-400 to-indigo-500 flex items-center justify-center text-white text-xs font-semibold shadow-lg shadow-blue-500/25">
+                    <div className="w-8 h-8 rounded-xl overflow-hidden bg-gradient-to-br from-green-400 to-emerald-500 flex items-center justify-center text-white text-xs font-semibold shadow-lg shadow-green-500/25">
                       <img
                         src={getAvatarUrl(currentContact)}
                         alt={getFullName(currentContact)}
@@ -951,7 +951,7 @@ return (
                           )}`;
                           target.className = "w-full h-full object-cover";
                           target.parentElement!.className =
-                            "w-8 h-8 rounded-xl overflow-hidden bg-gradient-to-br from-blue-400 to-indigo-500 flex items-center justify-center text-white text-xs font-semibold shadow-lg shadow-blue-500/25";
+                            "w-8 h-8 rounded-xl overflow-hidden bg-gradient-to-br from-green-400 to-emerald-500 flex items-center justify-center text-white text-xs font-semibold shadow-lg shadow-green-500/25";
                         }}
                       />
                     </div>
@@ -977,12 +977,12 @@ return (
             </div>
 
             {(selectedFiles.length > 0 || audioBlob) && (
-              <div className="p-4 border-t border-blue-200/50 bg-white/70 backdrop-blur-sm">
+              <div className="p-4 border-t border-green-200/50 bg-white/70 backdrop-blur-sm">
                 <div className="flex flex-wrap gap-2">
                   {selectedFiles.map((file, index) => (
                     <div
                       key={index}
-                      className="flex items-center gap-2 bg-blue-100/50 p-2 rounded-lg border border-blue-200/50"
+                      className="flex items-center gap-2 bg-green-100/50 p-2 rounded-lg border border-green-200/50"
                     >
                       {file.type.startsWith("image/") ? (
                         <img
@@ -991,8 +991,8 @@ return (
                           className="w-8 h-8 rounded object-cover"
                         />
                       ) : (
-                        <div className="w-8 h-8 bg-blue-200/50 rounded flex items-center justify-center">
-                          <FileText className="w-4 h-4 text-blue-600" />
+                        <div className="w-8 h-8 bg-green-200/50 rounded flex items-center justify-center">
+                          <FileText className="w-4 h-4 text-green-600" />
                         </div>
                       )}
                       <div className="flex-1 min-w-0">
@@ -1004,19 +1004,19 @@ return (
                         </p>
                       </div>
                       <button
-                        className="p-1 hover:bg-blue-200/50 rounded"
+                        className="p-1 hover:bg-green-200/50 rounded"
                         onClick={() => removeFile(index)}
                       >
-                        <X className="w-3 h-3 text-blue-600" />
+                        <X className="w-3 h-3 text-green-600" />
                       </button>
                     </div>
                   ))}
 
                   {audioBlob && (
-                    <div className="flex items-center gap-2 bg-blue-100/50 p-2 rounded-lg border border-blue-200/50 w-full">
+                    <div className="flex items-center gap-2 bg-green-100/50 p-2 rounded-lg border border-green-200/50 w-full">
                       <button
                         className={`p-2 rounded-full ${
-                          isPlaying ? "bg-blue-200/70" : "hover:bg-blue-200/50"
+                          isPlaying ? "bg-green-200/70" : "hover:bg-green-200/50"
                         }`}
                         onClick={() =>
                           isPlaying
@@ -1028,9 +1028,9 @@ return (
                         }
                       >
                         {isPlaying ? (
-                          <Pause className="w-4 h-4 text-blue-600" />
+                          <Pause className="w-4 h-4 text-green-600" />
                         ) : (
-                          <Play className="w-4 h-4 text-blue-600" />
+                          <Play className="w-4 h-4 text-green-600" />
                         )}
                       </button>
                       <div className="flex-1 flex items-center gap-2">
@@ -1047,10 +1047,10 @@ return (
                         </span>
                       </div>
                       <button
-                        className="p-2 hover:bg-blue-200/50 rounded"
+                        className="p-2 hover:bg-green-200/50 rounded"
                         onClick={clearAudioRecording}
                       >
-                        <X className="w-4 h-4 text-blue-600" />
+                        <X className="w-4 h-4 text-green-600" />
                       </button>
                     </div>
                   )}
@@ -1060,27 +1060,27 @@ return (
 
             {/* File Picker Popup */}
             {showFilePicker && (
-              <div className="absolute bottom-16 left-4 bg-white rounded-xl shadow-xl border border-blue-200/50 overflow-hidden z-10 w-64">
+              <div className="absolute bottom-16 left-4 bg-white rounded-xl shadow-xl border border-green-200/50 overflow-hidden z-10 w-64">
                 <div className="p-2">
-                  <div className="px-3 py-2 text-sm font-medium text-black border-b border-blue-200/50">
+                  <div className="px-3 py-2 text-sm font-medium text-black border-b border-green-200/50">
                     Send files
                   </div>
                   <div className="grid grid-cols-2 gap-2 p-2">
                     <button
                       onClick={() => handleFileUpload("image")}
-                      className="flex flex-col items-center p-3 hover:bg-blue-50/50 rounded-lg transition-colors"
+                      className="flex flex-col items-center p-3 hover:bg-green-50/50 rounded-lg transition-colors"
                     >
-                      <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center mb-2">
-                        <Image className="w-6 h-6 text-blue-500" />
+                      <div className="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center mb-2">
+                        <Image className="w-6 h-6 text-green-500" />
                       </div>
                       <span className="text-xs text-black">Photos</span>
                     </button>
                     <button
                       onClick={() => handleFileUpload("document")}
-                      className="flex flex-col items-center p-3 hover:bg-blue-50/50 rounded-lg transition-colors"
+                      className="flex flex-col items-center p-3 hover:bg-green-50/50 rounded-lg transition-colors"
                     >
-                      <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center mb-2">
-                        <FileText className="w-6 h-6 text-blue-500" />
+                      <div className="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center mb-2">
+                        <FileText className="w-6 h-6 text-green-500" />
                       </div>
                       <span className="text-xs text-black">Documents</span>
                     </button>
@@ -1089,7 +1089,7 @@ return (
               </div>
             )}
 
-            <div className="p-4 border-t border-blue-200/50 bg-white/70 backdrop-blur-sm relative">
+            <div className="p-4 border-t border-green-200/50 bg-white/70 backdrop-blur-sm relative">
               <input
                 type="file"
                 ref={fileInputRef}
@@ -1120,18 +1120,18 @@ return (
 
               <div className="flex items-center gap-3">
                 <button
-                  className="p-2 text-blue-600 hover:bg-blue-100/50 rounded-lg transition-colors relative"
+                  className="p-2 text-green-600 hover:bg-green-100/50 rounded-lg transition-colors relative"
                   onClick={() => setShowFilePicker(!showFilePicker)}
                 >
                   <Paperclip className="w-5 h-5" />
                 </button>
 
                 {isRecording ? (
-                  <div className="flex-1 flex items-center gap-3 bg-blue-100/50 px-4 py-3 rounded-xl">
+                  <div className="flex-1 flex items-center gap-3 bg-green-100/50 px-4 py-3 rounded-xl">
                     <div className="flex-1 flex items-center gap-2">
-                      <div className="w-full h-2 bg-blue-200 rounded-full overflow-hidden">
+                      <div className="w-full h-2 bg-green-200 rounded-full overflow-hidden">
                         <div
-                          className="h-full bg-gradient-to-r from-blue-500 to-indigo-500 rounded-full"
+                          className="h-full bg-gradient-to-r from-green-500 to-emerald-500 rounded-full"
                           style={{
                             width: `${Math.min(recordingTime * 2, 100)}%`,
                           }}
@@ -1156,11 +1156,11 @@ return (
                       onChange={(e) => setMessage(e.target.value)}
                       onKeyPress={handleKeyPress}
                       placeholder="Type something..."
-                      className="w-full px-4 py-3 pr-20 bg-blue-100/50 border border-blue-200/50 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500/50 text-black placeholder:text-blue-500/70 transition-all duration-200"
+                      className="w-full px-4 py-3 pr-20 bg-green-100/50 border border-green-200/50 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-500/20 focus:border-green-500/50 text-black placeholder:text-green-500/70 transition-all duration-200"
                     />
                     <div className="absolute right-3 top-1/2 transform -translate-y-1/2 flex items-center gap-2">
                       <button
-                        className="p-1 text-blue-600 hover:bg-blue-100/50 rounded"
+                        className="p-1 text-green-600 hover:bg-green-100/50 rounded"
                         onClick={() => setShowEmojiPicker(!showEmojiPicker)}
                       >
                         <Smile className="w-4 h-4" />
@@ -1172,7 +1172,7 @@ return (
                 {isRecording ? (
                   <button
                     onClick={handleSendMessage}
-                    className="p-3 bg-gradient-to-r from-blue-500 to-indigo-500 text-white rounded-xl hover:from-blue-600 hover:to-indigo-600 transition-all duration-200 shadow-lg shadow-blue-500/25"
+                    className="p-3 bg-gradient-to-r from-green-500 to-emerald-500 text-white rounded-xl hover:from-green-600 hover:to-emerald-600 transition-all duration-200 shadow-lg shadow-green-500/25"
                   >
                     <Send className="w-4 h-4" />
                   </button>
@@ -1183,8 +1183,8 @@ return (
                     }
                     className={`p-3 rounded-xl transition-all duration-200 shadow-lg ${
                       message.trim()
-                        ? "bg-gradient-to-r from-blue-500 to-indigo-500 text-white hover:from-blue-600 hover:to-indigo-600"
-                        : "bg-blue-100/50 text-blue-600 hover:bg-blue-200/50"
+                        ? "bg-gradient-to-r from-green-500 to-emerald-500 text-white hover:from-green-600 hover:to-emerald-600"
+                        : "bg-green-100/50 text-green-600 hover:bg-green-200/50"
                     }`}
                   >
                     {message.trim() ? (

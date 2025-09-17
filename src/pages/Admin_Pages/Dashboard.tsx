@@ -323,7 +323,7 @@ const Dashboard = () => {
       value: metrics.totalLoans.toString(),
       unit: "",
       trend: metrics.loanTrend,
-      color: "from-orange-400 to-red-500",
+      color: "from-green-400 to-green-600",
       bgColor: "bg-white",
       icon: DollarSign,
     },
@@ -332,7 +332,7 @@ const Dashboard = () => {
       value: metrics.totalUsers.toString(),
       unit: "",
       trend: "+8%",
-      color: "from-red-500 to-orange-600",
+      color: "from-green-500 to-green-700",
       bgColor: "bg-white",
       icon: Users,
     },
@@ -341,7 +341,7 @@ const Dashboard = () => {
       value: `₨${(metrics.totalPayments / 1000000).toFixed(1)}M`,
       unit: "",
       trend: "+12%",
-      color: "from-yellow-500 to-orange-500",
+      color: "from-green-500 to-green-700",
       bgColor: "bg-white",
       icon: TrendingUp,
     },
@@ -465,10 +465,10 @@ const Dashboard = () => {
 
   if (loading) {
     return (
-      <div className="flex h-screen bg-gradient-to-br from-orange-50 via-red-50 to-yellow-50 items-center justify-center">
+      <div className="flex h-screen bg-gradient-to-br from-green-50 via-green-50 to-green-50 items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-500 mx-auto mb-4"></div>
-          <p className="text-orange-600">Loading dashboard data...</p>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-500 mx-auto mb-4"></div>
+          <p className="text-green-600">Loading dashboard data...</p>
         </div>
       </div>
     );
@@ -476,12 +476,12 @@ const Dashboard = () => {
 
   if (error) {
     return (
-      <div className="flex h-screen bg-gradient-to-br from-orange-50 via-red-50 to-yellow-50 items-center justify-center">
+      <div className="flex h-screen bg-gradient-to-br from-green-50 via-green-50 to-green-50 items-center justify-center">
         <div className="text-center">
           <p className="text-red-600 mb-4">{error}</p>
           <button
             onClick={() => window.location.reload()}
-            className="px-4 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600"
+            className="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600"
           >
             Retry
           </button>
@@ -498,15 +498,15 @@ const Dashboard = () => {
       {/* Main Content */}
       <div className="flex-1 flex flex-col overflow-hidden lg:ml-0">
         {/* Header */}
-        <header className="bg-white/80 backdrop-blur-xl shadow-sm border-b border-orange-200/50 px-6 py-4 relative z-10">
-          <div className="absolute inset-0 bg-gradient-to-r from-orange-500/5 to-red-500/5"></div>
+        <header className="bg-white/80 backdrop-blur-xl shadow-sm border-b border-green-200/50 px-6 py-4 relative z-10">
+          <div className="absolute inset-0 bg-gradient-to-r from-green-500/5 to-green-500/5"></div>
           <div className="relative flex items-center justify-between">
             <div className="flex items-center">
               <button
                 onClick={() => setSidebarOpen(true)}
-                className="lg:hidden mr-4 p-2 rounded-xl bg-orange-100/50 hover:bg-orange-200/50 transition-all duration-200"
+                className="lg:hidden mr-4 p-2 rounded-xl bg-green-100/50 hover:bg-green-200/50 transition-all duration-200"
               >
-                <Menu className="w-5 h-5 text-orange-600" />
+                <Menu className="w-5 h-5 text-green-600" />
               </button>
               <div className="flex items-center space-x-3">
                 <div className="flex items-center space-x-2 text-sm">
@@ -522,11 +522,11 @@ const Dashboard = () => {
             <div className="flex items-center space-x-4">
               {/* Search */}
               <div className="relative hidden md:block">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-orange-400" />
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-green-400" />
                 <input
                   type="text"
                   placeholder="Search loans, users, payments..."
-                  className="pl-10 pr-4 py-2 w-64 bg-orange-100/50 border border-orange-200/50 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500/50 transition-all duration-200"
+                  className="pl-10 pr-4 py-2 w-64 bg-green-100/50 border border-green-200/50 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-green-500/20 focus:border-green-500/50 transition-all duration-200"
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                 />
@@ -540,10 +540,10 @@ const Dashboard = () => {
                     e.stopPropagation();
                     setNotificationsOpen(!notificationsOpen);
                   }}
-                  className="notification-bell relative p-2 rounded-xl bg-orange-100/50 hover:bg-orange-200/50 transition-all duration-200 group"
+                  className="notification-bell relative p-2 rounded-xl bg-green-100/50 hover:bg-green-200/50 transition-all duration-200 group"
                 >
-                  <Bell className="w-5 h-5 text-orange-600 group-hover:text-orange-700" />
-                  <div className="absolute -top-1 -right-1 w-4 h-4 bg-gradient-to-r from-red-500 to-orange-500 rounded-full flex items-center justify-center">
+                  <Bell className="w-5 h-5 text-green-600 group-hover:text-green-700" />
+                  <div className="absolute -top-1 -right-1 w-4 h-4 bg-gradient-to-r from-green-500 to-green-500 rounded-full flex items-center justify-center">
                     <span className="text-xs text-white font-medium">
                       {notifications.filter((n) => !n.read).length}
                     </span>
@@ -552,8 +552,8 @@ const Dashboard = () => {
 
                 {/* Enhanced Notifications Popup */}
                 {notificationsOpen && (
-                  <div className="notifications-popup fixed right-6 top-20 w-96 bg-white rounded-xl shadow-2xl border border-orange-200/50 z-[9999] overflow-hidden transform transition-all duration-300 ease-in-out">
-                    <div className="p-5 bg-gradient-to-r from-orange-50 to-red-50 border-b border-orange-200/50 flex justify-between items-center">
+                  <div className="notifications-popup fixed right-6 top-20 w-96 bg-white rounded-xl shadow-2xl border border-green-200/50 z-[9999] overflow-hidden transform transition-all duration-300 ease-in-out">
+                    <div className="p-5 bg-gradient-to-r from-green-50 to-green-50 border-b border-green-200/50 flex justify-between items-center">
                       <h3 className="font-bold text-lg text-black">
                         Notifications
                       </h3>
@@ -563,7 +563,7 @@ const Dashboard = () => {
                             e.stopPropagation();
                             markAllAsRead();
                           }}
-                          className="text-sm font-medium text-orange-600 hover:text-orange-700 transition-colors"
+                          className="text-sm font-medium text-green-600 hover:text-green-700 transition-colors"
                         >
                           Mark all as read
                         </button>
@@ -572,7 +572,7 @@ const Dashboard = () => {
                             e.stopPropagation();
                             setNotificationsOpen(false);
                           }}
-                          className="text-orange-500 hover:text-orange-700"
+                          className="text-green-500 hover:text-green-700"
                         >
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
@@ -594,8 +594,8 @@ const Dashboard = () => {
                         notifications.map((notification) => (
                           <div
                             key={notification.id}
-                            className={`p-5 border-b border-orange-100/50 hover:bg-orange-50/50 cursor-pointer transition-colors ${
-                              !notification.read ? "bg-orange-50" : ""
+                            className={`p-5 border-b border-green-100/50 hover:bg-green-50/50 cursor-pointer transition-colors ${
+                              !notification.read ? "bg-green-50" : ""
                             }`}
                             onClick={(e) => {
                               e.stopPropagation();
@@ -606,8 +606,8 @@ const Dashboard = () => {
                               <div
                                 className={`mt-1 flex-shrink-0 w-3 h-3 rounded-full ${
                                   notification.read
-                                    ? "bg-orange-200"
-                                    : "bg-orange-500"
+                                    ? "bg-green-200"
+                                    : "bg-green-500"
                                 }`}
                               ></div>
                               <div className="flex-1">
@@ -642,7 +642,7 @@ const Dashboard = () => {
                         ))
                       ) : (
                         <div className="p-8 text-center">
-                          <Bell className="w-12 h-12 mx-auto text-orange-300 mb-4" />
+                          <Bell className="w-12 h-12 mx-auto text-green-300 mb-4" />
                           <p className="text-lg text-gray-500 font-medium">
                             No notifications to display
                           </p>
@@ -652,13 +652,13 @@ const Dashboard = () => {
                         </div>
                       )}
                     </div>
-                    <div className="p-4 bg-gradient-to-r from-orange-50 to-red-50 border-t border-orange-200/50 text-center"></div>
+                    <div className="p-4 bg-gradient-to-r from-green-50 to-green-50 border-t border-green-200/50 text-center"></div>
                   </div>
                 )}
               </div>
 
               {/* User Profile */}
-              <div className="flex items-center space-x-3 pl-4 border-l border-orange-200/50">
+              <div className="flex items-center space-x-3 pl-4 border-l border-green-200/50">
                 <div className="text-right hidden sm:block">
                   <div className="text-sm font-semibold text-black">
                     Sarah Johnson
@@ -666,12 +666,12 @@ const Dashboard = () => {
                   <div className="text-xs text-gray-500">Loan Manager</div>
                 </div>
                 <div className="relative">
-                  <div className="w-10 h-10 bg-gradient-to-br from-orange-500 to-red-500 rounded-xl flex items-center justify-center shadow-lg shadow-orange-500/25">
+                  <div className="w-10 h-10 bg-gradient-to-br from-green-500 to-green-500 rounded-xl flex items-center justify-center shadow-lg shadow-green-500/25">
                     <span className="text-white font-semibold text-sm">SJ</span>
                   </div>
                   <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-400 border-2 border-white rounded-full shadow-sm"></div>
                 </div>
-                <ChevronDown className="w-4 h-4 text-orange-400" />
+                <ChevronDown className="w-4 h-4 text-green-400" />
               </div>
             </div>
           </div>
@@ -681,20 +681,20 @@ const Dashboard = () => {
         <main className="flex-1 overflow-y-auto p-6 space-y-8">
           {/* Search Results Summary */}
           {searchTerm && (
-            <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-4 shadow-lg border border-orange-200/50">
+            <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-4 shadow-lg border border-green-200/50">
               <div className="flex items-center justify-between">
-                <h3 className="text-sm font-medium text-orange-600">
+                <h3 className="text-sm font-medium text-green-600">
                   Search results for:{" "}
                   <span className="font-semibold">"{searchTerm}"</span>
                 </h3>
                 <button
                   onClick={() => setSearchTerm("")}
-                  className="text-xs text-orange-500 hover:text-orange-700"
+                  className="text-xs text-green-500 hover:text-green-700"
                 >
                   Clear search
                 </button>
               </div>
-              <div className="flex space-x-6 mt-2 text-xs text-orange-500">
+              <div className="flex space-x-6 mt-2 text-xs text-green-500">
                 <span>{searchedLoans.length} loans</span>
                 <span>{searchedUsers.length} users</span>
                 <span>{searchedPayments.length} payments</span>
@@ -703,7 +703,7 @@ const Dashboard = () => {
           )}
 
           {/* Hero Section */}
-          <div className="relative rounded-3xl px-10 py-20 text-white overflow-hidden bg-gradient-to-br from-orange-900 via-red-900 to-yellow-900 shadow-2xl min-h-[300px]">
+          <div className="relative rounded-3xl px-10 py-20 text-white overflow-hidden bg-gradient-to-br from-green-900 via-green-900 to-green-900 shadow-2xl min-h-[300px]">
             {/* Background image layer */}
             <div
               className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat opacity-50"
@@ -714,8 +714,8 @@ const Dashboard = () => {
             ></div>
 
             {/* Softer Gradient overlays */}
-            <div className="absolute inset-0 bg-gradient-to-br from-orange-600/10 via-red-500/5 to-transparent z-0"></div>
-            <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-bl from-yellow-400/10 to-transparent rounded-full blur-3xl z-0"></div>
+            <div className="absolute inset-0 bg-gradient-to-br from-green-600/10 via-green-500/5 to-transparent z-0"></div>
+            <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-bl from-green-400/10 to-transparent rounded-full blur-3xl z-0"></div>
             {/* Content */}
             <div className="relative z-10 flex items-center justify-between">
               <div className="max-w-2xl">
@@ -724,16 +724,16 @@ const Dashboard = () => {
                   <span className="text-sm font-medium">System Active</span>
                 </div>
 
-                <h1 className="text-4xl font-bold mb-3 bg-gradient-to-r from-white to-orange-200 bg-clip-text text-transparent">
+                <h1 className="text-4xl font-bold mb-3 bg-gradient-to-r from-white to-green-200 bg-clip-text text-transparent">
                   Welcome back, Sarah
                 </h1>
-                <p className="text-lg text-orange-200 mb-8 max-w-lg">
+                <p className="text-lg text-green-200 mb-8 max-w-lg">
                   Monitor loan performance, track key metrics, and make
                   data-driven decisions to optimize your lending portfolio.
                 </p>
 
                 <div className="flex items-center space-x-4">
-                  <button className="px-6 py-3 bg-gradient-to-r from-orange-500 to-red-500 rounded-xl font-semibold hover:from-orange-600 hover:to-red-600 transition-all duration-200 shadow-lg shadow-orange-500/25 hover:shadow-orange-500/40 transform hover:scale-105">
+                  <button className="px-6 py-3 bg-gradient-to-r from-green-500 to-green-500 rounded-xl font-semibold hover:from-green-600 hover:to-green-600 transition-all duration-200 shadow-lg shadow-green-500/25 hover:shadow-green-500/40 transform hover:scale-105">
                     Create New Loan
                   </button>
                   <button className="px-6 py-3 bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl font-semibold hover:bg-white/20 transition-all duration-200">
@@ -746,7 +746,7 @@ const Dashboard = () => {
                 <div className="w-40 h-40 bg-gradient-to-br from-white/10 to-white/5 rounded-3xl backdrop-blur-sm border border-white/20 flex items-center justify-center">
                   <Target className="w-20 h-20 text-white/80" />
                 </div>
-                <div className="absolute -top-4 -right-4 w-8 h-8 bg-gradient-to-r from-yellow-400 to-orange-400 rounded-full animate-pulse shadow-lg shadow-yellow-400/50"></div>
+                <div className="absolute -top-4 -right-4 w-8 h-8 bg-gradient-to-r from-green-400 to-green-400 rounded-full animate-pulse shadow-lg shadow-green-400/50"></div>
               </div>
             </div>
           </div>
@@ -760,7 +760,7 @@ const Dashboard = () => {
               >
                 <div className="flex items-center justify-between mb-4">
                   <div
-                    className={`p-3 rounded-xl bg-gradient-to-r ${metric.color} shadow-lg shadow-orange-500/25`}
+                    className={`p-3 rounded-xl bg-gradient-to-r ${metric.color} shadow-lg shadow-green-500/25`}
                   >
                     <metric.icon className="w-6 h-6 text-white" />
                   </div>
@@ -799,7 +799,7 @@ const Dashboard = () => {
                   </p>
                 </div>
                 <div className="flex items-center space-x-3">
-                  <div className="px-4 py-2 bg-orange-100 rounded-xl">
+                  <div className="px-4 py-2 bg-green-100 rounded-xl">
                     <span className="text-sm font-medium text-black">
                       All Users
                     </span>
@@ -808,15 +808,15 @@ const Dashboard = () => {
               </div>
 
               {/* Scrollable Users List */}
-              <div className="space-y-4 max-h-80 overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-orange-200 scrollbar-track-orange-50">
+              <div className="space-y-4 max-h-80 overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-green-200 scrollbar-track-green-50">
                 {searchedUsers.map((user) => (
                   <div
                     key={user.id}
-                    className="group flex items-center justify-between p-4 bg-gradient-to-r from-white/50 to-orange-50/30 rounded-xl border border-orange-200/30 hover:border-orange-300/50 transition-all duration-300 hover:shadow-md"
+                    className="group flex items-center justify-between p-4 bg-gradient-to-r from-white/50 to-green-50/30 rounded-xl border border-green-200/30 hover:border-green-300/50 transition-all duration-300 hover:shadow-md"
                   >
                     <div className="flex items-center space-x-4">
                       <div className="relative">
-                        <div className="w-12 h-12 bg-gradient-to-br from-orange-500 to-red-500 rounded-xl flex items-center justify-center shadow-lg shadow-orange-500/25">
+                        <div className="w-12 h-12 bg-gradient-to-br from-green-500 to-green-500 rounded-xl flex items-center justify-center shadow-lg shadow-green-500/25">
                           <span className="text-white font-semibold text-sm">
                             {getUserInitials(user.firstName, user.lastName)}
                           </span>
@@ -871,8 +871,8 @@ const Dashboard = () => {
 
                 {searchedUsers.length === 0 && (
                   <div className="text-center py-12">
-                    <div className="w-16 h-16 bg-orange-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                      <User className="w-8 h-8 text-orange-400" />
+                    <div className="w-16 h-16 bg-green-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                      <User className="w-8 h-8 text-green-400" />
                     </div>
                     <h4 className="text-lg font-semibold text-black mb-2">
                       No Users Found
@@ -909,7 +909,7 @@ const Dashboard = () => {
                       {riskAssessment.low}%
                     </span>
                   </div>
-                  <div className="w-full bg-orange-200 rounded-full h-3">
+                  <div className="w-full bg-green-200 rounded-full h-3">
                     <div
                       className="h-full bg-gradient-to-r from-green-400 to-green-500 rounded-full transition-all duration-1000"
                       style={{ width: `${riskAssessment.low}%` }}
@@ -926,7 +926,7 @@ const Dashboard = () => {
                       {riskAssessment.medium}%
                     </span>
                   </div>
-                  <div className="w-full bg-orange-200 rounded-full h-3">
+                  <div className="w-full bg-green-200 rounded-full h-3">
                     <div
                       className="h-full bg-gradient-to-r from-yellow-400 to-orange-400 rounded-full transition-all duration-1000"
                       style={{ width: `${riskAssessment.medium}%` }}
@@ -943,7 +943,7 @@ const Dashboard = () => {
                       {riskAssessment.high}%
                     </span>
                   </div>
-                  <div className="w-full bg-orange-200 rounded-full h-3">
+                  <div className="w-full bg-green-200 rounded-full h-3">
                     <div
                       className="h-full bg-gradient-to-r from-red-500 to-red-600 rounded-full transition-all duration-1000"
                       style={{ width: `${riskAssessment.high}%` }}
@@ -953,7 +953,7 @@ const Dashboard = () => {
               </div>
 
               {/* Risk Score */}
-              <div className="mt-8 text-center p-6 bg-gradient-to-br from-orange-100 to-red-100 rounded-2xl">
+              <div className="mt-8 text-center p-6 bg-gradient-to-br from-green-100 to-green-100 rounded-2xl">
                 <div className="text-3xl font-bold text-black mb-2">
                   {(
                     (riskAssessment.medium * 0.5 + riskAssessment.high * 1) /
@@ -974,34 +974,34 @@ const Dashboard = () => {
           <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-8 shadow-lg border border-white/50">
             <div className="flex items-center justify-between mb-8">
               <div>
-                <h3 className="text-xl font-bold text-orange-800 mb-1">
+                <h3 className="text-xl font-bold text-green-800 mb-1">
                   Pending Loan Applications
                 </h3>
-                <p className="text-sm text-orange-500">
+                <p className="text-sm text-green-500">
                   {getPendingLoans().length} applications awaiting review
                 </p>
               </div>
               <div className="flex items-center space-x-3">
-                <div className="px-4 py-2 bg-orange-100 rounded-xl">
-                  <span className="text-sm font-medium text-orange-700">
+                <div className="px-4 py-2 bg-green-100 rounded-xl">
+                  <span className="text-sm font-medium text-green-700">
                     All Pending
                   </span>
                 </div>
-                <button className="px-4 py-2 bg-gradient-to-r from-orange-500 to-red-500 text-white rounded-xl text-sm font-medium hover:from-orange-600 hover:to-red-600 transition-all duration-200 shadow-lg shadow-orange-500/25">
+                <button className="px-4 py-2 bg-gradient-to-r from-green-500 to-green-500 text-white rounded-xl text-sm font-medium hover:from-green-600 hover:to-green-600 transition-all duration-200 shadow-lg shadow-green-500/25">
                   Review All
                 </button>
               </div>
             </div>
 
-            <div className="space-y-4 max-h-96 overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-orange-200 scrollbar-track-orange-50">
+            <div className="space-y-4 max-h-96 overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-green-200 scrollbar-track-green-50">
               {getPendingLoans().map((loan) => (
                 <div
                   key={loan.id}
-                  className="group flex items-center justify-between p-6 bg-gradient-to-r from-white/50 to-orange-50/30 rounded-xl border border-orange-200/30 hover:border-orange-300/50 transition-all duration-300 hover:shadow-md"
+                  className="group flex items-center justify-between p-6 bg-gradient-to-r from-white/50 to-green-50/30 rounded-xl border border-green-200/30 hover:border-green-300/50 transition-all duration-300 hover:shadow-md"
                 >
                   <div className="flex items-center space-x-4">
                     <div className="relative">
-                      <div className="w-14 h-14 bg-gradient-to-br from-orange-500 to-red-500 rounded-xl flex items-center justify-center shadow-lg shadow-orange-500/25">
+                      <div className="w-14 h-14 bg-gradient-to-br from-green-500 to-green-500 rounded-xl flex items-center justify-center shadow-lg shadow-green-500/25">
                         <span className="text-white font-semibold text-sm">
                           {loan.borrower
                             .split(" ")
@@ -1021,7 +1021,7 @@ const Dashboard = () => {
                     </div>
                     <div className="flex-1">
                       <div className="flex items-center space-x-2 mb-2">
-                        <h4 className="font-semibold text-orange-800 text-lg">
+                        <h4 className="font-semibold text-green-800 text-lg">
                           {loan.borrower}
                         </h4>
                         <div
@@ -1036,7 +1036,7 @@ const Dashboard = () => {
                           {loan.riskLevel} Risk
                         </div>
                       </div>
-                      <div className="flex items-center space-x-4 text-sm text-orange-600 mb-1">
+                      <div className="flex items-center space-x-4 text-sm text-green-600 mb-1">
                         <div className="flex items-center space-x-1">
                           <Mail className="w-3 h-3" />
                           <span className="truncate max-w-40">
@@ -1048,13 +1048,13 @@ const Dashboard = () => {
                           <span>{loan.time}</span>
                         </div>
                       </div>
-                      <div className="text-xs text-orange-500">{loan.type}</div>
+                      <div className="text-xs text-green-500">{loan.type}</div>
                     </div>
                   </div>
 
                   <div className="flex items-center space-x-4">
                     <div className="text-right">
-                      <div className="text-2xl font-bold text-orange-800 mb-1">
+                      <div className="text-2xl font-bold text-green-800 mb-1">
                         {loan.amount}
                       </div>
                       <div
@@ -1084,13 +1084,13 @@ const Dashboard = () => {
 
               {getPendingLoans().length === 0 && (
                 <div className="text-center py-12">
-                  <div className="w-16 h-16 bg-orange-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                    <AlertCircle className="w-8 h-8 text-orange-400" />
+                  <div className="w-16 h-16 bg-green-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                    <AlertCircle className="w-8 h-8 text-green-400" />
                   </div>
-                  <h4 className="text-lg font-semibold text-orange-800 mb-2">
+                  <h4 className="text-lg font-semibold text-green-800 mb-2">
                     No Pending Loans
                   </h4>
-                  <p className="text-orange-500 text-sm">
+                  <p className="text-green-500 text-sm">
                     {searchTerm
                       ? "No pending loans match your search"
                       : "All loan applications have been processed"}

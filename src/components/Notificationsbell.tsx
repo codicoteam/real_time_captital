@@ -48,7 +48,7 @@ const NotificationBell: React.FC = () => {
           className="relative p-2 rounded-xl bg-blue-100/50 hover:bg-blue-200/50 transition-all duration-200 group"
         >
           <Bell className="w-5 h-5 text-blue-600 group-hover:text-blue-700" />
-          <div className="absolute -top-1 -right-1 w-4 h-4 bg-gradient-to-r from-red-500 to-orange-500 rounded-full flex items-center justify-center">
+          <div className="absolute -top-1 -right-1 w-4 h-4 bg-gradient-to-r from-red-500 to-green-500 rounded-full flex items-center justify-center">
             <span className="text-xs text-white font-medium">
               {notifications.filter(n => !n.read).length}
             </span>

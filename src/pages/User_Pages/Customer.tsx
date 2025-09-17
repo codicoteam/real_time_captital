@@ -19,7 +19,7 @@ import Sidebar from "../../components/User_Sidebar";
 // Mock NotificationBell component - replace with your actual import
 const NotificationBell = () => (
   <div className="relative">
-    <Bell className="w-5 h-5 text-orange-500" />
+    <Bell className="w-5 h-5 text-green-500" />
   </div>
 );
 
@@ -152,20 +152,20 @@ const CustomerPage = () => {
 
       <div className="flex-1 flex flex-col overflow-hidden lg:ml-0">
         {/* Header */}
-        <header className="bg-white/80 backdrop-blur-xl shadow-sm border-b border-orange-200/50 px-6 py-4 relative">
-          <div className="absolute inset-0 bg-gradient-to-r from-orange-500/5 to-red-500/5"></div>
+        <header className="bg-white/80 backdrop-blur-xl shadow-sm border-b border-green-200/50 px-6 py-4 relative">
+          <div className="absolute inset-0 bg-gradient-to-r from-green-500/5 to-green-700/5"></div>
           <div className="relative flex items-center justify-between">
             <div className="flex items-center">
               <button
                 onClick={() => setSidebarOpen(true)}
-                className="lg:hidden mr-4 p-2 rounded-xl bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 transition-all duration-200 shadow-lg"
+                className="lg:hidden mr-4 p-2 rounded-xl bg-gradient-to-r from-green-500 to-green-700 hover:from-green-600 hover:to-green-800 transition-all duration-200 shadow-lg"
               >
                 <Menu className="w-5 h-5 text-white" />
               </button>
               <div className="flex items-center space-x-3">
                 <div className="flex items-center space-x-2 text-sm">
-                  <span className="text-orange-500 font-medium">Dashboard</span>
-                  <span className="text-orange-400">›</span>
+                  <span className="text-green-500 font-medium">Dashboard</span>
+                  <span className="text-green-400">›</span>
                   <span className="text-black font-semibold">
                     Customer Management
                   </span>
@@ -175,25 +175,25 @@ const CustomerPage = () => {
 
             <div className="flex items-center space-x-4">
               <div className="relative hidden md:block">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-orange-500" />
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-green-500" />
                 <input
                   type="text"
                   placeholder="Search customers..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="pl-10 pr-4 py-2 w-64 bg-white/70 border border-orange-300/50 rounded-xl text-sm text-black placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-orange-500/30 focus:border-orange-500/70 transition-all duration-200"
+                  className="pl-10 pr-4 py-2 w-64 bg-white/70 border border-green-300/50 rounded-xl text-sm text-black placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-green-500/30 focus:border-green-500/70 transition-all duration-200"
                 />
               </div>
 
-              <button className="relative p-2 rounded-xl bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 transition-all duration-200 group shadow-lg">
+              <button className="relative p-2 rounded-xl bg-gradient-to-r from-green-500 to-green-700 hover:from-green-600 hover:to-green-800 transition-all duration-200 group shadow-lg">
                 <Bell className="w-5 h-5 text-white" />
-                <div className="absolute -top-1 -right-1 w-4 h-4 bg-gradient-to-r from-red-600 to-orange-600 rounded-full flex items-center justify-center border-2 border-white">
+                <div className="absolute -top-1 -right-1 w-4 h-4 bg-gradient-to-r from-green-700 to-green-600 rounded-full flex items-center justify-center border-2 border-white">
                   <span className="text-xs text-white font-bold">2</span>
                 </div>
               </button>
               <NotificationBell />
 
-              <div className="flex items-center space-x-3 pl-4 border-l border-orange-200/50">
+              <div className="flex items-center space-x-3 pl-4 border-l border-green-200/50">
                 <div className="text-right hidden sm:block">
                   <div className="text-sm font-bold text-black">{userName}</div>
                   <div className="text-xs text-gray-600 font-medium">
@@ -201,12 +201,12 @@ const CustomerPage = () => {
                   </div>
                 </div>
                 <div className="relative">
-                  <div className="w-10 h-10 bg-gradient-to-br from-orange-500 to-red-500 rounded-xl flex items-center justify-center shadow-lg">
+                  <div className="w-10 h-10 bg-gradient-to-br from-green-500 to-green-700 rounded-xl flex items-center justify-center shadow-lg">
                     <span className="text-white font-bold text-sm">AU</span>
                   </div>
                   <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-400 border-2 border-white rounded-full shadow-sm"></div>
                 </div>
-                <ChevronDown className="w-4 h-4 text-orange-500" />
+                <ChevronDown className="w-4 h-4 text-green-500" />
               </div>
             </div>
           </div>
@@ -227,7 +227,7 @@ const CustomerPage = () => {
               </div>
               <button
                 onClick={() => setShowAddModal(true)}
-                className="flex items-center space-x-2 px-6 py-3 bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white rounded-xl font-semibold transition-all duration-200 shadow-lg transform hover:scale-105"
+                className="flex items-center space-x-2 px-6 py-3 bg-gradient-to-r from-green-500 to-green-700 hover:from-green-600 hover:to-green-800 text-white rounded-xl font-semibold transition-all duration-200 shadow-lg transform hover:scale-105"
               >
                 <UserPlus className="w-5 h-5" />
                 <span>Add Customer</span>
@@ -236,7 +236,7 @@ const CustomerPage = () => {
 
             {/* Stats Cards */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-              <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-6 border border-orange-200/30 shadow-lg">
+              <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-6 border border-green-200/30 shadow-lg">
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-sm text-gray-600 font-medium">
@@ -246,12 +246,12 @@ const CustomerPage = () => {
                       {customers.length}
                     </p>
                   </div>
-                  <div className="p-3 bg-gradient-to-r from-orange-500 to-red-500 rounded-xl">
+                  <div className="p-3 bg-gradient-to-r from-green-500 to-green-700 rounded-xl">
                     <Users className="w-6 h-6 text-white" />
                   </div>
                 </div>
               </div>
-              <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-6 border border-orange-200/30 shadow-lg">
+              <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-6 border border-green-200/30 shadow-lg">
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-sm text-gray-600 font-medium">
@@ -266,7 +266,7 @@ const CustomerPage = () => {
                   </div>
                 </div>
               </div>
-              <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-6 border border-orange-200/30 shadow-lg">
+              <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-6 border border-green-200/30 shadow-lg">
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-sm text-gray-600 font-medium">
@@ -283,10 +283,10 @@ const CustomerPage = () => {
           </div>
 
           {/* Customer Table */}
-          <div className="bg-white/70 backdrop-blur-sm rounded-2xl border border-orange-200/30 shadow-lg overflow-hidden">
+          <div className="bg-white/70 backdrop-blur-sm rounded-2xl border border-green-200/30 shadow-lg overflow-hidden">
             <div className="overflow-x-auto">
               <table className="w-full">
-                <thead className="bg-gradient-to-r from-orange-500/10 to-red-500/10 border-b border-orange-200/30">
+                <thead className="bg-gradient-to-r from-green-500/10 to-green-700/10 border-b border-green-200/30">
                   <tr>
                     <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900">
                       Customer
@@ -308,15 +308,15 @@ const CustomerPage = () => {
                     </th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-orange-200/30">
+                <tbody className="divide-y divide-green-200/30">
                   {filteredCustomers.map((customer) => (
                     <tr
                       key={customer._id}
-                      className="hover:bg-orange-50/30 transition-colors duration-200"
+                      className="hover:bg-green-50/30 transition-colors duration-200"
                     >
                       <td className="px-6 py-4">
                         <div className="flex items-center space-x-3">
-                          <div className="w-10 h-10 bg-gradient-to-br from-orange-500 to-red-500 rounded-xl flex items-center justify-center shadow-lg">
+                          <div className="w-10 h-10 bg-gradient-to-br from-green-500 to-green-700 rounded-xl flex items-center justify-center shadow-lg">
                             <span className="text-white font-bold text-sm">
                               {getInitials(
                                 customer.firstName,
@@ -337,18 +337,18 @@ const CustomerPage = () => {
                       <td className="px-6 py-4">
                         <div className="space-y-1">
                           <div className="flex items-center space-x-2 text-sm text-gray-900">
-                            <Mail className="w-4 h-4 text-orange-500" />
+                            <Mail className="w-4 h-4 text-green-500" />
                             <span>{customer.email}</span>
                           </div>
                           <div className="flex items-center space-x-2 text-sm text-gray-600">
-                            <Phone className="w-4 h-4 text-orange-500" />
+                            <Phone className="w-4 h-4 text-green-500" />
                             <span>{customer.phoneNumber}</span>
                           </div>
                         </div>
                       </td>
                       <td className="px-6 py-4">
                         <div className="flex items-center space-x-2 text-sm text-gray-600">
-                          <MapPin className="w-4 h-4 text-orange-500" />
+                          <MapPin className="w-4 h-4 text-green-500" />
                           <span className="max-w-xs truncate">
                             {customer.address}
                           </span>
@@ -356,12 +356,12 @@ const CustomerPage = () => {
                       </td>
                       <td className="px-6 py-4">
                         <div className="flex items-center space-x-2 text-sm text-gray-600">
-                          <Calendar className="w-4 h-4 text-orange-500" />
+                          <Calendar className="w-4 h-4 text-green-500" />
                           <span>{formatDate(customer.createdAt)}</span>
                         </div>
                       </td>
                       <td className="px-6 py-4">
-                        <span className="inline-flex px-3 py-1 text-xs font-medium bg-gradient-to-r from-orange-100 to-red-100 text-orange-800 rounded-full">
+                        <span className="inline-flex px-3 py-1 text-xs font-medium bg-gradient-to-r from-green-100 to-green-200 text-green-800 rounded-full">
                           {customer.role}
                         </span>
                       </td>
@@ -376,7 +376,7 @@ const CustomerPage = () => {
                           </button>
                           <button
                             onClick={() => handleEdit(customer)}
-                            className="p-2 text-orange-600 hover:text-orange-800 hover:bg-orange-50 rounded-lg transition-colors duration-200"
+                            className="p-2 text-green-600 hover:text-green-800 hover:bg-green-50 rounded-lg transition-colors duration-200"
                             title="Edit Customer"
                           >
                             <Edit className="w-4 h-4" />
@@ -426,7 +426,7 @@ const CustomerPage = () => {
                   </button>
                   <button
                     onClick={() => setShowAddModal(false)}
-                    className="flex-1 px-4 py-2 bg-gradient-to-r from-orange-500 to-red-500 text-white rounded-lg hover:from-orange-600 hover:to-red-600 transition-colors"
+                    className="flex-1 px-4 py-2 bg-gradient-to-r from-green-500 to-green-700 text-white rounded-lg hover:from-green-600 hover:to-green-800 transition-colors"
                   >
                     Add Customer
                   </button>

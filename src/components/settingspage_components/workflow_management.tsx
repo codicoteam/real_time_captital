@@ -71,10 +71,10 @@ const WorkflowManagement = () => {
   return (
     <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-6 shadow-lg border border-white/50">
       <div className="flex items-center justify-between mb-6">
-        <h3 className="text-xl font-bold text-orange-800">
+        <h3 className="text-xl font-bold text-green-800">
           Workflow Management
         </h3>
-        <button className="flex items-center space-x-2 px-4 py-2 bg-gradient-to-r from-orange-500 to-red-500 text-white rounded-xl text-sm font-medium hover:from-orange-600 hover:to-red-600 transition-all duration-200">
+        <button className="flex items-center space-x-2 px-4 py-2 bg-gradient-to-r from-green-500 to-emerald-500 text-white rounded-xl text-sm font-medium hover:from-green-600 hover:to-emerald-600 transition-all duration-200">
           <Settings className="w-4 h-4" />
           <span>New Workflow</span>
         </button>
@@ -88,13 +88,13 @@ const WorkflowManagement = () => {
               key={workflow.id}
               className={`p-4 rounded-xl border-2 cursor-pointer transition-all duration-200 ${
                 selectedWorkflow?.id === workflow.id
-                  ? "border-orange-500 bg-orange-50"
-                  : "border-orange-200/50 bg-white/50 hover:border-orange-300"
+                  ? "border-green-500 bg-green-50"
+                  : "border-green-200/50 bg-white/50 hover:border-green-300"
               }`}
               onClick={() => setSelectedWorkflow(workflow)}
             >
               <div className="flex items-center justify-between mb-3">
-                <h4 className="font-semibold text-orange-800">
+                <h4 className="font-semibold text-green-800">
                   {workflow.name}
                 </h4>
                 <span
@@ -106,7 +106,7 @@ const WorkflowManagement = () => {
                 </span>
               </div>
 
-              <div className="flex items-center space-x-4 text-sm text-orange-600">
+              <div className="flex items-center space-x-4 text-sm text-green-600">
                 <div className="flex items-center space-x-1">
                   <FileText className="w-4 h-4" />
                   <span>{workflow.steps.length} steps</span>
@@ -121,16 +121,16 @@ const WorkflowManagement = () => {
         </div>
 
         {/* Workflow Details */}
-        <div className="bg-gradient-to-br from-orange-50 to-red-50 rounded-xl p-6">
+        <div className="bg-gradient-to-br from-green-50 to-emerald-50 rounded-xl p-6">
           {selectedWorkflow ? (
             <div>
-              <h4 className="text-lg font-bold text-orange-800 mb-4">
+              <h4 className="text-lg font-bold text-green-800 mb-4">
                 {selectedWorkflow.name}
               </h4>
 
               {/* Workflow Steps */}
               <div className="mb-6">
-                <h5 className="font-medium text-orange-700 mb-3">
+                <h5 className="font-medium text-green-700 mb-3">
                   Approval Steps
                 </h5>
                 <div className="space-y-3">
@@ -141,14 +141,14 @@ const WorkflowManagement = () => {
                     );
                     return (
                       <div key={index} className="flex items-center space-x-3">
-                        <div className="flex items-center justify-center w-8 h-8 bg-orange-200 rounded-full">
-                          <span className="text-sm font-medium text-orange-700">
+                        <div className="flex items-center justify-center w-8 h-8 bg-green-200 rounded-full">
+                          <span className="text-sm font-medium text-green-700">
                             {index + 1}
                           </span>
                         </div>
                         <div className="flex-1 flex items-center space-x-2">
-                          <StepIcon className="w-4 h-4 text-orange-600" />
-                          <span className="text-sm text-orange-700">
+                          <StepIcon className="w-4 h-4 text-green-600" />
+                          <span className="text-sm text-green-700">
                             {step}
                           </span>
                         </div>
@@ -160,12 +160,12 @@ const WorkflowManagement = () => {
 
               {/* Approvers */}
               <div className="mb-6">
-                <h5 className="font-medium text-orange-700 mb-3">Approvers</h5>
+                <h5 className="font-medium text-green-700 mb-3">Approvers</h5>
                 <div className="flex flex-wrap gap-2">
                   {selectedWorkflow.approvers.map((approver, index) => (
                     <span
                       key={index}
-                      className="px-3 py-1 bg-orange-200 text-orange-700 rounded-full text-sm font-medium"
+                      className="px-3 py-1 bg-green-200 text-green-700 rounded-full text-sm font-medium"
                     >
                       {approver}
                     </span>
@@ -175,18 +175,18 @@ const WorkflowManagement = () => {
 
               {/* Actions */}
               <div className="flex space-x-2">
-                <button className="px-4 py-2 bg-orange-500 text-white rounded-lg text-sm font-medium hover:bg-orange-600 transition-colors">
+                <button className="px-4 py-2 bg-green-500 text-white rounded-lg text-sm font-medium hover:bg-green-600 transition-colors">
                   Edit Workflow
                 </button>
-                <button className="px-4 py-2 bg-white border border-orange-300 text-orange-700 rounded-lg text-sm font-medium hover:bg-orange-50 transition-colors">
+                <button className="px-4 py-2 bg-white border border-green-300 text-green-700 rounded-lg text-sm font-medium hover:bg-green-50 transition-colors">
                   Duplicate
                 </button>
               </div>
             </div>
           ) : (
             <div className="text-center py-12">
-              <Settings className="w-12 h-12 text-orange-400 mx-auto mb-4" />
-              <p className="text-orange-600">
+              <Settings className="w-12 h-12 text-green-400 mx-auto mb-4" />
+              <p className="text-green-600">
                 Select a workflow to view details
               </p>
             </div>
