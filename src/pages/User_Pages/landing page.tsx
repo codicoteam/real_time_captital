@@ -5,7 +5,6 @@ import {
   Users,
   ArrowRight,
   Star,
-  Sparkles,
   Zap,
   Target,
   Globe,
@@ -13,12 +12,11 @@ import {
   Link,
 } from "lucide-react";
 import Footer from "../../components/Footer";
-
 import { useNavigate } from "react-router-dom";
 import Navbar from "../../components/navbar";
+import Loan from "../../assets/loan.png"; // Import your logo
 
 const LandingPage = () => {
-  // const [isMenuOpen, setIsMenuOpen] = React.useState(false);
   const [currentSlide, setCurrentSlide] = React.useState(0);
   const [mousePosition, setMousePosition] = React.useState({ x: 0, y: 0 });
   const [isDarkMode, setIsDarkMode] = React.useState(true);
@@ -27,7 +25,7 @@ const LandingPage = () => {
   React.useEffect(() => {
     const interval = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % 3);
-    }, 8000); // Change slide every  seconds
+    }, 8000); // Change slide every 8 seconds
     return () => clearInterval(interval);
   }, []);
 
@@ -44,17 +42,13 @@ const LandingPage = () => {
     if (element) {
       element.scrollIntoView({ behavior: "smooth" });
     }
-    setIsMenuOpen(false);
   };
-
-  // const toggleTheme = () => {
-  //   setIsDarkMode(!isDarkMode);
-  // };
 
   const handleClick = () => {
     navigate("/adminlogin");
   };
-  // Theme-aware classes
+
+  // Updated theme-aware classes with green color scheme
   const themeClasses = {
     bg: isDarkMode ? "bg-gray-950" : "bg-gray-50",
     text: isDarkMode ? "text-white" : "text-gray-900",
@@ -68,7 +62,7 @@ const LandingPage = () => {
     backgroundGradient: isDarkMode
       ? "bg-gradient-to-br from-gray-900 via-gray-950 to-black"
       : "bg-gradient-to-br from-gray-100 via-white to-gray-200",
-    glowEffect: isDarkMode ? "shadow-red-500/25" : "shadow-red-500/15",
+    glowEffect: isDarkMode ? "shadow-green-500/25" : "shadow-green-500/15",
     hoverBg: isDarkMode ? "hover:bg-white/10" : "hover:bg-gray-100/50",
   };
 
@@ -83,22 +77,22 @@ const LandingPage = () => {
         <div
           className={`absolute inset-0 ${
             isDarkMode
-              ? "bg-[radial-gradient(circle_at_50%_50%,rgba(239,68,68,0.1),transparent_50%)]"
-              : "bg-[radial-gradient(circle_at_50%_50%,rgba(239,68,68,0.05),transparent_50%)]"
+              ? "bg-[radial-gradient(circle_at_50%_50%,rgba(34,197,94,0.1),transparent_50%)]"
+              : "bg-[radial-gradient(circle_at_50%_50%,rgba(34,197,94,0.05),transparent_50%)]"
           }`}
         ></div>
         <div
           className={`absolute inset-0 ${
             isDarkMode
-              ? "bg-[radial-gradient(circle_at_80%_20%,rgba(251,191,36,0.1),transparent_50%)]"
-              : "bg-[radial-gradient(circle_at_80%_20%,rgba(251,191,36,0.05),transparent_50%)]"
+              ? "bg-[radial-gradient(circle_at_80%_20%,rgba(132,204,22,0.1),transparent_50%)]"
+              : "bg-[radial-gradient(circle_at_80%_20%,rgba(132,204,22,0.05),transparent_50%)]"
           }`}
         ></div>
         <div
           className={`absolute w-96 h-96 bg-gradient-to-r ${
             isDarkMode
-              ? "from-red-500/20 to-yellow-500/20"
-              : "from-red-500/10 to-yellow-500/10"
+              ? "from-green-500/20 to-emerald-500/20"
+              : "from-green-500/10 to-emerald-500/10"
           } rounded-full blur-3xl transition-all duration-1000 ease-out`}
           style={{
             left: mousePosition.x - 192,
@@ -111,10 +105,8 @@ const LandingPage = () => {
       <Navbar
         isDarkMode={isDarkMode}
         setIsDarkMode={setIsDarkMode}
-        // scrollToSection={scrollToSection}
       />
 
-      {/* Hero Section */}
       {/* Hero Section */}
       <section id="hero" className="relative h-screen mt- overflow-hidden">
         {/* Background Image */}
@@ -133,7 +125,7 @@ const LandingPage = () => {
               }`}
             >
               <img
-                src="https://www.shutterstock.com/image-photo/medical-coding-bill-billing-codes-600nw-2494681123.jpg"
+                src="https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=1920&h=1080&fit=crop"
                 alt="Loan Management Background"
                 className="w-full h-full object-cover"
               />
@@ -161,7 +153,7 @@ const LandingPage = () => {
               }`}
             >
               <img
-                src="https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=1920&h=1080&fit=crop"
+                src="https://images.unsplash.com/photo-1581092918056-0c4c3acd3789?w=1920&h=1080&fit=crop"
                 alt="Fast Approval Background"
                 className="w-full h-full object-cover"
               />
@@ -189,7 +181,7 @@ const LandingPage = () => {
               }`}
             >
               <img
-                src="https://media.istockphoto.com/id/1497005728/photo/smiling-businessman-talking-on-a-mobile-phone-while-working-on-his-laptop.jpg?s=612x612&w=0&k=20&c=ibhoJ_PmND3ny24BgixaSiMqn2qJ4LNcgqaDmeBnuQY="
+                src="https://images.unsplash.com/photo-1573164713714-d95e436ab8d6?w=1920&h=1080&fit=crop"
                 alt="Happy Customers Background"
                 className="w-full h-full object-cover"
               />
@@ -219,14 +211,18 @@ const LandingPage = () => {
                 <div
                   className={`inline-flex items-center px-4 py-2 bg-gradient-to-r ${
                     isDarkMode
-                      ? "from-red-500/20 to-yellow-500/20 border-red-500/30"
-                      : "from-red-500/10 to-yellow-500/10 border-red-500/20"
+                      ? "from-green-500/20 to-emerald-500/20 border-green-500/30"
+                      : "from-green-500/10 to-emerald-500/10 border-green-500/20"
                   } rounded-full border backdrop-blur-sm mb-8`}
                 >
-                  <Sparkles className="w-4 h-4 text-yellow-400 mr-2" />
+                  <img 
+                    src={Loan} 
+                    alt="Clear Finance Logo" 
+                    className="w-6 h-6 mr-2" 
+                  />
                   <span
                     onClick={handleClick}
-                    className="text-sm font-semibold text-yellow-400 tracking-wide uppercase cursor-pointer"
+                    className="text-sm font-semibold text-emerald-400 tracking-wide uppercase cursor-pointer"
                   >
                     Clear Finance
                   </span>
@@ -235,7 +231,7 @@ const LandingPage = () => {
                 <h1 className="text-6xl lg:text-7xl font-bold leading-tight mb-8">
                   <span className={themeClasses.text}>The smartest way to</span>
                   <br />
-                  <span className="bg-gradient-to-r from-red-400 via-yellow-400 to-red-400 bg-clip-text text-transparent animate-pulse">
+                  <span className="bg-gradient-to-r from-green-400 via-emerald-400 to-green-400 bg-clip-text text-transparent animate-pulse">
                     manage loans
                   </span>
                 </h1>
@@ -251,13 +247,13 @@ const LandingPage = () => {
                 <div className="flex flex-col sm:flex-row gap-6 justify-center">
                   <button
                     onClick={() => navigate("/userlogin")}
-                    className={`relative bg-gradient-to-r from-red-500 to-yellow-500 hover:from-red-600 hover:to-yellow-600 text-white px-10 py-4 rounded-2xl text-lg font-bold transition-all transform hover:scale-110 shadow-2xl ${themeClasses.glowEffect} overflow-hidden group`}
+                    className={`relative bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white px-10 py-4 rounded-2xl text-lg font-bold transition-all transform hover:scale-110 shadow-2xl ${themeClasses.glowEffect} overflow-hidden group`}
                   >
                     <span className="relative z-10 flex items-center justify-center">
                       Login
                       <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
                     </span>
-                    <div className="absolute inset-0 bg-gradient-to-r from-yellow-500 to-red-500 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                    <div className="absolute inset-0 bg-gradient-to-r from-emerald-500 to-green-500 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
                   </button>
 
                   <button
@@ -286,12 +282,16 @@ const LandingPage = () => {
                 <div
                   className={`inline-flex items-center px-4 py-2 bg-gradient-to-r ${
                     isDarkMode
-                      ? "from-red-500/20 to-yellow-500/20 border-red-500/30"
-                      : "from-red-500/10 to-yellow-500/10 border-red-500/20"
+                      ? "from-green-500/20 to-emerald-500/20 border-green-500/30"
+                      : "from-green-500/10 to-emerald-500/10 border-green-500/20"
                   } rounded-full border backdrop-blur-sm mb-8`}
                 >
-                  <Sparkles className="w-4 h-4 text-yellow-400 mr-2" />
-                  <span className="text-sm font-semibold text-yellow-400 tracking-wide uppercase">
+                  <img 
+                    src={Loan} 
+                    alt="Clear Finance Logo" 
+                    className="w-6 h-6 mr-2" 
+                  />
+                  <span className="text-sm font-semibold text-emerald-400 tracking-wide uppercase">
                     Secure & Fast
                   </span>
                 </div>
@@ -299,7 +299,7 @@ const LandingPage = () => {
                 <h1 className="text-6xl lg:text-7xl font-bold leading-tight mb-8">
                   <span className={themeClasses.text}>Get approved in</span>
                   <br />
-                  <span className="bg-gradient-to-r from-red-400 via-yellow-400 to-red-400 bg-clip-text text-transparent animate-pulse">
+                  <span className="bg-gradient-to-r from-green-400 via-emerald-400 to-green-400 bg-clip-text text-transparent animate-pulse">
                     minutes not days
                   </span>
                 </h1>
@@ -315,13 +315,13 @@ const LandingPage = () => {
                 <div className="flex flex-col sm:flex-row gap-6 justify-center">
                   <button
                     onClick={() => navigate("/usersignup")}
-                    className={`relative bg-gradient-to-r from-red-500 to-yellow-500 hover:from-red-600 hover:to-yellow-600 text-white px-10 py-4 rounded-2xl text-lg font-bold transition-all transform hover:scale-110 shadow-2xl ${themeClasses.glowEffect} overflow-hidden group`}
+                    className={`relative bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white px-10 py-4 rounded-2xl text-lg font-bold transition-all transform hover:scale-110 shadow-2xl ${themeClasses.glowEffect} overflow-hidden group`}
                   >
                     <span className="relative z-10 flex items-center justify-center">
                       Apply Now
                       <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
                     </span>
-                    <div className="absolute inset-0 bg-gradient-to-r from-yellow-500 to-red-500 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                    <div className="absolute inset-0 bg-gradient-to-r from-emerald-500 to-green-500 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
                   </button>
 
                   <button
@@ -350,12 +350,16 @@ const LandingPage = () => {
                 <div
                   className={`inline-flex items-center px-4 py-2 bg-gradient-to-r ${
                     isDarkMode
-                      ? "from-red-500/20 to-yellow-500/20 border-red-500/30"
-                      : "from-red-500/10 to-yellow-500/10 border-red-500/20"
+                      ? "from-green-500/20 to-emerald-500/20 border-green-500/30"
+                      : "from-green-500/10 to-emerald-500/10 border-green-500/20"
                   } rounded-full border backdrop-blur-sm mb-8`}
                 >
-                  <Sparkles className="w-4 h-4 text-yellow-400 mr-2" />
-                  <span className="text-sm font-semibold text-yellow-400 tracking-wide uppercase">
+                  <img 
+                    src={Loan} 
+                    alt="Clear Finance Logo" 
+                    className="w-6 h-6 mr-2" 
+                  />
+                  <span className="text-sm font-semibold text-emerald-400 tracking-wide uppercase">
                     Trusted by Thousands
                   </span>
                 </div>
@@ -363,7 +367,7 @@ const LandingPage = () => {
                 <h1 className="text-6xl lg:text-7xl font-bold leading-tight mb-8">
                   <span className={themeClasses.text}>Join</span>
                   <br />
-                  <span className="bg-gradient-to-r from-red-400 via-yellow-400 to-red-400 bg-clip-text text-transparent animate-pulse">
+                  <span className="bg-gradient-to-r from-green-400 via-emerald-400 to-green-400 bg-clip-text text-transparent animate-pulse">
                     200+ happy customers
                   </span>
                 </h1>
@@ -379,13 +383,13 @@ const LandingPage = () => {
                 <div className="flex flex-col sm:flex-row gap-6 justify-center">
                   <button
                     onClick={() => scrollToSection("testimonials")}
-                    className={`relative bg-gradient-to-r from-red-500 to-yellow-500 hover:from-red-600 hover:to-yellow-600 text-white px-10 py-4 rounded-2xl text-lg font-bold transition-all transform hover:scale-110 shadow-2xl ${themeClasses.glowEffect} overflow-hidden group`}
+                    className={`relative bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white px-10 py-4 rounded-2xl text-lg font-bold transition-all transform hover:scale-110 shadow-2xl ${themeClasses.glowEffect} overflow-hidden group`}
                   >
                     <span className="relative z-10 flex items-center justify-center">
                       Read Reviews
                       <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
                     </span>
-                    <div className="absolute inset-0 bg-gradient-to-r from-yellow-500 to-red-500 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                    <div className="absolute inset-0 bg-gradient-to-r from-emerald-500 to-green-500 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
                   </button>
 
                   <button
@@ -412,7 +416,7 @@ const LandingPage = () => {
               onClick={() => setCurrentSlide(slide)}
               className={`w-3 h-3 rounded-full transition-all duration-300 ${
                 currentSlide === slide
-                  ? "bg-gradient-to-r from-red-400 to-yellow-400 w-8"
+                  ? "bg-gradient-to-r from-green-400 to-emerald-400 w-8"
                   : isDarkMode
                   ? "bg-white/30 hover:bg-white/50"
                   : "bg-gray-400/50 hover:bg-gray-600/70"
@@ -454,7 +458,7 @@ const LandingPage = () => {
           <div className="text-center mb-16">
             <h2 className={`text-5xl font-bold ${themeClasses.text} mb-6`}>
               About
-              <span className="bg-gradient-to-r from-red-400 to-yellow-400 bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-green-400 to-emerald-400 bg-clip-text text-transparent">
                 {" "}
                 Clear Finance
               </span>
@@ -472,7 +476,7 @@ const LandingPage = () => {
             <div
               className={`${themeClasses.cardBg} backdrop-blur-xl rounded-2xl p-6 border ${themeClasses.border} text-center`}
             >
-              <div className="w-12 h-12 bg-gradient-to-br from-red-500 to-yellow-500 rounded-xl flex items-center justify-center mx-auto mb-4">
+              <div className="w-12 h-12 bg-gradient-to-br from-green-500 to-emerald-500 rounded-xl flex items-center justify-center mx-auto mb-4">
                 <Target className="w-6 h-6 text-white" />
               </div>
               <h3 className={`text-xl font-bold ${themeClasses.text} mb-3`}>
@@ -487,7 +491,7 @@ const LandingPage = () => {
             <div
               className={`${themeClasses.cardBg} backdrop-blur-xl rounded-2xl p-6 border ${themeClasses.border} text-center`}
             >
-              <div className="w-12 h-12 bg-gradient-to-br from-yellow-500 to-red-500 rounded-xl flex items-center justify-center mx-auto mb-4">
+              <div className="w-12 h-12 bg-gradient-to-br from-emerald-500 to-green-500 rounded-xl flex items-center justify-center mx-auto mb-4">
                 <Globe className="w-6 h-6 text-white" />
               </div>
               <h3 className={`text-xl font-bold ${themeClasses.text} mb-3`}>
@@ -502,7 +506,7 @@ const LandingPage = () => {
             <div
               className={`${themeClasses.cardBg} backdrop-blur-xl rounded-2xl p-6 border ${themeClasses.border} text-center`}
             >
-              <div className="w-12 h-12 bg-gradient-to-br from-green-500 to-emerald-500 rounded-xl flex items-center justify-center mx-auto mb-4">
+              <div className="w-12 h-12 bg-gradient-to-br from-green-600 to-emerald-600 rounded-xl flex items-center justify-center mx-auto mb-4">
                 <CheckCircle className="w-6 h-6 text-white" />
               </div>
               <h3 className={`text-xl font-bold ${themeClasses.text} mb-3`}>
@@ -523,7 +527,7 @@ const LandingPage = () => {
           <div className="text-center mb-20">
             <h2 className={`text-5xl font-bold ${themeClasses.text} mb-6`}>
               Our
-              <span className="bg-gradient-to-r from-red-400 to-yellow-400 bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-green-400 to-emerald-400 bg-clip-text text-transparent">
                 {" "}
                 Services
               </span>
@@ -545,7 +549,7 @@ const LandingPage = () => {
                 title: "Business Loans",
                 description:
                   "What is a Business Loan? Available to registered businesses, these loans help expand operations, purchase equipment, or manage cash flow.",
-                color: "from-blue-500 to-indigo-500",
+                color: "from-green-500 to-emerald-500",
               },
               {
                 image:
@@ -553,7 +557,7 @@ const LandingPage = () => {
                 title: "Civil Servants/SSB Loans",
                 description:
                   "What is a Civil Servant/SSB Loan? These are specialized loans for government employees with competitive rates and flexible terms.",
-                color: "from-green-500 to-emerald-500",
+                color: "from-green-600 to-emerald-600",
               },
               {
                 image:
@@ -561,7 +565,7 @@ const LandingPage = () => {
                 title: "Salary Based Loans",
                 description:
                   "Quick loans based on your monthly salary with instant approval and competitive interest rates for salaried employees.",
-                color: "from-purple-500 to-pink-500",
+                color: "from-green-700 to-emerald-700",
               },
               {
                 image:
@@ -569,7 +573,7 @@ const LandingPage = () => {
                 title: "Asset Finance",
                 description:
                   "What is Asset Finance? Loans financing against your valuable assets including vehicles, property, and equipment as collateral.",
-                color: "from-orange-500 to-red-500",
+                color: "from-green-800 to-emerald-800",
               },
               {
                 image:
@@ -577,7 +581,7 @@ const LandingPage = () => {
                 title: "Collateral Loans",
                 description:
                   "Secure loans backed by your valuable assets. Lower interest rates with flexible repayment terms using property or vehicles as security.",
-                color: "from-teal-500 to-cyan-500",
+                color: "from-green-900 to-emerald-900",
               },
               {
                 image:
@@ -585,7 +589,7 @@ const LandingPage = () => {
                 title: "Pensioner Loans",
                 description:
                   "What is a Pensioner Loan? These are loans specifically designed for retirees with pension-backed security and favorable terms.",
-                color: "from-indigo-500 to-purple-500",
+                color: "from-green-950 to-emerald-950",
               },
             ].map((service, index) => (
               <div
@@ -593,7 +597,7 @@ const LandingPage = () => {
                 className="group hover:transform hover:scale-105 transition-all duration-500 cursor-pointer"
               >
                 <div
-                  className={`${themeClasses.cardBg} backdrop-blur-xl rounded-2xl overflow-hidden border ${themeClasses.border} hover:${themeClasses.borderHover} transition-all duration-500 hover:shadow-2xl hover:shadow-red-500/10`}
+                  className={`${themeClasses.cardBg} backdrop-blur-xl rounded-2xl overflow-hidden border ${themeClasses.border} hover:${themeClasses.borderHover} transition-all duration-500 hover:shadow-2xl hover:shadow-green-500/10`}
                 >
                   {/* Image */}
                   <div className="relative h-48 overflow-hidden">
@@ -635,15 +639,15 @@ const LandingPage = () => {
         <div
           className={`absolute inset-0 bg-gradient-to-r ${
             isDarkMode
-              ? "from-red-500/10 to-yellow-500/10"
-              : "from-red-500/5 to-yellow-500/5"
+              ? "from-green-500/10 to-emerald-500/10"
+              : "from-green-500/5 to-emerald-500/5"
           }`}
         ></div>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="text-center mb-16">
             <h2 className={`text-5xl font-bold ${themeClasses.text} mb-6`}>
               Our
-              <span className="bg-gradient-to-r from-red-400 to-yellow-400 bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-green-400 to-emerald-400 bg-clip-text text-transparent">
                 {" "}
                 Impact
               </span>
@@ -685,10 +689,10 @@ const LandingPage = () => {
                     themeClasses.borderHover
                   } transition-all duration-500 hover:transform hover:scale-105`}
                 >
-                  <div className="flex justify-center mb-4 text-yellow-400">
+                  <div className="flex justify-center mb-4 text-emerald-400">
                     {stat.icon}
                   </div>
-                  <div className="text-5xl font-bold bg-gradient-to-r from-red-400 to-yellow-400 bg-clip-text text-transparent mb-2">
+                  <div className="text-5xl font-bold bg-gradient-to-r from-green-400 to-emerald-400 bg-clip-text text-transparent mb-2">
                     {stat.number}
                   </div>
                   <div className={`${themeClasses.textMuted} font-medium`}>
@@ -707,7 +711,7 @@ const LandingPage = () => {
           <div className="text-center mb-20">
             <h2 className={`text-5xl font-bold ${themeClasses.text} mb-6`}>
               What Our
-              <span className="bg-gradient-to-r from-red-400 to-yellow-400 bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-green-400 to-emerald-400 bg-clip-text text-transparent">
                 {" "}
                 Customers Say
               </span>
@@ -772,7 +776,7 @@ const LandingPage = () => {
                   {[...Array(testimonial.rating)].map((_, i) => (
                     <Star
                       key={i}
-                      className="w-5 h-5 text-yellow-400 fill-current"
+                      className="w-5 h-5 text-emerald-400 fill-current"
                     />
                   ))}
                 </div>
@@ -794,7 +798,7 @@ const LandingPage = () => {
           <div className="text-center mb-20">
             <h2 className={`text-5xl font-bold ${themeClasses.text} mb-6`}>
               How It
-              <span className="bg-gradient-to-r from-red-400 to-yellow-400 bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-green-400 to-emerald-400 bg-clip-text text-transparent">
                 {" "}
                 Works
               </span>
@@ -814,7 +818,7 @@ const LandingPage = () => {
                 description:
                   "Fill out our simple application form in just 2 minutes. Our smart form adapts to your needs.",
                 icon: <Link className="w-8 h-8" />,
-                color: "from-red-500 to-orange-500",
+                color: "from-green-500 to-emerald-500",
               },
               {
                 step: "02",
@@ -822,7 +826,7 @@ const LandingPage = () => {
                 description:
                   "Our AI analyzes your application instantly using advanced algorithms and real-time data.",
                 icon: <Zap className="w-8 h-8" />,
-                color: "from-yellow-500 to-orange-500",
+                color: "from-emerald-500 to-green-500",
               },
               {
                 step: "03",
@@ -830,7 +834,7 @@ const LandingPage = () => {
                 description:
                   "Receive your funds directly in your account within 24 hours of approval.",
                 icon: <CheckCircle className="w-8 h-8" />,
-                color: "from-green-500 to-emerald-500",
+                color: "from-green-600 to-emerald-600",
               },
             ].map((step, index) => (
               <div key={index} className="relative group">
@@ -866,10 +870,10 @@ const LandingPage = () => {
                 {/* Connection line */}
                 {index < 2 && (
                   <div
-                    className={`hidden lg:block absolute top-1/2 -right-6 w-12 h-0.5 bg-gradient-to-r from-red-400 to-yellow-400 transform -translate-y-1/2`}
+                    className={`hidden lg:block absolute top-1/2 -right-6 w-12 h-0.5 bg-gradient-to-r from-green-400 to-emerald-400 transform -translate-y-1/2`}
                   >
                     <div className="absolute right-0 top-1/2 transform -translate-y-1/2">
-                      <ArrowRight className="w-4 h-4 text-yellow-400" />
+                      <ArrowRight className="w-4 h-4 text-emerald-400" />
                     </div>
                   </div>
                 )}
@@ -884,14 +888,14 @@ const LandingPage = () => {
         <div
           className={`absolute inset-0 bg-gradient-to-r ${
             isDarkMode
-              ? "from-red-500/20 via-yellow-500/20 to-red-500/20"
-              : "from-red-500/10 via-yellow-500/10 to-red-500/10"
+              ? "from-green-500/20 via-emerald-500/20 to-green-500/20"
+              : "from-green-500/10 via-emerald-500/10 to-green-500/10"
           }`}
         ></div>
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
           <h2 className={`text-6xl font-bold ${themeClasses.text} mb-8`}>
             Ready to
-            <span className="bg-gradient-to-r from-red-400 to-yellow-400 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-green-400 to-emerald-400 bg-clip-text text-transparent">
               {" "}
               Transform
             </span>
@@ -899,7 +903,7 @@ const LandingPage = () => {
             Your Financial Future?
           </h2>
           <p
-            className={`text-2xl ${themeClasses.textSecondary} mb-12 leading-relaxed`}
+          className={`text-2xl ${themeClasses.textSecondary} mb-12 leading-relaxed`}
           >
             Join hundreds of thousands of satisfied customers who've already
             experienced the Clear Finance difference.
@@ -907,13 +911,13 @@ const LandingPage = () => {
           <div className="flex flex-col sm:flex-row gap-6 justify-center">
             <button
               onClick={() => navigate("/usersignup")}
-              className={`relative bg-gradient-to-r from-red-500 to-yellow-500 hover:from-red-600 hover:to-yellow-600 text-white px-12 py-5 rounded-2xl text-lg font-bold transition-all transform hover:scale-110 shadow-2xl ${themeClasses.glowEffect} overflow-hidden group`}
+              className={`relative bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white px-12 py-5 rounded-2xl text-lg font-bold transition-all transform hover:scale-110 shadow-2xl ${themeClasses.glowEffect} overflow-hidden group`}
             >
               <span className="relative z-10 flex items-center justify-center">
                 Get Started Now
                 <ArrowRight className="ml-3 w-6 h-6 group-hover:translate-x-1 transition-transform" />
               </span>
-              <div className="absolute inset-0 bg-gradient-to-r from-yellow-500 to-red-500 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+              <div className="absolute inset-0 bg-gradient-to-r from-emerald-500 to-green-500 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
             </button>
             <button
               onClick={() => scrollToSection("about")}
@@ -930,13 +934,9 @@ const LandingPage = () => {
       </section>
 
       {/* Footer */}
-
       <Footer isDarkMode={isDarkMode} themeClasses={themeClasses} />
     </div>
   );
 };
 
 export default LandingPage;
-function setIsMenuOpen(_arg0: boolean) {
-  throw new Error("Function not implemented.");
-}

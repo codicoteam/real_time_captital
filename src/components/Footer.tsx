@@ -2,6 +2,9 @@ import React from "react";
 import { Star, Shield, Clock } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
+// Import the logo from assets
+import Loan from "../assets/loan.png";
+
 interface FooterProps {
   isDarkMode: boolean;
   themeClasses: {
@@ -25,16 +28,16 @@ const Footer: React.FC<FooterProps> = ({ isDarkMode, themeClasses }) => {
         <div className="grid md:grid-cols-4 gap-12">
           <div className="col-span-1">
             <div className="flex items-center mb-6">
-              <div
-                className={`relative w-12 h-12 bg-gradient-to-br from-red-500 to-yellow-500 rounded-xl flex items-center justify-center shadow-lg ${themeClasses.glowEffect}`}
-              >
-                <div className="w-6 h-6 border-2 border-white rounded-sm transform rotate-45"></div>
-                <div className="absolute -inset-1 bg-gradient-to-br from-red-500 to-yellow-500 rounded-xl blur opacity-30 animate-pulse"></div>
-              </div>
+              {/* Logo from assets */}
+<img
+                   src={Loan}
+                   alt="Clear Finance Logo"
+                 className="h-35 w-auto mt-12 ml-0 mr-auto"
+                  />
               <span
-                className={`ml-3 text-3xl font-bold ${
+                className={`ml-0 text-3xl font-bold ${
                   isDarkMode
-                    ? "bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent"
+                    ? "text-white"
                     : "text-gray-900"
                 }`}
               >
@@ -62,7 +65,7 @@ const Footer: React.FC<FooterProps> = ({ isDarkMode, themeClasses }) => {
                   key={index}
                   className={`flex items-center space-x-2 ${themeClasses.textMuted} text-sm`}
                 >
-                  <div className="text-yellow-400">{item.icon}</div>
+                  <div className="text-green-500">{item.icon}</div>
                   <span>{item.label}</span>
                 </div>
               ))}
@@ -83,7 +86,7 @@ const Footer: React.FC<FooterProps> = ({ isDarkMode, themeClasses }) => {
                 <li key={index}>
                   <button
                     onClick={() => navigate(link.path)}
-                    className={`${themeClasses.textSecondary} hover:${themeClasses.text} hover:text-yellow-400 transition-colors`}
+                    className={`${themeClasses.textSecondary} hover:${themeClasses.text} hover:text-green-500 transition-colors`}
                   >
                     {link.name}
                   </button>
@@ -106,7 +109,7 @@ const Footer: React.FC<FooterProps> = ({ isDarkMode, themeClasses }) => {
                 <li key={index}>
                   <button
                     onClick={() => navigate(service.path)}
-                    className={`${themeClasses.textSecondary} hover:${themeClasses.text} hover:text-yellow-400 transition-colors`}
+                    className={`${themeClasses.textSecondary} hover:${themeClasses.text} hover:text-green-500 transition-colors`}
                   >
                     {service.name}
                   </button>
@@ -123,7 +126,7 @@ const Footer: React.FC<FooterProps> = ({ isDarkMode, themeClasses }) => {
               <li>
                 <button
                   onClick={() => navigate("/userlogin")}
-                  className={`${themeClasses.textSecondary} hover:${themeClasses.text} hover:text-yellow-400 transition-colors`}
+                  className={`${themeClasses.textSecondary} hover:${themeClasses.text} hover:text-green-500 transition-colors`}
                 >
                   Login
                 </button>
@@ -131,7 +134,7 @@ const Footer: React.FC<FooterProps> = ({ isDarkMode, themeClasses }) => {
               <li>
                 <button
                   onClick={() => navigate("/usersignup")}
-                  className={`${themeClasses.textSecondary} hover:${themeClasses.text} hover:text-yellow-400 transition-colors`}
+                  className={`${themeClasses.textSecondary} hover:${themeClasses.text} hover:text-green-500 transition-colors`}
                 >
                   Sign Up
                 </button>
@@ -139,7 +142,7 @@ const Footer: React.FC<FooterProps> = ({ isDarkMode, themeClasses }) => {
               <li>
                 <button
                   onClick={() => navigate("/contact")}
-                  className={`${themeClasses.textSecondary} hover:${themeClasses.text} hover:text-yellow-400 transition-colors`}
+                  className={`${themeClasses.textSecondary} hover:${themeClasses.text} hover:text-green-500 transition-colors`}
                 >
                   Contact Support
                 </button>

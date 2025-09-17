@@ -2,6 +2,9 @@ import React from "react";
 import { Menu, X, LogIn, Sun, Moon } from "lucide-react";
 import { useNavigate, useLocation } from "react-router-dom";
 
+// Import the logo from assets (adjust the path as needed)
+import Loan from "../assets/loan.png";
+
 type NavbarProps = {
   isDarkMode: boolean;
   setIsDarkMode: (value: boolean) => void;
@@ -34,7 +37,7 @@ const Navbar: React.FC<NavbarProps> = ({ isDarkMode, setIsDarkMode }) => {
     border: isDarkMode ? "border-white/10" : "border-gray-200/30",
     cardBg: isDarkMode ? "bg-black/30" : "bg-white/30",
     hoverBg: isDarkMode ? "hover:bg-white/10" : "hover:bg-gray-100/50",
-    glowEffect: isDarkMode ? "shadow-red-500/25" : "shadow-red-500/15",
+    glowEffect: isDarkMode ? "shadow-green-500/25" : "shadow-green-500/15",
     // Active state classes
     activeText: isDarkMode ? "text-white" : "text-gray-900",
     activeBg: isDarkMode ? "bg-white/10" : "bg-gray-100/50",
@@ -62,16 +65,17 @@ const Navbar: React.FC<NavbarProps> = ({ isDarkMode, setIsDarkMode }) => {
               className="flex-shrink-0 flex items-center cursor-pointer"
               onClick={() => navigate("/")}
             >
-              <div
-                className={`relative w-10 h-10 bg-gradient-to-br from-red-500 to-yellow-500 rounded-xl flex items-center justify-center shadow-lg ${themeClasses.glowEffect}`}
-              >
-                <div className="w-5 h-5 border-2 border-white rounded-sm transform rotate-45"></div>
-                <div className="absolute -inset-1 bg-gradient-to-br from-red-500 to-yellow-500 rounded-xl blur opacity-30 animate-pulse"></div>
-              </div>
+             <img
+                   src={Loan}
+                   alt="Clear Finance Logo"
+                 className="h-35 w-auto mt-12 ml-0 mr-auto"
+                  />
+
+
               <span
                 className={`ml-3 text-2xl font-bold ${
                   isDarkMode
-                    ? "bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent"
+                    ? "text-white"
                     : "text-gray-900"
                 }`}
               >
@@ -96,7 +100,7 @@ const Navbar: React.FC<NavbarProps> = ({ isDarkMode, setIsDarkMode }) => {
                   >
                     {item.name}
                     <div
-                      className={`absolute bottom-1 left-1/2 transform -translate-x-1/2 h-0.5 bg-gradient-to-r from-red-500 to-yellow-500 transition-all duration-300 ${
+                      className={`absolute bottom-1 left-1/2 transform -translate-x-1/2 h-0.5 bg-gradient-to-r from-green-500 to-emerald-500 transition-all duration-300 ${
                         isActive ? "w-6" : "w-0 group-hover:w-6"
                       }`}
                     ></div>
@@ -132,10 +136,10 @@ const Navbar: React.FC<NavbarProps> = ({ isDarkMode, setIsDarkMode }) => {
 
             <button
               onClick={() => navigate("/usersignup")}
-              className={`relative bg-gradient-to-r from-red-500 to-yellow-500 hover:from-red-600 hover:to-yellow-600 text-white px-6 py-2.5 rounded-xl text-sm font-semibold transition-all transform hover:scale-105 shadow-lg ${themeClasses.glowEffect} overflow-hidden group`}
+              className={`relative bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white px-6 py-2.5 rounded-xl text-sm font-semibold transition-all transform hover:scale-105 shadow-lg ${themeClasses.glowEffect} overflow-hidden group`}
             >
               <span className="relative z-10">Get Started</span>
-              <div className="absolute inset-0 bg-gradient-to-r from-yellow-500 to-red-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+              <div className="absolute inset-0 bg-gradient-to-r from-emerald-500 to-green-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
             </button>
           </div>
 
@@ -186,7 +190,7 @@ const Navbar: React.FC<NavbarProps> = ({ isDarkMode, setIsDarkMode }) => {
                 >
                   {item.name}
                   {isActive && (
-                    <div className="absolute left-0 top-1/2 transform -translate-y-1/2 w-1 h-6 bg-gradient-to-b from-red-500 to-yellow-500 rounded-r"></div>
+                    <div className="absolute left-0 top-1/2 transform -translate-y-1/2 w-1 h-6 bg-gradient-to-b from-green-500 to-emerald-500 rounded-r"></div>
                   )}
                 </button>
               );
@@ -203,7 +207,7 @@ const Navbar: React.FC<NavbarProps> = ({ isDarkMode, setIsDarkMode }) => {
               </button>
               <button
                 onClick={() => navigate("/usersignup")}
-                className="w-full bg-gradient-to-r from-red-500 to-yellow-500 text-white px-4 py-2 rounded-xl font-medium"
+                className="w-full bg-gradient-to-r from-green-500 to-emerald-500 text-white px-4 py-2 rounded-xl font-medium"
               >
                 Get Started
               </button>

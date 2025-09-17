@@ -10,7 +10,7 @@ import {
   X,
 } from "lucide-react";
 import { useNavigate, useLocation, type To } from "react-router-dom";
-import logo from "../assets/logo.png";
+import Loan from "../assets/loan.png";
 
 const Sidebar = ({ isOpen = true, onClose = () => {} }) => {
   const navigate = useNavigate();
@@ -21,61 +21,61 @@ const Sidebar = ({ isOpen = true, onClose = () => {} }) => {
       icon: LayoutDashboard,
       label: "Dashboard",
       path: "/admindashboard",
-      color: "from-orange-500 to-red-600",
+      color: "from-green-500 to-green-600",
     },
     {
       icon: Users,
       label: "Users",
       path: "/users",
-      color: "from-orange-500 to-red-600",
+      color: "from-green-500 to-green-600",
     },
     {
       icon: CreditCard,
       label: "Loan Management",
       path: "/loan-management",
-      color: "from-orange-500 to-red-600",
+      color: "from-green-500 to-green-600",
     },
     {
       icon: TrendingUp,
       label: "Loan Tracking",
       path: "/loan-tracking",
-      color: "from-orange-500 to-red-600",
+      color: "from-green-500 to-green-600",
     },
     {
       icon: CreditCard,
       label: "Payments",
       path: "/payments",
-      color: "from-orange-500 to-red-600",
+      color: "from-green-500 to-green-600",
     },
     {
       icon: Users,
       label: "Chat",
       path: "/chat",
-      color: "from-orange-500 to-red-600",
+      color: "from-green-500 to-green-600",
     },
     {
       icon: Settings,
       label: "Settings",
       path: "/settings",
-      color: "from-orange-500 to-red-600",
+      color: "from-green-500 to-green-600",
     },
     {
       icon: Lock,
       label: "Collaterals",
       path: "/collaterals",
-      color: "from-orange-500 to-red-600",
+      color: "from-green-500 to-green-600",
     },
     {
       icon: Bell,
       label: "Notifications",
       path: "/notifications",
-      color: "from-orange-500 to-red-600",
+      color: "from-green-500 to-green-600",
     },
     {
       icon: Lock,
       label: "Admin Logout",
       path: "/Adminlogout",
-      color: "from-orange-500 to-red-600",
+      color: "from-green-500 to-green-600",
     },
   ];
 
@@ -98,7 +98,7 @@ const Sidebar = ({ isOpen = true, onClose = () => {} }) => {
 
       {/* Sidebar */}
       <aside
-        className={`fixed inset-y-0 left-0 z-50 w-72 bg-gray-50 transform ${
+        className={`fixed inset-y-0 left-0 z-50 w-72 bg-white transform ${
           isOpen ? "translate-x-0" : "-translate-x-full"
         } transition-all duration-300 ease-out lg:translate-x-0 lg:static lg:inset-0 overflow-hidden flex flex-col border-r border-gray-200`}
       >
@@ -106,14 +106,13 @@ const Sidebar = ({ isOpen = true, onClose = () => {} }) => {
         <div className="relative flex items-center justify-between h-16 px-4 border-b border-gray-200 bg-white flex-shrink-0">
           <div className="flex items-center space-x-3">
             <img
-              src={logo}
-              alt="Pocket Logo"
-              className="w-8 h-8 object-contain"
-            />
+                   src={Loan}
+                   alt=""
+                 className="h-35 w-auto mt-12 ml-0 mr-auto"
+                  />
             <div>
-              <h1 className="text-lg font-bold text-gray-800">Pocket.</h1>
+              <h1 className="text-lg font-bold text-gray-800"></h1>
               <p className="text-xs text-gray-500 font-medium tracking-wide">
-                Loan Management
               </p>
             </div>
           </div>
@@ -136,7 +135,7 @@ const Sidebar = ({ isOpen = true, onClose = () => {} }) => {
                 key={index}
                 className={`group relative flex items-center px-4 py-3 rounded-lg transition-all duration-300 cursor-pointer ${
                   isActive
-                    ? `bg-gradient-to-r ${item.color} shadow-lg shadow-orange-500/20`
+                    ? `bg-gradient-to-r ${item.color} shadow-lg shadow-green-500/20`
                     : "hover:bg-gray-100"
                 }`}
                 onClick={() => handleNavigation(item.path)}

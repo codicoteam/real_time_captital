@@ -9,7 +9,7 @@ import {
   Bell,
 } from "lucide-react";
 import { useNavigate, useLocation, type To } from "react-router-dom";
-import logo from "../assets/logo.png";
+import Loan from "../assets/loan.png";
 
 const UserSidebar = ({ isOpen = true, onClose = () => {} }) => {
   const navigate = useNavigate();
@@ -20,50 +20,50 @@ const UserSidebar = ({ isOpen = true, onClose = () => {} }) => {
       icon: LayoutDashboard,
       label: "Dashboard",
       path: "/userdashboard",
-      color: "from-orange-500 to-red-600",
+      color: "from-green-600 to-green-800",
     },
     {
       icon: FileText,
       label: "Loan Application",
       path: "/loan_application",
-      color: "from-orange-500 to-red-600",
+      color: "from-green-600 to-green-800",
     },
     {
       icon: CreditCard,
       label: "Payment",
       path: "/payment",
-      color: "from-orange-500 to-red-600",
+      color: "from-green-600 to-green-800",
     },
     {
       icon: User,
       label: "Chat",
       path: "/chart",
-      color: "from-orange-500 to-pink-600",
+      color: "from-green-600 to-green-800",
     },
     {
       icon: User,
       label: "My Customers",
       path: "/customer",
-      color: "from-orange-500 to-pink-600",
+      color: "from-green-600 to-green-800",
     },
     {
       icon: Bell,
       label: "Notifications",
       path: "/usernotifications",
-      color: "from-orange-500 to-red-600",
+      color: "from-green-600 to-green-800",
     },
     {
       icon: User,
       label: "Account",
       path: "/account",
-      color: "from-orange-500 to-red-600",
+      color: "from-green-600 to-green-800",
     },
 
     {
       icon: Lock,
       label: "Logout",
       path: "/logout",
-      color: "from-orange-500 to-red-600",
+      color: "from-green-600 to-green-800",
     },
   ];
 
@@ -84,22 +84,23 @@ const UserSidebar = ({ isOpen = true, onClose = () => {} }) => {
 
       {/* Sidebar */}
       <aside
-        className={`fixed inset-y-0 left-0 z-50 w-72 bg-gray-50 transform ${
+        className={`fixed inset-y-0 left-0 z-50 w-72 bg-white transform ${
           isOpen ? "translate-x-0" : "-translate-x-full"
         } transition-all duration-300 ease-out lg:translate-x-0 lg:static lg:inset-0 overflow-hidden flex flex-col border-r border-gray-200`}
       >
         {/* Header */}
         <div className="relative flex items-center justify-between h-16 px-4 border-b border-gray-200 bg-white flex-shrink-0">
           <div className="flex items-center space-x-3">
-            <img
-              src={logo}
-              alt="Pocket Logo"
-              className="w-8 h-8 object-contain"
-            />
+              <img
+                   src={Loan}
+                   alt=""
+                 className="h-35 w-auto mt-12 ml-0 mr-auto"
+                  />
+
             <div>
-              <h1 className="text-lg font-bold text-gray-800">Pocket.</h1>
+              <h1 className="text-lg font-bold text-gray-800"></h1>
               <p className="text-xs text-gray-500 font-medium tracking-wide">
-                Financial Solutions
+            
               </p>
             </div>
           </div>
@@ -122,7 +123,7 @@ const UserSidebar = ({ isOpen = true, onClose = () => {} }) => {
                 key={index}
                 className={`group relative flex items-center px-4 py-3 rounded-lg transition-all duration-300 cursor-pointer ${
                   isActive
-                    ? `bg-gradient-to-r ${item.color} shadow-lg shadow-orange-500/20`
+                    ? `bg-gradient-to-r ${item.color} shadow-lg shadow-green-500/20`
                     : "hover:bg-gray-100"
                 }`}
                 onClick={() => handleNavigation(item.path)}
